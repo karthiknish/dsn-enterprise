@@ -25,23 +25,46 @@ export async function POST(request) {
       );
     }
 
-    // Validate required fields
-    if (!body.name || !body.email || !body.message) {
-      console.log("Validation failed: missing required fields");
+    // Validate required fields with specific error messages
+    const validationErrors = {};
+
+    if (!body.name || body.name.trim() === "") {
+      validationErrors.name = "Name is required";
+    }
+
+    if (!body.email || body.email.trim() === "") {
+      validationErrors.email = "Email is required";
+    } else if (!/^\S+@\S+\.\S+$/.test(body.email)) {
+      validationErrors.email = "Please enter a valid email address";
+    }
+
+    if (!body.message || body.message.trim() === "") {
+      validationErrors.message = "Message is required";
+    }
+
+    if (body.phone && !/^[0-9+\-\s()]{6,20}$/.test(body.phone)) {
+      validationErrors.phone = "Please enter a valid phone number";
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      console.log("Validation failed:", validationErrors);
       return NextResponse.json(
-        { error: "Name, email, and message are required fields" },
+        {
+          error: "Validation failed",
+          validationErrors,
+        },
         { status: 400 }
       );
     }
 
     // Format the data for Contentful
     const contactData = {
-      name: body.name,
-      email: body.email,
-      phone: body.phone || "",
-      company: body.company || "",
-      message: body.message,
-      productInterest: body.productInterest || "",
+      name: body.name.trim(),
+      email: body.email.trim(),
+      phone: body.phone ? body.phone.trim() : "",
+      company: body.company ? body.company.trim() : "",
+      message: body.message.trim(),
+      productInterest: body.productInterest ? body.productInterest.trim() : "",
     };
 
     console.log("Attempting to create Contentful entry:", contactData);

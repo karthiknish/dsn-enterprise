@@ -245,15 +245,19 @@ const AboutPage = () => {
               <ul className="space-y-2">
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>Premium grade materials</span>
+                  <span className="text-gray-700">Premium grade materials</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>Rigorous material testing</span>
+                  <span className="text-gray-700">
+                    Rigorous material testing
+                  </span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>Quality-focused sourcing</span>
+                  <span className="text-gray-700">
+                    Quality-focused sourcing
+                  </span>
                 </li>
               </ul>
             </motion.div>
@@ -275,15 +279,15 @@ const AboutPage = () => {
               <ul className="space-y-2">
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>Advanced CNC machines</span>
+                  <span className="text-gray-700">Advanced CNC machines</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>Skilled craftsmanship</span>
+                  <span className="text-gray-700">Skilled craftsmanship</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>Precision grinding</span>
+                  <span className="text-gray-700">Precision grinding</span>
                 </li>
               </ul>
             </motion.div>
@@ -305,15 +309,21 @@ const AboutPage = () => {
               <ul className="space-y-2">
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>Comprehensive inspection</span>
+                  <span className="text-gray-700">
+                    Comprehensive inspection
+                  </span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>SUB-ZERO treatment at -80°C</span>
+                  <span className="text-gray-700">
+                    SUB-ZERO treatment at -80°C
+                  </span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>Hardness testing (60 ± 2HRC)</span>
+                  <span className="text-gray-700">
+                    Hardness testing (60 ± 2HRC)
+                  </span>
                 </li>
               </ul>
             </motion.div>
@@ -329,7 +339,8 @@ const AboutPage = () => {
               Our Certifications
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We are proud to be recognized by leading industry organizations for our commitment to quality and excellence.
+              We are proud to be recognized by leading industry organizations
+              for our commitment to quality and excellence.
             </p>
           </div>
 
@@ -343,7 +354,7 @@ const AboutPage = () => {
             >
               <div className="relative h-64 w-full">
                 <img
-                  src="/images/cetificates/API-5B-0039-2023_page-0001.jpg"
+                  src="/images/certificates/API-5B-0039-2023_page-0001.jpg"
                   alt="API 5B Certificate"
                   className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
                 />
@@ -353,9 +364,14 @@ const AboutPage = () => {
                   <span className="text-primary text-2xl mr-3">
                     <FaAward />
                   </span>
-                  <h3 className="text-xl font-bold text-gray-900">API 5B Certificate</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    API 5B Certificate
+                  </h3>
                 </div>
-                <p className="text-gray-600">API Specification 5B certification for threading, gauging, and inspection of casing, tubing, and line pipe threads.</p>
+                <p className="text-gray-600">
+                  API Specification 5B certification for threading, gauging, and
+                  inspection of casing, tubing, and line pipe threads.
+                </p>
               </div>
             </motion.div>
 
@@ -368,7 +384,7 @@ const AboutPage = () => {
             >
               <div className="relative h-64 w-full">
                 <img
-                  src="/images/cetificates/SMCS-NABL-SCOPE-23-25-1_page-0002.jpg"
+                  src="/images/certificates/SMCS-NABL-SCOPE-23-25-1_page-0002.jpg"
                   alt="NABL Accreditation"
                   className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
                 />
@@ -378,9 +394,15 @@ const AboutPage = () => {
                   <span className="text-primary text-2xl mr-3">
                     <FaCertificate />
                   </span>
-                  <h3 className="text-xl font-bold text-gray-900">NABL Accreditation</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    NABL Accreditation
+                  </h3>
                 </div>
-                <p className="text-gray-600">National Accreditation Board for Testing and Calibration Laboratories (NABL) certification for our calibration services.</p>
+                <p className="text-gray-600">
+                  National Accreditation Board for Testing and Calibration
+                  Laboratories (NABL) certification for our calibration
+                  services.
+                </p>
               </div>
             </motion.div>
 
@@ -393,7 +415,7 @@ const AboutPage = () => {
             >
               <div className="relative h-64 w-full">
                 <img
-                  src="/images/cetificates/api72.jpg"
+                  src="/images/certificates/api72.jpg"
                   alt="API 7-2 Certificate"
                   className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
                 />
@@ -403,9 +425,14 @@ const AboutPage = () => {
                   <span className="text-primary text-2xl mr-3">
                     <FaAward />
                   </span>
-                  <h3 className="text-xl font-bold text-gray-900">API 7-2 Certificate</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    API 7-2 Certificate
+                  </h3>
                 </div>
-                <p className="text-gray-600">API Specification 7-2 certification for threading and gauging of rotary shouldered thread connections.</p>
+                <p className="text-gray-600">
+                  API Specification 7-2 certification for threading and gauging
+                  of rotary shouldered thread connections.
+                </p>
               </div>
             </motion.div>
 
@@ -418,7 +445,7 @@ const AboutPage = () => {
             >
               <div className="relative h-64 w-full">
                 <img
-                  src="/images/cetificates/isocert.jpg"
+                  src="/images/certificates/isocert.jpg"
                   alt="ISO Certification"
                   className="w-full h-full object-cover transition-transform hover:scale-105 duration-300"
                 />
@@ -428,9 +455,13 @@ const AboutPage = () => {
                   <span className="text-primary text-2xl mr-3">
                     <FaCertificate />
                   </span>
-                  <h3 className="text-xl font-bold text-gray-900">ISO Certification</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    ISO Certification
+                  </h3>
                 </div>
-                <p className="text-gray-600">ISO 9001:2015 certification for our quality management system.</p>
+                <p className="text-gray-600">
+                  ISO 9001:2015 certification for our quality management system.
+                </p>
               </div>
             </motion.div>
           </div>
@@ -446,12 +477,6 @@ const AboutPage = () => {
             you achieve precision and quality in your measurements.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/products"
-              className="inline-block bg-secondary text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors"
-            >
-              Explore Products
-            </Link>
             <Link
               href="/contact"
               className="inline-block bg-transparent hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-md border-2 border-white transition-colors"

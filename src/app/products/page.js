@@ -151,17 +151,20 @@ const standards = [
 ];
 
 const ProductsPage = () => {
-  const [activeCategory, setActiveCategory] = useState('plain-gauges');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [activeCategory, setActiveCategory] = useState("plain-gauges");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredProducts = searchTerm 
-    ? products.map(category => ({
-        ...category,
-        items: category.items.filter(item => 
-          item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      })).filter(category => category.items.length > 0)
+  const filteredProducts = searchTerm
+    ? products
+        .map((category) => ({
+          ...category,
+          items: category.items.filter(
+            (item) =>
+              item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              item.description.toLowerCase().includes(searchTerm.toLowerCase())
+          ),
+        }))
+        .filter((category) => category.items.length > 0)
     : products;
 
   return (
@@ -170,7 +173,7 @@ const ProductsPage = () => {
       <section className="bg-primary text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <motion.h1 
+            <motion.h1
               className="text-4xl md:text-5xl font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -178,15 +181,17 @@ const ProductsPage = () => {
             >
               Our Products
             </motion.h1>
-            <motion.p 
+            <motion.p
               className="text-xl mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Explore our comprehensive range of high-precision gauges and measuring instruments designed for various industrial applications.
+              Explore our comprehensive range of high-precision gauges and
+              measuring instruments designed for various industrial
+              applications.
             </motion.p>
-            <motion.div 
+            <motion.div
               className="relative max-w-xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -208,7 +213,7 @@ const ProductsPage = () => {
       </section>
 
       {/* Product Categories */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center mb-12 gap-4">
             {products.map((category) => (
@@ -216,8 +221,8 @@ const ProductsPage = () => {
                 key={category.id}
                 className={`px-6 py-3 rounded-full font-medium transition-colors ${
                   activeCategory === category.id
-                    ? 'bg-primary text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    ? "bg-primary text-white"
+                    : "bg-white text-gray-700 hover:bg-gray-100"
                 }`}
                 onClick={() => setActiveCategory(category.id)}
               >
@@ -229,12 +234,20 @@ const ProductsPage = () => {
           {filteredProducts.map((category) => (
             <div
               key={category.id}
-              className={`${activeCategory === category.id || searchTerm ? 'block' : 'hidden'}`}
+              className={`${
+                activeCategory === category.id || searchTerm
+                  ? "block"
+                  : "hidden"
+              }`}
             >
               <div className="mb-12">
-                <h2 className="text-3xl font-bold mb-2 text-gray-900">{category.name}</h2>
-                <p className="text-lg text-gray-600 mb-8">{category.description}</p>
-                
+                <h2 className="text-3xl font-bold mb-2 text-gray-900">
+                  {category.name}
+                </h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  {category.description}
+                </p>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {category.items.map((item, index) => (
                     <motion.div
@@ -248,11 +261,17 @@ const ProductsPage = () => {
                         <div className="text-6xl text-primary">⚙️</div>
                       </div>
                       <div className="p-6">
-                        <h3 className="text-xl font-bold mb-2 text-gray-900">{item.name}</h3>
-                        <p className="text-primary font-medium mb-3">{item.specs}</p>
+                        <h3 className="text-xl font-bold mb-2 text-gray-900">
+                          {item.name}
+                        </h3>
+                        <p className="text-primary font-medium mb-3">
+                          {item.specs}
+                        </p>
                         <p className="text-gray-600 mb-4">{item.description}</p>
-                        <Link 
-                          href={`/contact?product=${encodeURIComponent(item.name)}`}
+                        <Link
+                          href={`/contact?product=${encodeURIComponent(
+                            item.name
+                          )}`}
                           className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
                         >
                           Request Quote
@@ -272,26 +291,32 @@ const ProductsPage = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center text-gray-900">Product Specifications</h2>
-            
-            <div className="bg-blue-50 p-8 rounded-lg mb-12">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">General Specifications</h3>
+            <h2 className="text-3xl font-bold mb-8 text-center text-gray-900">
+              Product Specifications
+            </h2>
+
+            <div className="bg-secondary-light p-8 rounded-lg mb-12">
+              <h3 className="text-xl font-bold mb-4 text-gray-900">
+                General Specifications
+              </h3>
               <ul className="space-y-3">
                 {specifications.map((spec, index) => (
                   <li key={index} className="flex items-start">
                     <span className="text-primary mr-2">✓</span>
-                    <span>{spec}</span>
+                    <span className="text-gray-700">{spec}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            
-            <h3 className="text-xl font-bold mb-4 text-gray-900">Quality Standards Practiced</h3>
-            <ul className="space-y-3 bg-gray-50 p-8 rounded-lg">
+
+            <h3 className="text-xl font-bold mb-4 text-gray-900">
+              Quality Standards Practiced
+            </h3>
+            <ul className="space-y-3 bg-secondary-light p-8 rounded-lg">
               {standards.map((standard, index) => (
                 <li key={index} className="flex items-start">
                   <span className="text-primary mr-2">•</span>
-                  <span>{standard}</span>
+                  <span className="text-gray-700">{standard}</span>
                 </li>
               ))}
             </ul>
@@ -304,11 +329,12 @@ const ProductsPage = () => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Need a Custom Solution?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            We specialize in manufacturing custom gauges according to your specific requirements. Contact us today to discuss your needs.
+            We specialize in manufacturing custom gauges according to your
+            specific requirements. Contact us today to discuss your needs.
           </p>
-          <Link 
-            href="/contact" 
-            className="inline-block bg-secondary text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors"
+          <Link
+            href="/contact"
+            className="inline-block bg-white text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors"
           >
             Contact Us
           </Link>
@@ -319,3 +345,4 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
+     

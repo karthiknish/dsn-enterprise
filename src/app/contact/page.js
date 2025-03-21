@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const ContactPage = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     company: "",
     message: "",
-    product: "",
+    productInterest: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,13 +39,7 @@ const ContactPage = () => {
     try {
       console.log("Submitting form with data:", formData);
 
-      // Format the data for the API
-      const submissionData = {
-        ...formData,
-        source: "contact_page",
-      };
-
-      console.log("Sending to /api/contact:", submissionData);
+      console.log("Sending to /api/contact:", formData);
 
       // Use the API endpoint instead of direct Supabase access
       let response;
@@ -53,7 +49,7 @@ const ContactPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(submissionData),
+          body: JSON.stringify(formData),
         });
       } catch (fetchError) {
         console.error("Network error during fetch:", fetchError);
@@ -118,22 +114,22 @@ const ContactPage = () => {
 
       console.log("Submission successful, response:", result);
 
-      // Success
+      // Success - redirect to thank you page
       setIsSubmitting(false);
       setSubmitSuccess(true);
+
+      // Reset form data
       setFormData({
         name: "",
         email: "",
         phone: "",
         company: "",
         message: "",
-        product: "",
+        productInterest: "",
       });
 
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 5000);
+      // Redirect to thank you page
+      router.push("/thank-you");
     } catch (error) {
       console.error("Error submitting form:", error);
       setIsSubmitting(false);
@@ -362,15 +358,15 @@ const ContactPage = () => {
 
                   <div className="mb-4">
                     <label
-                      htmlFor="product"
+                      htmlFor="productInterest"
                       className="block text-gray-700 font-medium mb-2"
                     >
                       Product Interest
                     </label>
                     <select
-                      id="product"
-                      name="product"
-                      value={formData.product}
+                      id="productInterest"
+                      name="productInterest"
+                      value={formData.productInterest}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border text-primary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                     >
