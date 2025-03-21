@@ -1,0 +1,14 @@
+{
+  "name": "fewdf",
+  "email": "few@gmail.com",
+  "phone": "25354",
+  "company": "edfs",
+  "message": "dsedef",
+  "product_interest": "Cylindrical Setting Masters",
+  "source": "homepage",
+  "status": "new",
+  "storage_reason": "connection_error",
+  "error": "Database connection issue: Empty error response from Supabase",
+  "timestamp": "2025-03-21T12:18:52.360Z",
+  "stored_locally": true
+}

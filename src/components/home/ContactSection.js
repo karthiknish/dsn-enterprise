@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import supabase from "../../lib/supabase";
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +11,7 @@ const ContactSection = () => {
     phone: "",
     company: "",
     message: "",
-    product: "",
+    productInterest: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,24 +35,87 @@ const ContactSection = () => {
     setSubmitSuccess(false);
 
     try {
-      // Save to Supabase
-      const { data, error } = await supabase.from("contacts").insert([
-        {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || null,
-          company: formData.company || null,
-          message: formData.message,
-          product_interest: formData.product || null,
-          created_at: new Date(),
-          status: "new",
-          source: "homepage",
-        },
-      ]);
+      console.log("Submitting form with data:", formData);
 
-      if (error) {
-        throw error;
+      // Format the data for the API
+      const submissionData = {
+        ...formData,
+      };
+
+      console.log("Sending to /api/contact:", submissionData);
+
+      // Use the API endpoint instead of direct Supabase access
+      let response;
+      try {
+        response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(submissionData),
+        });
+      } catch (fetchError) {
+        console.error("Network error during fetch:", fetchError);
+        throw new Error("Network error: Could not connect to the server");
       }
+
+      // Check if response is not JSON
+      let responseText;
+      let isJson = false;
+      const contentType = response.headers.get("content-type");
+
+      try {
+        responseText = await response.text();
+        if (contentType && contentType.includes("application/json")) {
+          isJson = true;
+        } else {
+          console.error("Non-JSON response received:", responseText);
+          throw new Error("The server returned an invalid response format");
+        }
+      } catch (textError) {
+        console.error("Error reading response:", textError);
+        throw new Error("Could not read server response");
+      }
+
+      // Parse JSON if we have it
+      let result;
+      if (isJson) {
+        try {
+          result = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error(
+            "Error parsing JSON:",
+            parseError,
+            "Raw text:",
+            responseText
+          );
+          throw new Error("Invalid JSON response from server");
+        }
+      } else {
+        throw new Error(
+          "Server returned HTML instead of JSON. There may be a server error."
+        );
+      }
+
+      // Handle API errors based on response status
+      if (!response.ok) {
+        console.error("API error response:", result);
+        if (response.status === 400) {
+          throw new Error(
+            result.error || "Please fill out all required fields"
+          );
+        } else if (response.status === 403) {
+          throw new Error(
+            "Database permission error. Your form could not be submitted."
+          );
+        } else {
+          throw new Error(
+            result.error || result.details || "Failed to submit form"
+          );
+        }
+      }
+
+      console.log("Submission successful, response:", result);
 
       // Success
       setIsSubmitting(false);
@@ -64,7 +126,7 @@ const ContactSection = () => {
         phone: "",
         company: "",
         message: "",
-        product: "",
+        productInterest: "",
       });
 
       // Reset success message after 5 seconds
@@ -210,15 +272,15 @@ const ContactSection = () => {
                 </div>
                 <div className="mb-4">
                   <label
-                    htmlFor="product"
+                    htmlFor="productInterest"
                     className="block text-gray-700 font-medium mb-2"
                   >
                     Product Interest
                   </label>
                   <select
-                    id="product"
-                    name="product"
-                    value={formData.product}
+                    id="productInterest"
+                    name="productInterest"
+                    value={formData.productInterest}
                     onChange={handleChange}
                     className="w-full px-4 py-2 text-primary border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   >
