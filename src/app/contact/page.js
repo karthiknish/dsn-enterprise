@@ -208,7 +208,9 @@ const ContactPage = () => {
                 <FaPhone className="text-4xl text-primary" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900">Phone</h3>
-              <p className="text-gray-600">+91 9363122005</p>
+              <p className="text-gray-600">
+                <a href="tel:+919363122005">+91 9363122005</a>
+              </p>
             </motion.div>
 
             <motion.div
@@ -222,7 +224,11 @@ const ContactPage = () => {
                 <FaEnvelope className="text-4xl text-primary" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900">Email</h3>
-              <p className="text-gray-600">info@dsnenterprises.com</p>
+              <p className="text-gray-600">
+                <a href="mailto:info@dsnenterprises.in">
+                  info@dsnenterprises.in
+                </a>
+              </p>
             </motion.div>
 
             <motion.div

@@ -349,7 +349,9 @@ const ContactSection = () => {
                   />
                   <div>
                     <h4 className="font-bold mb-1">Phone Number</h4>
-                    <p className="text-secondary-light">+91 9363122005</p>
+                    <p className="text-secondary-light">
+                      <a href="tel:+919363122005">+91 9363122005</a>
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start">
@@ -360,7 +362,9 @@ const ContactSection = () => {
                   <div>
                     <h4 className="font-bold mb-1">Email Address</h4>
                     <p className="text-secondary-light">
-                      info@dsnenterprises.com
+                      <a href="mailto:info@dsnenterprises.in">
+                        info@dsnenterprises.in
+                      </a>
                     </p>
                   </div>
                 </div>

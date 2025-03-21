@@ -149,11 +149,17 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <FaPhone className="mr-3 text-secondary" />
-                <span>+91 9363122005</span>
+                <span>
+                  <a href="tel:+919363122005">+91 9363122005</a>
+                </span>
               </li>
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 text-secondary" />
-                <span>info@dsnenterprises.com</span>
+                <span>
+                  <a href="mailto:info@dsnenterprises.in">
+                    info@dsnenterprises.in
+                  </a>
+                </span>
               </li>
             </ul>
           </div>

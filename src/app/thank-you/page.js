@@ -126,9 +126,12 @@ export default function ThankYouPage() {
                   directly:
                 </p>
                 <p className="text-gray-800 font-medium">
-                  Phone: +91 9363122005
+                  Phone: <a href="tel:+919363122005">+91 9363122005</a>
                   <br />
-                  Email: info@dsnenterprises.com
+                  Email:{" "}
+                  <a href="mailto:info@dsnenterprises.com">
+                    info@dsnenterprises.com
+                  </a>
                 </p>
               </motion.div>
             </div>
