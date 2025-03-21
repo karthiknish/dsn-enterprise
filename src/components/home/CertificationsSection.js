@@ -7,32 +7,36 @@ import { FaAward, FaCertificate } from 'react-icons/fa';
 const certificates = [
   {
     id: 1,
-    name: 'API 5B Certificate',
-    description: 'API Specification 5B certification for threading, gauging, and inspection of casing, tubing, and line pipe threads.',
-    image: '/images/cetificates/API-5B-0039-2023_page-0001.jpg',
-    icon: <FaAward />
+    name: "API 5B Certificate",
+    description:
+      "API Specification 5B certification for threading, gauging, and inspection of casing, tubing, and line pipe threads.",
+    image: "/images/certificates/API-5B-0039-2023_page-0001.jpg",
+    icon: <FaAward />,
   },
   {
     id: 2,
-    name: 'NABL Accreditation',
-    description: 'National Accreditation Board for Testing and Calibration Laboratories (NABL) certification for our calibration services.',
-    image: '/images/cetificates/SMCS-NABL-SCOPE-23-25-1_page-0002.jpg',
-    icon: <FaCertificate />
+    name: "NABL Accreditation",
+    description:
+      "National Accreditation Board for Testing and Calibration Laboratories (NABL) certification for our calibration services.",
+    image: "/images/certificates/SMCS-NABL-SCOPE-23-25-1_page-0002.jpg",
+    icon: <FaCertificate />,
   },
   {
     id: 3,
-    name: 'API 7-2 Certificate',
-    description: 'API Specification 7-2 certification for threading and gauging of rotary shouldered thread connections.',
-    image: '/images/cetificates/api72.jpg',
-    icon: <FaAward />
+    name: "API 7-2 Certificate",
+    description:
+      "API Specification 7-2 certification for threading and gauging of rotary shouldered thread connections.",
+    image: "/images/certificates/api72.jpg",
+    icon: <FaAward />,
   },
   {
     id: 4,
-    name: 'ISO Certification',
-    description: 'ISO 9001:2015 certification for our quality management system.',
-    image: '/images/cetificates/isocert.jpg',
-    icon: <FaCertificate />
-  }
+    name: "ISO Certification",
+    description:
+      "ISO 9001:2015 certification for our quality management system.",
+    image: "/images/certificates/isocert.jpg",
+    icon: <FaCertificate />,
+  },
 ];
 
 const CertificationsSection = () => {
