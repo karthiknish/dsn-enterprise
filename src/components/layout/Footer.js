@@ -52,7 +52,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/"
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-secondary transition-colors"
                 >
                   Home
                 </Link>
@@ -60,7 +60,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/about"
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-secondary transition-colors"
                 >
                   About Us
                 </Link>
@@ -68,7 +68,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/products"
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-secondary transition-colors"
                 >
                   Products
                 </Link>
@@ -76,7 +76,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/services"
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-secondary transition-colors"
                 >
                   Services
                 </Link>
@@ -84,7 +84,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/contact"
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-secondary transition-colors"
                 >
                   Contact
                 </Link>
@@ -98,40 +98,40 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/products#thread-gauges"
-                  className="hover:text-blue-400 transition-colors"
+                  href="#"
+                  className="hover:text-secondary transition-colors"
                 >
                   Thread Gauges
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/products#plain-gauges"
-                  className="hover:text-blue-400 transition-colors"
+                  href="#"
+                  className="hover:text-secondary transition-colors"
                 >
                   Plain Gauges
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/products#api-gauges"
-                  className="hover:text-blue-400 transition-colors"
+                  href="#"
+                  className="hover:text-secondary transition-colors"
                 >
                   API Gauges
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/products#special-gauges"
-                  className="hover:text-blue-400 transition-colors"
+                  href="#"
+                  className="hover:text-secondary transition-colors"
                 >
                   Special Gauges
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/products#custom-gauges"
-                  className="hover:text-blue-400 transition-colors"
+                  href="#"
+                  className="hover:text-secondary transition-colors"
                 >
                   Custom Gauges
                 </Link>
