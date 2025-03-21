@@ -102,11 +102,11 @@ export default function ThankYouPage() {
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary mr-2">•</span>
-                    <span>You'll receive a confirmation email</span>
+                    <span>You will receive a confirmation email</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary mr-2">•</span>
-                    <span>We'll contact you within 24-48 business hours</span>
+                    <span>We will contact you within 24-48 business hours</span>
                   </li>
                 </ul>
               </motion.div>
@@ -122,7 +122,7 @@ export default function ThankYouPage() {
                   Need Immediate Assistance?
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  If your matter is urgent, please don't hesitate to contact us
+                  If your matter is urgent, please do not hesitate to contact us
                   directly:
                 </p>
                 <p className="text-gray-800 font-medium">
