@@ -107,7 +107,7 @@ const ContactPage = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               Have questions about our products or services? Get in touch with
-              our team and we'll be happy to assist you.
+              our team and we will be happy to assist you.
             </motion.p>
           </div>
         </div>
@@ -213,7 +213,8 @@ const ContactPage = () => {
                 {submitSuccess && (
                   <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                     <p>
-                      Thank you for your message! We'll get back to you shortly.
+                      Thank you for your message! We will get back to you
+                      shortly.
                     </p>
                   </div>
                 )}
