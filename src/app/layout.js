@@ -24,6 +24,7 @@ export const metadata = {
   title: "DSN Enterprises - Precision Gauges & Measuring Instruments",
   description:
     "DSN Enterprises is a leading manufacturer and supplier of high-precision gauges and measuring instruments for industrial applications.",
+  favicon: "/favicon.ico",
 };
 
 export default function RootLayout({ children }) {

@@ -8,7 +8,7 @@ const Hero = () => {
     <div className="relative text-white bg-white  min-h-screen flex items-center">
       {/* Video Background */}
       <video
-        style={{ marginTop: "-50px" }}
+        style={{ marginTop: "-70px" }}
         className="absolute inset-0 w-full h-full object-cover"
         autoPlay
         muted
