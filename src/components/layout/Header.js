@@ -28,7 +28,9 @@ const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+        scrolled || window.location.pathname !== "/"
+          ? "bg-white shadow-md py-2"
+          : "bg-transparent py-4"
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -49,7 +51,9 @@ const Header = () => {
           <Link
             href="/"
             className={`${
-              scrolled ? "text-gray-800" : "text-white"
+              scrolled || window.location.pathname !== "/"
+                ? "text-gray-800"
+                : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             Home
@@ -57,7 +61,9 @@ const Header = () => {
           <Link
             href="/about"
             className={`${
-              scrolled ? "text-gray-800" : "text-white"
+              scrolled || window.location.pathname !== "/"
+                ? "text-gray-800"
+                : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             About Us
@@ -65,7 +71,9 @@ const Header = () => {
           <Link
             href="/products"
             className={`${
-              scrolled ? "text-gray-800" : "text-white"
+              scrolled || window.location.pathname !== "/"
+                ? "text-gray-800"
+                : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             Products
@@ -73,7 +81,9 @@ const Header = () => {
           <Link
             href="/services"
             className={`${
-              scrolled ? "text-gray-800" : "text-white"
+              scrolled || window.location.pathname !== "/"
+                ? "text-gray-800"
+                : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             Services
@@ -81,7 +91,9 @@ const Header = () => {
           <Link
             href="/contact"
             className={`${
-              scrolled ? "text-gray-800" : "text-white"
+              scrolled || window.location.pathname !== "/"
+                ? "text-gray-800"
+                : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             Contact

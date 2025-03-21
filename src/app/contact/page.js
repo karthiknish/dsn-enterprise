@@ -146,7 +146,7 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="pt-16">
+    <div className="pt-8">
       {/* Hero Section */}
       <section className="bg-primary text-white py-20">
         <div className="container mx-auto px-4">

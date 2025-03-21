@@ -92,13 +92,6 @@ const FeaturedProducts = () => {
                 </h3>
                 <p className="text-primary font-medium mb-2">{product.specs}</p>
                 <p className="text-gray-600 mb-4">{product.description}</p>
-                <Link
-                  href={product.link}
-                  className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
-                >
-                  Learn More
-                  <FaArrowRight className="w-4 h-4 ml-2" />
-                </Link>
               </div>
             </motion.div>
           ))}
