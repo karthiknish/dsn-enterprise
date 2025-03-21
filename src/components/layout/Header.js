@@ -28,7 +28,7 @@ const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled || window.location.pathname !== "/"
+        scrolled || window?.location?.pathname !== "/"
           ? "bg-white shadow-md py-2"
           : "bg-transparent py-4"
       }`}
@@ -51,7 +51,7 @@ const Header = () => {
           <Link
             href="/"
             className={`${
-              scrolled || window.location.pathname !== "/"
+              scrolled || window?.location?.pathname !== "/"
                 ? "text-gray-800"
                 : "text-white"
             } hover:text-primary font-medium transition-colors`}
@@ -61,7 +61,7 @@ const Header = () => {
           <Link
             href="/about"
             className={`${
-              scrolled || window.location.pathname !== "/"
+              scrolled || window?.location?.pathname !== "/"
                 ? "text-gray-800"
                 : "text-white"
             } hover:text-primary font-medium transition-colors`}
@@ -71,7 +71,7 @@ const Header = () => {
           <Link
             href="/products"
             className={`${
-              scrolled || window.location.pathname !== "/"
+              scrolled || window?.location?.pathname !== "/"
                 ? "text-gray-800"
                 : "text-white"
             } hover:text-primary font-medium transition-colors`}
@@ -81,7 +81,7 @@ const Header = () => {
           <Link
             href="/services"
             className={`${
-              scrolled || window.location.pathname !== "/"
+              scrolled || window?.location?.pathname !== "/"
                 ? "text-gray-800"
                 : "text-white"
             } hover:text-primary font-medium transition-colors`}
@@ -91,7 +91,7 @@ const Header = () => {
           <Link
             href="/contact"
             className={`${
-              scrolled || window.location.pathname !== "/"
+              scrolled || window?.location?.pathname !== "/"
                 ? "text-gray-800"
                 : "text-white"
             } hover:text-primary font-medium transition-colors`}
@@ -102,7 +102,11 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button className="md:hidden text-gray-800" onClick={toggleMenu}>
-          {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          {isOpen ? (
+            <FaTimes className="text-primary" size={24} />
+          ) : (
+            <FaBars className="text-white" size={24} />
+          )}
         </button>
       </div>
 
@@ -117,7 +121,7 @@ const Header = () => {
             className="absolute top-4 right-4 text-gray-800"
             onClick={toggleMenu}
           >
-            <FaTimes size={24} />
+            <FaTimes className="text-primary" size={24} />
           </button>
           <Link
             href="/"
