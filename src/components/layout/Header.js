@@ -7,7 +7,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [setHome, setSetHome] = useState(false);
+  const [setHome, setSetHome] = useState(true);
   useEffect(() => {
     const handleScroll = () => {
       if (window.location.pathname === "/") {
