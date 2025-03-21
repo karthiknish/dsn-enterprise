@@ -7,9 +7,15 @@ import { FaBars, FaTimes } from "react-icons/fa";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
+  const [setHome, setSetHome] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
+      if (window.location.pathname === "/") {
+        setSetHome(true);
+      } else {
+        setSetHome(false);
+      }
+
       if (window.scrollY > 10) {
         setScrolled(true);
       } else {
@@ -28,9 +34,7 @@ const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled || window?.location?.pathname !== "/"
-          ? "bg-white shadow-md py-2"
-          : "bg-transparent py-4"
+        scrolled || !setHome ? "bg-white shadow-md py-2" : "bg-transparent py-4"
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -51,9 +55,7 @@ const Header = () => {
           <Link
             href="/"
             className={`${
-              scrolled || window?.location?.pathname !== "/"
-                ? "text-gray-800"
-                : "text-white"
+              scrolled || !setHome ? "text-gray-800" : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             Home
@@ -61,9 +63,7 @@ const Header = () => {
           <Link
             href="/about"
             className={`${
-              scrolled || window?.location?.pathname !== "/"
-                ? "text-gray-800"
-                : "text-white"
+              scrolled || !setHome ? "text-gray-800" : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             About Us
@@ -71,9 +71,7 @@ const Header = () => {
           <Link
             href="/products"
             className={`${
-              scrolled || window?.location?.pathname !== "/"
-                ? "text-gray-800"
-                : "text-white"
+              scrolled || !setHome ? "text-gray-800" : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             Products
@@ -81,9 +79,7 @@ const Header = () => {
           <Link
             href="/services"
             className={`${
-              scrolled || window?.location?.pathname !== "/"
-                ? "text-gray-800"
-                : "text-white"
+              scrolled || !setHome ? "text-gray-800" : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             Services
@@ -91,9 +87,7 @@ const Header = () => {
           <Link
             href="/contact"
             className={`${
-              scrolled || window?.location?.pathname !== "/"
-                ? "text-gray-800"
-                : "text-white"
+              scrolled || !setHome ? "text-gray-800" : "text-white"
             } hover:text-primary font-medium transition-colors`}
           >
             Contact
@@ -105,7 +99,10 @@ const Header = () => {
           {isOpen ? (
             <FaTimes className="text-primary" size={24} />
           ) : (
-            <FaBars className="text-white" size={24} />
+            <FaBars
+              className={`${scrolled ? "text-gray-800" : "text-white"}`}
+              size={24}
+            />
           )}
         </button>
       </div>
@@ -125,35 +122,35 @@ const Header = () => {
           </button>
           <Link
             href="/"
-            className="py-3 text-lg font-medium border-b border-gray-200"
+            className="py-3 text-lg text-primary font-medium border-b border-gray-200"
             onClick={toggleMenu}
           >
             Home
           </Link>
           <Link
             href="/about"
-            className="py-3 text-lg font-medium border-b border-gray-200"
+            className="py-3 text-lg text-primary font-medium border-b border-gray-200"
             onClick={toggleMenu}
           >
             About Us
           </Link>
           <Link
             href="/products"
-            className="py-3 text-lg font-medium border-b border-gray-200"
+            className="py-3 text-lg text-primary font-medium border-b border-gray-200"
             onClick={toggleMenu}
           >
             Products
           </Link>
           <Link
             href="/services"
-            className="py-3 text-lg font-medium border-b border-gray-200"
+            className="py-3 text-lg text-primary font-medium border-b border-gray-200"
             onClick={toggleMenu}
           >
             Services
           </Link>
           <Link
             href="/contact"
-            className="py-3 text-lg font-medium"
+            className="py-3 text-lg text-primary font-medium"
             onClick={toggleMenu}
           >
             Contact

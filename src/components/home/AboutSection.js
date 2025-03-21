@@ -61,8 +61,8 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
             className="order-1 lg:order-2"
           >
-            <div className="relative">
-              <div className="bg-secondary-light rounded-lg h-96 w-full">
+            <div className="relative w-3/4 h-full md:w-full">
+              <div className="bg-secondary-light mx-auto rounded-lg h-96 w-full">
                 <img
                   className="w-full h-full object-contain"
                   src="/images/featured.png"
