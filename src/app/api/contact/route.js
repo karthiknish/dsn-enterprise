@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createContactEntry } from "@/lib/contentful";
-
+import { sendEmail } from "@/lib/brevo";
 // Initialize Contentful environment variables
 const contentfulSpaceId = process.env.CONTENTFUL_SPACE_ID;
 const contentfulManagementToken = process.env.CONTENTFUL_MANAGEMENT_TOKEN;
@@ -83,6 +83,47 @@ export async function POST(request) {
       "Successfully saved contact to Contentful with ID:",
       entry.sys.id
     );
+
+    // Send confirmation email to admins
+    try {
+      const emailHtml = `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${contactData.name}</p>
+        <p><strong>Email:</strong> ${contactData.email}</p>
+        <p><strong>Phone:</strong> ${contactData.phone || "Not provided"}</p>
+        <p><strong>Company:</strong> ${
+          contactData.company || "Not provided"
+        }</p>
+        <p><strong>Product Interest:</strong> ${
+          contactData.productInterest || "Not specified"
+        }</p>
+        <p><strong>Message:</strong></p>
+        <p>${contactData.message}</p>
+      `;
+
+      // Send to first admin
+      await sendEmail({
+        to: "microfin@rediffmail.com",
+        toName: "DSN Enterprises Admin",
+        subject: "New Contact Form Submission - DSN Enterprises",
+        htmlContent: emailHtml,
+        textContent: `New Contact Form Submission from ${contactData.name} (${contactData.email})`,
+      });
+
+      // Send to second admin
+      await sendEmail({
+        to: "karthik.nishanth06@gmail.com",
+        toName: "DSN Enterprises Admin",
+        subject: "New Contact Form Submission - DSN Enterprises",
+        htmlContent: emailHtml,
+        textContent: `New Contact Form Submission from ${contactData.name} (${contactData.email})`,
+      });
+
+      console.log("Confirmation emails sent to admins successfully");
+    } catch (emailError) {
+      console.error("Error sending confirmation emails:", emailError);
+      // Continue with the response even if email sending fails
+    }
 
     // Return success response
     return NextResponse.json(
