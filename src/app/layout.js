@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,6 +46,7 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-Q6XMPKTR8P');
           `}
         </Script>
+        <Analytics />
         {/* Meta Pixel Code */}
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`
