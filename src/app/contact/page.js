@@ -173,88 +173,6 @@ const ContactPage = () => {
       </section>
 
       {/* Contact Information */}
-      <section className="py-16 bg-secondary-light">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-            <motion.div
-              className="bg-white rounded-lg shadow-lg p-8 text-center"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="flex justify-center mb-4">
-                <FaMapMarkerAlt className="text-4xl text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">
-                Our Location
-              </h3>
-              <p className="text-gray-600">
-                Coimbatore,
-                <br /> Tamil Nadu,
-                <br />
-                India
-              </p>
-            </motion.div>
-
-            <motion.div
-              className="bg-white rounded-lg shadow-lg p-8 text-center"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <div className="flex justify-center mb-4">
-                <FaPhone className="text-4xl text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Phone</h3>
-              <p className="text-gray-600">
-                <a href="tel:+919363122005">+91 9363122005</a>
-              </p>
-            </motion.div>
-
-            <motion.div
-              className="bg-white rounded-lg shadow-lg p-8 text-center"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <div className="flex justify-center mb-4">
-                <FaEnvelope className="text-4xl text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Email</h3>
-              <p className="text-gray-600">
-                <a href="mailto:info@dsnenterprises.in">
-                  info@dsnenterprises.in
-                </a>
-              </p>
-            </motion.div>
-
-            <motion.div
-              className="bg-white rounded-lg shadow-lg p-8 text-center"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="flex justify-center mb-4">
-                <FaClock className="text-4xl text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-gray-900">
-                Business Hours
-              </h3>
-              <p className="text-gray-600">
-                Monday - Friday: 9:00 AM - 6:00 PM
-                <br />
-                Saturday: 9:00 AM - 1:00 PM
-                <br />
-                Sunday: Closed
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* Contact Form */}
       <section className="py-16 bg-white">
@@ -510,6 +428,88 @@ const ContactPage = () => {
                 </div>
               </motion.div>
             </div>
+          </div>
+        </div>
+      </section>
+      <section className="py-16 bg-secondary-light">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <motion.div
+              className="bg-white rounded-lg shadow-lg p-8 text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex justify-center mb-4">
+                <FaMapMarkerAlt className="text-4xl text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">
+                Our Location
+              </h3>
+              <p className="text-gray-600">
+                Coimbatore,
+                <br /> Tamil Nadu,
+                <br />
+                India
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="bg-white rounded-lg shadow-lg p-8 text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <div className="flex justify-center mb-4">
+                <FaPhone className="text-4xl text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Phone</h3>
+              <p className="text-gray-600">
+                <a href="tel:+919363122005">+91 9363122005</a>
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="bg-white rounded-lg shadow-lg p-8 text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <div className="flex justify-center mb-4">
+                <FaEnvelope className="text-4xl text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Email</h3>
+              <p className="text-gray-600">
+                <a href="mailto:info@dsnenterprises.in">
+                  info@dsnenterprises.in
+                </a>
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="bg-white rounded-lg shadow-lg p-8 text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <div className="flex justify-center mb-4">
+                <FaClock className="text-4xl text-primary" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">
+                Business Hours
+              </h3>
+              <p className="text-gray-600">
+                Monday - Friday: 9:00 AM - 6:00 PM
+                <br />
+                Saturday: 9:00 AM - 1:00 PM
+                <br />
+                Sunday: Closed
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>

@@ -166,14 +166,14 @@ const ContactSection = () => {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1  lg:grid-cols-2 gap-12">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="bg-secondary-light p-8 rounded-lg shadow-lg">
+            <div className="bg-secondary-light p-8  rounded-lg shadow-lg">
               <h3 className="text-2xl font-bold mb-6 text-gray-900">
                 Send Us a Message
               </h3>
