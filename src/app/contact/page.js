@@ -347,7 +347,6 @@ const ContactPage = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="hidden lg:block"
               >
                 <div className="bg-secondary-light p-8 rounded-lg h-full">
                   <h3 className="text-2xl font-bold mb-6 text-gray-900">
