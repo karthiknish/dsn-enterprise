@@ -34,16 +34,16 @@ const AboutSection = () => {
                 <p className="text-gray-700">Years of Experience</p>
               </div>
               <div className="bg-secondary-light p-4 rounded-lg">
-                <h3 className="text-xl font-bold text-primary mb-2">2000+</h3>
+                <h3 className="text-xl font-bold text-primary mb-2">200+</h3>
                 <p className="text-gray-700">Satisfied Clients</p>
               </div>
               <div className="bg-secondary-light p-4 rounded-lg">
-                <h3 className="text-xl font-bold text-primary mb-2">50+</h3>
+                <h3 className="text-xl font-bold text-primary mb-2">10+</h3>
                 <p className="text-gray-700">Types of Gauges</p>
               </div>
               <div className="bg-secondary-light p-4 rounded-lg">
-                <h3 className="text-xl font-bold text-primary mb-2">25+</h3>
-                <p className="text-gray-700">Countries Served</p>
+                <h3 className="text-xl font-bold text-primary mb-2">50+</h3>
+                <p className="text-gray-700">Cities covered in South India</p>
               </div>
             </div>
             <Link
