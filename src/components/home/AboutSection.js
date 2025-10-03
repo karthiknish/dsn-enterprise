@@ -65,7 +65,7 @@ const AboutSection = () => {
               <div className="bg-secondary-light mx-auto rounded-lg h-96 w-full">
                 <img
                   className="w-full h-full object-contain"
-                  src="/images/featured.png"
+                  src="/images/bnr1.png"
                   alt="Cylinder Maters"
                 />
               </div>

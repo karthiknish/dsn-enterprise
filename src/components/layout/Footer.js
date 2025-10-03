@@ -156,8 +156,8 @@ const Footer = () => {
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 text-secondary" />
                 <span>
-                  <a href="mailto:info@dsnenterprises.in">
-                    info@dsnenterprises.in
+                  <a href="mailto:microfin2001@gmail.com">
+                    microfin2001@gmail.com
                   </a>
                 </span>
               </li>

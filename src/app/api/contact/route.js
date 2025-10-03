@@ -103,7 +103,7 @@ export async function POST(request) {
 
       // Send to first admin
       await sendEmail({
-        to: "microfin@rediffmail.com",
+        to: "microfin2001@gmail.com",
         toName: "DSN Enterprises Admin",
         subject: "New Contact Form Submission - DSN Enterprises",
         htmlContent: emailHtml,
@@ -112,7 +112,7 @@ export async function POST(request) {
 
       // Send to second admin
       await sendEmail({
-        to: "karthik.nishanth06@gmail.com",
+        to: "microfin2001@gmail.com",
         toName: "DSN Enterprises Admin",
         subject: "New Contact Form Submission - DSN Enterprises",
         htmlContent: emailHtml,

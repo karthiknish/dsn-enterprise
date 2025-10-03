@@ -5,37 +5,31 @@ import { motion } from 'framer-motion';
 import { FaAward, FaCertificate } from 'react-icons/fa';
 
 const certificates = [
+  
   {
     id: 1,
-    name: "API 5B Certificate",
+    name: "ISO Certification",
     description:
-      "API Specification 5B certification for threading, gauging, and inspection of casing, tubing, and line pipe threads.",
-    image: "/images/certificates/API-5B-0039-2023_page-0001.jpg",
-    icon: <FaAward />,
+      "ISO 9001:2015 certification for our quality management system.",
+    image: "/images/certificates/iso-9001-2015-certficate-new.webp",
+    icon: <FaCertificate />,
   },
   {
     id: 2,
-    name: "NABL Accreditation",
+    name: "ISO/IEC 17025:2017 Certificate",
     description:
-      "National Accreditation Board for Testing and Calibration Laboratories (NABL) certification for our calibration services.",
-    image: "/images/certificates/SMCS-NABL-SCOPE-23-25-1_page-0002.jpg",
+      "ISO/IEC 17025:2017 accreditation for competence in testing and calibration laboratories.",
+    image: "/images/certificates/certificate-cc-2602_page-0001.jpg",
     icon: <FaCertificate />,
   },
   {
     id: 3,
-    name: "API 7-2 Certificate",
+    name: "NABL Scope-CC-2602",
     description:
-      "API Specification 7-2 certification for threading and gauging of rotary shouldered thread connections.",
-    image: "/images/certificates/api72.jpg",
-    icon: <FaAward />,
-  },
-  {
-    id: 4,
-    name: "ISO Certification",
-    description:
-      "ISO 9001:2015 certification for our quality management system.",
-    image: "/images/certificates/isocert.jpg",
+      "Scope of NABL accreditation for UNIK Gauges & Tools Calibration Laboratory (PDF).",
+    image: "/images/certificates/scope-cc-2602.pdf",
     icon: <FaCertificate />,
+    isPdf: true,
   },
 ];
 
@@ -75,13 +69,24 @@ const CertificationsSection = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <div className="relative h-64 w-full">
-                <Image
-                  src={certificate.image}
-                  alt={certificate.name}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  className="transition-transform hover:scale-105 duration-300"
-                />
+                {certificate.isPdf ? (
+                  <a
+                    href={certificate.image}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center h-full w-full bg-gray-100 text-primary text-lg font-semibold"
+                  >
+                    Download PDF
+                  </a>
+                ) : (
+                  <Image
+                    src={certificate.image}
+                    alt={certificate.name}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    className="transition-transform hover:scale-105 duration-300"
+                  />
+                )}
               </div>
               <div className="p-6">
                 <div className="flex items-center mb-3">

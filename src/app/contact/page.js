@@ -482,8 +482,8 @@ const ContactPage = () => {
               </div>
               <h3 className="text-xl font-bold mb-3 text-gray-900">Email</h3>
               <p className="text-gray-600">
-                <a href="mailto:info@dsnenterprises.in">
-                  info@dsnenterprises.in
+                <a href="mailto:microfin2001@gmail.com">
+                  microfin2001@gmail.com
                 </a>
               </p>
             </motion.div>

@@ -362,8 +362,8 @@ const ContactSection = () => {
                   <div>
                     <h4 className="font-bold mb-1">Email Address</h4>
                     <p className="text-secondary-light">
-                      <a href="mailto:info@dsnenterprises.in">
-                        info@dsnenterprises.in
+                      <a href="mailto:microfin2001@gmail.com">
+                        microfin2001@gmail.com
                       </a>
                     </p>
                   </div>
