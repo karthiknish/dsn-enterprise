@@ -16,36 +16,37 @@ const products = [
         name: 'Plain Plug Gauge',
         specs: '1mm to 250mm - OHNS (W) & Carbide',
         description: 'Precision plug gauges for accurate hole measurement.',
-        image: '/images/plain-gauge.jpg',
+        image: '/images/plain-plug-gauge.png',
       },
       {
         id: 'plain-ring-gauge',
         name: 'Plain Ring Gauge',
         specs: '6mm to 125mm',
         description: 'Precision ring gauges for accurate shaft measurement.',
-        image: '/images/plain-gauge.jpg',
+        image: '/images/plain-ring-gauge.png',
       },
       {
         id: 'cylindrical-setting-masters',
         name: 'Cylindrical Setting Masters',
         specs: '6mm to 250mm',
         description: 'Master setting gauges for calibration and reference.',
-        image: '/images/plain-gauge.jpg',
+        image: '/images/cylinder-maters.png',
       },
       {
         id: 'cylindrical-measuring-pin',
         name: 'Cylindrical Measuring Pin',
         specs: '1mm to 20mm',
         description: 'Precision pins for accurate measurement.',
-        image: '/images/plain-gauge.jpg',
+        image: '/images/cylinder-maters.png',
       },
       {
         id: 'snap-gauges',
         name: 'Snap Gauges',
         specs: 'Various sizes available',
         description: 'Quick and accurate external dimension measurement.',
-        image: '/images/plain-gauge.jpg',
+        image: '/images/snap-gauge.png',
       },
+      
     ]
   },
   {
@@ -58,28 +59,28 @@ const products = [
         name: 'Thread Plug Gauge',
         specs: 'Various thread forms and sizes',
         description: 'For accurate internal thread inspection.',
-        image: '/images/thread-gauge.jpg',
+        image: '/images/thread-plug-gauge.png',
       },
       {
         id: 'thread-ring-gauge',
         name: 'Thread Ring Gauge',
         specs: 'Various thread forms and sizes',
         description: 'For accurate external thread inspection.',
-        image: '/images/thread-gauge.jpg',
+        image: '/images/thread-ring-gauge.png',
       },
       {
         id: 'thread-setting-plug',
         name: 'Thread Setting Plug',
         specs: 'Various thread forms and sizes',
         description: 'For calibrating thread ring gauges.',
-        image: '/images/thread-gauge.jpg',
+        image: '/images/thread-setting-plug-gauge.png',
       },
       {
         id: 'taper-thread-gauges',
         name: 'Taper Thread Gauges',
         specs: 'Various thread forms and sizes',
         description: 'For inspecting tapered thread forms.',
-        image: '/images/thread-gauge.jpg',
+        image: '/images/thread-ring-gauge.png',
       },
     ]
   },
@@ -93,14 +94,14 @@ const products = [
         name: 'API Thread Gauges',
         specs: 'API 5B & 7-2 certified',
         description: 'For oil and gas industry thread inspection.',
-        image: '/images/api-gauge.jpg',
+        image: '/images/api-thread-gauge.png',
       },
       {
         id: 'api-master-gauges',
         name: 'API Master Gauges',
         specs: 'API 5B & 7-2 certified',
         description: 'Reference gauges for calibration.',
-        image: '/images/api-gauge.jpg',
+        image: '/images/api-master-gauge.png',
       },
     ]
   },
@@ -114,21 +115,21 @@ const products = [
         name: 'Special Gauges as per Drawing',
         specs: 'Custom specifications',
         description: 'Manufactured according to customer drawings and specifications.',
-        image: '/images/special-gauge.jpg',
+        image: '/images/featured.png',
       },
       {
         id: 'acme-thread-gauges',
         name: 'ACME Thread Gauges',
         specs: 'Various sizes',
         description: 'For ACME thread inspection.',
-        image: '/images/special-gauge.jpg',
+        image: '/images/featured.png',
       },
       {
         id: 'buttress-thread-gauges',
         name: 'Buttress Thread Gauges',
         specs: 'Various sizes',
         description: 'For Buttress thread inspection.',
-        image: '/images/special-gauge.jpg',
+        image: '/images/featured.png',
       },
     ]
   },
@@ -257,8 +258,12 @@ const ProductsPage = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                     >
-                      <div className="h-48 bg-secondary-light flex items-center justify-center">
-                        <div className="text-6xl text-primary">⚙️</div>
+                      <div className="h-48 bg-secondary-light overflow-hidden">
+                        <img
+                          className="w-full h-full object-contain"
+                          src={item.image}
+                          alt={item.name}
+                        />
                       </div>
                       <div className="p-6">
                         <h3 className="text-xl font-bold mb-2 text-gray-900">
@@ -345,4 +350,4 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
-     
+

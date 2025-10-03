@@ -41,6 +41,32 @@ const products = [
     image: "/images/snap-gauge.png",
     link: "/products#special-gauges",
   },
+  {
+    id: 5,
+    name: "Thread Plug Gauges",
+    description:
+      "Precision thread plug gauges for accurate measurement and inspection of internal threads.",
+    specs: "Various thread sizes",
+    image: "/images/thread-plug-gauge.png",
+    link: "/products#thread-gauges",
+  },
+  {
+    id: 6,
+    name: "Thread Ring Gauges",
+    description:
+      "High-quality thread ring gauges for external thread verification and calibration.",
+    specs: "Various thread sizes",
+    image: "/images/thread-ring-gauge.png",
+    link: "/products#thread-gauges",
+  },
+  {
+    id: 7,
+    name: "API Master Gauges",
+    description: "Reference gauges for calibration and API applications.",
+    specs: "API 5B & 7-2 certified",
+    image: "/images/api-master-gauge.png",
+    link: "/products#api-gauges",
+  },
 ];
 
 const FeaturedProducts = () => {
@@ -64,12 +90,13 @@ const FeaturedProducts = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Discover our range of high-precision measuring instruments designed
-            for various industrial applications.
+            Our company supplies precision measuring instruments engineered for
+            industrial applications. Distribution and after‑sales support are
+            provided via our trusted partner, Unik Gauges, located in Pune.
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {products.map((product, index) => (
             <motion.div
               key={product.id}

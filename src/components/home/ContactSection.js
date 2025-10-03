@@ -287,6 +287,8 @@ const ContactSection = () => {
                       Cylindrical Measuring Pin
                     </option>
                     <option value="Snap Gauges">Snap Gauges</option>
+                    <option value="Thread Plug Gauge">Thread Plug Gauge</option>
+                    <option value="Thread Ring Gauge">Thread Ring Gauge</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
