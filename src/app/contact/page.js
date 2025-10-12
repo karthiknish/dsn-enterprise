@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from "react-icons/fa";
+import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaCheck, FaExclamationTriangle, FaTimes } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useMetaTracking } from "@/hooks/useMetaTracking";
 
 const ContactPage = () => {
   const router = useRouter();
+  const formRef = useRef(null);
+  const {
+    trackContactSubmission,
+    trackPageView,
+    trackFieldInteraction,
+    trackValidationErrors,
+    trackFormAbandonment
+  } = useMetaTracking();
+  
+  // Form data state
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,134 +27,277 @@ const ContactPage = () => {
     productInterest: "",
   });
 
+  // Form state management
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [isFormDirty, setIsFormDirty] = useState(false);
+  const [isAutoSaving, setIsAutoSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState(null);
+  
+
+  // Track page view on mount
+  useEffect(() => {
+    trackPageView({
+      page_title: 'Contact Us',
+      page_location: window.location.href,
+      page_category: 'Lead Generation'
+    });
+  }, [trackPageView]);
+
+  // Auto-save form data to localStorage
+  useEffect(() => {
+    const savedData = localStorage.getItem('contactFormDraft');
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        if (parsed.timestamp && Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) { // 24 hours
+          setFormData(parsed.data);
+          setLastSaved(new Date(parsed.timestamp));
+        }
+      } catch (error) {
+        console.error('Error loading saved form:', error);
+      }
+    }
+  }, []);
+
+  // Auto-save on form changes
+  useEffect(() => {
+    if (isFormDirty) {
+      const timeoutId = setTimeout(() => {
+        setIsAutoSaving(true);
+        const saveData = {
+          data: formData,
+          timestamp: Date.now()
+        };
+        localStorage.setItem('contactFormDraft', JSON.stringify(saveData));
+        setLastSaved(new Date());
+        setIsAutoSaving(false);
+      }, 1000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [formData, isFormDirty]);
+
+  // Track form abandonment on page unload
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isFormDirty && Object.values(formData).some(value => value && value.trim() !== '')) {
+        trackFormAbandonment(formData);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isFormDirty, formData, trackFormAbandonment]);
+
+  // Clear saved form data on successful submission
+  const clearSavedForm = () => {
+    localStorage.removeItem('contactFormDraft');
+    setLastSaved(null);
+  };
+
+  // Enhanced form validation
+  const validateField = (name, value) => {
+    const errors = { ...fieldErrors };
+    
+    switch (name) {
+      case 'name':
+        if (!value || value.trim().length === 0) {
+          errors.name = 'Name is required';
+        } else if (value.trim().length < 2) {
+          errors.name = 'Name must be at least 2 characters';
+        } else if (value.trim().length > 100) {
+          errors.name = 'Name must be less than 100 characters';
+        } else {
+          delete errors.name;
+        }
+        break;
+        
+      case 'email':
+        if (!value || value.trim().length === 0) {
+          errors.email = 'Email is required';
+        } else {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value.trim())) {
+            errors.email = 'Please enter a valid email address';
+          } else {
+            delete errors.email;
+          }
+        }
+        break;
+        
+      case 'phone':
+        if (value) {
+          const phoneRegex = /^[\d\s\+\-\(\)]{6,20}$/;
+          if (!phoneRegex.test(value.trim())) {
+            errors.phone = 'Please enter a valid phone number';
+          } else {
+            delete errors.phone;
+          }
+        } else {
+          delete errors.phone;
+        }
+        break;
+        
+      case 'message':
+        if (!value || value.trim().length === 0) {
+          errors.message = 'Message is required';
+        } else if (value.trim().length < 10) {
+          errors.message = 'Message must be at least 10 characters';
+        } else if (value.trim().length > 2000) {
+          errors.message = 'Message must be less than 2000 characters';
+        } else {
+          delete errors.message;
+        }
+        break;
+        
+      case 'company':
+        if (value && value.trim().length > 200) {
+          errors.company = 'Company name must be less than 200 characters';
+        } else {
+          delete errors.company;
+        }
+        break;
+    }
+    
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, id, value } = e.target;
-    const fieldName = name || id; // Use name if available, otherwise use id
+    const fieldName = name || id;
+    
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
     }));
+    
+    setIsFormDirty(true);
+    
+    // Track field interaction
+    trackFieldInteraction(fieldName, 'change');
+    
+    // Real-time validation
+    if (fieldErrors[fieldName]) {
+      validateField(fieldName, value);
+    }
+  };
+
+  const handleFocus = (e) => {
+    const { name, id } = e.target;
+    const fieldName = name || id;
+    trackFieldInteraction(fieldName, 'focus');
+  };
+
+  const handleBlur = (e) => {
+    const { name, id, value } = e.target;
+    const fieldName = name || id;
+    validateField(fieldName, value);
+    trackFieldInteraction(fieldName, 'blur');
+  };
+
+  // Clear form data
+  const clearForm = () => {
+    // Track form clear event
+    if (Object.values(formData).some(value => value && value.trim() !== '')) {
+      trackFormAbandonment(formData);
+    }
+    
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      message: "",
+      productInterest: "",
+    });
+    setFieldErrors({});
+    setIsFormDirty(false);
+    clearSavedForm();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate all fields
+    const isValid = Object.keys(formData).every(field => 
+      validateField(field, formData[field])
+    );
+    
+    if (!isValid) {
+      // Track validation errors
+      trackValidationErrors(fieldErrors);
+      
+      setSubmitError(true);
+      setErrorMessage("Please fix the errors in the form before submitting.");
+      // Scroll to first error
+      const firstErrorField = document.querySelector('.field-error');
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      setTimeout(() => setSubmitError(false), 5000);
+      return;
+    }
+    
     setIsSubmitting(true);
     setSubmitError(false);
     setSubmitSuccess(false);
+    setFieldErrors({});
 
     try {
-      console.log("Submitting form with data:", formData);
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      console.log("Sending to /api/contact:", formData);
-
-      // Use the API endpoint instead of direct Supabase access
-      let response;
-      try {
-        response = await fetch("/api/contact", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-      } catch (fetchError) {
-        console.error("Network error during fetch:", fetchError);
-        throw new Error("Network error: Could not connect to the server");
-      }
-
-      // Check if response is not JSON
-      let responseText;
-      let isJson = false;
-      const contentType = response.headers.get("content-type");
-
-      try {
-        responseText = await response.text();
-        if (contentType && contentType.includes("application/json")) {
-          isJson = true;
-        } else {
-          console.error("Non-JSON response received:", responseText);
-          throw new Error("The server returned an invalid response format");
-        }
-      } catch (textError) {
-        console.error("Error reading response:", textError);
-        throw new Error("Could not read server response");
-      }
-
-      // Parse JSON if we have it
-      let result;
-      if (isJson) {
-        try {
-          result = JSON.parse(responseText);
-        } catch (parseError) {
-          console.error(
-            "Error parsing JSON:",
-            parseError,
-            "Raw text:",
-            responseText
-          );
-          throw new Error("Invalid JSON response from server");
-        }
-      } else {
-        throw new Error(
-          "Server returned HTML instead of JSON. There may be a server error."
-        );
-      }
+      const result = await response.json();
 
       // Handle API errors based on response status
       if (!response.ok) {
         console.error("API error response:", result);
-        if (response.status === 400) {
-          throw new Error(
-            result.error || "Please fill out all required fields"
-          );
-        } else if (response.status === 401) {
-          throw new Error(
-            "Authentication error with Contentful. Please check your API credentials."
-          );
+        
+        if (response.status === 400 && result.validationErrors) {
+          // Handle field-specific validation errors
+          setFieldErrors(result.validationErrors);
+          throw new Error("Please correct the errors in the form.");
+        } else if (response.status === 429) {
+          throw new Error("Too many requests. Please wait a moment and try again.");
         } else {
-          throw new Error(
-            result.error || result.details || "Failed to submit form"
-          );
+          throw new Error(result.error || "Failed to submit form. Please try again.");
         }
       }
 
       console.log("Submission successful, response:", result);
 
-      // Success - redirect to thank you page
+      // Success
       setIsSubmitting(false);
       setSubmitSuccess(true);
-
-      // Reset form data
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        message: "",
-        productInterest: "",
-      });
-
+      
+      // Track successful contact submission
+      trackContactSubmission(contactData);
+      
+      // Clear form and saved data
+      clearForm();
+      
       // Redirect to thank you page
       router.push("/thank-you");
+      
     } catch (error) {
       console.error("Error submitting form:", error);
       setIsSubmitting(false);
       setSubmitError(true);
-      setErrorMessage(
-        error.message ||
-          "There was an error sending your message. Please try again later."
-      );
-
-      setTimeout(() => {
-        setSubmitError(false);
-      }, 5000);
+      setErrorMessage(error.message || "There was an error sending your message. Please try again later.");
     }
   };
+
+  
 
   return (
     <div className="pt-8">
@@ -222,9 +376,23 @@ const ContactPage = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border text-primary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-2 border text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+                        fieldErrors.name 
+                          ? 'border-red-500 focus:ring-red-500' 
+                          : 'border-gray-300'
+                      }`}
                       required
+                      aria-invalid={fieldErrors.name ? 'true' : 'false'}
+                      aria-describedby={fieldErrors.name ? 'name-error' : undefined}
                     />
+                    {fieldErrors.name && (
+                      <p id="name-error" className="mt-1 text-sm text-red-600 flex items-center field-error">
+                        <FaExclamationTriangle className="mr-1" />
+                        {fieldErrors.name}
+                      </p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -241,9 +409,23 @@ const ContactPage = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 text-primary py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        className={`w-full px-4 text-primary py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+                          fieldErrors.email 
+                            ? 'border-red-500 focus:ring-red-500' 
+                            : 'border-gray-300'
+                        }`}
                         required
+                        aria-invalid={fieldErrors.email ? 'true' : 'false'}
+                        aria-describedby={fieldErrors.email ? 'email-error' : undefined}
                       />
+                      {fieldErrors.email && (
+                        <p id="email-error" className="mt-1 text-sm text-red-600 flex items-center field-error">
+                          <FaExclamationTriangle className="mr-1" />
+                          {fieldErrors.email}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <label
@@ -258,8 +440,22 @@ const ContactPage = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 text-primary border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-2 border text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+                          fieldErrors.phone 
+                            ? 'border-red-500 focus:ring-red-500' 
+                            : 'border-gray-300'
+                        }`}
+                        aria-invalid={fieldErrors.phone ? 'true' : 'false'}
+                        aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
                       />
+                      {fieldErrors.phone && (
+                        <p id="phone-error" className="mt-1 text-sm text-red-600 flex items-center field-error">
+                          <FaExclamationTriangle className="mr-1" />
+                          {fieldErrors.phone}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -276,8 +472,22 @@ const ContactPage = () => {
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border text-primary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
+                      className={`w-full px-4 py-2 border text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+                        fieldErrors.company 
+                          ? 'border-red-500 focus:ring-red-500' 
+                          : 'border-gray-300'
+                      }`}
+                      aria-invalid={fieldErrors.company ? 'true' : 'false'}
+                      aria-describedby={fieldErrors.company ? 'company-error' : undefined}
                     />
+                    {fieldErrors.company && (
+                      <p id="company-error" className="mt-1 text-sm text-red-600 flex items-center field-error">
+                        <FaExclamationTriangle className="mr-1" />
+                        {fieldErrors.company}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mb-4">
@@ -292,7 +502,9 @@ const ContactPage = () => {
                       name="productInterest"
                       value={formData.productInterest}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border text-primary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
+                      className="w-full px-4 py-2 border text-primary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                     >
                       <option value="">Select a product</option>
                       <option value="Plain Plug Gauges">
@@ -321,26 +533,94 @@ const ContactPage = () => {
                     >
                       Message *
                     </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows="5"
-                      value={formData.message}
-                      onChange={handleChange}
-                      className="w-full px-4 py-2 border text-primary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                      required
-                    ></textarea>
+                    <div className="relative">
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows="5"
+                        value={formData.message}
+                        onChange={handleChange}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-2 border text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none ${
+                          fieldErrors.message 
+                            ? 'border-red-500 focus:ring-red-500' 
+                            : 'border-gray-300'
+                        }`}
+                        required
+                        aria-invalid={fieldErrors.message ? 'true' : 'false'}
+                        aria-describedby={fieldErrors.message ? 'message-error' : 'message-help'}
+                        maxLength={2000}
+                      />
+                      <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                        {formData.message.length}/2000
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center mt-1">
+                      <p id="message-help" className="text-xs text-gray-500">
+                        Please provide at least 10 characters
+                      </p>
+                      {fieldErrors.message && (
+                        <p id="message-error" className="text-sm text-red-600 flex items-center field-error">
+                          <FaExclamationTriangle className="mr-1" />
+                          {fieldErrors.message}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className={`w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors ${
-                      isSubmitting ? "opacity-70 cursor-not-allowed" : ""
-                    }`}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </button>
+                  <div className="flex gap-3">
+                    <button
+                      type="submit"
+                      className={`flex-1 bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-all transform hover:scale-105 ${
+                        isSubmitting 
+                          ? "opacity-70 cursor-not-allowed" 
+                          : ""
+                      }`}
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center">
+                          <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Sending...
+                        </span>
+                      ) : (
+                        "Send Message"
+                      )}
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={clearForm}
+                      className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+                      disabled={isSubmitting}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  
+                  {/* Auto-save indicator */}
+                  {(isAutoSaving || lastSaved) && (
+                    <div className="mt-3 text-xs text-gray-500 flex items-center justify-center">
+                      {isAutoSaving ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-3 w-3 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <FaCheck className="mr-1" />
+                          Draft saved {lastSaved && `at ${lastSaved.toLocaleTimeString()}`}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </form>
               </motion.div>
 

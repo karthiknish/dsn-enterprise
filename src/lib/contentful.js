@@ -9,6 +9,14 @@ export const contentfulClient = createClient({
 
 // Contentful management client - for creating/updating content
 export const getContentfulManagementClient = () => {
+  if (!process.env.CONTENTFUL_MANAGEMENT_TOKEN) {
+    throw new Error('CONTENTFUL_MANAGEMENT_TOKEN is not defined');
+  }
+  
+  if (!process.env.CONTENTFUL_SPACE_ID) {
+    throw new Error('CONTENTFUL_SPACE_ID is not defined');
+  }
+
   const managementClient = createManagementClient({
     accessToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN,
   });
