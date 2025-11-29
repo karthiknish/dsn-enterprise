@@ -10,11 +10,21 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
+    "@tiptap/extension-code-block-lowlight": "^3.11.1",
+    "@tiptap/extension-image": "^3.11.1",
+    "@tiptap/extension-link": "^3.11.1",
+    "@tiptap/extension-placeholder": "^3.11.1",
+    "@tiptap/extension-text-align": "^3.11.1",
+    "@tiptap/extension-underline": "^3.11.1",
+    "@tiptap/react": "^3.11.1",
+    "@tiptap/starter-kit": "^3.11.1",
     "@vercel/analytics": "^1.5.0",
     "contentful": "^11.5.10",
     "contentful-management": "^11.48.1",
+    "firebase": "^12.6.0",
     "framer-motion": "^12.5.0",
-    "next": "15.2.3",
+    "lowlight": "^3.3.0",
+    "next": "^16.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0"
@@ -23,7 +33,7 @@
     "@eslint/eslintrc": "^3",
     "autoprefixer": "^10.4.16",
     "eslint": "^9",
-    "eslint-config-next": "15.2.3",
+    "eslint-config-next": "^16.0.5",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5"
   }

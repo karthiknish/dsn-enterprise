@@ -3,7 +3,42 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaRuler, FaSearch, FaArrowRight } from 'react-icons/fa';
+import { FaRuler, FaSearch, FaArrowRight, FaChevronRight } from 'react-icons/fa';
+
+const categories = [
+  {
+    id: 'plain-gauges',
+    name: 'Plain Gauges',
+    description: 'High-precision plug gauges, ring gauges, and setting masters for dimensional measurement',
+    href: '/products/plain-gauges',
+    image: '/images/plain-plug-gauge.png',
+    highlights: ['Plug Gauges 1-250mm', 'Ring Gauges 6-125mm', 'Setting Masters', 'Snap Gauges'],
+  },
+  {
+    id: 'thread-gauges',
+    name: 'Thread Gauges',
+    description: 'Thread plug, ring, and setting gauges for all standard thread forms',
+    href: '/products/thread-gauges',
+    image: '/images/thread-plug-gauge.png',
+    highlights: ['Metric & Unified', 'BSW, BSF, BSP', 'NPT & NPTF', 'Setting Plugs'],
+  },
+  {
+    id: 'api-gauges',
+    name: 'API Gauges',
+    description: 'API 5B & 7-2 certified gauges for oil and gas industry applications',
+    href: '/products/api-gauges',
+    image: '/images/api-thread-gauge.png',
+    highlights: ['API 5B Certified', 'API 7-2 Certified', 'Casing & Tubing', 'Rotary Connections'],
+  },
+  {
+    id: 'special-gauges',
+    name: 'Special Gauges',
+    description: 'Custom gauges including ACME, buttress, spline, and gauges made to your drawings',
+    href: '/products/special-gauges',
+    image: '/images/featured.png',
+    highlights: ['ACME Thread', 'Buttress Thread', 'Spline Gauges', 'Custom Designs'],
+  },
+];
 
 const products = [
   {
@@ -213,9 +248,73 @@ const ProductsPage = () => {
         </div>
       </section>
 
-      {/* Product Categories */}
+      {/* Product Category Cards */}
+      <section className="py-16 bg-secondary-light">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4 text-gray-900">
+              Product Categories
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Browse our gauge categories to find the right precision instruments for your needs.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories.map((category, index) => (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Link
+                  href={category.href}
+                  className="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all group h-full"
+                >
+                  <div className="h-48 bg-gray-100 flex items-center justify-center p-4">
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2 text-gray-900 group-hover:text-primary transition-colors">
+                      {category.name}
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4">
+                      {category.description}
+                    </p>
+                    <ul className="space-y-1 mb-4">
+                      {category.highlights.map((item, i) => (
+                        <li key={i} className="text-sm text-gray-500 flex items-center">
+                          <FaChevronRight className="text-primary mr-2 text-xs" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <span className="inline-flex items-center text-primary font-medium text-sm group-hover:translate-x-1 transition-transform">
+                      View Products
+                      <FaArrowRight className="ml-2" />
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Product Categories Tabs */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-4 text-gray-900">
+              Quick Product Overview
+            </h2>
+          </div>
           <div className="flex flex-wrap justify-center mb-12 gap-4">
             {products.map((category) => (
               <button
@@ -273,15 +372,24 @@ const ProductsPage = () => {
                           {item.specs}
                         </p>
                         <p className="text-gray-600 mb-4">{item.description}</p>
-                        <Link
-                          href={`/contact?product=${encodeURIComponent(
-                            item.name
-                          )}`}
-                          className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
-                        >
-                          Request Quote
-                          <FaArrowRight className="ml-2" />
-                        </Link>
+                        <div className="flex gap-3">
+                          <Link
+                            href={`/contact?product=${encodeURIComponent(
+                              item.name
+                            )}`}
+                            className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
+                          >
+                            Request Quote
+                            <FaArrowRight className="ml-2" />
+                          </Link>
+                          <Link
+                            href={`/products/${category.id}`}
+                            className="text-gray-500 hover:text-primary font-medium inline-flex items-center"
+                          >
+                            View All
+                            <FaChevronRight className="ml-1" />
+                          </Link>
+                        </div>
                       </div>
                     </motion.div>
                   ))}

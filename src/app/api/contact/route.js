@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/lib/brevo";
 import { rateLimit } from "@/lib/rateLimit";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 // Force dynamic rendering to prevent build-time execution
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
-
-// Initialize Contentful environment variables
-const contentfulSpaceId = process.env.CONTENTFUL_SPACE_ID;
-const contentfulManagementToken = process.env.CONTENTFUL_MANAGEMENT_TOKEN;
 
 // Security headers for all responses
 const securityHeaders = {
@@ -149,15 +147,6 @@ export async function POST(request) {
 
     console.log("Received contact form submission:", { ...body, email: body.email ? '[REDACTED]' : 'MISSING' });
 
-    // Ensure environment variables are available
-    if (!contentfulSpaceId || !contentfulManagementToken) {
-      console.error("Contentful environment variables are missing!");
-      return NextResponse.json(
-        { error: "Server configuration error. Please try again later." },
-        { status: 500, headers: securityHeaders }
-      );
-    }
-
     // Enhanced validation with specific error messages
     const validationErrors = {};
 
@@ -228,21 +217,24 @@ export async function POST(request) {
       productInterest: body.productInterest ? body.productInterest.trim().replace(/[<>]/g, '') : "",
     };
 
-    console.log("Attempting to create Contentful entry for:", { name: contactData.name, email: '[REDACTED]' });
+    console.log("Attempting to save contact to Firebase:", { name: contactData.name, email: '[REDACTED]' });
 
-    // Create entry in Contentful (dynamic import to prevent build-time execution)
-    const { createContactEntry } = await import("@/lib/contentful");
-    const entry = await createContactEntry(contactData);
+    // Create entry in Firebase Firestore
+    const docRef = await addDoc(collection(db, "contacts"), {
+      ...contactData,
+      createdAt: serverTimestamp(),
+      status: "new",
+    });
 
-    if (!entry || !entry.sys) {
-      console.error("Failed to create Contentful entry - no entry returned");
+    if (!docRef || !docRef.id) {
+      console.error("Failed to create Firebase entry - no document returned");
       return NextResponse.json(
         { error: "Failed to save your message. Please try again." },
         { status: 500, headers: securityHeaders }
       );
     }
 
-    console.log("Successfully saved contact to Contentful with ID:", entry.sys.id);
+    console.log("Successfully saved contact to Firebase with ID:", docRef.id);
 
     // Generate email content
     const emailContent = generateEmailTemplate(contactData);
@@ -279,7 +271,7 @@ export async function POST(request) {
       {
         success: true,
         message: "Thank you for your message! We'll get back to you soon.",
-        entryId: entry.sys.id,
+        entryId: docRef.id,
       },
       { 
         status: 201,
@@ -290,18 +282,11 @@ export async function POST(request) {
   } catch (error) {
     console.error("Unexpected error in contact API:", error);
 
-    // Check for specific Contentful errors
-    if (error.name === "AccessTokenInvalid") {
+    // Check for specific Firebase errors
+    if (error.code === "permission-denied") {
       return NextResponse.json(
         { error: "Service temporarily unavailable. Please try again later." },
         { status: 503, headers: securityHeaders }
-      );
-    }
-
-    if (error.name === "ValidationFailed") {
-      return NextResponse.json(
-        { error: "Invalid data format. Please check your input and try again." },
-        { status: 400, headers: securityHeaders }
       );
     }
 
