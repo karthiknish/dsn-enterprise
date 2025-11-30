@@ -281,7 +281,7 @@ const ContactPage = () => {
       setSubmitSuccess(true);
       
       // Track successful contact submission
-      trackContactSubmission(contactData);
+      trackContactSubmission(formData);
       
       // Clear form and saved data
       clearForm();
