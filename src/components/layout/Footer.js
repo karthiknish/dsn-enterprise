@@ -67,18 +67,34 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/products"
+                  href="/industries"
                   className="hover:text-secondary transition-colors"
                 >
-                  Products
+                  Industries
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/services"
+                  href="/quality"
                   className="hover:text-secondary transition-colors"
                 >
-                  Services
+                  Quality Assurance
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/calibration"
+                  className="hover:text-secondary transition-colors"
+                >
+                  Calibration
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog"
+                  className="hover:text-secondary transition-colors"
+                >
+                  Blog
                 </Link>
               </li>
               <li>
@@ -98,7 +114,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="#"
+                  href="/products/thread-gauges"
                   className="hover:text-secondary transition-colors"
                 >
                   Thread Gauges
@@ -106,7 +122,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products/plain-gauges"
                   className="hover:text-secondary transition-colors"
                 >
                   Plain Gauges
@@ -114,7 +130,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products/api-gauges"
                   className="hover:text-secondary transition-colors"
                 >
                   API Gauges
@@ -122,7 +138,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/products/special-gauges"
                   className="hover:text-secondary transition-colors"
                 >
                   Special Gauges
@@ -130,10 +146,18 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#"
+                  href="/resources"
                   className="hover:text-secondary transition-colors"
                 >
-                  Custom Gauges
+                  Resources
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/faq"
+                  className="hover:text-secondary transition-colors"
+                >
+                  FAQ
                 </Link>
               </li>
             </ul>

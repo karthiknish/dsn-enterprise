@@ -23,11 +23,18 @@ const PexelsImagePicker = dynamic(
   { ssr: false }
 );
 
+// Dynamically import AIBlogGenerator
+const AIBlogGenerator = dynamic(
+  () => import("@/components/admin/AIBlogGenerator"),
+  { ssr: false }
+);
+
 export default function NewBlogPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [showPexelsPicker, setShowPexelsPicker] = useState(false);
+  const [showAIGenerator, setShowAIGenerator] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -38,6 +45,7 @@ export default function NewBlogPage() {
     status: "draft",
     metaTitle: "",
     metaDescription: "",
+    keywords: [],
   });
 
   const generateSlug = (title) => {
@@ -89,7 +97,7 @@ export default function NewBlogPage() {
 
     setSaving(true);
     try {
-      await addDoc(collection(db, "blogs"), {
+      await addDoc(collection(db, "blog-posts"), {
         ...formData,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
@@ -103,6 +111,22 @@ export default function NewBlogPage() {
     }
   };
 
+  const handleAIContentGenerated = (content) => {
+    // Convert markdown to HTML-like format for TipTap
+    setFormData({ ...formData, content });
+  };
+
+  const handleAIMetadataGenerated = (metadata) => {
+    setFormData({
+      ...formData,
+      metaTitle: metadata.metaTitle || formData.title,
+      metaDescription: metadata.metaDescription || formData.excerpt,
+      excerpt: metadata.excerpt || formData.excerpt,
+      slug: metadata.suggestedSlug || formData.slug,
+      keywords: metadata.keywords || [],
+    });
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
@@ -110,7 +134,28 @@ export default function NewBlogPage() {
           <h1 className="text-2xl font-bold text-gray-900">Create New Post</h1>
           <p className="text-gray-600">Write and publish a new blog post</p>
         </div>
+        <button
+          type="button"
+          onClick={() => setShowAIGenerator(!showAIGenerator)}
+          className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
+            showAIGenerator
+              ? "bg-purple-100 text-purple-700 border border-purple-300"
+              : "bg-purple-600 text-white hover:bg-purple-700"
+          }`}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          {showAIGenerator ? "Hide AI Assistant" : "AI Assistant"}
+        </button>
       </div>
+
+      {showAIGenerator && (
+        <AIBlogGenerator
+          onContentGenerated={handleAIContentGenerated}
+          onMetadataGenerated={handleAIMetadataGenerated}
+        />
+      )}
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
