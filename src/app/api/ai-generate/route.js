@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { generateBlogContent, generateBlogMetadata, generateBlogIdeas, improveContent } from '@/lib/gemini';
+import { generateBlogContent, generateBlogMetadata, generateBlogIdeas, improveContent, generateTitle, generateExcerpt } from '@/lib/gemini';
 
 export async function POST(request) {
   try {
@@ -48,6 +48,26 @@ export async function POST(request) {
           );
         }
         result = await improveContent(content, instruction);
+        break;
+
+      case 'title':
+        if (!topic) {
+          return NextResponse.json(
+            { success: false, error: 'Topic is required' },
+            { status: 400 }
+          );
+        }
+        result = await generateTitle(topic);
+        break;
+
+      case 'excerpt':
+        if (!topic) {
+          return NextResponse.json(
+            { success: false, error: 'Title is required' },
+            { status: 400 }
+          );
+        }
+        result = await generateExcerpt(topic, content || '');
         break;
 
       default:

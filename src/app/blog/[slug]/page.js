@@ -63,12 +63,12 @@ export default async function BlogPostPage({ params }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-16">
+      <section className="bg-gradient-to-r from-green-900 to-green-700 text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <Link
               href="/blog"
-              className="inline-flex items-center text-blue-200 hover:text-white mb-6 transition-colors"
+              className="inline-flex items-center text-green-200 hover:text-white mb-6 transition-colors"
             >
               <svg
                 className="w-4 h-4 mr-2"
@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }) {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-oswald">
               {post.title}
             </h1>
-            <div className="flex items-center text-blue-200">
+            <div className="flex items-center text-green-200">
               <time>
                 {post.createdAt
                   ? new Date(post.createdAt).toLocaleDateString("en-US", {
@@ -122,7 +122,7 @@ export default async function BlogPostPage({ params }) {
           <div className="max-w-4xl mx-auto">
             <article className="bg-white rounded-xl shadow-sm p-8 md:p-12">
               <div
-                className="prose prose-lg max-w-none prose-headings:font-oswald prose-headings:text-gray-900 prose-a:text-blue-600 prose-img:rounded-lg"
+                className="prose prose-lg max-w-none prose-headings:font-oswald prose-headings:text-gray-900 prose-a:text-green-600 prose-img:rounded-lg"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
             </article>
@@ -173,7 +173,7 @@ export default async function BlogPostPage({ params }) {
             <div className="mt-8 text-center">
               <Link
                 href="/blog"
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <svg
                   className="w-4 h-4 mr-2"

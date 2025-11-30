@@ -10,6 +10,7 @@ export default function AdminLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     if (!loading && !user && pathname !== "/admin/login") {
@@ -17,10 +18,24 @@ export default function AdminLayout({ children }) {
     }
   }, [user, loading, router, pathname]);
 
+  // Load sidebar state from local storage
+  useEffect(() => {
+    const storedState = localStorage.getItem("adminSidebarCollapsed");
+    if (storedState) {
+      setIsCollapsed(JSON.parse(storedState));
+    }
+  }, []);
+
+  const toggleSidebar = () => {
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+    localStorage.setItem("adminSidebarCollapsed", JSON.stringify(newState));
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"></div>
       </div>
     );
   }
@@ -57,84 +72,169 @@ export default function AdminLayout({ children }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-300 ease-in-out flex flex-col 
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+          ${isCollapsed ? "lg:w-20" : "lg:w-64"}
+          w-64
+        `}
       >
-        <div className="flex items-center justify-between h-16 px-4 bg-gray-800">
-          <Link href="/admin" className="text-xl font-bold text-white">
-            DSN Admin
-          </Link>
+        {/* Logo Area */}
+        <div className={`flex items-center h-16 bg-white border-b border-gray-200 transition-all duration-300 ${isCollapsed ? "justify-center px-0" : "justify-between px-6"}`}>
+          {!isCollapsed ? (
+            <Link href="/admin" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="font-bold text-white">D</span>
+              </div>
+              <span className="text-lg font-bold tracking-tight text-gray-900 whitespace-nowrap">DSN Admin</span>
+            </Link>
+          ) : (
+            <Link href="/admin" className="flex items-center justify-center w-full">
+              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="font-bold text-white">D</span>
+              </div>
+            </Link>
+          )}
+          
+          {/* Mobile Close Button */}
           <button
-            className="lg:hidden text-gray-400 hover:text-white"
+            className="lg:hidden text-gray-500 hover:text-gray-900"
             onClick={() => setSidebarOpen(false)}
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+
+          {/* Desktop Collapse Button */}
+          {!isCollapsed && (
+            <button
+              onClick={toggleSidebar}
+              className="hidden lg:flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-600 rounded hover:bg-gray-100 transition-colors"
+              title="Collapse Sidebar"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
         </div>
 
-        <nav className="mt-8 px-4">
+        {/* Navigation */}
+        <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto overflow-x-hidden">
           {navigation.map((item) => {
-            const isActive = pathname === item.href || 
-              (item.href !== "/admin" && pathname.startsWith(item.href));
+            // Fix: Don't highlight "Blog Posts" when on "Create Post" page
+            const isActive = item.href === "/admin/blog" 
+              ? pathname === "/admin/blog" || (pathname.startsWith("/admin/blog/") && pathname !== "/admin/blog/new")
+              : pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center px-4 py-3 mb-2 rounded-lg transition-colors ${
+                className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group whitespace-nowrap ${
                   isActive
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-400 hover:bg-gray-800 hover:text-white"
-                }`}
+                    ? "bg-green-600 text-white shadow-md shadow-green-200"
+                    : "text-gray-600 hover:bg-green-50 hover:text-green-700"
+                } ${isCollapsed ? "justify-center" : ""}`}
                 onClick={() => setSidebarOpen(false)}
+                title={isCollapsed ? item.name : ""}
               >
-                <item.icon className="w-5 h-5 mr-3" />
-                {item.name}
+                <item.icon 
+                  className={`w-5 h-5 transition-colors flex-shrink-0 ${
+                    isActive ? "text-white" : "text-gray-400 group-hover:text-green-600"
+                  } ${isCollapsed ? "" : "mr-3"}`} 
+                />
+                {!isCollapsed && <span className="font-medium">{item.name}</span>}
               </Link>
             );
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <button
-            onClick={handleLogout}
-            className="flex items-center w-full px-4 py-3 text-gray-400 rounded-lg hover:bg-gray-800 hover:text-white transition-colors"
-          >
-            <LogoutIcon className="w-5 h-5 mr-3" />
-            Logout
-          </button>
+        {/* User Profile & Logout */}
+        <div className={`p-4 border-t border-gray-200 bg-white transition-all duration-300 ${isCollapsed ? "items-center" : ""}`}>
+          {!isCollapsed ? (
+            <>
+              <div className="flex items-center gap-3 mb-4 px-2">
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-sm font-medium text-green-700 flex-shrink-0">
+                  {user?.email?.[0].toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {user?.email?.split('@')[0]}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    Administrator
+                  </p>
+                </div>
+              </div>
+              
+              <button
+                onClick={handleLogout}
+                className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors border border-gray-200 hover:border-red-200"
+              >
+                <LogoutIcon className="w-4 h-4 mr-2" />
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-sm font-medium text-green-700 cursor-help" title={user?.email}>
+                {user?.email?.[0].toUpperCase()}
+              </div>
+              <button
+                onClick={handleLogout}
+                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                title="Sign Out"
+              >
+                <LogoutIcon className="w-5 h-5" />
+              </button>
+              <button
+                onClick={toggleSidebar}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                title="Expand Sidebar"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className={`transition-all duration-300 ease-in-out flex flex-col min-h-screen ${isCollapsed ? "lg:pl-20" : "lg:pl-64"}`}>
         {/* Top bar */}
-        <header className="sticky top-0 z-30 flex items-center h-16 px-4 bg-white shadow-sm">
-          <button
-            className="lg:hidden text-gray-600 hover:text-gray-900"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+        <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-6 bg-white/80 backdrop-blur-md border-b border-gray-200">
+          <div className="flex items-center gap-4">
+            <button
+              className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            
+            {/* Breadcrumbs or Page Title could go here */}
+          </div>
 
-          <div className="flex items-center ml-auto">
-            <span className="text-sm text-gray-600 mr-4">{user?.email}</span>
+          <div className="flex items-center gap-4">
             <Link
               href="/"
               target="_blank"
-              className="text-sm text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all shadow-sm"
             >
-              View Site →
+              <span>View Live Site</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
             </Link>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="p-4 md:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

@@ -33,13 +33,13 @@ export default async function BlogPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-20">
+      <section className="bg-gradient-to-r from-green-900 to-green-700 text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 font-oswald">
               Our Blog
             </h1>
-            <p className="text-xl text-blue-100">
+            <p className="text-xl text-green-100">
               Insights, updates, and expertise from DSN Enterprises
             </p>
           </div>
@@ -98,7 +98,7 @@ export default async function BlogPage() {
                         : "No date"}
                     </div>
                     <Link href={`/blog/${post.slug}`}>
-                      <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
+                      <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-green-600 transition-colors">
                         {post.title}
                       </h2>
                     </Link>
@@ -109,7 +109,7 @@ export default async function BlogPage() {
                     )}
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium"
+                      className="inline-flex items-center text-green-600 hover:text-green-800 font-medium"
                     >
                       Read more
                       <svg

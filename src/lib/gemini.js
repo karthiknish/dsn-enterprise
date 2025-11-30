@@ -19,7 +19,12 @@ Requirements:
 7. Optimize for SEO with natural keyword placement
 8. Length: 1000-1500 words
 9. Include bullet points and numbered lists where appropriate
-10. Add internal linking suggestions marked as [INTERNAL LINK: page-name]
+10. Add 2-3 internal links using proper HTML anchor tags with these available pages:
+    - Products: <a href="/products">our precision gauges</a>
+    - Services: <a href="/services">our services</a>
+    - About: <a href="/about">about DSN Enterprises</a>
+    - Contact: <a href="/contact">contact us</a>
+    Use natural anchor text that fits the context. DO NOT use placeholder formats like [INTERNAL LINK: ...].
 
 Write the blog post content now:`;
 
@@ -143,6 +148,73 @@ Provide the improved content only, maintaining the same format and structure:`;
     };
   } catch (error) {
     console.error('Gemini Improve Error:', error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+}
+
+export async function generateTitle(topic) {
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+  const prompt = `Generate 5 SEO-optimized blog post titles for a precision gauge manufacturing company (DSN Enterprises) about this topic: "${topic}"
+
+Requirements:
+- Each title should be engaging and click-worthy
+- Include relevant keywords naturally
+- Keep titles under 60 characters when possible
+- Mix of how-to, listicle, and informational styles
+
+Respond ONLY with a valid JSON array of strings, no explanation:`;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      return {
+        success: true,
+        titles: JSON.parse(jsonMatch[0]),
+      };
+    }
+    throw new Error('Invalid JSON response');
+  } catch (error) {
+    console.error('Gemini Title Error:', error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+}
+
+export async function generateExcerpt(title, content) {
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+  const prompt = `Generate a compelling blog excerpt/summary for SEO and social sharing.
+
+Title: ${title}
+${content ? `Content preview: ${content.substring(0, 500)}...` : ''}
+
+Requirements:
+- 150-200 characters maximum
+- Engaging and informative
+- Include a hook to encourage reading
+- SEO-friendly
+
+Respond with ONLY the excerpt text, no quotes or explanation:`;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return {
+      success: true,
+      excerpt: response.text().trim().replace(/^"|"$/g, ''),
+    };
+  } catch (error) {
+    console.error('Gemini Excerpt Error:', error);
     return {
       success: false,
       error: error.message,

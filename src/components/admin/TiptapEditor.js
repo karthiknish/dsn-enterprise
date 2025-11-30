@@ -7,7 +7,7 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 const MenuBar = ({ editor }) => {
   if (!editor) {
@@ -304,7 +304,10 @@ const MenuBar = ({ editor }) => {
 };
 
 export default function TiptapEditor({ content, onChange, placeholder = "Start writing..." }) {
+  const isExternalUpdate = useRef(false);
+  
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: {
@@ -332,7 +335,9 @@ export default function TiptapEditor({ content, onChange, placeholder = "Start w
     ],
     content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      if (!isExternalUpdate.current) {
+        onChange(editor.getHTML());
+      }
     },
     editorProps: {
       attributes: {
@@ -340,6 +345,15 @@ export default function TiptapEditor({ content, onChange, placeholder = "Start w
       },
     },
   });
+
+  // Update editor content when content prop changes externally (e.g., from AI generator)
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      isExternalUpdate.current = true;
+      editor.commands.setContent(content, false);
+      isExternalUpdate.current = false;
+    }
+  }, [content, editor]);
 
   return (
     <div className="border border-gray-300 rounded-lg overflow-hidden bg-white">
