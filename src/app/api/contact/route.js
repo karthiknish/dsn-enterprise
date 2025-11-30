@@ -37,54 +37,54 @@ const generateEmailTemplate = (contactData) => {
         <title>New Contact Form Submission</title>
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+          .header { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
           .content { background: #f8fafc; padding: 30px; border-radius: 0 0 8px 8px; }
           .field { margin-bottom: 20px; }
-          .field-label { font-weight: bold; color: #1e40af; margin-bottom: 5px; }
-          .field-value { background: white; padding: 10px; border-left: 4px solid #1e40af; border-radius: 4px; }
+          .field-label { font-weight: bold; color: #16a34a; margin-bottom: 5px; }
+          .field-value { background: white; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; }
           .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
-          .timestamp { background: #fef3c7; padding: 10px; border-radius: 4px; text-align: center; margin-bottom: 20px; }
+          .timestamp { background: #dcfce7; padding: 10px; border-radius: 4px; text-align: center; margin-bottom: 20px; color: #166534; }
         </style>
       </head>
       <body>
         <div class="header">
-          <h1>📧 New Contact Form Submission</h1>
+          <h1>New Contact Form Submission</h1>
           <p>DSN Enterprises - Precision Gauges & Tools</p>
         </div>
         <div class="content">
           <div class="timestamp">
-            <strong>📅 Submitted on:</strong> ${timestamp}
+            <strong>Submitted on:</strong> ${timestamp}
           </div>
           
           <div class="field">
-            <div class="field-label">👤 Name:</div>
+            <div class="field-label">Name:</div>
             <div class="field-value">${contactData.name}</div>
           </div>
           
           <div class="field">
-            <div class="field-label">📧 Email:</div>
+            <div class="field-label">Email:</div>
             <div class="field-value">
-              <a href="mailto:${contactData.email}" style="color: #1e40af;">${contactData.email}</a>
+              <a href="mailto:${contactData.email}" style="color: #16a34a;">${contactData.email}</a>
             </div>
           </div>
           
           <div class="field">
-            <div class="field-label">📞 Phone:</div>
+            <div class="field-label">Phone:</div>
             <div class="field-value">${contactData.phone || "Not provided"}</div>
           </div>
           
           <div class="field">
-            <div class="field-label">🏢 Company:</div>
+            <div class="field-label">Company:</div>
             <div class="field-value">${contactData.company || "Not provided"}</div>
           </div>
           
           <div class="field">
-            <div class="field-label">🔧 Product Interest:</div>
+            <div class="field-label">Product Interest:</div>
             <div class="field-value">${contactData.productInterest || "Not specified"}</div>
           </div>
           
           <div class="field">
-            <div class="field-label">💬 Message:</div>
+            <div class="field-label">Message:</div>
             <div class="field-value" style="white-space: pre-line;">${contactData.message}</div>
           </div>
         </div>
