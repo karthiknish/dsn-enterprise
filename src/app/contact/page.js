@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaCheck, FaExclamationTriangle, FaTimes } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useMetaTracking } from "@/hooks/useMetaTracking";
+import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const ContactPage = () => {
   const router = useRouter();
@@ -16,6 +17,15 @@ const ContactPage = () => {
     trackValidationErrors,
     trackFormAbandonment
   } = useMetaTracking();
+
+  const {
+    trackContactSubmission: trackGoogleAdsSubmission,
+    trackFormFieldFocus,
+    trackPhoneClick,
+    trackEmailClick,
+    trackScrollDepth,
+    trackTimeOnPage,
+  } = useGoogleAdsTracking();
   
   // Form data state
   const [formData, setFormData] = useState({
@@ -45,7 +55,16 @@ const ContactPage = () => {
       page_location: window.location.href,
       page_category: 'Lead Generation'
     });
-  }, [trackPageView]);
+
+    // Track scroll depth for Google Ads
+    const cleanup = trackScrollDepth('Contact Page');
+
+    // Track time on page when leaving
+    return () => {
+      if (cleanup) cleanup();
+      trackTimeOnPage('Contact Page');
+    };
+  }, [trackPageView, trackScrollDepth, trackTimeOnPage]);
 
   // Auto-save form data to localStorage
   useEffect(() => {
@@ -191,6 +210,7 @@ const ContactPage = () => {
     const { name, id } = e.target;
     const fieldName = name || id;
     trackFieldInteraction(fieldName, 'focus');
+    trackFormFieldFocus(fieldName); // Google Ads tracking
   };
 
   const handleBlur = (e) => {
@@ -280,8 +300,11 @@ const ContactPage = () => {
       setIsSubmitting(false);
       setSubmitSuccess(true);
       
-      // Track successful contact submission
+      // Track successful contact submission (Meta Pixel)
       trackContactSubmission(formData);
+      
+      // Track successful contact submission (Google Ads)
+      trackGoogleAdsSubmission(formData);
       
       // Clear form and saved data
       clearForm();

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
+import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const productLinks = [
   { href: "/products", label: "All Products" },
@@ -29,6 +30,7 @@ const Header = () => {
   const [mobileCompanyExpanded, setMobileCompanyExpanded] = useState(false);
   const productDropdownRef = useRef(null);
   const companyDropdownRef = useRef(null);
+  const { trackCTAClick } = useGoogleAdsTracking();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -175,6 +177,7 @@ const Header = () => {
           <Link
             href="/contact"
             className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark font-medium transition-colors"
+            onClick={() => trackCTAClick('Contact Button', 'Header')}
           >
             Contact
           </Link>

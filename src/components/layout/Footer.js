@@ -9,8 +9,11 @@ import {
   FaLinkedin,
   FaInstagram,
 } from "react-icons/fa";
+import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const Footer = () => {
+  const { trackPhoneClick, trackEmailClick } = useGoogleAdsTracking();
+
   return (
     <footer className="bg-primary text-white pt-12 pb-6">
       <div className="container mx-auto px-4">
@@ -174,13 +177,19 @@ const Footer = () => {
               <li className="flex items-center">
                 <FaPhone className="mr-3 text-secondary" />
                 <span>
-                  <a href="tel:+919363122005">+91 9363122005</a>
+                  <a 
+                    href="tel:+919363122005"
+                    onClick={() => trackPhoneClick('+919363122005')}
+                  >+91 9363122005</a>
                 </span>
               </li>
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 text-secondary" />
                 <span>
-                  <a href="mailto:microfin2001@gmail.com">
+                  <a 
+                    href="mailto:microfin2001@gmail.com"
+                    onClick={() => trackEmailClick('microfin2001@gmail.com')}
+                  >
                     microfin2001@gmail.com
                   </a>
                 </span>

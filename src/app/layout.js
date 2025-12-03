@@ -50,9 +50,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Google tag (gtag.js) */}
+        {/* Google tag (gtag.js) - Google Tag Manager & Google Ads */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-Q6XMPKTR8P"
+          src="https://www.googletagmanager.com/gtag/js?id=GT-TQKJ52Q3"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -60,7 +60,26 @@ export default function RootLayout({ children }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-Q6XMPKTR8P');
+            
+            // Google Tag configuration
+            gtag('config', 'GT-TQKJ52Q3', {
+              page_path: window.location.pathname,
+              send_page_view: true
+            });
+            
+            // Google Ads configuration with enhanced conversions
+            gtag('config', 'AW-17769294111', {
+              allow_enhanced_conversions: true,
+              page_path: window.location.pathname
+            });
+            
+            // Set default consent (adjust based on your cookie consent implementation)
+            gtag('consent', 'default', {
+              'ad_storage': 'granted',
+              'analytics_storage': 'granted',
+              'ad_user_data': 'granted',
+              'ad_personalization': 'granted'
+            });
           `}
         </Script>
         <Analytics />

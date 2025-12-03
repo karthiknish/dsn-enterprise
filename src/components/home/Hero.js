@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const Hero = () => {
+  const { trackCTAClick } = useGoogleAdsTracking();
+
   return (
     <div className="relative text-white bg-white  min-h-screen flex items-center">
       {/* Video Background */}
@@ -37,12 +40,14 @@ const Hero = () => {
               <Link
                 href="#products"
                 className="bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors"
+                onClick={() => trackCTAClick('Explore Products', 'Hero')}
               >
                 Explore Products
               </Link>
               <Link
                 href="/contact"
                 className="bg-secondary hover:bg-secondary-dark text-primary font-medium py-3 px-6 rounded-md transition-colors"
+                onClick={() => trackCTAClick('Contact Us', 'Hero')}
               >
                 Contact Us
               </Link>

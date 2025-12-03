@@ -1,10 +1,19 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaCheckCircle, FaArrowLeft } from "react-icons/fa";
+import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 export default function ThankYouPage() {
+  const { trackThankYouPageView, trackPhoneClick, trackEmailClick } = useGoogleAdsTracking();
+
+  // Track conversion on page load
+  useEffect(() => {
+    trackThankYouPageView();
+  }, [trackThankYouPageView]);
+
   return (
     <div className="pt-16">
       {/* Hero Section */}
@@ -126,10 +135,16 @@ export default function ThankYouPage() {
                   directly:
                 </p>
                 <p className="text-gray-800 font-medium">
-                  Phone: <a href="tel:+919363122005">+91 9363122005</a>
+                  Phone: <a 
+                    href="tel:+919363122005"
+                    onClick={() => trackPhoneClick('+919363122005')}
+                  >+91 9363122005</a>
                   <br />
                   Email:{" "}
-                  <a href="mailto:info@dsnenterprises.com">
+                  <a 
+                    href="mailto:info@dsnenterprises.com"
+                    onClick={() => trackEmailClick('info@dsnenterprises.com')}
+                  >
                     info@dsnenterprises.com
                   </a>
                 </p>

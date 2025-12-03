@@ -4,9 +4,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const ContactSection = () => {
   const router = useRouter();
+  const { trackContactSubmission, trackPhoneClick, trackEmailClick, trackFormFieldFocus } = useGoogleAdsTracking();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -113,6 +115,9 @@ const ContactSection = () => {
       // Success - redirect to thank you page
       setIsSubmitting(false);
       setSubmitSuccess(true);
+
+      // Track Google Ads conversion
+      trackContactSubmission(formData);
 
       // Reset form data
       setFormData({
@@ -352,7 +357,10 @@ const ContactSection = () => {
                   <div>
                     <h4 className="font-bold mb-1">Phone Number</h4>
                     <p className="text-secondary-light">
-                      <a href="tel:+919363122005">+91 9363122005</a>
+                      <a 
+                        href="tel:+919363122005"
+                        onClick={() => trackPhoneClick('+919363122005')}
+                      >+91 9363122005</a>
                     </p>
                   </div>
                 </div>
@@ -364,7 +372,10 @@ const ContactSection = () => {
                   <div>
                     <h4 className="font-bold mb-1">Email Address</h4>
                     <p className="text-secondary-light">
-                      <a href="mailto:microfin2001@gmail.com">
+                      <a 
+                        href="mailto:microfin2001@gmail.com"
+                        onClick={() => trackEmailClick('microfin2001@gmail.com')}
+                      >
                         microfin2001@gmail.com
                       </a>
                     </p>
