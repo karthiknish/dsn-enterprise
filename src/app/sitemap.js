@@ -9,7 +9,7 @@ export const revalidate = 3600; // Revalidate every hour
 
 async function getBlogPosts() {
   try {
-    const blogRef = collection(db, 'blog-posts');
+    const blogRef = collection(db, 'blogs');
     const q = query(
       blogRef,
       where('status', '==', 'published'),
@@ -18,7 +18,10 @@ async function getBlogPosts() {
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({
       slug: doc.data().slug,
-      updatedAt: doc.data().updatedAt?.toDate() || doc.data().createdAt?.toDate() || new Date(),
+      updatedAt:
+        doc.data().updatedAt?.toDate?.() ||
+        doc.data().createdAt?.toDate?.() ||
+        new Date(),
     }));
   } catch (error) {
     // Return empty array if Firebase is not accessible

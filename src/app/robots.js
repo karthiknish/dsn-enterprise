@@ -2,6 +2,7 @@ const BASE_URL = 'https://dsnenterprises.in';
 
 export default function robots() {
   return {
+    host: BASE_URL,
     rules: [
       {
         userAgent: '*',

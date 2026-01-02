@@ -5,6 +5,22 @@ import Link from "next/link";
 export const metadata = {
   title: "Blog - DSN Enterprises",
   description: "Read our latest articles about precision gauges, measuring instruments, and industrial applications.",
+  alternates: {
+    canonical: "/blog",
+  },
+  openGraph: {
+    title: "Blog - DSN Enterprises",
+    description: "Read our latest articles about precision gauges, measuring instruments, and industrial applications.",
+    type: "website",
+    url: "/blog",
+    images: ["/images/featured.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog - DSN Enterprises",
+    description: "Read our latest articles about precision gauges, measuring instruments, and industrial applications.",
+    images: ["/images/featured.png"],
+  },
 };
 
 async function getPublishedPosts() {

@@ -38,16 +38,33 @@ export async function generateMetadata({ params }) {
   if (!post) {
     return {
       title: "Post Not Found - DSN Enterprises",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
   
+  const description = post.metaDescription || post.excerpt || post.title;
+
   return {
     title: post.metaTitle || `${post.title} - DSN Enterprises`,
-    description: post.metaDescription || post.excerpt || post.title,
+    description,
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.metaTitle || post.title,
-      description: post.metaDescription || post.excerpt,
-      images: post.featuredImage ? [post.featuredImage] : [],
+      description,
+      url: `/blog/${post.slug}`,
+      type: "article",
+      images: post.featuredImage ? [post.featuredImage] : ["/images/featured.png"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.metaTitle || post.title,
+      description,
+      images: post.featuredImage ? [post.featuredImage] : ["/images/featured.png"],
     },
   };
 }
@@ -134,7 +151,7 @@ export default async function BlogPostPage({ params }) {
               </h3>
               <div className="flex gap-4">
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://dsnenterprises.com/blog/${post.slug}`)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://dsnenterprises.in/blog/${post.slug}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 bg-[#1DA1F2] text-white rounded-lg hover:bg-opacity-90 transition-colors"
@@ -145,7 +162,7 @@ export default async function BlogPostPage({ params }) {
                   Twitter
                 </a>
                 <a
-                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://dsnenterprises.com/blog/${post.slug}`)}&title=${encodeURIComponent(post.title)}`}
+                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://dsnenterprises.in/blog/${post.slug}`)}&title=${encodeURIComponent(post.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 bg-[#0A66C2] text-white rounded-lg hover:bg-opacity-90 transition-colors"
@@ -156,7 +173,7 @@ export default async function BlogPostPage({ params }) {
                   LinkedIn
                 </a>
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://dsnenterprises.com/blog/${post.slug}`)}`}
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://dsnenterprises.in/blog/${post.slug}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 bg-[#1877F2] text-white rounded-lg hover:bg-opacity-90 transition-colors"

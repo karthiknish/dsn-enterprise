@@ -24,25 +24,39 @@ const oswald = Oswald({
 
 export const metadata = {
   metadataBase: new URL('https://dsnenterprises.in'),
-  title: "DSN Enterprises - Precision Gauges & Measuring Instruments",
+  title: {
+    default: "DSN Enterprises - Precision Gauges & Measuring Instruments",
+    template: "%s | DSN Enterprises",
+  },
   description:
     "DSN Enterprises is a leading manufacturer and supplier of high-precision gauges and measuring instruments for industrial applications.",
-  favicon: "/favicon.ico",
+  icons: {
+    icon: "/favicon.ico",
+  },
   openGraph: {
     title: "DSN Enterprises - Precision Gauges & Measuring Instruments",
     description: "Leading manufacturer of high-precision gauges including plain gauges, thread gauges, API gauges for oil & gas industry.",
-    url: "https://dsnenterprises.in",
+    url: "/",
     siteName: "DSN Enterprises",
     locale: "en_IN",
     type: "website",
+    images: [
+      {
+        url: "/images/featured.png",
+        width: 960,
+        height: 640,
+        alt: "DSN Enterprises - Precision Gauges",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "DSN Enterprises - Precision Gauges",
     description: "Leading manufacturer of high-precision gauges and measuring instruments.",
+    images: ["/images/featured.png"],
   },
   alternates: {
-    canonical: "https://dsnenterprises.in",
+    canonical: "/",
   },
 };
 
