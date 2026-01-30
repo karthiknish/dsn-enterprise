@@ -9,14 +9,34 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#374941",
-          light: "#4a6257",
-          dark: "#2a3831",
+          DEFAULT: "var(--color-primary)",
+          light: "var(--color-primary-light)",
+          dark: "var(--color-primary-dark)",
         },
         secondary: {
-          DEFAULT: "#B5C3AB",
-          light: "#c7d2be",
-          dark: "#9aaa8e",
+          DEFAULT: "var(--color-secondary)",
+          light: "var(--color-secondary-light)",
+          dark: "var(--color-secondary-dark)",
+        },
+        background: "var(--color-background)",
+        foreground: "var(--color-foreground)",
+        accent: {
+          DEFAULT: "var(--color-accent)",
+          dark: "var(--color-accent-dark)",
+        },
+        industry: {
+          api: "var(--color-industry-api)",
+          automotive: "var(--color-industry-automotive)",
+          aerospace: "var(--color-industry-aerospace)",
+          engineering: "var(--color-industry-engineering)",
+          "oil-gas": "var(--color-industry-oil-gas)",
+          medical: "var(--color-industry-medical)",
+          power: "var(--color-industry-power)",
+          electronics: "var(--color-industry-electronics)",
+        },
+        blog: {
+          accent: "var(--color-blog-accent)",
+          "accent-dark": "var(--color-blog-accent-dark)",
         },
       },
     },

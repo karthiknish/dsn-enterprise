@@ -61,7 +61,7 @@ const Hero = () => {
             className="hidden lg:block"
           >
             <div className="relative h-96 w-full rounded-lg overflow-hidden shadow-2xl backdrop-blur-sm">
-              <div className="absolute inset-0 p-8 bg-gradient-to-br from-secondary to-primary opacity-75"></div>
+              <div className="absolute inset-0 p-8 bg-primary opacity-75"></div>
               <div className="absolute inset-0 flex flex-col items-center justify-center ">
                 <h3 className="text-3xl font-bold mb-6 text-white drop-shadow-md">
                   Industry-Leading Quality

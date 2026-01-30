@@ -1,5 +1,6 @@
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { generateProductCityPages, generateServiceCityPages } from '@/lib/seo-pages.config';
 
 const BASE_URL = 'https://dsnenterprises.in';
 
@@ -134,5 +135,21 @@ export default async function sitemap() {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...blogPages];
+  // Product-City SEO pages
+  const productCityPages = generateProductCityPages().map(page => ({
+    url: `${BASE_URL}/products/${page.product}-${page.city}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  }));
+
+  // Service-City SEO pages
+  const serviceCityPages = generateServiceCityPages().map(page => ({
+    url: `${BASE_URL}/services/${page.service}-${page.city}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  }));
+
+  return [...staticPages, ...blogPages, ...productCityPages, ...serviceCityPages];
 }

@@ -255,7 +255,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
   };
 
   return (
-    <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6 mb-6">
+    <div className="bg-secondary-light border border-primary rounded-lg p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold text-gray-900 flex items-center">
           <FaMagic className="mr-2 text-purple-600" />

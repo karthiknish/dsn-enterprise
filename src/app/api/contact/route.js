@@ -37,7 +37,7 @@ const generateEmailTemplate = (contactData) => {
         <title>New Contact Form Submission</title>
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+          .header { background: #374941; color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
           .content { background: #f8fafc; padding: 30px; border-radius: 0 0 8px 8px; }
           .field { margin-bottom: 20px; }
           .field-label { font-weight: bold; color: #16a34a; margin-bottom: 5px; }

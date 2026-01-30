@@ -30,7 +30,7 @@ const industries = [
     ],
     products: ["API 5B Gauges", "API 7-2 Gauges", "Buttress Thread Gauges", "NPT/NPTF Gauges"],
     image: "/images/api-thread-gauge.png",
-    color: "from-orange-500 to-red-500"
+    color: "bg-industry-oil-gas"
   },
   {
     id: "automotive",
@@ -46,7 +46,7 @@ const industries = [
     ],
     products: ["Thread Plug Gauges", "Thread Ring Gauges", "Spline Gauges", "Plain Gauges"],
     image: "/images/thread-plug-gauge.png",
-    color: "from-blue-500 to-cyan-500"
+    color: "bg-industry-automotive"
   },
   {
     id: "aerospace",
@@ -62,7 +62,7 @@ const industries = [
     ],
     products: ["UNJ Thread Gauges", "MS/AN Thread Gauges", "Setting Masters", "Special Gauges"],
     image: "/images/plain-plug-gauge.png",
-    color: "from-indigo-500 to-purple-500"
+    color: "bg-industry-aerospace"
   },
   {
     id: "general-engineering",
@@ -78,7 +78,7 @@ const industries = [
     ],
     products: ["Plain Plug Gauges", "Plain Ring Gauges", "Snap Gauges", "Cylindrical Pins"],
     image: "/images/plain-ring-gauge.png",
-    color: "from-gray-500 to-gray-700"
+    color: "bg-industry-engineering"
   },
   {
     id: "heavy-machinery",
@@ -94,7 +94,7 @@ const industries = [
     ],
     products: ["Large Diameter Gauges", "ACME Thread Gauges", "Buttress Gauges", "Custom Gauges"],
     image: "/images/featured.png",
-    color: "from-yellow-500 to-orange-500"
+    color: "bg-industry-oil-gas"
   },
   {
     id: "marine",
@@ -110,7 +110,7 @@ const industries = [
     ],
     products: ["BSP Thread Gauges", "Taper Thread Gauges", "Marine Grade Gauges", "API Gauges"],
     image: "/images/thread-ring-gauge.png",
-    color: "from-teal-500 to-blue-500"
+    color: "bg-industry-medical"
   },
   {
     id: "railways",
@@ -126,7 +126,7 @@ const industries = [
     ],
     products: ["Large Ring Gauges", "Taper Gauges", "Thread Gauges", "Profile Gauges"],
     image: "/images/cylinder-maters.png",
-    color: "from-green-500 to-teal-500"
+    color: "bg-industry-power"
   },
   {
     id: "electronics",
@@ -142,7 +142,7 @@ const industries = [
     ],
     products: ["Fine Pitch Gauges", "Micro Thread Gauges", "Precision Pins", "Miniature Gauges"],
     image: "/images/plain-plug-gauge.png",
-    color: "from-purple-500 to-pink-500"
+    color: "bg-industry-electronics"
   },
 ];
 
@@ -189,7 +189,7 @@ export default function IndustriesPage() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <div className={`grid grid-cols-1 lg:grid-cols-2 gap-0 ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
-                  <div className={`bg-gradient-to-br ${industry.color} p-8 lg:p-12 text-white ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
+                  <div className={`${industry.color} p-8 lg:p-12 text-white ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
                     <div className="flex items-center mb-6">
                       <industry.icon className="text-4xl mr-4" />
                       <h2 className="text-3xl font-bold">{industry.name}</h2>
