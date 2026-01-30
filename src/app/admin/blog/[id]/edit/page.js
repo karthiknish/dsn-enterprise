@@ -23,6 +23,12 @@ const PexelsImagePicker = dynamic(
   { ssr: false }
 );
 
+// Dynamically import DatePicker to avoid SSR issues
+const DatePicker = dynamic(
+  () => import("@/components/ui/date-picker.jsx").then(mod => ({ default: mod.DatePicker })),
+  { ssr: false }
+);
+
 export default function EditBlogPage({ params }) {
   const { id } = use(params);
   const router = useRouter();
@@ -637,13 +643,12 @@ export default function EditBlogPage({ params }) {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Published Date
                   </label>
-                  <input
-                    type="date"
+                  <DatePicker
                     value={formData.publishedDate}
-                    onChange={(e) =>
-                      setFormData({ ...formData, publishedDate: e.target.value })
+                    onChange={(value) =>
+                      setFormData({ ...formData, publishedDate: value })
                     }
-                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
+                    placeholder="Select publish date"
                   />
                 </div>
 
