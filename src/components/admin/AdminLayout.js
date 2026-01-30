@@ -2,8 +2,45 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+
+// Fixed positioning tooltip component
+const SidebarTooltip = ({ content, children }) => {
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const triggerRef = useRef(null);
+
+  const updatePosition = () => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.top + rect.height / 2,
+        left: rect.right + 8,
+      });
+    }
+  };
+
+  return (
+    <div
+      ref={triggerRef}
+      className="group/tooltip relative inline-block"
+      onMouseEnter={updatePosition}
+    >
+      {children}
+      <div
+        className="fixed px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity duration-200 z-[99999] shadow-lg"
+        style={{
+          top: `${position.top}px`,
+          left: `${position.left}px`,
+          transform: "translateY(-50%)",
+        }}
+      >
+        {content}
+        <div className="absolute top-1/2 left-0 -translate-x-full border-4 border-transparent border-r-gray-900" />
+      </div>
+    </div>
+  );
+};
 
 export default function AdminLayout({ children }) {
   const { user, logout, loading } = useAuth();
@@ -123,7 +160,7 @@ export default function AdminLayout({ children }) {
         <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto overflow-x-hidden">
           {navigation.map((item) => {
             // Fix: Don't highlight "Blog Posts" when on "Create Post" page
-            const isActive = item.href === "/admin/blog" 
+            const isActive = item.href === "/admin/blog"
               ? pathname === "/admin/blog" || (pathname.startsWith("/admin/blog/") && pathname !== "/admin/blog/new")
               : pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
 
@@ -137,14 +174,25 @@ export default function AdminLayout({ children }) {
                     : "text-gray-600 hover:bg-green-50 hover:text-green-700"
                 } ${isCollapsed ? "justify-center" : ""}`}
                 onClick={() => setSidebarOpen(false)}
-                title={isCollapsed ? item.name : ""}
               >
-                <item.icon 
-                  className={`w-5 h-5 transition-colors flex-shrink-0 ${
-                    isActive ? "text-white" : "text-gray-400 group-hover:text-green-600"
-                  } ${isCollapsed ? "" : "mr-3"}`} 
-                />
-                {!isCollapsed && <span className="font-medium">{item.name}</span>}
+                {isCollapsed ? (
+                  <SidebarTooltip content={item.name}>
+                    <item.icon
+                      className={`w-5 h-5 transition-colors flex-shrink-0 ${
+                        isActive ? "text-white" : "text-gray-400 group-hover:text-green-600"
+                      }`}
+                    />
+                  </SidebarTooltip>
+                ) : (
+                  <>
+                    <item.icon
+                      className={`w-5 h-5 transition-colors flex-shrink-0 mr-3 ${
+                        isActive ? "text-white" : "text-gray-400 group-hover:text-green-600"
+                      }`}
+                    />
+                    <span className="font-medium">{item.name}</span>
+                  </>
+                )}
               </Link>
             );
           })}
@@ -178,25 +226,29 @@ export default function AdminLayout({ children }) {
             </>
           ) : (
             <div className="flex flex-col items-center gap-4">
-              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-sm font-medium text-green-700 cursor-help" title={user?.email}>
-                {user?.email?.[0].toUpperCase()}
-              </div>
-              <button
-                onClick={handleLogout}
-                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                title="Sign Out"
-              >
-                <LogoutIcon className="w-5 h-5" />
-              </button>
-              <button
-                onClick={toggleSidebar}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-                title="Expand Sidebar"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                </svg>
-              </button>
+              <SidebarTooltip content={user?.email || "User"}>
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-sm font-medium text-green-700 cursor-pointer">
+                  {user?.email?.[0].toUpperCase()}
+                </div>
+              </SidebarTooltip>
+              <SidebarTooltip content="Sign Out">
+                <button
+                  onClick={handleLogout}
+                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                >
+                  <LogoutIcon className="w-5 h-5" />
+                </button>
+              </SidebarTooltip>
+              <SidebarTooltip content="Expand Sidebar">
+                <button
+                  onClick={toggleSidebar}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </SidebarTooltip>
             </div>
           )}
         </div>

@@ -62,8 +62,12 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
         ? await searchPhotos(query.trim(), 15, nextPage)
         : await getCuratedPhotos(15, nextPage);
 
-      setPhotos([...photos, ...(result.photos || [])]);
-      setHasMore(result.photos?.length === 15);
+      // Deduplicate photos by ID
+      const existingIds = new Set(photos.map((p) => p.id));
+      const newPhotos = (result.photos || []).filter((p) => !existingIds.has(p.id));
+
+      setPhotos([...photos, ...newPhotos]);
+      setHasMore((result.photos?.length || 0) > 0);
       setPage(nextPage);
     } catch (err) {
       setError(err.message || "Failed to load more photos");
