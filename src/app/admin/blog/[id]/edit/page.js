@@ -3,7 +3,7 @@
 import { useState, useEffect, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { db, storage } from "@/lib/firebase";
-import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, updateDoc, serverTimestamp, Timestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import dynamic from "next/dynamic";
 
@@ -51,6 +51,7 @@ export default function EditBlogPage({ params }) {
     status: "draft",
     metaTitle: "",
     metaDescription: "",
+    publishedDate: "",
   });
 
   const showNotification = (message, type = "info") => {
@@ -115,6 +116,7 @@ export default function EditBlogPage({ params }) {
           status: data.status || "draft",
           metaTitle: data.metaTitle || "",
           metaDescription: data.metaDescription || "",
+          publishedDate: data.publishedDate ? data.publishedDate.toDate().toISOString().split('T')[0] : data.createdAt?.toDate?.()?.toISOString().split('T')[0] || "",
         };
         setFormData(postData);
         setOriginalData(postData);
@@ -293,10 +295,24 @@ export default function EditBlogPage({ params }) {
     setSaving(true);
     try {
       const docRef = doc(db, "blogs", id);
-      await updateDoc(docRef, {
-        ...formData,
+      const updateData = {
+        title: formData.title,
+        slug: formData.slug,
+        excerpt: formData.excerpt,
+        content: formData.content,
+        featuredImage: formData.featuredImage,
+        imageAttribution: formData.imageAttribution,
+        status: formData.status,
+        metaTitle: formData.metaTitle,
+        metaDescription: formData.metaDescription,
         updatedAt: serverTimestamp(),
-      });
+      };
+
+      if (formData.publishedDate) {
+        updateData.publishedDate = Timestamp.fromDate(new Date(formData.publishedDate));
+      }
+
+      await updateDoc(docRef, updateData);
       clearDraft();
       showNotification('Post updated successfully', 'success');
       setTimeout(() => router.push("/admin/blog"), 1000);
@@ -437,7 +453,7 @@ export default function EditBlogPage({ params }) {
                       type="text"
                       value={formData.title}
                       onChange={handleTitleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                      className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
                       placeholder="Enter post title"
                     />
                     {showTitleSuggestions && titleSuggestions.length > 0 && (
@@ -486,7 +502,7 @@ export default function EditBlogPage({ params }) {
                       onChange={(e) =>
                         setFormData({ ...formData, slug: e.target.value })
                       }
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                      className="flex-1 px-4 py-2 text-gray-900 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
                       placeholder="post-url-slug"
                     />
                   </div>
@@ -527,7 +543,7 @@ export default function EditBlogPage({ params }) {
                       setFormData({ ...formData, excerpt: e.target.value })
                     }
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
                     placeholder="Brief description of the post"
                   />
                 </div>
@@ -566,7 +582,7 @@ export default function EditBlogPage({ params }) {
                     onChange={(e) =>
                       setFormData({ ...formData, metaTitle: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
                     placeholder="SEO title (auto-filled from title)"
                   />
                   <p className="mt-1 text-xs text-gray-500">
@@ -584,7 +600,7 @@ export default function EditBlogPage({ params }) {
                       setFormData({ ...formData, metaDescription: e.target.value })
                     }
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
                     placeholder="SEO description (auto-filled from content)"
                   />
                   <p className="mt-1 text-xs text-gray-500">
@@ -610,11 +626,25 @@ export default function EditBlogPage({ params }) {
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Published Date
+                  </label>
+                  <input
+                    type="date"
+                    value={formData.publishedDate}
+                    onChange={(e) =>
+                      setFormData({ ...formData, publishedDate: e.target.value })
+                    }
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
+                  />
                 </div>
 
                 <div className="flex gap-3 pt-2">

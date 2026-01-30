@@ -48,7 +48,7 @@ const CertificationsSection = () => {
             Our Certifications
           </motion.h2>
           <motion.p 
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
+            className="text-lg text-gray-700 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -95,7 +95,7 @@ const CertificationsSection = () => {
                   </span>
                   <h3 className="text-xl font-bold text-gray-900">{certificate.name}</h3>
                 </div>
-                <p className="text-gray-600">{certificate.description}</p>
+                <p className="text-gray-700">{certificate.description}</p>
               </div>
             </motion.div>
           ))}

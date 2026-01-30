@@ -220,16 +220,7 @@ export default function AdminLayout({ children }) {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              target="_blank"
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all shadow-sm"
-            >
-              <span>View Live Site</span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </Link>
+            {/* View Live Site button removed */}
           </div>
         </header>
 

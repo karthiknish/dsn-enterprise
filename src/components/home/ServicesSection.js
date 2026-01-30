@@ -70,7 +70,7 @@ const ServicesSection = () => {
             Our Services
           </motion.h2>
           <motion.p
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
+            className="text-lg text-gray-700 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -95,10 +95,10 @@ const ServicesSection = () => {
               <h3 className="text-xl font-bold mb-3 text-gray-900">
                 {service.name}
               </h3>
-              <p className="text-gray-600 mb-4">{service.description}</p>
+              <p className="text-gray-700 mb-4">{service.description}</p>
 
               <div className="mb-4">
-                <ul className="text-sm text-gray-600">
+                <ul className="text-sm text-gray-700">
                   {service.details.slice(0, 2).map((detail, i) => (
                     <li key={i} className="flex items-start mb-1">
                       <FaCheck

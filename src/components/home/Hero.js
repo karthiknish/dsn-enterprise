@@ -8,7 +8,7 @@ const Hero = () => {
   const { trackCTAClick } = useGoogleAdsTracking();
 
   return (
-    <div className="relative text-white bg-white  min-h-screen flex items-center">
+    <div className="relative text-white min-h-screen flex items-center">
       {/* Video Background */}
       <video
         style={{ marginTop: "-70px" }}
@@ -28,7 +28,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
               Precision Gauges & Measuring Instruments
             </h1>
             <p className="text-xl mb-8 text-gray-200 max-w-lg">
@@ -71,7 +71,7 @@ const Hero = () => {
                     <span className="mr-3 text-secondary-light bg-white rounded-full h-6 w-6 flex items-center justify-center shadow-md">
                       ✓
                     </span>
-                    <span className="font-medium">
+                    <span className="font-medium text-white">
                       ISO Certified Manufacturing
                     </span>
                   </li>
@@ -79,7 +79,7 @@ const Hero = () => {
                     <span className="mr-3 text-secondary-light bg-white rounded-full h-6 w-6 flex items-center justify-center shadow-md">
                       ✓
                     </span>
-                    <span className="font-medium">
+                    <span className="font-medium text-white">
                       State-of-the-art Calibration Services
                     </span>
                   </li>
@@ -87,19 +87,19 @@ const Hero = () => {
                     <span className="mr-3 text-secondary-light bg-white rounded-full h-6 w-6 flex items-center justify-center shadow-md">
                       ✓
                     </span>
-                    <span className="font-medium">Custom Gauge Solutions</span>
+                    <span className="font-medium text-white">Custom Gauge Solutions</span>
                   </li>
                   <li className="flex items-center bg-white/10 backdrop-blur-sm p-3 rounded-lg transition-all hover:bg-white/20">
                     <span className="mr-3 text-secondary-light bg-white rounded-full h-6 w-6 flex items-center justify-center shadow-md">
                       ✓
                     </span>
-                    <span className="font-medium">Global Delivery Network</span>
+                    <span className="font-medium text-white">Global Delivery Network</span>
                   </li>
                   <li className="flex items-center bg-white/10 backdrop-blur-sm p-3 rounded-lg transition-all hover:bg-white/20">
                     <span className="mr-3 text-secondary-light bg-white rounded-full h-6 w-6 flex items-center justify-center shadow-md">
                       ✓
                     </span>
-                    <span className="font-medium">
+                    <span className="font-medium text-white">
                       Expert Technical Support
                     </span>
                   </li>

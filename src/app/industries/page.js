@@ -30,7 +30,7 @@ const industries = [
     ],
     products: ["API 5B Gauges", "API 7-2 Gauges", "Buttress Thread Gauges", "NPT/NPTF Gauges"],
     image: "/images/api-thread-gauge.png",
-    color: "bg-industry-oil-gas"
+    color: "bg-primary"
   },
   {
     id: "automotive",
@@ -46,7 +46,7 @@ const industries = [
     ],
     products: ["Thread Plug Gauges", "Thread Ring Gauges", "Spline Gauges", "Plain Gauges"],
     image: "/images/thread-plug-gauge.png",
-    color: "bg-industry-automotive"
+    color: "bg-primary"
   },
   {
     id: "aerospace",
@@ -62,7 +62,7 @@ const industries = [
     ],
     products: ["UNJ Thread Gauges", "MS/AN Thread Gauges", "Setting Masters", "Special Gauges"],
     image: "/images/plain-plug-gauge.png",
-    color: "bg-industry-aerospace"
+    color: "bg-primary"
   },
   {
     id: "general-engineering",
@@ -78,7 +78,7 @@ const industries = [
     ],
     products: ["Plain Plug Gauges", "Plain Ring Gauges", "Snap Gauges", "Cylindrical Pins"],
     image: "/images/plain-ring-gauge.png",
-    color: "bg-industry-engineering"
+    color: "bg-primary"
   },
   {
     id: "heavy-machinery",
@@ -94,7 +94,7 @@ const industries = [
     ],
     products: ["Large Diameter Gauges", "ACME Thread Gauges", "Buttress Gauges", "Custom Gauges"],
     image: "/images/featured.png",
-    color: "bg-industry-oil-gas"
+    color: "bg-primary"
   },
   {
     id: "marine",
@@ -110,7 +110,7 @@ const industries = [
     ],
     products: ["BSP Thread Gauges", "Taper Thread Gauges", "Marine Grade Gauges", "API Gauges"],
     image: "/images/thread-ring-gauge.png",
-    color: "bg-industry-medical"
+    color: "bg-primary"
   },
   {
     id: "railways",
@@ -126,7 +126,7 @@ const industries = [
     ],
     products: ["Large Ring Gauges", "Taper Gauges", "Thread Gauges", "Profile Gauges"],
     image: "/images/cylinder-maters.png",
-    color: "bg-industry-power"
+    color: "bg-primary"
   },
   {
     id: "electronics",
@@ -142,7 +142,7 @@ const industries = [
     ],
     products: ["Fine Pitch Gauges", "Micro Thread Gauges", "Precision Pins", "Miniature Gauges"],
     image: "/images/plain-plug-gauge.png",
-    color: "bg-industry-electronics"
+    color: "bg-primary"
   },
 ];
 

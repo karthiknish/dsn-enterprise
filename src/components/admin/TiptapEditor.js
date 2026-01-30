@@ -43,7 +43,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("bold") ? "bg-gray-300" : ""
         }`}
         title="Bold"
@@ -57,7 +57,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("italic") ? "bg-gray-300" : ""
         }`}
         title="Italic"
@@ -70,7 +70,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("underline") ? "bg-gray-300" : ""
         }`}
         title="Underline"
@@ -83,7 +83,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleStrike().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("strike") ? "bg-gray-300" : ""
         }`}
         title="Strikethrough"
@@ -99,7 +99,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={`p-2 rounded hover:bg-gray-200 font-bold ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 font-bold ${
           editor.isActive("heading", { level: 1 }) ? "bg-gray-300" : ""
         }`}
         title="Heading 1"
@@ -110,7 +110,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`p-2 rounded hover:bg-gray-200 font-bold ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 font-bold ${
           editor.isActive("heading", { level: 2 }) ? "bg-gray-300" : ""
         }`}
         title="Heading 2"
@@ -121,7 +121,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={`p-2 rounded hover:bg-gray-200 font-bold ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 font-bold ${
           editor.isActive("heading", { level: 3 }) ? "bg-gray-300" : ""
         }`}
         title="Heading 3"
@@ -135,7 +135,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive({ textAlign: "left" }) ? "bg-gray-300" : ""
         }`}
         title="Align Left"
@@ -148,7 +148,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive({ textAlign: "center" }) ? "bg-gray-300" : ""
         }`}
         title="Align Center"
@@ -161,7 +161,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive({ textAlign: "right" }) ? "bg-gray-300" : ""
         }`}
         title="Align Right"
@@ -177,7 +177,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("bulletList") ? "bg-gray-300" : ""
         }`}
         title="Bullet List"
@@ -193,7 +193,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("orderedList") ? "bg-gray-300" : ""
         }`}
         title="Numbered List"
@@ -209,7 +209,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("blockquote") ? "bg-gray-300" : ""
         }`}
         title="Blockquote"
@@ -222,7 +222,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("codeBlock") ? "bg-gray-300" : ""
         }`}
         title="Code Block"
@@ -238,7 +238,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={setLink}
-        className={`p-2 rounded hover:bg-gray-200 ${
+        className={`p-2 rounded text-gray-900 hover:bg-gray-200 ${
           editor.isActive("link") ? "bg-gray-300" : ""
         }`}
         title="Add Link"
@@ -251,7 +251,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={addImage}
-        className="p-2 rounded hover:bg-gray-200"
+        className="p-2 rounded text-gray-900 hover:bg-gray-200"
         title="Add Image"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,7 +265,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        className="p-2 rounded hover:bg-gray-200"
+        className="p-2 rounded text-gray-900 hover:bg-gray-200"
         title="Horizontal Rule"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -280,7 +280,7 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().undo()}
-        className="p-2 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="p-2 rounded text-gray-900 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
         title="Undo"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -292,7 +292,7 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().redo()}
-        className="p-2 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="p-2 rounded text-gray-900 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
         title="Redo"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -322,7 +322,7 @@ export default function TiptapEditor({ content, onChange, placeholder = "Start w
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-blue-600 hover:text-blue-800 underline",
+          class: "text-primary hover:text-primary-dark underline",
         },
       }),
       Placeholder.configure({

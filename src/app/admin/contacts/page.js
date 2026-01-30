@@ -66,7 +66,7 @@ export default function ContactsPage() {
   const getStatusColor = (status) => {
     switch (status) {
       case "new":
-        return "bg-blue-100 text-blue-800";
+        return "bg-primary/10 text-primary";
       case "contacted":
         return "bg-yellow-100 text-yellow-800";
       case "resolved":
@@ -79,7 +79,7 @@ export default function ContactsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -123,7 +123,7 @@ export default function ContactsPage() {
                   <div
                     key={contact.id}
                     className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
-                      selectedContact?.id === contact.id ? "bg-blue-50" : ""
+                      selectedContact?.id === contact.id ? "bg-primary/5" : ""
                     }`}
                     onClick={() => setSelectedContact(contact)}
                   >
@@ -203,7 +203,7 @@ export default function ContactsPage() {
                   <p>
                     <a
                       href={`mailto:${selectedContact.email}`}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-primary hover:text-primary-dark"
                     >
                       {selectedContact.email}
                     </a>
@@ -218,7 +218,7 @@ export default function ContactsPage() {
                     <p>
                       <a
                         href={`tel:${selectedContact.phone}`}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="text-primary hover:text-primary-dark"
                       >
                         {selectedContact.phone}
                       </a>
@@ -264,7 +264,7 @@ export default function ContactsPage() {
                     onChange={(e) =>
                       handleStatusChange(selectedContact.id, e.target.value)
                     }
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   >
                     <option value="new">New</option>
                     <option value="contacted">Contacted</option>
@@ -285,7 +285,7 @@ export default function ContactsPage() {
                 <div className="pt-4 flex gap-2">
                   <a
                     href={`mailto:${selectedContact.email}?subject=Re: Your inquiry to DSN Enterprises`}
-                    className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
                   >
                     <svg
                       className="w-4 h-4 mr-2"

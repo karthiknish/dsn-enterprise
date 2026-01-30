@@ -84,7 +84,7 @@ const FeaturedProducts = () => {
             Our Featured Products
           </motion.h2>
           <motion.p
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
+            className="text-lg text-gray-700 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -118,7 +118,7 @@ const FeaturedProducts = () => {
                   {product.name}
                 </h3>
                 <p className="text-primary font-medium mb-2">{product.specs}</p>
-                <p className="text-gray-600 mb-4">{product.description}</p>
+                <p className="text-gray-700 mb-4">{product.description}</p>
               </div>
             </motion.div>
           ))}

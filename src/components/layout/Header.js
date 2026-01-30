@@ -68,7 +68,7 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  const linkClass = scrolled || !setHome ? "text-gray-800" : "text-white";
+  const linkClass = scrolled || !setHome ? "text-gray-900" : "text-white";
 
   return (
     <header
@@ -184,12 +184,12 @@ const Header = () => {
         </nav>
 
         {/* Mobile Menu Button */}
-        <button className="lg:hidden text-gray-800" onClick={toggleMenu}>
+        <button className="lg:hidden text-gray-900" onClick={toggleMenu}>
           {isOpen ? (
             <FaTimes className="text-primary" size={24} />
           ) : (
             <FaBars
-              className={`${scrolled ? "text-gray-800" : "text-white"}`}
+              className={`${scrolled ? "text-gray-900" : "text-white"}`}
               size={24}
             />
           )}
@@ -204,7 +204,7 @@ const Header = () => {
       >
         <div className="flex flex-col h-full p-8 pt-20">
           <button
-            className="absolute top-4 right-4 text-gray-800"
+            className="absolute top-4 right-4 text-gray-900"
             onClick={toggleMenu}
           >
             <FaTimes className="text-primary" size={24} />

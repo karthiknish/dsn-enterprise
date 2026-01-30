@@ -280,7 +280,7 @@ export default function BlogListPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {post.createdAt?.toDate?.()?.toLocaleDateString(undefined, {
+                        {(post.publishedDate?.toDate?.() || post.createdAt?.toDate?.())?.toLocaleDateString(undefined, {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric'
