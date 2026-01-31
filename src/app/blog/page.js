@@ -2,26 +2,37 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Blog - DSN Enterprises",
-  description: "Read our latest articles about precision gauges, measuring instruments, and industrial applications.",
-  alternates: {
-    canonical: "/blog",
-  },
-  openGraph: {
-    title: "Blog - DSN Enterprises",
-    description: "Read our latest articles about precision gauges, measuring instruments, and industrial applications.",
-    type: "website",
-    url: "/blog",
-    images: ["/images/featured.png"],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Blog - DSN Enterprises",
-    description: "Read our latest articles about precision gauges, measuring instruments, and industrial applications.",
-    images: ["/images/featured.png"],
-  },
-};
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  const searchQuery = params?.q || "";
+  
+  const title = searchQuery 
+    ? `Search results for "${searchQuery}" - Blog - DSN Enterprises`
+    : "Blog - DSN Enterprises";
+    
+  const description = "Read our latest articles about precision gauges, measuring instruments, and industrial applications.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "/blog",
+    },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: "/blog",
+      images: ["/images/featured.png"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/images/featured.png"],
+    },
+  };
+}
 
 async function getPublishedPosts() {
   try {
@@ -35,6 +46,7 @@ async function getPublishedPosts() {
     return snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
+      publishedDate: doc.data().publishedDate?.toDate?.()?.toISOString() || null,
       createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || null,
     }));
   } catch (error) {
@@ -43,8 +55,28 @@ async function getPublishedPosts() {
   }
 }
 
-export default async function BlogPage() {
-  const posts = await getPublishedPosts();
+export default async function BlogPage({ searchParams }) {
+  const params = await searchParams;
+  const currentPage = parseInt(params?.page) || 1;
+  const searchQuery = params?.q || "";
+  const postsPerPage = 9;
+
+  const allPosts = await getPublishedPosts();
+  
+  // Filter posts based on search query
+  const filteredPosts = searchQuery 
+    ? allPosts.filter(post => 
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.content?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : allPosts;
+
+  const totalPosts = filteredPosts.length;
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
+  
+  const startIndex = (currentPage - 1) * postsPerPage;
+  const posts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -62,10 +94,64 @@ export default async function BlogPage() {
         </div>
       </section>
 
+      {/* Search and Filters Bar */}
+      <section className="bg-white border-b border-gray-200 py-4 sticky top-0 z-10 shadow-sm">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <form action="/blog" method="GET" className="relative group">
+              <input
+                type="text"
+                name="q"
+                defaultValue={searchQuery}
+                placeholder="Search articles by title, content or topic..."
+                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all outline-none"
+              />
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-600 transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              {searchQuery && (
+                <Link 
+                  href="/blog"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </Link>
+              )}
+            </form>
+          </div>
+        </div>
+      </section>
+
       {/* Blog Posts */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          {posts.length === 0 ? (
+          {searchQuery && (
+            <div className="mb-8 max-w-7xl mx-auto">
+              <h2 className="text-2xl font-bold text-gray-900">
+                {totalPosts > 0 
+                  ? `Search results for "${searchQuery}" (${totalPosts})`
+                  : `No results found for "${searchQuery}"`
+                }
+              </h2>
+              {totalPosts === 0 && (
+                <button 
+                  onClick={() => window.location.href = '/blog'}
+                  className="mt-4 text-green-600 hover:text-green-800 font-medium flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                  Clear search and show all posts
+                </button>
+              )}
+            </div>
+          )}
+
+          {posts.length === 0 && !searchQuery ? (
             <div className="text-center py-16">
               <svg
                 className="w-16 h-16 mx-auto text-gray-400 mb-4"
@@ -88,64 +174,109 @@ export default async function BlogPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post) => (
-                <article
-                  key={post.id}
-                  className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow"
-                >
-                  {post.featuredImage && (
-                    <Link href={`/blog/${post.slug}`}>
-                      <img
-                        src={post.featuredImage}
-                        alt={post.title}
-                        className="w-full h-48 object-cover"
-                      />
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.map((post) => {
+                  const displayDate = post.publishedDate || post.createdAt;
+                  return (
+                    <article
+                      key={post.id}
+                      className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
+                    >
+                      {post.featuredImage && (
+                        <Link href={`/blog/${post.slug}`}>
+                          <img
+                            src={post.featuredImage}
+                            alt={post.title}
+                            className="w-full h-48 object-cover"
+                            loading="lazy"
+                          />
+                        </Link>
+                      )}
+                      <div className="p-6 flex flex-col flex-1">
+                        <div className="text-sm text-gray-500 mb-2">
+                          {displayDate
+                            ? new Date(displayDate).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })
+                            : "No date"}
+                        </div>
+                        <Link href={`/blog/${post.slug}`}>
+                          <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-green-600 transition-colors">
+                            {post.title}
+                          </h2>
+                        </Link>
+                        {post.excerpt && (
+                          <p className="text-gray-600 mb-4 line-clamp-3">
+                            {post.excerpt}
+                          </p>
+                        )}
+                        <div className="mt-auto">
+                          <Link
+                            href={`/blog/${post.slug}`}
+                            className="inline-flex items-center text-green-600 hover:text-green-800 font-medium"
+                          >
+                            Read more
+                            <svg
+                              className="w-4 h-4 ml-1"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-12 flex justify-center gap-2">
+                  {currentPage > 1 && (
+                    <Link
+                      href={`/blog?page=${currentPage - 1}${searchQuery ? `&q=${searchQuery}` : ""}`}
+                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-green-500 transition-all font-medium"
+                    >
+                      Previous
                     </Link>
                   )}
-                  <div className="p-6">
-                    <div className="text-sm text-gray-500 mb-2">
-                      {post.createdAt
-                        ? new Date(post.createdAt).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })
-                        : "No date"}
-                    </div>
-                    <Link href={`/blog/${post.slug}`}>
-                      <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-green-600 transition-colors">
-                        {post.title}
-                      </h2>
-                    </Link>
-                    {post.excerpt && (
-                      <p className="text-gray-600 mb-4 line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                    )}
+                  
+                  {[...Array(totalPages)].map((_, i) => (
                     <Link
-                      href={`/blog/${post.slug}`}
-                      className="inline-flex items-center text-green-600 hover:text-green-800 font-medium"
+                      key={i + 1}
+                      href={`/blog?page=${i + 1}${searchQuery ? `&q=${searchQuery}` : ""}`}
+                      className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition-all ${
+                        currentPage === i + 1
+                          ? "bg-green-600 text-white"
+                          : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-green-500"
+                      }`}
                     >
-                      Read more
-                      <svg
-                        className="w-4 h-4 ml-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
+                      {i + 1}
                     </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
+                  ))}
+
+                  {currentPage < totalPages && (
+                    <Link
+                      href={`/blog?page=${currentPage + 1}${searchQuery ? `&q=${searchQuery}` : ""}`}
+                      className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-green-500 transition-all font-medium"
+                    >
+                      Next
+                    </Link>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>

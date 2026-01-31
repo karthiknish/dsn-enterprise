@@ -111,6 +111,7 @@ const FeaturedProducts = () => {
                   className="w-full h-full object-contain"
                   src={product.image}
                   alt={product.name}
+                  loading="lazy"
                 />
               </div>
               <div className="p-6">

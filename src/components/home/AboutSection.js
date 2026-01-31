@@ -67,6 +67,7 @@ const AboutSection = () => {
                   className="w-full h-full object-contain"
                   src="/images/bnr1.png"
                   alt="Cylinder Maters"
+                  loading="lazy"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 bg-primary rounded-lg p-6 shadow-xl max-w-xs">

@@ -22,6 +22,7 @@ async function getPostBySlug(slug) {
     return {
       id: doc.id,
       ...doc.data(),
+      publishedDate: doc.data().publishedDate?.toDate?.()?.toISOString() || null,
       createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || null,
       updatedAt: doc.data().updatedAt?.toDate?.()?.toISOString() || null,
     };
@@ -79,6 +80,35 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": post.title,
+            "image": post.featuredImage ? [post.featuredImage] : ["https://dsnenterprises.in/images/featured.png"],
+            "datePublished": post.publishedDate || post.createdAt,
+            "dateModified": post.updatedAt || post.publishedDate || post.createdAt,
+            "author": [{
+              "@type": "Organization",
+              "name": "DSN Enterprises",
+              "url": "https://dsnenterprises.in"
+            }],
+            "publisher": {
+              "@type": "Organization",
+              "name": "DSN Enterprises",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://dsnenterprises.in/images/logo.png"
+              }
+            },
+            "description": post.excerpt || post.title
+          })
+        }}
+      />
+
       {/* Hero Section */}
       <section className="bg-primary text-white py-16">
         <div className="container mx-auto px-4">
@@ -107,8 +137,8 @@ export default async function BlogPostPage({ params }) {
             </h1>
             <div className="flex items-center text-green-200">
               <time>
-                {post.createdAt
-                  ? new Date(post.createdAt).toLocaleDateString("en-US", {
+                {(post.publishedDate || post.createdAt)
+                  ? new Date(post.publishedDate || post.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
@@ -128,6 +158,7 @@ export default async function BlogPostPage({ params }) {
               src={post.featuredImage}
               alt={post.title}
               className="w-full h-64 md:h-96 object-cover rounded-xl shadow-lg"
+              loading="lazy"
             />
           </div>
         </div>

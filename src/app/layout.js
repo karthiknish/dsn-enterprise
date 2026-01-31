@@ -122,6 +122,46 @@ export default function RootLayout({ children }) {
           />
         </noscript>
         {/* End Meta Pixel Code */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "DSN Enterprises",
+              "url": "https://dsnenterprises.in",
+              "logo": "https://dsnenterprises.in/images/logo.png",
+              "description": "Leading manufacturer and supplier of high-precision gauges and measuring instruments.",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Coimbatore",
+                "addressRegion": "Tamil Nadu",
+                "addressCountry": "India"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-9842211222",
+                "contactType": "customer service"
+              }
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "DSN Enterprises",
+              "url": "https://dsnenterprises.in",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://dsnenterprises.in/blog?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            })
+          }}
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}
