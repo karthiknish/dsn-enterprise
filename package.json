@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-analytics/data": "^5.2.1",
     "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.49.1",
     "@tiptap/extension-code-block-lowlight": "^3.11.1",
