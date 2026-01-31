@@ -5,7 +5,18 @@ import { NextResponse } from 'next/server';
 const propertyId = process.env.GA_PROPERTY_ID;
 const credentialsBase64 = process.env.GOOGLE_SERVICES_JSON_BASE64;
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const period = searchParams.get('period') || '30d';
+  
+  const dateRangeMap = {
+    '7d': '7daysAgo',
+    '30d': '30daysAgo',
+    '90d': '90daysAgo',
+  };
+  
+  const startDate = dateRangeMap[period] || '30daysAgo';
+
   if (!propertyId) {
     return NextResponse.json(
       { error: 'GA_PROPERTY_ID is not configured' },
@@ -21,21 +32,14 @@ export async function GET() {
   }
 
   try {
-    // Parse credentials from Base64 environment variable
-    // Clean the base64 string from potential quotes or whitespace
     const cleanBase64 = credentialsBase64.trim().replace(/^"|"$/g, '');
     const credentials = JSON.parse(Buffer.from(cleanBase64, 'base64').toString('utf8'));
 
-    // The private_key needs to have real newlines. 
-    // If it was parsed from JSON, it should already have them.
-    // However, some env parsers might have messed them up.
     let privateKey = credentials.private_key;
     if (privateKey && typeof privateKey === 'string') {
-      // Ensure literal \n are replaced with real newlines just in case
       privateKey = privateKey.replace(/\\n/g, '\n');
     }
 
-    // Authenticate using the credentials object
     const client = new BetaAnalyticsDataClient({
       credentials: {
         client_email: credentials.client_email,
@@ -44,61 +48,40 @@ export async function GET() {
       projectId: credentials.project_id,
     });
 
-    // Run a report for basic metrics
-    const [response] = await client.runReport({
+    // 1. Total Metrics for the period
+    const [totalResponse] = await client.runReport({
       property: `properties/${propertyId.replace('properties/', '')}`,
-      dateRanges: [
-        {
-          startDate: '30daysAgo',
-          endDate: 'today',
-        },
-      ],
-      dimensions: [
-        {
-          name: 'date',
-        },
-      ],
+      dateRanges: [{ startDate, endDate: 'today' }],
       metrics: [
-        {
-          name: 'activeUsers',
-        },
-        {
-          name: 'sessions',
-        },
-        {
-          name: 'screenPageViews',
-        },
-        {
-          name: 'bounceRate',
-        },
+        { name: 'activeUsers' },
+        { name: 'sessions' },
+        { name: 'screenPageViews' },
+        { name: 'bounceRate' },
       ],
     });
 
-    // Run a second report for top pages
+    // 2. Daily Trends for Graph
+    const [trendResponse] = await client.runReport({
+      property: `properties/${propertyId.replace('properties/', '')}`,
+      dateRanges: [{ startDate, endDate: 'today' }],
+      dimensions: [{ name: 'date' }],
+      metrics: [{ name: 'activeUsers' }, { name: 'sessions' }],
+      orderBys: [{ dimension: { dimensionName: 'date' } }],
+    });
+
+    // 3. Top Pages
     const [topPagesResponse] = await client.runReport({
       property: `properties/${propertyId.replace('properties/', '')}`,
-      dateRanges: [
-        {
-          startDate: '30daysAgo',
-          endDate: 'today',
-        },
-      ],
-      dimensions: [
-        {
-          name: 'pagePath',
-        },
-      ],
-      metrics: [
-        {
-          name: 'screenPageViews',
-        },
-      ],
+      dateRanges: [{ startDate, endDate: 'today' }],
+      dimensions: [{ name: 'pagePath' }],
+      metrics: [{ name: 'screenPageViews' }],
       limit: 10,
     });
 
     return NextResponse.json({
-      report: response,
-      topPages: topPagesResponse,
+      metrics: totalResponse.rows?.[0]?.metricValues || [],
+      trends: trendResponse.rows || [],
+      topPages: topPagesResponse.rows || [],
     });
   } catch (error) {
     console.error('GA Data API Error:', error);

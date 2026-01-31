@@ -60,67 +60,14 @@ export const metadata = {
   },
 };
 
+import GoogleAnalytics from "@/components/Analytics";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Google tag (gtag.js) - Google Tag Manager & Google Ads */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=GT-TQKJ52Q3"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            // Google Tag configuration
-            gtag('config', 'GT-TQKJ52Q3', {
-              page_path: window.location.pathname,
-              send_page_view: true
-            });
-            
-            // Google Ads configuration with enhanced conversions
-            gtag('config', 'AW-17769294111', {
-              allow_enhanced_conversions: true,
-              page_path: window.location.pathname
-            });
-            
-            // Set default consent (adjust based on your cookie consent implementation)
-            gtag('consent', 'default', {
-              'ad_storage': 'granted',
-              'analytics_storage': 'granted',
-              'ad_user_data': 'granted',
-              'ad_personalization': 'granted'
-            });
-          `}
-        </Script>
+        <GoogleAnalytics />
         <Analytics />
-        {/* Meta Pixel Code */}
-        <Script id="facebook-pixel" strategy="afterInteractive">
-          {`
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1391622058130598');
-            fbq('track', 'PageView');
-          `}
-        </Script>
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src="https://www.facebook.com/tr?id=1391622058130598&ev=PageView&noscript=1"
-            alt=""
-          />
-        </noscript>
         {/* End Meta Pixel Code */}
         <script
           type="application/ld+json"
@@ -140,7 +87,7 @@ export default function RootLayout({ children }) {
               },
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+91-9842211222",
+                "telephone": "+91-9363122005",
                 "contactType": "customer service"
               }
             })
