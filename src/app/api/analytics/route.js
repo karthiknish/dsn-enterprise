@@ -24,6 +24,11 @@ export async function GET() {
     // Parse credentials from Base64 environment variable
     const credentials = JSON.parse(Buffer.from(credentialsBase64, 'base64').toString('utf8'));
 
+    // Fix private key formatting issue (literal \n vs real newlines)
+    if (credentials.private_key) {
+      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+    }
+
     // Authenticate using the credentials object
     const client = new BetaAnalyticsDataClient({
       credentials,
