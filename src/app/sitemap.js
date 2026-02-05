@@ -4,9 +4,8 @@ import { generateProductCityPages, generateServiceCityPages } from '@/lib/seo-pa
 
 const BASE_URL = 'https://dsnenterprises.in';
 
-// Force dynamic generation at request time
-export const dynamic = 'force-dynamic';
 export const revalidate = 3600; // Revalidate every hour
+
 
 async function getBlogPosts() {
   try {
