@@ -23,7 +23,7 @@ const oswald = Oswald({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://dsnenterprises.in'),
+  metadataBase: new URL('https://www.dsnenterprises.in'),
   title: {
     default: "DSN Enterprises - Precision Gauges & Measuring Instruments",
     template: "%s | DSN Enterprises",
@@ -76,8 +76,8 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "DSN Enterprises",
-              "url": "https://dsnenterprises.in",
-              "logo": "https://dsnenterprises.in/images/logo.png",
+              "url": "https://www.dsnenterprises.in",
+              "logo": "https://www.dsnenterprises.in/images/logo.png",
               "description": "Leading manufacturer and supplier of high-precision gauges and measuring instruments.",
               "address": {
                 "@type": "PostalAddress",
@@ -100,10 +100,10 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "DSN Enterprises",
-              "url": "https://dsnenterprises.in",
+              "url": "https://www.dsnenterprises.in",
               "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://dsnenterprises.in/blog?q={search_term_string}",
+                "target": "https://www.dsnenterprises.in/blog?q={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             })

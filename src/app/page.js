@@ -17,14 +17,14 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://dsnenterprises.in"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "DSN Enterprises - Precision Gauge Manufacturers in Coimbatore, India",
     description: "Leading manufacturer of precision gauges including plain plug gauges, ring gauges, thread gauges, and custom gauges. ISO certified quality with NABL calibration services.",
-    url: "https://dsnenterprises.in",
+    url: "https://www.dsnenterprises.in",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

@@ -88,20 +88,20 @@ export default async function BlogPostPage({ params }) {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             "headline": post.title,
-            "image": post.featuredImage ? [post.featuredImage] : ["https://dsnenterprises.in/images/featured.png"],
+            "image": post.featuredImage ? [post.featuredImage] : ["https://www.dsnenterprises.in/images/featured.png"],
             "datePublished": post.publishedDate || post.createdAt,
             "dateModified": post.updatedAt || post.publishedDate || post.createdAt,
             "author": [{
               "@type": "Organization",
               "name": "DSN Enterprises",
-              "url": "https://dsnenterprises.in"
+              "url": "https://www.dsnenterprises.in"
             }],
             "publisher": {
               "@type": "Organization",
               "name": "DSN Enterprises",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://dsnenterprises.in/images/logo.png"
+                "url": "https://www.dsnenterprises.in/images/logo.png"
               }
             },
             "description": post.excerpt || post.title
@@ -182,7 +182,7 @@ export default async function BlogPostPage({ params }) {
               </h3>
               <div className="flex gap-4">
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://dsnenterprises.in/blog/${post.slug}`)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://www.dsnenterprises.in/blog/${post.slug}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 bg-[color:var(--color-twitter)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
@@ -193,7 +193,7 @@ export default async function BlogPostPage({ params }) {
                   Twitter
                 </a>
                 <a
-                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://dsnenterprises.in/blog/${post.slug}`)}&title=${encodeURIComponent(post.title)}`}
+                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://www.dsnenterprises.in/blog/${post.slug}`)}&title=${encodeURIComponent(post.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 bg-[color:var(--color-linkedin)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
@@ -204,7 +204,7 @@ export default async function BlogPostPage({ params }) {
                   LinkedIn
                 </a>
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://dsnenterprises.in/blog/${post.slug}`)}`}
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://www.dsnenterprises.in/blog/${post.slug}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 bg-[color:var(--color-facebook)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
