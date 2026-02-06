@@ -2,7 +2,7 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { generateProductCityPages, generateServiceCityPages } from '@/lib/seo-pages.config';
 
-const BASE_URL = 'https://dsnenterprises.in';
+const BASE_URL = 'https://www.dsnenterprises.in';
 
 export const revalidate = 3600; // Revalidate every hour
 

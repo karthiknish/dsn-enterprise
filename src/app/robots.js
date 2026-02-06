@@ -1,4 +1,4 @@
-const BASE_URL = 'https://dsnenterprises.in';
+const BASE_URL = 'https://www.dsnenterprises.in';
 
 export default function robots() {
   return {
