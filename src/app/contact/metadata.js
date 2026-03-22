@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/contact",
   },
   openGraph: {
     title: "Contact Us - DSN Enterprises | Precision Gauge Manufacturers",
     description: "Get in touch with DSN Enterprises for precision gauges, calibration services, and custom solutions. Contact us at +91 9363122005 or email info@dsnenterprises.com.",
-    url: "https://dsnenterprises.com/contact",
+    url: "https://www.dsnenterprises.in/contact",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

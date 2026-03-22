@@ -1,8 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
+import * as React from "react"
 import { cn } from "@/lib/utils.js"
 import { Calendar } from "./calendar.jsx"
 
@@ -31,19 +31,15 @@ export function DatePicker({
     setOpen(false)
   }
 
-  const updatePosition = () => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect()
-      setPosition({
-        top: rect.bottom + 4,
-        left: rect.left,
-      })
-    }
-  }
-
   React.useEffect(() => {
     if (open) {
-      updatePosition()
+      if (buttonRef.current) {
+        const rect = buttonRef.current.getBoundingClientRect()
+        setPosition({
+          top: rect.bottom + 4,
+          left: rect.left,
+        })
+      }
     }
   }, [open])
 

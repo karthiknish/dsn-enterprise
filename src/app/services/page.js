@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FaTools, FaRuler, FaCertificate, FaWrench, FaArrowRight, FaCheck } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { FaArrowRight, FaCertificate, FaCheck, FaRuler, FaTools } from 'react-icons/fa';
 
 const services = [
   {
@@ -143,8 +143,8 @@ const ServicesPage = () => {
                   {service.description}
                 </p>
                 <ul className="space-y-4">
-                  {service.details.map((detail, i) => (
-                    <li key={i} className="flex items-start">
+                  {service.details.map((detail) => (
+                    <li key={`${service.id}-${detail}`} className="flex items-start">
                       <FaCheck className="text-primary mt-1 mr-3 flex-shrink-0" />
                       <span className="text-gray-700">{detail}</span>
                     </li>
@@ -182,8 +182,8 @@ const ServicesPage = () => {
             </h2>
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <ul className="space-y-3">
-                {standards.map((standard, index) => (
-                  <li key={index} className="flex items-start">
+                {standards.map((standard) => (
+                  <li key={standard} className="flex items-start">
                     <span className="text-primary mr-2">•</span>
                     <span className="text-gray-700">{standard}</span>
                   </li>

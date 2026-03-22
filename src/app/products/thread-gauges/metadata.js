@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/products/thread-gauges",
   },
   openGraph: {
     title: "Thread Gauges Manufacturer | Thread Plug & Ring Gauges - DSN Enterprises",
     description: "Precision thread gauges including thread plug gauges, ring gauges, setting plugs, taper gauges, and all standard thread forms.",
-    url: "https://dsnenterprises.com/products/thread-gauges",
+    url: "https://www.dsnenterprises.in/products/thread-gauges",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

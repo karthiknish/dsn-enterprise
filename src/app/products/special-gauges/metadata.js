@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/products/special-gauges",
   },
   openGraph: {
     title: "Special Gauges Manufacturer | Custom & Specialty Gauges - DSN Enterprises",
     description: "Custom and specialty gauges including ACME thread gauges, buttress thread gauges, trapezoidal gauges, spline gauges, and custom gauges.",
-    url: "https://dsnenterprises.com/products/special-gauges",
+    url: "https://www.dsnenterprises.in/products/special-gauges",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/resources",
   },
   openGraph: {
     title: "Resources & Downloads | Product Catalogs & Technical Resources - DSN Enterprises",
     description: "Access product catalogs, technical resources, gauge tolerance charts, thread data tables, API specifications, and quality certificates.",
-    url: "https://dsnenterprises.com/resources",
+    url: "https://www.dsnenterprises.in/resources",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

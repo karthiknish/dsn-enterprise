@@ -1,10 +1,11 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Oswald } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import GoogleAnalytics from "@/components/Analytics";
+import MotionProvider from "@/components/MotionProvider";
 import "./globals.css";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
-import Script from "next/script";
-import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,7 +61,38 @@ export const metadata = {
   },
 };
 
-import GoogleAnalytics from "@/components/Analytics";
+const organizationJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "DSN Enterprises",
+  url: "https://www.dsnenterprises.in",
+  logo: "https://www.dsnenterprises.in/images/logo.png",
+  description:
+    "Leading manufacturer and supplier of high-precision gauges and measuring instruments.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Coimbatore",
+    addressRegion: "Tamil Nadu",
+    addressCountry: "India",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+91-9363122005",
+    contactType: "customer service",
+  },
+});
+
+const websiteJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "DSN Enterprises",
+  url: "https://www.dsnenterprises.in",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://www.dsnenterprises.in/blog?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+});
 
 export default function RootLayout({ children }) {
   return (
@@ -69,53 +101,19 @@ export default function RootLayout({ children }) {
         <GoogleAnalytics />
         <Analytics />
         {/* End Meta Pixel Code */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "DSN Enterprises",
-              "url": "https://www.dsnenterprises.in",
-              "logo": "https://www.dsnenterprises.in/images/logo.png",
-              "description": "Leading manufacturer and supplier of high-precision gauges and measuring instruments.",
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Coimbatore",
-                "addressRegion": "Tamil Nadu",
-                "addressCountry": "India"
-              },
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+91-9363122005",
-                "contactType": "customer service"
-              }
-            })
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "DSN Enterprises",
-              "url": "https://www.dsnenterprises.in",
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://www.dsnenterprises.in/blog?q={search_term_string}",
-                "query-input": "required name=search_term_string"
-              }
-            })
-          }}
-        />
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: organizationJsonLd }} />
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: websiteJsonLd }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}
       >
-        <Header />
-        <main className="pt-16">{children}</main>
-        <Footer />
+        <MotionProvider>
+          <Header />
+          <main className="pt-16">{children}</main>
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );

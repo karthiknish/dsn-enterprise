@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/quality",
   },
   openGraph: {
     title: "Quality Assurance | ISO 9001 & NABL Certified - DSN Enterprises",
     description: "Learn about our quality assurance processes, ISO 9001:2015 certification, NABL accreditation, and API 5B & 7-2 licensing.",
-    url: "https://dsnenterprises.com/quality",
+    url: "https://www.dsnenterprises.in/quality",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

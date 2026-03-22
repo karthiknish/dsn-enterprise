@@ -2,15 +2,15 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { 
-  FaDownload, 
-  FaFilePdf, 
-  FaFileExcel,
+import {
   FaBook,
-  FaClipboardList,
   FaCertificate,
+  FaClipboardList,
+  FaDownload,
+  FaFileExcel,
+  FaFilePdf,
+  FaIndustry,
   FaRuler,
-  FaIndustry
 } from "react-icons/fa";
 
 const downloadCategories = [
@@ -218,9 +218,9 @@ export default function ResourcesPage() {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {category.items.map((item, itemIndex) => (
+                  {category.items.map((item) => (
                     <div
-                      key={itemIndex}
+                      key={item.name}
                       className="bg-secondary-light rounded-lg p-5 flex items-start gap-4 hover:shadow-md transition-shadow"
                     >
                       <FileIcon type={item.type} />
@@ -272,8 +272,8 @@ export default function ResourcesPage() {
                 >
                   <h3 className="text-xl font-bold text-primary mb-4">{standard.standard}</h3>
                   <ul className="space-y-2">
-                    {standard.items.map((item, i) => (
-                      <li key={i} className="text-sm text-gray-600 flex items-start">
+                    {standard.items.map((item) => (
+                      <li key={item} className="text-sm text-gray-600 flex items-start">
                         <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 mr-2 flex-shrink-0"></span>
                         {item}
                       </li>
@@ -305,9 +305,9 @@ export default function ResourcesPage() {
                 { name: "American Petroleum Institute", abbr: "API" },
                 { name: "NABL India", abbr: "NABL" },
                 { name: "ISO Standards", abbr: "ISO" },
-              ].map((org, index) => (
+              ].map((org) => (
                 <div
-                  key={index}
+                  key={org.abbr}
                   className="bg-secondary-light rounded-lg p-6 text-center hover:shadow-md transition-shadow"
                 >
                   <FaIndustry className="text-3xl text-primary mx-auto mb-3" />

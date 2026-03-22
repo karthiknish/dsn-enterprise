@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/products/api-gauges",
   },
   openGraph: {
     title: "API Gauges Manufacturer | API 5B & 7-2 Certified Gauges - DSN Enterprises",
     description: "API 5B & 7-2 licensed manufacturer of certified thread gauges for oil and gas industry. API casing, tubing, line pipe, and rotary shouldered gauges.",
-    url: "https://dsnenterprises.com/products/api-gauges",
+    url: "https://www.dsnenterprises.in/products/api-gauges",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

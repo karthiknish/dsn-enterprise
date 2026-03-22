@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/industries",
   },
   openGraph: {
     title: "Industries We Serve | Oil & Gas, Automotive, Aerospace - DSN Enterprises",
     description: "DSN Enterprises serves diverse industries including Oil & Gas, Automotive, Aerospace & Defense, General Engineering, and Heavy Machinery with precision gauging solutions.",
-    url: "https://dsnenterprises.com/industries",
+    url: "https://www.dsnenterprises.in/industries",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/calibration",
   },
   openGraph: {
     title: "Gauge Calibration Services | NABL Accredited Calibration - DSN Enterprises",
     description: "NABL accredited gauge calibration services for plain gauges, thread gauges, API gauges, and setting masters. Express calibration and on-site services available.",
-    url: "https://dsnenterprises.com/calibration",
+    url: "https://www.dsnenterprises.in/calibration",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

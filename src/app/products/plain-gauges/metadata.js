@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/products/plain-gauges",
   },
   openGraph: {
     title: "Plain Gauges Manufacturer | Plain Plug & Ring Gauges - DSN Enterprises",
     description: "Premium quality plain gauges including plain plug gauges, ring gauges, cylindrical setting masters, measuring pins, and snap gauges. Available in 1mm to 250mm range.",
-    url: "https://dsnenterprises.com/products/plain-gauges",
+    url: "https://www.dsnenterprises.in/products/plain-gauges",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

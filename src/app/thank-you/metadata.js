@@ -5,14 +5,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://dsnenterprises.com"),
+  metadataBase: new URL("https://www.dsnenterprises.in"),
   alternates: {
     canonical: "/thank-you",
   },
   openGraph: {
     title: "Thank You - DSN Enterprises",
     description: "Thank you for contacting DSN Enterprises. We have received your message and will get back to you shortly.",
-    url: "https://dsnenterprises.com/thank-you",
+    url: "https://www.dsnenterprises.in/thank-you",
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

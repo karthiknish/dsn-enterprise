@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaRuler, FaSearch, FaArrowRight, FaChevronRight } from 'react-icons/fa';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { FaArrowRight, FaChevronRight, FaSearch } from 'react-icons/fa';
 
 const categories = [
   {
@@ -273,11 +274,14 @@ const ProductsPage = () => {
                   href={category.href}
                   className="block bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all group h-full"
                 >
-                  <div className="h-48 bg-gray-100 flex items-center justify-center p-4">
-                    <img
+                  <div className="relative h-48 bg-gray-100 flex items-center justify-center p-4">
+                    <Image
                       src={category.image}
                       alt={category.name}
-                      className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      fill
+                      unoptimized
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                   <div className="p-6">
@@ -288,8 +292,8 @@ const ProductsPage = () => {
                       {category.description}
                     </p>
                     <ul className="space-y-1 mb-4">
-                      {category.highlights.map((item, i) => (
-                        <li key={i} className="text-sm text-gray-500 flex items-center">
+                      {category.highlights.map((item) => (
+                        <li key={`${category.id}-${item}`} className="text-sm text-gray-500 flex items-center">
                           <FaChevronRight className="text-primary mr-2 text-xs" />
                           {item}
                         </li>
@@ -319,6 +323,7 @@ const ProductsPage = () => {
             {products.map((category) => (
               <button
                 key={category.id}
+                type="button"
                 className={`px-6 py-3 rounded-full font-medium transition-colors ${
                   activeCategory === category.id
                     ? "bg-primary text-white"
@@ -357,11 +362,14 @@ const ProductsPage = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                     >
-                      <div className="h-48 bg-secondary-light overflow-hidden">
-                        <img
-                          className="w-full h-full object-contain"
+                      <div className="relative h-48 bg-secondary-light overflow-hidden">
+                        <Image
+                          className="object-contain"
                           src={item.image}
                           alt={item.name}
+                          fill
+                          unoptimized
+                          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                         />
                       </div>
                       <div className="p-6">
@@ -413,8 +421,8 @@ const ProductsPage = () => {
                 General Specifications
               </h3>
               <ul className="space-y-3">
-                {specifications.map((spec, index) => (
-                  <li key={index} className="flex items-start">
+                {specifications.map((spec) => (
+                  <li key={spec} className="flex items-start">
                     <span className="text-primary mr-2">✓</span>
                     <span className="text-gray-700">{spec}</span>
                   </li>
@@ -426,8 +434,8 @@ const ProductsPage = () => {
               Quality Standards Practiced
             </h3>
             <ul className="space-y-3 bg-secondary-light p-8 rounded-lg">
-              {standards.map((standard, index) => (
-                <li key={index} className="flex items-start">
+              {standards.map((standard) => (
+                <li key={standard} className="flex items-start">
                   <span className="text-primary mr-2">•</span>
                   <span className="text-gray-700">{standard}</span>
                 </li>

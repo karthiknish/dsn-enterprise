@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaMagic, FaSpinner, FaLightbulb, FaCopy, FaCheck, FaRedo } from 'react-icons/fa';
+import { FaCheck, FaCopy, FaLightbulb, FaMagic, FaRedo, FaSpinner } from 'react-icons/fa';
 
 // Process inline markdown (bold, italic, links, code)
 const processInlineMarkdown = (text) => {
@@ -15,7 +15,7 @@ const processInlineMarkdown = (text) => {
     // Inline code
     .replace(/`(.*?)`/g, '<code>$1</code>')
     // Links
-    .replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2">$1</a>');
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 };
 
 // Convert markdown to HTML for TipTap
@@ -29,7 +29,7 @@ const markdownToHtml = (markdown) => {
   let listType = null;
   
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i];
+    const line = lines[i];
     
     // Headers (process in order from h6 to h1)
     if (line.match(/^###### /)) {
@@ -172,7 +172,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
       } else {
         setError(data.error || 'Failed to generate content');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Network error. Please try again.');
     } finally {
       setIsGenerating(false);
@@ -206,7 +206,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
       } else {
         setError(data.error || 'Failed to generate metadata');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Network error. Please try again.');
     } finally {
       setIsGeneratingMeta(false);
@@ -235,7 +235,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
       } else {
         setError(data.error || 'Failed to load ideas');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Network error. Please try again.');
     } finally {
       setIsLoadingIdeas(false);
@@ -262,6 +262,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
           AI Blog Generator
         </h3>
         <button
+          type="button"
           onClick={loadBlogIdeas}
           disabled={isLoadingIdeas}
           className="text-sm text-purple-600 hover:text-purple-800 flex items-center"
@@ -285,16 +286,17 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
         <div className="mb-4 bg-white rounded-lg p-4 border border-purple-200">
           <h4 className="font-medium text-gray-900 mb-3">Suggested Blog Topics:</h4>
           <div className="space-y-2 max-h-60 overflow-y-auto">
-            {blogIdeas.map((idea, index) => (
-              <div
-                key={index}
+            {blogIdeas.map((idea) => (
+              <button
+                key={idea.title}
+                type="button"
                 onClick={() => selectIdea(idea)}
-                className="p-3 bg-gray-50 rounded cursor-pointer hover:bg-purple-50 transition-colors"
+                className="w-full p-3 bg-gray-50 rounded cursor-pointer hover:bg-purple-50 transition-colors text-left"
               >
                 <div className="font-medium text-gray-900 text-sm">{idea.title}</div>
                 <div className="flex flex-wrap gap-1 mt-1">
-                  {idea.keywords?.map((kw, i) => (
-                    <span key={i} className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
+                  {idea.keywords?.map((kw) => (
+                    <span key={`${idea.title}-${kw}`} className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded">
                       {kw}
                     </span>
                   ))}
@@ -309,10 +311,11 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
                     {idea.estimatedSearchVolume} volume
                   </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
           <button
+            type="button"
             onClick={() => setShowIdeas(false)}
             className="mt-3 text-sm text-gray-500 hover:text-gray-700"
           >
@@ -323,10 +326,11 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="ai-blog-topic" className="block text-sm font-medium text-gray-700 mb-1">
             Blog Topic / Title
           </label>
           <input
+            id="ai-blog-topic"
             type="text"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
@@ -336,10 +340,11 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="ai-blog-keywords" className="block text-sm font-medium text-gray-700 mb-1">
             Target Keywords (comma-separated)
           </label>
           <input
+            id="ai-blog-keywords"
             type="text"
             value={keywords}
             onChange={(e) => setKeywords(e.target.value)}
@@ -350,6 +355,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
 
         <div className="flex gap-3">
           <button
+            type="button"
             onClick={generateContent}
             disabled={isGenerating || !topic.trim()}
             className="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 disabled:bg-purple-300 disabled:cursor-not-allowed flex items-center justify-center"
@@ -375,6 +381,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
             <h4 className="font-medium text-gray-900">Generated Content Preview:</h4>
             <div className="flex gap-2">
               <button
+                type="button"
                 onClick={copyContent}
                 className="text-sm text-gray-600 hover:text-gray-800 flex items-center"
               >
@@ -382,6 +389,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
                 {copied ? 'Copied!' : 'Copy'}
               </button>
               <button
+                type="button"
                 onClick={() => generateMetadata(generatedContent)}
                 disabled={isGeneratingMeta}
                 className="text-sm text-purple-600 hover:text-purple-800 flex items-center"
@@ -394,6 +402,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
                 Generate SEO Metadata
               </button>
               <button
+                type="button"
                 onClick={generateContent}
                 disabled={isGenerating}
                 className="text-sm text-gray-600 hover:text-gray-800 flex items-center"
@@ -411,6 +420,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
             </div>
           </div>
           <button
+            type="button"
             onClick={() => {
               if (onContentGenerated) {
                 const htmlContent = markdownToHtml(generatedContent);
