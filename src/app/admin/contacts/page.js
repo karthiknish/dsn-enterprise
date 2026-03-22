@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
 import {
   collection,
   query,
@@ -11,12 +9,15 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
 
 export default function ContactsPage() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedContact, setSelectedContact] = useState(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: fetchContacts is stable at component level
   useEffect(() => {
     fetchContacts();
   }, []);
@@ -70,7 +71,7 @@ export default function ContactsPage() {
       case "contacted":
         return "bg-yellow-100 text-yellow-800";
       case "resolved":
-        return "bg-green-100 text-green-800";
+        return "bg-accent-100 text-accent-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -97,6 +98,7 @@ export default function ContactsPage() {
           {contacts.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm p-12 text-center">
               <svg
+                aria-hidden="true"
                 className="w-16 h-16 mx-auto text-gray-400 mb-4"
                 fill="none"
                 stroke="currentColor"
@@ -120,9 +122,10 @@ export default function ContactsPage() {
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
               <div className="divide-y divide-gray-200">
                 {contacts.map((contact) => (
-                  <div
+                  <button
                     key={contact.id}
-                    className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
+                    type="button"
+                    className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors text-left w-full ${
                       selectedContact?.id === contact.id ? "bg-primary/5" : ""
                     }`}
                     onClick={() => setSelectedContact(contact)}
@@ -153,7 +156,7 @@ export default function ContactsPage() {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -169,10 +172,12 @@ export default function ContactsPage() {
                   Contact Details
                 </h3>
                 <button
+                  type="button"
                   onClick={() => setSelectedContact(null)}
                   className="text-gray-400 hover:text-gray-600"
                 >
                   <svg
+                    aria-hidden="true"
                     className="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
@@ -190,17 +195,17 @@ export default function ContactsPage() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase">
+                  <label htmlFor="contact-name" className="text-xs font-medium text-gray-500 uppercase">
                     Name
                   </label>
-                  <p className="text-gray-900">{selectedContact.name}</p>
+                  <p id="contact-name" className="text-gray-900">{selectedContact.name}</p>
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase">
+                  <label htmlFor="contact-email" className="text-xs font-medium text-gray-500 uppercase">
                     Email
                   </label>
-                  <p>
+                  <p id="contact-email">
                     <a
                       href={`mailto:${selectedContact.email}`}
                       className="text-primary hover:text-primary-dark"
@@ -212,10 +217,10 @@ export default function ContactsPage() {
 
                 {selectedContact.phone && (
                   <div>
-                    <label className="text-xs font-medium text-gray-500 uppercase">
+                    <label htmlFor="contact-phone" className="text-xs font-medium text-gray-500 uppercase">
                       Phone
                     </label>
-                    <p>
+                    <p id="contact-phone">
                       <a
                         href={`tel:${selectedContact.phone}`}
                         className="text-primary hover:text-primary-dark"
@@ -228,38 +233,39 @@ export default function ContactsPage() {
 
                 {selectedContact.company && (
                   <div>
-                    <label className="text-xs font-medium text-gray-500 uppercase">
+                    <label htmlFor="contact-company" className="text-xs font-medium text-gray-500 uppercase">
                       Company
                     </label>
-                    <p className="text-gray-900">{selectedContact.company}</p>
+                    <p id="contact-company" className="text-gray-900">{selectedContact.company}</p>
                   </div>
                 )}
 
                 {selectedContact.productInterest && (
                   <div>
-                    <label className="text-xs font-medium text-gray-500 uppercase">
+                    <label htmlFor="contact-product" className="text-xs font-medium text-gray-500 uppercase">
                       Product Interest
                     </label>
-                    <p className="text-gray-900">
+                    <p id="contact-product" className="text-gray-900">
                       {selectedContact.productInterest}
                     </p>
                   </div>
                 )}
 
                 <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase">
+                  <label htmlFor="contact-message" className="text-xs font-medium text-gray-500 uppercase">
                     Message
                   </label>
-                  <p className="text-gray-900 whitespace-pre-wrap">
+                  <p id="contact-message" className="text-gray-900 whitespace-pre-wrap">
                     {selectedContact.message}
                   </p>
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase">
+                  <label htmlFor="contact-status" className="text-xs font-medium text-gray-500 uppercase">
                     Status
                   </label>
                   <select
+                    id="contact-status"
                     value={selectedContact.status || "new"}
                     onChange={(e) =>
                       handleStatusChange(selectedContact.id, e.target.value)
@@ -273,10 +279,10 @@ export default function ContactsPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-gray-500 uppercase">
+                  <label htmlFor="contact-submitted" className="text-xs font-medium text-gray-500 uppercase">
                     Submitted
                   </label>
-                  <p className="text-gray-900">
+                  <p id="contact-submitted" className="text-gray-900">
                     {selectedContact.createdAt?.toDate?.()?.toLocaleString() ||
                       "No date"}
                   </p>
@@ -288,6 +294,7 @@ export default function ContactsPage() {
                     className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
                   >
                     <svg
+                      aria-hidden="true"
                       className="w-4 h-4 mr-2"
                       fill="none"
                       stroke="currentColor"
@@ -303,10 +310,12 @@ export default function ContactsPage() {
                     Reply
                   </a>
                   <button
+                    type="button"
                     onClick={() => handleDelete(selectedContact.id)}
                     className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors"
                   >
                     <svg
+                      aria-hidden="true"
                       className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
@@ -326,6 +335,7 @@ export default function ContactsPage() {
           ) : (
             <div className="bg-white rounded-xl shadow-sm p-6 text-center text-gray-500">
               <svg
+                aria-hidden="true"
                 className="w-12 h-12 mx-auto text-gray-400 mb-3"
                 fill="none"
                 stroke="currentColor"

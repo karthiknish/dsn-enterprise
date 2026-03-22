@@ -50,7 +50,7 @@ export default function ThankYouPage() {
               transition={{ duration: 0.5 }}
               className="flex justify-center mb-6"
             >
-              <FaCheckCircle className="text-6xl text-green-500" />
+              <FaCheckCircle className="text-6xl text-accent" />
             </motion.div>
 
             <motion.h2

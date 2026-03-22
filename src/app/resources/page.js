@@ -169,7 +169,7 @@ const standardsInfo = [
 
 function FileIcon({ type }) {
   if (type === "Excel") {
-    return <FaFileExcel className="text-green-600 text-2xl" />;
+    return <FaFileExcel className="text-accent text-2xl" />;
   }
   return <FaFilePdf className="text-red-600 text-2xl" />;
 }

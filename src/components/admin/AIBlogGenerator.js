@@ -302,7 +302,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
                 <div className="flex items-center gap-4 mt-1 text-xs text-gray-500">
                   <span>Audience: {idea.targetAudience}</span>
                   <span className={`px-2 py-0.5 rounded ${
-                    idea.estimatedSearchVolume === 'high' ? 'bg-green-100 text-green-700' :
+                    idea.estimatedSearchVolume === 'high' ? 'bg-accent-100 text-accent-700' :
                     idea.estimatedSearchVolume === 'medium' ? 'bg-yellow-100 text-yellow-700' :
                     'bg-gray-100 text-gray-700'
                   }`}>
@@ -378,7 +378,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
                 onClick={copyContent}
                 className="text-sm text-gray-600 hover:text-gray-800 flex items-center"
               >
-                {copied ? <FaCheck className="mr-1 text-green-600" /> : <FaCopy className="mr-1" />}
+                {copied ? <FaCheck className="mr-1 text-accent" /> : <FaCopy className="mr-1" />}
                 {copied ? 'Copied!' : 'Copy'}
               </button>
               <button
@@ -417,7 +417,7 @@ export default function AIBlogGenerator({ onContentGenerated, onMetadataGenerate
                 onContentGenerated(htmlContent);
               }
             }}
-            className="mt-3 w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center"
+            className="mt-3 w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-accent-700 flex items-center justify-center"
           >
             <FaCheck className="mr-2" />
             Use This Content in Editor

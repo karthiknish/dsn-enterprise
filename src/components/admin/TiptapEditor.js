@@ -81,9 +81,10 @@ export default function TiptapEditor({ content, onChange, placeholder = "Start w
   return (
     <div>
       <EditorStyles />
-      <div
+      <section
+        aria-label="Rich text editor"
         className={`border border-gray-300 rounded-lg bg-white overflow-visible relative transition-colors ${
-          isDragging ? "border-green-500 ring-2 ring-green-200" : ""
+          isDragging ? "border-accent ring-2 ring-accent-200" : ""
         }`}
         onDragEnter={(e) => {
           e.preventDefault();
@@ -120,15 +121,15 @@ export default function TiptapEditor({ content, onChange, placeholder = "Start w
 
         {/* Drop zone overlay */}
         {isDragging && (
-          <div className="absolute inset-0 bg-green-50/90 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center pointer-events-none z-10 border-2 border-dashed border-green-400">
-            <svg className="w-16 h-16 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="absolute inset-0 bg-accent-50/90 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center pointer-events-none z-10 border-2 border-dashed border-accent-400">
+            <svg aria-hidden="true" className="w-16 h-16 text-accent mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-green-700 font-semibold text-lg">Drop images here</p>
-            <p className="text-green-600 text-sm mt-1">Supports JPG, PNG, GIF, WebP</p>
+            <p className="text-accent-700 font-semibold text-lg">Drop images here</p>
+            <p className="text-accent text-sm mt-1">Supports JPG, PNG, GIF, WebP</p>
           </div>
         )}
-      </div>
+      </section>
 
       {/* Link Dialog */}
       <LinkDialog

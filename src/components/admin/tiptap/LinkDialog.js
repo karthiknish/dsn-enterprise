@@ -26,10 +26,11 @@ export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Add Link</h3>
           <button
+            type="button"
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -37,43 +38,46 @@ export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="link-url" className="block text-sm font-medium text-gray-700 mb-1">
               URL
             </label>
             <input
+              id="link-url"
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com"
-              className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              autoFocus
+              className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="link-text" className="block text-sm font-medium text-gray-700 mb-1">
               Link Text (optional)
             </label>
             <input
+              id="link-text"
               type="text"
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Enter link text"
-              className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
         </div>
 
         <div className="flex gap-3 mt-6">
           <button
+            type="button"
             onClick={onClose}
             className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
           >
             Cancel
           </button>
           <button
+            type="button"
             onClick={handleConfirm}
-            className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+            className="flex-1 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 font-medium"
           >
             Insert Link
           </button>

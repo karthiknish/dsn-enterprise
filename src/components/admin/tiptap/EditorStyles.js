@@ -13,13 +13,13 @@ export function EditorStyles() {
       .ProseMirror table td,
       .ProseMirror table th {
         min-width: 1em;
-        border: 1px solid #d1d5db;
+        border: 1px solid var(--color-border);
         padding: 0.25rem 0.75rem;
       }
       .ProseMirror table th {
-        background-color: #f9fafb;
+        background-color: var(--color-gray-50);
         font-weight: 600;
-        color: #111827;
+        color: var(--color-gray-900);
       }
       .ProseMirror table p {
         margin: 0;

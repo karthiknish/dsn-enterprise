@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
 import {
   collection,
   query,
@@ -10,7 +8,10 @@ import {
   deleteDoc,
   doc,
 } from "firebase/firestore";
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
 
 export default function BlogListPage() {
   const [posts, setPosts] = useState([]);
@@ -27,6 +28,7 @@ export default function BlogListPage() {
     setTimeout(() => setNotification(null), 5000);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: fetchPosts is stable at component level
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -84,7 +86,7 @@ export default function BlogListPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Reset to first page when search term changes
+  // biome-ignore lint/correctness/useExhaustiveDependencies: searchTerm drives the reset but is not used inside the effect body
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
@@ -92,7 +94,7 @@ export default function BlogListPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
       </div>
     );
   }
@@ -105,25 +107,26 @@ export default function BlogListPage() {
           notification.type === 'error' 
             ? 'bg-red-50 border border-red-200 text-red-800' 
             : notification.type === 'success'
-            ? 'bg-green-50 border border-green-200 text-green-800'
+            ? 'bg-accent-50 border border-accent-200 text-accent-800'
             : 'bg-gray-50 border border-gray-200 text-gray-800'
         }`}>
           {notification.type === 'error' && (
-            <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           )}
           {notification.type === 'success' && (
-            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           )}
           <span className="font-medium">{notification.message}</span>
           <button
+            type="button"
             onClick={() => setNotification(null)}
             className="ml-2 text-gray-400 hover:text-gray-600"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -136,7 +139,7 @@ export default function BlogListPage() {
           <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4 animate-fadeIn">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg aria-hidden="true" className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </div>
@@ -147,12 +150,14 @@ export default function BlogListPage() {
             </p>
             <div className="flex gap-3">
               <button
+                type="button"
                 onClick={() => setShowDeleteDialog(null)}
                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={confirmDelete}
                 className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
               >
@@ -174,16 +179,16 @@ export default function BlogListPage() {
             target="_blank"
             className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
           >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
             View Live
           </Link>
           <Link
             href="/admin/blog/new"
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+            className="inline-flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors shadow-sm"
           >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             New Post
@@ -194,14 +199,14 @@ export default function BlogListPage() {
       {/* Search Bar */}
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
         <input
           type="text"
           placeholder="Search posts..."
-          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-green-500 focus:border-green-500 sm:text-sm transition duration-150 ease-in-out"
+          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-accent focus:border-accent sm:text-sm transition duration-150 ease-in-out"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -216,9 +221,10 @@ export default function BlogListPage() {
 
       {posts.length === 0 ? (
         <div className="bg-white rounded-xl shadow-sm p-12 text-center border border-gray-100">
-          <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-accent-50 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
-              className="w-8 h-8 text-green-500"
+              aria-hidden="true"
+              className="w-8 h-8 text-accent"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -235,7 +241,7 @@ export default function BlogListPage() {
           <p className="text-gray-500 mb-6">Get started by creating your first blog post.</p>
           <Link
             href="/admin/blog/new"
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+            className="inline-flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors shadow-sm"
           >
             Create First Post
           </Link>
@@ -267,14 +273,17 @@ export default function BlogListPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {post.featuredImage ? (
-                            <img
+                            <Image
                               src={post.featuredImage}
                               alt=""
+                              width={40}
+                              height={40}
+                              unoptimized
                               className="w-10 h-10 rounded-lg object-cover mr-3 border border-gray-200"
                             />
                           ) : (
                             <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center mr-3 border border-gray-200">
-                              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg aria-hidden="true" className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
                             </div>
@@ -293,12 +302,12 @@ export default function BlogListPage() {
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             post.status === "published"
-                              ? "bg-green-100 text-green-800"
+                              ? "bg-accent-100 text-accent-800"
                               : "bg-yellow-100 text-yellow-800"
                           }`}
                         >
                           <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-                            post.status === "published" ? "bg-green-400" : "bg-yellow-400"
+                            post.status === "published" ? "bg-accent-400" : "bg-yellow-400"
                           }`}></span>
                           {post.status.charAt(0).toUpperCase() + post.status.slice(1)}
                         </span>
@@ -315,36 +324,37 @@ export default function BlogListPage() {
                           <Link
                             href={`/blog/${post.slug}`}
                             target="_blank"
-                            className="text-gray-400 hover:text-green-600 transition-colors"
+                            className="text-gray-400 hover:text-accent transition-colors"
                             title="View Live"
                           >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
                           </Link>
                           <Link
                             href={`/admin/blog/${post.id}/edit`}
-                            className="text-gray-400 hover:text-green-600 transition-colors"
+                            className="text-gray-400 hover:text-accent transition-colors"
                             title="Edit"
                           >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                           </Link>
                           <button
+                            type="button"
                             onClick={() => handleDelete(post.id, post.title)}
                             disabled={deleting === post.id}
                             className="text-gray-400 hover:text-red-600 disabled:opacity-50 transition-colors"
                             title="Delete"
                           >
                             {deleting === post.id ? (
-                              <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <svg aria-hidden="true" className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                               </svg>
                             ) : (
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                               </svg>
                             )}
@@ -371,6 +381,7 @@ export default function BlogListPage() {
         <div className="flex items-center justify-between bg-white px-4 py-3 sm:px-6 rounded-xl shadow-sm border border-gray-100">
           <div className="flex flex-1 justify-between sm:hidden">
             <button
+              type="button"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -378,6 +389,7 @@ export default function BlogListPage() {
               Previous
             </button>
             <button
+              type="button"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -389,6 +401,7 @@ export default function BlogListPage() {
             <div>
               <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                 <button
+                  type="button"
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
                   className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -399,22 +412,24 @@ export default function BlogListPage() {
                   </svg>
                 </button>
                 
-                {[...Array(totalPages)].map((_, i) => (
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
                   <button
-                    key={i + 1}
-                    onClick={() => handlePageChange(i + 1)}
-                    aria-current={currentPage === i + 1 ? "page" : undefined}
-                    className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 transition-colors ${
-                      currentPage === i + 1
-                        ? "z-10 bg-green-600 text-white focus-visible:outline-green-600"
+                    type="button"
+                    key={pageNum}
+                    onClick={() => handlePageChange(pageNum)}
+                    aria-current={currentPage === pageNum ? "page" : undefined}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors ${
+                      currentPage === pageNum
+                        ? "z-10 bg-accent text-white focus-visible:outline-accent"
                         : "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
                     }`}
                   >
-                    {i + 1}
+                    {pageNum}
                   </button>
                 ))}
 
                 <button
+                  type="button"
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                   className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

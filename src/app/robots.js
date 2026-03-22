@@ -12,4 +12,4 @@ export default function robots() {
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,
   };
-}
+} 

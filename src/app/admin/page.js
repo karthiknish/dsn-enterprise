@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
 import { collection, query, orderBy, getDocs, limit } from "firebase/firestore";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
 
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -14,6 +14,7 @@ export default function AdminDashboardPage() {
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: fetchDashboardData is stable at component level
   useEffect(() => {
     fetchDashboardData();
   }, []);
@@ -80,7 +81,7 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center">
             <div className="p-3 bg-primary/10 rounded-lg">
-              <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg aria-hidden="true" className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
             </div>
@@ -93,8 +94,8 @@ export default function AdminDashboardPage() {
 
         <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center">
-            <div className="p-3 bg-green-100 rounded-lg">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-3 bg-accent-100 rounded-lg">
+              <svg aria-hidden="true" className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -108,7 +109,7 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex items-center">
             <div className="p-3 bg-yellow-100 rounded-lg">
-              <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg aria-hidden="true" className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </div>
@@ -128,7 +129,7 @@ export default function AdminDashboardPage() {
             href="/admin/blog/new"
             className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
           >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             New Blog Post
@@ -137,7 +138,7 @@ export default function AdminDashboardPage() {
             href="/admin/blog"
             className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
           >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
             </svg>
             View All Posts
@@ -178,7 +179,7 @@ export default function AdminDashboardPage() {
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
                       post.status === "published"
-                        ? "bg-green-100 text-green-800"
+                        ? "bg-accent-100 text-accent-800"
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >

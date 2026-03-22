@@ -5,7 +5,6 @@ import {
   FaTools,
   FaRuler,
   FaCertificate,
-  FaWrench,
   FaCheck,
   FaArrowRight,
 } from "react-icons/fa";
@@ -99,11 +98,10 @@ const ServicesSection = () => {
 
               <div className="mb-4">
                 <ul className="text-sm text-gray-700">
-                  {service.details.slice(0, 2).map((detail, i) => (
-                    <li key={i} className="flex items-start mb-1">
+                  {service.details.slice(0, 2).map((detail) => (
+                    <li key={detail} className="flex items-start mb-1">
                       <FaCheck
-                        className="text-primary mt-1 mr-2 flex-shrink-0"
-                        style={{ fontSize: "10px" }}
+                        className="text-primary mt-1 mr-2 flex-shrink-0 text-[10px]"
                       />
                       <span>{detail}</span>
                     </li>

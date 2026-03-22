@@ -1,18 +1,19 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { db, storage } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp, Timestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import Image from "next/image";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { db, storage } from "@/lib/firebase";
 
 // Dynamically import TiptapEditor to avoid SSR issues
 const TiptapEditor = dynamic(() => import("@/components/admin/TiptapEditor"), {
   ssr: false,
   loading: () => (
     <div className="border border-gray-300 rounded-lg p-4 bg-gray-50 min-h-[300px] flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-600"></div>
+      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent"></div>
     </div>
   ),
 });
@@ -75,7 +76,7 @@ export default function NewBlogPage() {
           setSavedDraft(parsed);
           setShowRestoreDialog(true);
         }
-      } catch (e) {
+      } catch (_e) {
         localStorage.removeItem(STORAGE_KEY);
       }
     }
@@ -95,7 +96,7 @@ export default function NewBlogPage() {
   useEffect(() => {
     const timeoutId = setTimeout(saveToLocalStorage, 1000);
     return () => clearTimeout(timeoutId);
-  }, [formData, saveToLocalStorage]);
+  }, [saveToLocalStorage]);
 
   const restoreDraft = () => {
     if (savedDraft) {
@@ -138,11 +139,11 @@ export default function NewBlogPage() {
     if (formData.title && !formData.metaTitle) {
       // Truncate to 60 chars for SEO
       const metaTitle = formData.title.length > 60 
-        ? formData.title.substring(0, 57) + '...'
+        ? `${formData.title.substring(0, 57)}...`
         : formData.title;
       setFormData(prev => ({ ...prev, metaTitle }));
     }
-  }, [formData.title]);
+  }, [formData.title, formData.metaTitle]);
 
   useEffect(() => {
     // Auto-fill meta description from excerpt or content
@@ -163,12 +164,12 @@ export default function NewBlogPage() {
       if (description) {
         // Truncate to 160 chars for SEO
         const metaDescription = description.length > 160 
-          ? description.substring(0, 157) + '...'
+          ? `${description.substring(0, 157)}...`
           : description;
         setFormData(prev => ({ ...prev, metaDescription }));
       }
     }
-  }, [formData.excerpt, formData.content]);
+  }, [formData.excerpt, formData.content, formData.metaDescription]);
 
   // Convert markdown to HTML for TipTap
   const markdownToHtml = (markdown) => {
@@ -181,7 +182,7 @@ export default function NewBlogPage() {
     let listType = null;
     
     for (let i = 0; i < lines.length; i++) {
-      let line = lines[i];
+      const line = lines[i];
       
       // Headers (process in order from h6 to h1)
       if (line.match(/^###### /)) {
@@ -294,7 +295,7 @@ export default function NewBlogPage() {
       // Inline code
       .replace(/`(.*?)`/g, '<code>$1</code>')
       // Links
-      .replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2">$1</a>');
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
   };
 
   const handleGenerateTitles = async () => {
@@ -445,25 +446,26 @@ export default function NewBlogPage() {
           notification.type === 'error' 
             ? 'bg-red-50 border border-red-200 text-red-800' 
             : notification.type === 'success'
-            ? 'bg-green-50 border border-green-200 text-green-800'
+            ? 'bg-accent-50 border border-accent-200 text-accent-800'
             : 'bg-gray-50 border border-gray-200 text-gray-800'
         }`}>
           {notification.type === 'error' && (
-            <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           )}
           {notification.type === 'success' && (
-            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           )}
           <span className="font-medium">{notification.message}</span>
           <button
+            type="button"
             onClick={() => setNotification(null)}
             className="ml-2 text-gray-400 hover:text-gray-600"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -475,8 +477,8 @@ export default function NewBlogPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4 animate-fadeIn">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
+                <svg aria-hidden="true" className="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </div>
@@ -495,14 +497,16 @@ export default function NewBlogPage() {
             )}
             <div className="flex gap-3">
               <button
+                type="button"
                 onClick={discardDraft}
                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 Discard
               </button>
               <button
+                type="button"
                 onClick={restoreDraft}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                className="flex-1 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors font-medium"
               >
                 Restore
               </button>
@@ -525,7 +529,7 @@ export default function NewBlogPage() {
               : "bg-purple-600 text-white hover:bg-purple-700 hover:shadow-md"
           }`}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
           {showAIGenerator ? "Hide AI Assistant" : "AI Assistant"}
@@ -549,7 +553,7 @@ export default function NewBlogPage() {
               <div className="space-y-5">
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="post-title" className="block text-sm font-medium text-gray-700">
                       Title <span className="text-red-500">*</span>
                     </label>
                     <button
@@ -560,7 +564,7 @@ export default function NewBlogPage() {
                     >
                       {generatingTitle ? (
                         <>
-                          <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <svg aria-hidden="true" className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                           </svg>
@@ -568,7 +572,7 @@ export default function NewBlogPage() {
                         </>
                       ) : (
                         <>
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg aria-hidden="true" className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                           </svg>
                           AI Suggest Titles
@@ -578,10 +582,11 @@ export default function NewBlogPage() {
                   </div>
                   <div className="relative">
                     <input
+                      id="post-title"
                       type="text"
                       value={formData.title}
                       onChange={handleTitleChange}
-                      className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                      className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-shadow"
                       placeholder="Enter post title"
                     />
                     {showTitleSuggestions && titleSuggestions.length > 0 && (
@@ -593,14 +598,14 @@ export default function NewBlogPage() {
                             onClick={() => setShowTitleSuggestions(false)}
                             className="text-gray-400 hover:text-gray-600"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                           </button>
                         </div>
                         <ul className="max-h-48 overflow-y-auto">
-                          {titleSuggestions.map((title, index) => (
-                            <li key={index}>
+                          {titleSuggestions.map((title) => (
+                            <li key={title}>
                               <button
                                 type="button"
                                 onClick={() => handleSelectTitle(title)}
@@ -617,7 +622,7 @@ export default function NewBlogPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="post-slug" className="block text-sm font-medium text-gray-700 mb-1">
                     Slug
                   </label>
                   <div className="flex items-center">
@@ -625,12 +630,13 @@ export default function NewBlogPage() {
                       /blog/
                     </span>
                     <input
+                      id="post-slug"
                       type="text"
                       value={formData.slug}
                       onChange={(e) =>
                         setFormData({ ...formData, slug: e.target.value })
                       }
-                      className="flex-1 px-4 py-2 text-gray-900 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                      className="flex-1 px-4 py-2 text-gray-900 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-shadow"
                       placeholder="post-url-slug"
                     />
                   </div>
@@ -638,7 +644,7 @@ export default function NewBlogPage() {
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="post-excerpt" className="block text-sm font-medium text-gray-700">
                       Excerpt
                     </label>
                     <button
@@ -649,7 +655,7 @@ export default function NewBlogPage() {
                     >
                       {generatingExcerpt ? (
                         <>
-                          <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <svg aria-hidden="true" className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                           </svg>
@@ -657,7 +663,7 @@ export default function NewBlogPage() {
                         </>
                       ) : (
                         <>
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg aria-hidden="true" className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                           </svg>
                           AI Generate
@@ -666,12 +672,13 @@ export default function NewBlogPage() {
                     </button>
                   </div>
                   <textarea
+                    id="post-excerpt"
                     value={formData.excerpt}
                     onChange={(e) =>
                       setFormData({ ...formData, excerpt: e.target.value })
                     }
                     rows={3}
-                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-shadow"
                     placeholder="Brief description of the post for SEO and previews"
                   />
                 </div>
@@ -679,6 +686,7 @@ export default function NewBlogPage() {
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: TiptapEditor is not a standard form control */}
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Content <span className="text-red-500">*</span>
               </label>
@@ -694,23 +702,24 @@ export default function NewBlogPage() {
             {/* SEO Settings */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg aria-hidden="true" className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 SEO Settings
               </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="post-meta-title" className="block text-sm font-medium text-gray-700 mb-1">
                     Meta Title
                   </label>
                   <input
+                    id="post-meta-title"
                     type="text"
                     value={formData.metaTitle}
                     onChange={(e) =>
                       setFormData({ ...formData, metaTitle: e.target.value })
                     }
-                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-shadow"
                     placeholder="SEO title (auto-filled from title)"
                   />
                   <p className="mt-1 text-xs text-gray-500">
@@ -719,16 +728,17 @@ export default function NewBlogPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="post-meta-description" className="block text-sm font-medium text-gray-700 mb-1">
                     Meta Description
                   </label>
                   <textarea
+                    id="post-meta-description"
                     value={formData.metaDescription}
                     onChange={(e) =>
                       setFormData({ ...formData, metaDescription: e.target.value })
                     }
                     rows={3}
-                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-shadow"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-shadow"
                     placeholder="SEO description (auto-filled from content)"
                   />
                   <p className="mt-1 text-xs text-gray-500">
@@ -746,15 +756,16 @@ export default function NewBlogPage() {
               <h3 className="text-lg font-medium text-gray-900 mb-4">Publish</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="post-status" className="block text-sm font-medium text-gray-700 mb-1">
                     Status
                   </label>
                   <select
+                    id="post-status"
                     value={formData.status}
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value })
                     }
-                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
+                    className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white"
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
@@ -762,6 +773,7 @@ export default function NewBlogPage() {
                 </div>
 
                 <div>
+                  {/* biome-ignore lint/a11y/noLabelWithoutControl: DatePicker is not a standard form control */}
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Published Date
                   </label>
@@ -785,11 +797,11 @@ export default function NewBlogPage() {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 font-medium shadow-sm"
+                    className="flex-1 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors disabled:opacity-50 font-medium shadow-sm"
                   >
                     {saving ? (
                       <span className="flex items-center justify-center gap-2">
-                        <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <svg aria-hidden="true" className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
@@ -812,9 +824,12 @@ export default function NewBlogPage() {
               {formData.featuredImage ? (
                 <div className="space-y-4">
                   <div className="relative group">
-                    <img
+                    <Image
                       src={formData.featuredImage}
                       alt="Featured"
+                      width={800}
+                      height={192}
+                      unoptimized
                       className="w-full h-48 object-cover rounded-lg border border-gray-200"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all rounded-lg" />
@@ -827,7 +842,7 @@ export default function NewBlogPage() {
                         href={formData.imageAttribution.photographerUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-green-600 hover:underline"
+                        className="text-accent hover:underline"
                       >
                         {formData.imageAttribution.photographer}
                       </a>{" "}
@@ -836,7 +851,7 @@ export default function NewBlogPage() {
                         href={formData.imageAttribution.pexelsUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-green-600 hover:underline"
+                        className="text-accent hover:underline"
                       >
                         Pexels
                       </a>
@@ -866,7 +881,7 @@ export default function NewBlogPage() {
                       onClick={() => setImageTab("upload")}
                       className={`flex-1 pb-2 text-sm font-medium border-b-2 transition-colors ${
                         imageTab === "upload"
-                          ? "border-green-500 text-green-600"
+                          ? "border-accent text-accent"
                           : "border-transparent text-gray-500 hover:text-gray-700"
                       }`}
                     >
@@ -877,7 +892,7 @@ export default function NewBlogPage() {
                       onClick={() => setImageTab("pexels")}
                       className={`flex-1 pb-2 text-sm font-medium border-b-2 transition-colors ${
                         imageTab === "pexels"
-                          ? "border-green-500 text-green-600"
+                          ? "border-accent text-accent"
                           : "border-transparent text-gray-500 hover:text-gray-700"
                       }`}
                     >
@@ -888,7 +903,7 @@ export default function NewBlogPage() {
                       onClick={() => setImageTab("url")}
                       className={`flex-1 pb-2 text-sm font-medium border-b-2 transition-colors ${
                         imageTab === "url"
-                          ? "border-green-500 text-green-600"
+                          ? "border-accent text-accent"
                           : "border-transparent text-gray-500 hover:text-gray-700"
                       }`}
                     >
@@ -900,16 +915,17 @@ export default function NewBlogPage() {
                   <div className="pt-2">
                     {imageTab === "upload" && (
                       <label className="block group cursor-pointer">
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center group-hover:border-green-500 group-hover:bg-green-50 transition-all">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center group-hover:border-accent group-hover:bg-accent-50 transition-all">
                           {uploading ? (
                             <div className="flex flex-col items-center justify-center">
-                              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-600 mb-2"></div>
+                              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent mb-2"></div>
                               <span className="text-sm text-gray-500">Uploading...</span>
                             </div>
                           ) : (
                             <>
                               <svg
-                                className="w-10 h-10 mx-auto text-gray-400 group-hover:text-green-500 mb-2 transition-colors"
+                                aria-hidden="true"
+                                className="w-10 h-10 mx-auto text-gray-400 group-hover:text-accent mb-2 transition-colors"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -947,6 +963,7 @@ export default function NewBlogPage() {
                         className="w-full px-4 py-8 border-2 border-dashed border-teal-300 bg-teal-50 rounded-lg hover:bg-teal-100 hover:border-teal-400 transition-all flex flex-col items-center justify-center gap-2 group"
                       >
                         <svg
+                          aria-hidden="true"
                           className="w-8 h-8 text-teal-600 group-hover:scale-110 transition-transform"
                           fill="currentColor"
                           viewBox="0 0 24 24"
@@ -967,7 +984,7 @@ export default function NewBlogPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, featuredImage: e.target.value })
                           }
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm"
                           placeholder="https://example.com/image.jpg"
                         />
                         <p className="text-xs text-gray-500">

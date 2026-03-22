@@ -76,7 +76,7 @@ export function DatePicker({
         type="button"
         onClick={() => setOpen(!open)}
         className={cn(
-          "w-full justify-start text-left font-normal px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent",
+          "w-full justify-start text-left font-normal px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent",
           !date ? "text-gray-400" : "text-gray-900"
         )}
       >
