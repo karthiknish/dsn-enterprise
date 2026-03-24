@@ -1,3 +1,5 @@
+import { SITE_URL, getSiteUrl } from "@/lib/site";
+
 export const metadata = {
   title: "Gauge Calibration Services | NABL Accredited Calibration - DSN Enterprises",
   description: "NABL accredited gauge calibration services for plain gauges, thread gauges, API gauges, and setting masters. Express calibration, gauge repair, refurbishment, and on-site calibration available with traceable certificates.",
@@ -5,14 +7,14 @@ export const metadata = {
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
-  metadataBase: new URL("https://www.dsnenterprises.in"),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/calibration",
   },
   openGraph: {
     title: "Gauge Calibration Services | NABL Accredited Calibration - DSN Enterprises",
     description: "NABL accredited gauge calibration services for plain gauges, thread gauges, API gauges, and setting masters. Express calibration and on-site services available.",
-    url: "https://www.dsnenterprises.in/calibration",
+    url: getSiteUrl("/calibration"),
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

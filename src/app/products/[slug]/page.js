@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CITIES, getProductCityPage, PRODUCTS } from "@/lib/seo-pages.config";
-
-const BASE_URL = "https://www.dsnenterprises.in";
+import { getSiteUrl } from "@/lib/site";
 
 // Generate static params for all product-city combinations
 export async function generateStaticParams() {
@@ -63,7 +62,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: pageData.title,
       description: pageData.description,
-      url: `${BASE_URL}/products/${slug}`,
+      url: getSiteUrl(`/products/${slug}`),
       type: "website",
       siteName: "DSN Enterprises",
       locale: "en_IN",

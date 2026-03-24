@@ -16,6 +16,9 @@ This is the official website for DSN Enterprises, a leading manufacturer and sup
 First, set up the environment variables:
 1. Create a `.env.local` file with the following variables:
    ```
+   # Primary site URL used for canonicals, sitemap, and redirects
+   SITE_URL=https://www.dsnenterprises.in
+
    # Contentful Configuration
    CONTENTFUL_SPACE_ID=your_space_id
    CONTENTFUL_ACCESS_TOKEN=your_access_token

@@ -3,6 +3,7 @@ import { Oswald } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import GoogleAnalytics from "@/components/Analytics";
 import MotionProvider from "@/components/MotionProvider";
+import { SITE_URL, getSiteUrl } from "@/lib/site";
 import "./globals.css";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
@@ -24,7 +25,7 @@ const oswald = Oswald({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://www.dsnenterprises.in'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "DSN Enterprises - Precision Gauges & Measuring Instruments",
     template: "%s | DSN Enterprises",
@@ -65,8 +66,8 @@ const organizationJsonLd = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "DSN Enterprises",
-  url: "https://www.dsnenterprises.in",
-  logo: "https://www.dsnenterprises.in/images/logo.png",
+  url: SITE_URL,
+  logo: getSiteUrl("/images/logo.png"),
   description:
     "Leading manufacturer and supplier of high-precision gauges and measuring instruments.",
   address: {
@@ -86,10 +87,10 @@ const websiteJsonLd = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "DSN Enterprises",
-  url: "https://www.dsnenterprises.in",
+  url: SITE_URL,
   potentialAction: {
     "@type": "SearchAction",
-    target: "https://www.dsnenterprises.in/blog?q={search_term_string}",
+    target: getSiteUrl("/blog?q={search_term_string}"),
     "query-input": "required name=search_term_string",
   },
 });

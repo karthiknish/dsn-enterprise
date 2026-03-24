@@ -4,6 +4,7 @@ import AboutSection from "../components/home/AboutSection";
 import ServicesSection from "../components/home/ServicesSection";
 import CertificationsSection from "../components/home/CertificationsSection";
 import ContactSection from "../components/home/ContactSection";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
   title: "DSN Enterprises - Precision Gauge Manufacturers in Coimbatore, India",
@@ -17,14 +18,14 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://www.dsnenterprises.in"),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "DSN Enterprises - Precision Gauge Manufacturers in Coimbatore, India",
     description: "Leading manufacturer of precision gauges including plain plug gauges, ring gauges, thread gauges, and custom gauges. ISO certified quality with NABL calibration services.",
-    url: "https://www.dsnenterprises.in",
+    url: SITE_URL,
     siteName: "DSN Enterprises",
     type: "website",
     locale: "en_IN",

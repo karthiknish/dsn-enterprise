@@ -1,8 +1,8 @@
-const BASE_URL = 'https://www.dsnenterprises.in';
+import { SITE_URL } from '@/lib/site';
 
 export default function robots() {
   return {
-    host: BASE_URL,
+    host: SITE_URL,
     rules: [
       {
         userAgent: '*',
@@ -10,6 +10,6 @@ export default function robots() {
         disallow: ['/admin/', '/api/'],
       },
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 } 
