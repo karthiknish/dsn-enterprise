@@ -517,7 +517,7 @@ export default function NewBlogPage() {
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Create New Post</h1>
+          <h1 className="sr-only">Create post</h1>
           <p className="text-gray-600">Write and publish a new blog post</p>
         </div>
         <button

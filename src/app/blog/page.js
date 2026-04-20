@@ -96,16 +96,21 @@ export default async function BlogPage({ searchParams }) {
       </section>
 
       {/* Search and Filters Bar */}
-      <section className="bg-white border-b border-gray-200 py-4 sticky top-0 z-10 shadow-sm">
+      <section className="bg-white border-b border-gray-200 py-4 sticky top-16 z-10 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
-            <form action="/blog" method="GET" className="relative group">
+            <form action="/blog" method="GET" className="relative group" role="search">
+              <label htmlFor="blog-search" className="sr-only">
+                Search blog posts
+              </label>
               <input
-                type="text"
+                id="blog-search"
+                type="search"
                 name="q"
                 defaultValue={searchQuery}
                 placeholder="Search articles by title, content or topic..."
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all outline-none"
+                autoComplete="off"
+                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent transition-all outline-none focus-visible:outline-none"
               />
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent transition-colors">
                 <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,9 +118,10 @@ export default async function BlogPage({ searchParams }) {
                 </svg>
               </div>
               {searchQuery && (
-                <Link 
+                <Link
                   href="/blog"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 transition-colors"
+                  aria-label="Clear search"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 rounded p-1 text-gray-400 hover:text-red-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 >
                   <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -142,7 +148,7 @@ export default async function BlogPage({ searchParams }) {
                 <button
                   type="button"
                   onClick={() => window.location.href = '/blog'}
-                  className="mt-4 text-accent hover:text-accent-700 font-medium flex items-center gap-2"
+                  className="mt-4 text-accent hover:text-accent-700 font-medium flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                 >
                   <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

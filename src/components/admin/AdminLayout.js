@@ -72,8 +72,9 @@ export default function AdminLayout({ children }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100" role="status" aria-live="polite">
+        <span className="sr-only">Loading</span>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent" aria-hidden />
       </div>
     );
   }
@@ -99,6 +100,19 @@ export default function AdminLayout({ children }) {
     router.push("/admin/login");
   };
 
+  const pageTitle = (() => {
+    const exact = {
+      "/admin": "Dashboard",
+      "/admin/analytics": "Analytics",
+      "/admin/blog": "Blog posts",
+      "/admin/blog/new": "Create post",
+      "/admin/contacts": "Contacts",
+    };
+    if (exact[pathname]) return exact[pathname];
+    if (/^\/admin\/blog\/[^/]+\/edit$/.test(pathname)) return "Edit post";
+    return "Admin";
+  })();
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Mobile sidebar overlay */}
@@ -113,6 +127,8 @@ export default function AdminLayout({ children }) {
 
       {/* Sidebar */}
       <aside
+        id="admin-sidebar"
+        aria-label="Admin navigation"
         className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-300 ease-in-out flex flex-col 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
           ${isCollapsed ? "lg:w-20" : "lg:w-64"}
@@ -139,8 +155,9 @@ export default function AdminLayout({ children }) {
           {/* Mobile Close Button */}
           <button
             type="button"
-            className="lg:hidden text-gray-500 hover:text-gray-900"
+            className="lg:hidden text-gray-500 hover:text-gray-900 p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             onClick={() => setSidebarOpen(false)}
+            aria-label="Close menu"
           >
             <svg aria-hidden="true" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -152,8 +169,9 @@ export default function AdminLayout({ children }) {
             <button
               type="button"
               onClick={toggleSidebar}
-              className="hidden lg:flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-600 rounded hover:bg-gray-100 transition-colors"
+              className="hidden lg:flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-600 rounded hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               title="Collapse Sidebar"
+              aria-label="Collapse sidebar"
             >
               <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
@@ -174,7 +192,7 @@ export default function AdminLayout({ children }) {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group whitespace-nowrap ${
+                className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
                   isActive
                     ? "bg-accent text-white shadow-md shadow-accent-200"
                     : "text-gray-600 hover:bg-accent-50 hover:text-accent-700"
@@ -225,7 +243,7 @@ export default function AdminLayout({ children }) {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors border border-gray-200 hover:border-red-200"
+                className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors border border-gray-200 hover:border-red-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
               >
                 <LogoutIcon className="w-4 h-4 mr-2" />
                 Sign Out
@@ -242,7 +260,8 @@ export default function AdminLayout({ children }) {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                  aria-label="Sign out"
                 >
                   <LogoutIcon className="w-5 h-5" />
                 </button>
@@ -251,7 +270,8 @@ export default function AdminLayout({ children }) {
                 <button
                   type="button"
                   onClick={toggleSidebar}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                  aria-label="Expand sidebar"
                 >
                   <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -266,28 +286,40 @@ export default function AdminLayout({ children }) {
       {/* Main content */}
       <div className={`transition-all duration-300 ease-in-out flex flex-col min-h-screen ${isCollapsed ? "lg:pl-20" : "lg:pl-64"}`}>
         {/* Top bar */}
-        <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-6 bg-white/80 backdrop-blur-md border-b border-gray-200">
-          <div className="flex items-center gap-4">
+        <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 bg-white/80 backdrop-blur-md border-b border-gray-200">
+          <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
-              className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100"
+              className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               onClick={() => setSidebarOpen(true)}
+              aria-expanded={sidebarOpen}
+              aria-controls="admin-sidebar"
+              aria-label="Open menu"
             >
               <svg aria-hidden="true" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            
-            {/* Breadcrumbs or Page Title could go here */}
+            <p className="text-lg font-semibold text-gray-900 truncate m-0">{pageTitle}</p>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* View Live Site button removed */}
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-primary px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            >
+              <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              <span className="hidden sm:inline">View site</span>
+            </Link>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-6 lg:p-8">{children}</main>
+        <main id="admin-main" className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">{children}</main>
       </div>
     </div>
   );

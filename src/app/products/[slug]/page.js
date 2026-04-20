@@ -230,7 +230,7 @@ export default async function ProductCityPage({ params }) {
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors"
+                  className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
                 >
                   Request Quote
                 </Link>

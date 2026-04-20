@@ -121,30 +121,45 @@ const faqCategories = [
   },
 ];
 
-function FAQItem({ faq, isOpen, onClick }) {
+function faqTabSlug(name) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function FAQItem({ faq, isOpen, onClick, itemId }) {
+  const panelId = `${itemId}-panel`;
+  const btnId = `${itemId}-button`;
   return (
     <div className="border-b border-gray-200 last:border-b-0">
       <button
-        className="w-full py-4 px-6 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+        id={btnId}
+        type="button"
+        aria-expanded={!!isOpen}
+        aria-controls={panelId}
+        className="w-full py-4 px-6 flex items-center justify-between text-left hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
         onClick={onClick}
       >
         <span className="font-medium text-gray-900 pr-4">{faq.question}</span>
-        <FaChevronDown 
-          className={`text-primary flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+        <FaChevronDown
+          aria-hidden
+          className={`text-primary flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id={panelId}
+            role="region"
+            aria-labelledby={btnId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="px-6 pb-4 text-gray-600 leading-relaxed">
-              {faq.answer}
-            </div>
+            <div className="px-6 pb-4 text-gray-600 leading-relaxed">{faq.answer}</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -195,15 +210,24 @@ export default function FAQPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Category Tabs */}
-            <div className="flex flex-wrap justify-center gap-2 mb-12">
+            <div
+              className="flex flex-wrap justify-center gap-2 mb-12"
+              role="tablist"
+              aria-label="FAQ categories"
+            >
               {faqCategories.map((category) => (
                 <button
                   key={category.name}
+                  type="button"
+                  role="tab"
+                  id={`faq-tab-${faqTabSlug(category.name)}`}
+                  aria-selected={activeCategory === category.name}
+                  aria-controls={`faq-panel-${faqTabSlug(category.name)}`}
                   onClick={() => setActiveCategory(category.name)}
-                  className={`px-6 py-2 rounded-full font-medium transition-colors ${
+                  className={`px-6 py-2 rounded-full font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                     activeCategory === category.name
-                      ? 'bg-primary text-white'
-                      : 'bg-secondary-light text-gray-700 hover:bg-secondary'
+                      ? "bg-primary text-white"
+                      : "bg-secondary-light text-gray-700 hover:bg-secondary"
                   }`}
                 >
                   {category.name}
@@ -214,6 +238,9 @@ export default function FAQPage() {
             {/* FAQ List */}
             <motion.div
               key={activeCategory}
+              id={`faq-panel-${faqTabSlug(activeCategory)}`}
+              role="tabpanel"
+              aria-labelledby={`faq-tab-${faqTabSlug(activeCategory)}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
@@ -225,6 +252,7 @@ export default function FAQPage() {
                 return (
                   <FAQItem
                     key={faqIndex}
+                    itemId={`faq-${categoryIndex}-${faqIndex}`}
                     faq={faq}
                     isOpen={openItems[key]}
                     onClick={() => toggleItem(categoryIndex, faqIndex)}
@@ -269,7 +297,7 @@ export default function FAQPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center bg-primary text-white hover:bg-primary-dark font-bold py-3 px-8 rounded-md transition-colors"
+            className="inline-flex items-center bg-primary text-white hover:bg-primary-dark font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             <FaPhoneAlt className="mr-2" />
             Contact Us

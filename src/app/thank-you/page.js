@@ -15,7 +15,7 @@ export default function ThankYouPage() {
   }, [trackThankYouPageView]);
 
   return (
-    <div className="pt-16">
+    <div>
       {/* Hero Section */}
       <section className="bg-primary text-white py-20">
         <div className="container mx-auto px-4">
@@ -80,7 +80,7 @@ export default function ThankYouPage() {
             >
               <Link
                 href="/"
-                className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primary-dark transition duration-300"
+                className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primary-dark transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
               >
                 <FaArrowLeft className="mr-2" /> Back to Home
               </Link>
@@ -135,14 +135,19 @@ export default function ThankYouPage() {
                   directly:
                 </p>
                 <p className="text-gray-800 font-medium">
-                  Phone: <a 
+                  Phone:{" "}
+                  <a
                     href="tel:+919363122005"
+                    className="underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
                     onClick={() => trackPhoneClick('+919363122005')}
-                  >+91 9363122005</a>
+                  >
+                    +91 9363122005
+                  </a>
                   <br />
                   Email:{" "}
-                  <a 
+                  <a
                     href="mailto:info@dsnenterprises.com"
+                    className="underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
                     onClick={() => trackEmailClick('info@dsnenterprises.com')}
                   >
                     info@dsnenterprises.com

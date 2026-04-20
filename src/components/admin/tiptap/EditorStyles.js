@@ -33,7 +33,7 @@ export function EditorStyles() {
         top: 0;
         bottom: 0;
         pointer-events: none;
-        background-color: #b3d8ff;
+        background-color: var(--color-editor-selected-cell);
         opacity: 0.3;
       }
       /* Fade animation */

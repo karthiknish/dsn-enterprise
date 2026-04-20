@@ -13,6 +13,7 @@ export default function AdminDashboardPage() {
   });
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: fetchDashboardData is stable at component level
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function AdminDashboardPage() {
 
   const fetchDashboardData = async () => {
     try {
+      setFetchError(null);
       const postsRef = collection(db, "blogs");
       const postsSnapshot = await getDocs(postsRef);
       
@@ -56,6 +58,7 @@ export default function AdminDashboardPage() {
       setRecentPosts(recent);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
+      setFetchError("Could not load dashboard data. Check connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -63,16 +66,22 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex items-center justify-center min-h-[40vh]" role="status" aria-live="polite">
+        <span className="sr-only">Loading dashboard</span>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" aria-hidden />
       </div>
     );
   }
 
   return (
     <div>
+      <h1 className="sr-only">Dashboard</h1>
+      {fetchError && (
+        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+          {fetchError}
+        </div>
+      )}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-600">Welcome to the admin dashboard</p>
       </div>
 

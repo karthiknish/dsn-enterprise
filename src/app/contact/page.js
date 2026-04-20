@@ -592,7 +592,7 @@ const ContactPage = () => {
                   <div className="flex gap-3">
                     <button
                       type="submit"
-                      className={`flex-1 bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-all transform hover:scale-105 ${
+                      className={`flex-1 bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-all transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                         isSubmitting 
                           ? "opacity-70 cursor-not-allowed" 
                           : ""
@@ -615,7 +615,7 @@ const ContactPage = () => {
                     <button
                       type="button"
                       onClick={clearForm}
-                      className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+                      className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                       disabled={isSubmitting}
                     >
                       Clear

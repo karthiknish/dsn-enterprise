@@ -16,6 +16,7 @@ export default function ContactsPage() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: fetchContacts is stable at component level
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function ContactsPage() {
 
   const fetchContacts = async () => {
     try {
+      setFetchError(null);
       const contactsRef = collection(db, "contacts");
       const q = query(contactsRef, orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
@@ -34,6 +36,7 @@ export default function ContactsPage() {
       setContacts(contactsData);
     } catch (error) {
       console.error("Error fetching contacts:", error);
+      setFetchError("Could not load contacts. Check connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -79,16 +82,29 @@ export default function ContactsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex items-center justify-center min-h-[40vh]" role="status" aria-live="polite">
+        <span className="sr-only">Loading contacts</span>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" aria-hidden />
       </div>
     );
   }
 
+  const previewMessage = (msg) => {
+    if (!msg || typeof msg !== "string") return "—";
+    const t = msg.trim();
+    if (t.length <= 80) return t;
+    return `${t.slice(0, 80)}…`;
+  };
+
   return (
     <div>
+      <h1 className="sr-only">Contact submissions</h1>
+      {fetchError && (
+        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+          {fetchError}
+        </div>
+      )}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Contact Submissions</h1>
         <p className="text-gray-600">Manage contact form submissions</p>
       </div>
 
@@ -125,10 +141,11 @@ export default function ContactsPage() {
                   <button
                     key={contact.id}
                     type="button"
-                    className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors text-left w-full ${
-                      selectedContact?.id === contact.id ? "bg-primary/5" : ""
+                    className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors text-left w-full rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset ${
+                      selectedContact?.id === contact.id ? "bg-primary/5 ring-1 ring-primary/20" : ""
                     }`}
                     onClick={() => setSelectedContact(contact)}
+                    aria-pressed={selectedContact?.id === contact.id}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
@@ -148,7 +165,7 @@ export default function ContactsPage() {
                           {contact.email}
                         </p>
                         <p className="text-sm text-gray-500 truncate mt-1">
-                          {contact.message?.substring(0, 80)}...
+                          {previewMessage(contact.message)}
                         </p>
                         <p className="text-xs text-gray-400 mt-2">
                           {contact.createdAt?.toDate?.()?.toLocaleString() ||
@@ -166,7 +183,7 @@ export default function ContactsPage() {
         {/* Contact Detail */}
         <div className="lg:col-span-1">
           {selectedContact ? (
-            <div className="bg-white rounded-xl shadow-sm p-6 sticky top-24">
+            <div className="bg-white rounded-xl shadow-sm p-6 lg:sticky lg:top-24">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Contact Details
@@ -174,7 +191,8 @@ export default function ContactsPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedContact(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="Close details"
                 >
                   <svg
                     aria-hidden="true"
@@ -312,7 +330,8 @@ export default function ContactsPage() {
                   <button
                     type="button"
                     onClick={() => handleDelete(selectedContact.id)}
-                    className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                    className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                    aria-label="Delete submission"
                   >
                     <svg
                       aria-hidden="true"

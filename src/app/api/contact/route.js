@@ -3,6 +3,7 @@ import { sendEmail } from "@/lib/brevo";
 import { rateLimit } from "@/lib/rateLimit";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { emailColors } from "@/theme/emailColors";
 
 // Force dynamic rendering to prevent build-time execution
 export const dynamic = 'force-dynamic';
@@ -36,14 +37,14 @@ const generateEmailTemplate = (contactData) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>New Contact Form Submission</title>
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #374941; color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
-          .content { background: #f8fafc; padding: 30px; border-radius: 0 0 8px 8px; }
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: ${emailColors.textBody}; max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: ${emailColors.primary}; color: ${emailColors.onPrimary}; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+          .content { background: ${emailColors.gray50}; padding: 30px; border-radius: 0 0 8px 8px; }
           .field { margin-bottom: 20px; }
-          .field-label { font-weight: bold; color: #16a34a; margin-bottom: 5px; }
-          .field-value { background: white; padding: 10px; border-left: 4px solid #16a34a; border-radius: 4px; }
-          .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; }
-          .timestamp { background: #dcfce7; padding: 10px; border-radius: 4px; text-align: center; margin-bottom: 20px; color: #166534; }
+          .field-label { font-weight: bold; color: ${emailColors.accent}; margin-bottom: 5px; }
+          .field-value { background: ${emailColors.white}; padding: 10px; border-left: 4px solid ${emailColors.accent}; border-radius: 4px; }
+          .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid ${emailColors.border}; color: ${emailColors.gray500}; font-size: 14px; }
+          .timestamp { background: ${emailColors.accent100}; padding: 10px; border-radius: 4px; text-align: center; margin-bottom: 20px; color: ${emailColors.accent800}; }
         </style>
       </head>
       <body>
@@ -64,7 +65,7 @@ const generateEmailTemplate = (contactData) => {
           <div class="field">
             <div class="field-label">Email:</div>
             <div class="field-value">
-              <a href="mailto:${contactData.email}" style="color: #16a34a;">${contactData.email}</a>
+              <a href="mailto:${contactData.email}" style="color: ${emailColors.accent};">${contactData.email}</a>
             </div>
           </div>
           

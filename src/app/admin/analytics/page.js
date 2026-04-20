@@ -33,8 +33,9 @@ export default function AnalyticsPage() {
 
   if (loading && !data) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
+      <div className="flex items-center justify-center min-h-[40vh]" role="status" aria-live="polite">
+        <span className="sr-only">Loading analytics</span>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent" aria-hidden />
       </div>
     );
   }
@@ -108,7 +109,7 @@ export default function AnalyticsPage() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
+          <h1 className="sr-only">Analytics</h1>
           <p className="text-gray-600">Website performance overview</p>
         </div>
         
@@ -323,7 +324,7 @@ function AnalyticsTrendGraph({ trends }) {
               y1={height - padding - (p * graphHeight)} 
               x2={width - padding} 
               y2={height - padding - (p * graphHeight)} 
-              stroke="#F3F4F6" 
+              stroke="var(--color-chart-grid)" 
               strokeWidth="1"
             />
           ))}
@@ -332,17 +333,17 @@ function AnalyticsTrendGraph({ trends }) {
           <path d={usersArea} fill="url(#blueGradient)" opacity="0.1" />
           
           {/* User Trend Line */}
-          <path d={usersPath} fill="none" stroke="#3B82F6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={usersPath} fill="none" stroke="var(--color-chart-line-users)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
           
           {/* Session Trend Line */}
-          <path d={sessionsPath} fill="none" stroke="#10B981" strokeWidth="2" strokeDasharray="4 2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={sessionsPath} fill="none" stroke="var(--color-chart-line-sessions)" strokeWidth="2" strokeDasharray="4 2" strokeLinecap="round" strokeLinejoin="round" />
 
           {/* Data Points (sparse) */}
           {processedData.filter((_, i) => processedData.length < 15 || i % Math.ceil(processedData.length / 10) === 0).map((d) => {
             const idx = processedData.indexOf(d);
             return (
               <g key={idx}>
-                <circle cx={getX(idx)} cy={getY(d.users)} r="4" fill="white" stroke="#3B82F6" strokeWidth="2" />
+                <circle cx={getX(idx)} cy={getY(d.users)} r="4" fill="var(--color-white)" stroke="var(--color-chart-line-users)" strokeWidth="2" />
                 <text 
                   x={getX(idx)} 
                   y={height - padding + 20} 
@@ -357,7 +358,7 @@ function AnalyticsTrendGraph({ trends }) {
 
           <defs>
             <linearGradient id="blueGradient" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="#3B82F6" />
+              <stop offset="0%" stopColor="var(--color-chart-line-users)" />
               <stop offset="100%" stopColor="transparent" />
             </linearGradient>
           </defs>

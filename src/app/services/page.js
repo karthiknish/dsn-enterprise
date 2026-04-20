@@ -153,7 +153,7 @@ const ServicesPage = () => {
                 <div className="mt-8">
                   <Link
                     href="/contact"
-                    className="inline-block bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors"
+                    className="inline-block bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
                   >
                     Request Service
                   </Link>
@@ -206,7 +206,7 @@ const ServicesPage = () => {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-secondary text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors"
+            className="inline-block bg-secondary text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
           >
             Contact Us
           </Link>

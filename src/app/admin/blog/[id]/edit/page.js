@@ -419,7 +419,7 @@ export default function EditBlogPage({ params }) {
 
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Edit Post</h1>
+          <h1 className="sr-only">Edit post</h1>
           <p className="text-gray-600">Update your blog post</p>
         </div>
       </div>

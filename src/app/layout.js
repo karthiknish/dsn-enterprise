@@ -111,8 +111,16 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}
       >
         <MotionProvider>
+          <a
+            href="#site-main"
+            className="pointer-events-none fixed left-4 top-0 z-[100] -translate-y-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-lg opacity-0 transition focus:pointer-events-auto focus:translate-y-20 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
+          >
+            Skip to main content
+          </a>
           <Header />
-          <main className="pt-16">{children}</main>
+          <main id="site-main" className="pt-16">
+            {children}
+          </main>
           <Footer />
         </MotionProvider>
       </body>

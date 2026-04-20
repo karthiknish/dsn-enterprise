@@ -22,6 +22,7 @@ export default function BlogListPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [fetchError, setFetchError] = useState(null);
 
   const showNotification = (message, type = "info") => {
     setNotification({ message, type });
@@ -35,6 +36,7 @@ export default function BlogListPage() {
 
   const fetchPosts = async () => {
     try {
+      setFetchError(null);
       const postsRef = collection(db, "blogs");
       const q = query(postsRef, orderBy("createdAt", "desc"));
       const snapshot = await getDocs(q);
@@ -45,6 +47,7 @@ export default function BlogListPage() {
       setPosts(postsData);
     } catch (error) {
       console.error("Error fetching posts:", error);
+      setFetchError("Could not load posts. Check connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -91,10 +94,20 @@ export default function BlogListPage() {
     setCurrentPage(1);
   }, [searchTerm]);
 
+  useEffect(() => {
+    if (!showDeleteDialog) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setShowDeleteDialog(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [showDeleteDialog]);
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"></div>
+      <div className="flex items-center justify-center min-h-[40vh]" role="status" aria-live="polite">
+        <span className="sr-only">Loading posts</span>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent" aria-hidden />
       </div>
     );
   }
@@ -103,7 +116,9 @@ export default function BlogListPage() {
     <div className="space-y-6">
       {/* Notification Toast */}
       {notification && (
-        <div className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-slideIn ${
+        <div
+          role={notification.type === "error" ? "alert" : "status"}
+          className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-slideIn max-w-[min(100vw-2rem,24rem)] ${
           notification.type === 'error' 
             ? 'bg-red-50 border border-red-200 text-red-800' 
             : notification.type === 'success'
@@ -124,7 +139,8 @@ export default function BlogListPage() {
           <button
             type="button"
             onClick={() => setNotification(null)}
-            className="ml-2 text-gray-400 hover:text-gray-600"
+            className="ml-2 shrink-0 p-1 rounded-md text-gray-400 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label="Dismiss notification"
           >
             <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -135,31 +151,43 @@ export default function BlogListPage() {
 
       {/* Delete Confirmation Dialog */}
       {showDeleteDialog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4 animate-fadeIn">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          role="presentation"
+          onClick={() => setShowDeleteDialog(null)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4 animate-fadeIn"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-post-title"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
                 <svg aria-hidden="true" className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Delete Post?</h3>
+              <h3 id="delete-post-title" className="text-lg font-semibold text-gray-900">
+                Delete post?
+              </h3>
             </div>
             <p className="text-gray-600 mb-4">
               Are you sure you want to delete <span className="font-medium text-gray-900">"{showDeleteDialog.title}"</span>? This action cannot be undone.
             </p>
-            <div className="flex gap-3">
+            <div className="flex flex-col-reverse sm:flex-row gap-3">
               <button
                 type="button"
                 onClick={() => setShowDeleteDialog(null)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={confirmDelete}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
               >
                 Delete
               </button>
@@ -168,9 +196,15 @@ export default function BlogListPage() {
         </div>
       )}
 
+      {fetchError && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">
+          {fetchError}
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Blog Posts</h1>
+          <h1 className="sr-only">Blog posts</h1>
           <p className="text-gray-600">Manage your blog posts</p>
         </div>
         <div className="flex gap-3">
@@ -204,9 +238,10 @@ export default function BlogListPage() {
           </svg>
         </div>
         <input
-          type="text"
+          type="search"
           placeholder="Search posts..."
-          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-accent focus:border-accent sm:text-sm transition duration-150 ease-in-out"
+          aria-label="Search posts by title"
+          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-accent sm:text-sm transition duration-150 ease-in-out"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

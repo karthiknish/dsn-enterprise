@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
@@ -46,7 +47,7 @@ export default function AdminLoginPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm" role="alert">
               {error}
             </div>
           )}
@@ -121,6 +122,12 @@ export default function AdminLoginPage() {
             </button>
           </div>
         </form>
+
+        <p className="text-center text-sm text-gray-500">
+          <Link href="/" className="font-medium text-primary hover:text-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded">
+            ← Back to website
+          </Link>
+        </p>
       </div>
     </div>
   );

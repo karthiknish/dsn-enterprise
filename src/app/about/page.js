@@ -479,7 +479,7 @@ const AboutPage = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/contact"
-              className="inline-block bg-transparent hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-md border-2 border-white transition-colors"
+              className="inline-block bg-transparent hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-md border-2 border-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
             >
               Contact Us
             </Link>
