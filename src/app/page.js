@@ -1,6 +1,7 @@
 import Hero from "../components/home/Hero";
 import FeaturedProducts from "../components/home/FeaturedProducts";
 import AboutSection from "../components/home/AboutSection";
+import ConsultancySection from "../components/home/ConsultancySection";
 import ServicesSection from "../components/home/ServicesSection";
 import CertificationsSection from "../components/home/CertificationsSection";
 import ContactSection from "../components/home/ContactSection";
@@ -9,7 +10,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
   title: "DSN Enterprises - Precision Gauge Manufacturers in Coimbatore, India",
   description: "Leading manufacturer of precision gauges including plain plug gauges, ring gauges, thread gauges, and custom gauges. ISO certified quality with NABL calibration services. Serving industries across Tamil Nadu and India.",
-  keywords: ["precision gauges", "plain plug gauges", "ring gauges", "thread gauges", "gauge calibration", "NABL calibration", "gauge manufacturers", "Coimbatore", "Tamil Nadu", "India", "API gauges", "custom gauges", "measuring instruments", "quality control gauges"],
+  keywords: ["precision gauges", "plain plug gauges", "ring gauges", "thread gauges", "gauge calibration", "NABL calibration", "gauge manufacturers", "Coimbatore", "Tamil Nadu", "India", "API gauges", "custom gauges", "measuring instruments", "quality control gauges", "gauge engineering consultancy", "dimensional metrology advisory"],
   authors: [{ name: "DSN Enterprises" }],
   creator: "DSN Enterprises",
   publisher: "DSN Enterprises",
@@ -67,6 +68,7 @@ export default function Home() {
       <Hero />
       <FeaturedProducts />
       <AboutSection />
+      <ConsultancySection />
       <ServicesSection />
       <CertificationsSection />
       <ContactSection />

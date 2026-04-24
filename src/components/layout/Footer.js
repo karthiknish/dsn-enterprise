@@ -5,9 +5,7 @@ import {
   FaPhone,
   FaEnvelope,
   FaMapMarkerAlt,
-  FaFacebook,
   FaLinkedin,
-  FaInstagram,
 } from "react-icons/fa";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
@@ -27,23 +25,13 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a
-                href="#"
-                className="text-white hover:text-blue-400 transition-colors"
+                href="https://www.linkedin.com/company/dsn-enterprises/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
+                aria-label="DSN Enterprises on LinkedIn"
               >
-                <FaFacebook size={20} />
-              </a>
-
-              <a
-                href="#"
-                className="text-white hover:text-blue-400 transition-colors"
-              >
-                <FaLinkedin size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-white hover:text-blue-400 transition-colors"
-              >
-                <FaInstagram size={20} />
+                <FaLinkedin size={20} aria-hidden />
               </a>
             </div>
           </div>

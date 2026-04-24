@@ -8,7 +8,7 @@ const Hero = () => {
   const { trackCTAClick } = useGoogleAdsTracking();
 
   return (
-    <div className="relative text-white min-h-screen flex items-center">
+    <div className="relative text-white min-h-screen min-h-[100dvh] flex items-center">
       {/* Video Background */}
       <video
         style={{ marginTop: "-70px" }}
@@ -17,21 +17,27 @@ const Hero = () => {
         muted
         loop
         playsInline
+        aria-hidden
       >
         <source src="/hero-video.mp4" type="video/mp4" />
       </video>
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/60 pointer-events-none"
+        style={{ marginTop: "-70px" }}
+        aria-hidden
+      />
 
-      <div className="container mx-auto px-4 z-10">
+      <div className="container mx-auto px-4 z-10 py-12 sm:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white text-balance leading-tight tracking-tight">
               Precision Gauges & Measuring Instruments
             </h1>
-            <p className="text-xl mb-8 text-gray-200 max-w-lg">
+            <p className="text-lg sm:text-xl mb-8 text-white max-w-lg leading-relaxed">
               DSN Enterprises is a leading manufacturer and supplier of
               high-precision gauges and measuring instruments for industrial
               applications.
@@ -39,14 +45,14 @@ const Hero = () => {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="#products"
-                className="bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors"
+                className="bg-primary hover:bg-primary-dark active:translate-y-px text-white font-medium py-3 px-6 rounded-md transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary/80"
                 onClick={() => trackCTAClick('Explore Products', 'Hero')}
               >
                 Explore Products
               </Link>
               <Link
                 href="/contact"
-                className="bg-secondary hover:bg-secondary-dark text-primary font-medium py-3 px-6 rounded-md transition-colors"
+                className="bg-secondary hover:bg-secondary-dark active:translate-y-px text-primary font-medium py-3 px-6 rounded-md transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary/80"
                 onClick={() => trackCTAClick('Contact Us', 'Hero')}
               >
                 Contact Us

@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const ContactSection = () => {
   const router = useRouter();
-  const { trackContactSubmission, trackPhoneClick, trackEmailClick, trackFormFieldFocus } = useGoogleAdsTracking();
+  const { trackContactSubmission } = useGoogleAdsTracking();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -171,14 +170,14 @@ const ContactSection = () => {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1  lg:grid-cols-2 gap-12">
+        <div className="max-w-2xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="bg-secondary-light p-8  rounded-lg shadow-lg">
+            <div className="bg-secondary-light p-8 rounded-lg shadow-lg">
               <h3 className="text-2xl font-bold mb-6 text-gray-900">
                 Send Us a Message
               </h3>
@@ -325,81 +324,6 @@ const ContactSection = () => {
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
               </form>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="bg-primary text-white p-8 rounded-lg shadow-lg h-full">
-              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <FaMapMarkerAlt
-                    className="mt-1 mr-4 text-secondary-light"
-                    size={24}
-                  />
-                  <div>
-                    <h4 className="font-bold mb-1">Our Location</h4>
-                    <p className="text-secondary-light">
-                      Coimbatore, Tamil Nadu, India
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <FaPhone
-                    className="mt-1 mr-4 text-secondary-light"
-                    size={24}
-                  />
-                  <div>
-                    <h4 className="font-bold mb-1">Phone Number</h4>
-                    <p className="text-secondary-light">
-                      <a 
-                        href="tel:+919363122005"
-                        onClick={() => trackPhoneClick('+919363122005')}
-                      >+91 9363122005</a>
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start">
-                  <FaEnvelope
-                    className="mt-1 mr-4 text-secondary-light"
-                    size={24}
-                  />
-                  <div>
-                    <h4 className="font-bold mb-1">Email Address</h4>
-                    <p className="text-secondary-light">
-                      <a 
-                        href="mailto:microfin2001@gmail.com"
-                        onClick={() => trackEmailClick('microfin2001@gmail.com')}
-                      >
-                        microfin2001@gmail.com
-                      </a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-12">
-                <h4 className="font-bold mb-4">Business Hours</h4>
-                <ul className="space-y-2">
-                  <li className="flex justify-between">
-                    <span>Monday - Friday:</span>
-                    <span>9:00 AM - 6:00 PM</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Saturday:</span>
-                    <span>9:00 AM - 1:00 PM</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Sunday:</span>
-                    <span>Closed</span>
-                  </li>
-                </ul>
-              </div>
             </div>
           </motion.div>
         </div>

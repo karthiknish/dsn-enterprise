@@ -84,7 +84,7 @@ const ServicesSection = () => {
           {services.map((service, index) => (
             <motion.div
               key={service.id}
-              className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow"
+              className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col h-full"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -96,7 +96,7 @@ const ServicesSection = () => {
               </h3>
               <p className="text-gray-700 mb-4">{service.description}</p>
 
-              <div className="mb-4">
+              <div className="mb-4 flex-1 min-h-0">
                 <ul className="text-sm text-gray-700">
                   {service.details.slice(0, 2).map((detail) => (
                     <li key={detail} className="flex items-start mb-1">
@@ -111,7 +111,7 @@ const ServicesSection = () => {
 
               <Link
                 href={service.link}
-                className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
+                className="mt-auto text-primary hover:text-primary-dark font-medium inline-flex items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 Learn More
                 <FaArrowRight className="w-4 h-4 ml-2" />
@@ -123,7 +123,7 @@ const ServicesSection = () => {
         <div className="text-center mt-12">
           <Link
             href="#contact"
-            className="inline-block bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-md transition-colors"
+            className="inline-block bg-primary hover:bg-primary-dark active:translate-y-px text-white font-medium py-3 px-8 rounded-md transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
           >
             Contact Now
           </Link>

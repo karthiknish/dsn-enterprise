@@ -99,9 +99,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <GoogleAnalytics />
-        <Analytics />
-        {/* End Meta Pixel Code */}
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: organizationJsonLd }} />
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML */}
@@ -123,6 +120,8 @@ export default function RootLayout({ children }) {
           </main>
           <Footer />
         </MotionProvider>
+        <GoogleAnalytics />
+        <Analytics />
       </body>
     </html>
   );
