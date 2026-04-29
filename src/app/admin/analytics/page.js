@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const metricToneClasses = {
   accent: "bg-accent-50 text-accent-700",
-  teal: "bg-teal-50 text-teal-600",
+  sessions: "bg-accent-100 text-accent-800",
   secondary: "bg-secondary-light text-primary",
   warning: "bg-yellow-50 text-yellow-700",
 };
@@ -85,7 +85,7 @@ export default function AnalyticsPage() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
         </svg>
       ),
-      tone: "teal",
+      tone: "sessions",
     },
     {
       name: "Page Views",
@@ -175,7 +175,7 @@ export default function AnalyticsPage() {
               <span className="text-gray-600">Users</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-teal-400"></span>
+              <span className="w-3 h-3 rounded-full bg-accent-800"></span>
               <span className="text-gray-600">Sessions</span>
             </div>
           </div>
@@ -337,7 +337,7 @@ function AnalyticsTrendGraph({ trends }) {
           ))}
 
           {/* User Trend Area */}
-          <path d={usersArea} fill="url(#blueGradient)" opacity="0.1" />
+          <path d={usersArea} fill="url(#usersTrendAreaGradient)" opacity="0.1" />
           
           {/* User Trend Line */}
           <path d={usersPath} fill="none" stroke="var(--color-chart-line-users)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -364,7 +364,7 @@ function AnalyticsTrendGraph({ trends }) {
           })}
 
           <defs>
-            <linearGradient id="blueGradient" x1="0" x2="0" y1="0" y2="1">
+            <linearGradient id="usersTrendAreaGradient" x1="0" x2="0" y1="0" y2="1">
               <stop offset="0%" stopColor="var(--color-chart-line-users)" />
               <stop offset="100%" stopColor="transparent" />
             </linearGradient>

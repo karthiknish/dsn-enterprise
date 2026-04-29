@@ -81,8 +81,8 @@
   /* Special purpose text colors */
   --color-text-on-primary: #ffffff;  /* white text on primary/dark backgrounds */
   --color-text-on-light: #111827;    /* dark text on light/white backgrounds */
-  --color-text-link: #2563eb;        /* blue for links */
-  --color-text-link-hover: #1d4ed8;  /* darker blue for link hover */
+  --color-text-link: var(--color-accent);
+  --color-text-link-hover: var(--color-accent-dark);
 
   /* Semantic state text colors */
   --color-text-success: #16a34a;    /* green for success messages */
@@ -112,12 +112,12 @@
   --color-warning-700: #a16207;
   --color-warning-800: #854d0e;
 
-  /* Info / social blue — maps `blue-*` */
-  --color-info-50: #eff6ff;
-  --color-info-400: #60a5fa;
-  --color-info-500: #3b82f6;
-  --color-info-600: #2563eb;
-  --color-info-700: #1d4ed8;
+  /* Info — maps `blue-*`; aligned with accent green */
+  --color-info-50: var(--color-accent-50);
+  --color-info-400: var(--color-accent-400);
+  --color-info-500: var(--color-accent-500);
+  --color-info-600: var(--color-accent);
+  --color-info-700: var(--color-accent-dark);
 
   /* AI / feature purple — maps `purple-*` */
   --color-ai-50: #faf5ff;
@@ -129,13 +129,13 @@
   --color-ai-700: #7e22ce;
   --color-ai-800: #6b21a8;
 
-  /* Teal — maps `teal-*` (e.g. media dropzones) */
-  --color-teal-50: #f0fdfa;
-  --color-teal-100: #ccfbf1;
-  --color-teal-300: #5eead4;
-  --color-teal-400: #2dd4bf;
-  --color-teal-600: #0d9488;
-  --color-teal-800: #115e59;
+  /* Teal slot — maps `teal-*`; same tokens as accent (single brand green) */
+  --color-teal-50: var(--color-accent-50);
+  --color-teal-100: var(--color-accent-100);
+  --color-teal-300: var(--color-accent-200);
+  --color-teal-400: var(--color-accent-400);
+  --color-teal-600: var(--color-accent);
+  --color-teal-800: var(--color-accent-800);
 
   /* Green — maps `green-*` (aligned with accent for UI consistency) */
   --color-green-50: #f0fdf4;
@@ -146,14 +146,14 @@
   --color-orange-600: #ea580c;
 
   /* Rich text editor — table cell selection highlight (TipTap) */
-  --color-editor-selected-cell: #b3d8ff;
+  --color-editor-selected-cell: var(--color-accent-200);
 
-  /* Emerald (chart second series; Tailwind emerald-500) */
-  --color-emerald-500: #10b981;
+  /* Emerald slot — keep Tailwind token; brand green */
+  --color-emerald-500: var(--color-accent-500);
 
   /* Charts (SVG attributes; not all have Tailwind classes) */
   --color-chart-line-users: var(--color-accent-500);
-  --color-chart-line-sessions: var(--color-teal-600);
+  --color-chart-line-sessions: var(--color-accent-800);
   --color-chart-grid: var(--color-gray-100);
 
   /* Spacing Scale (for reference) */
