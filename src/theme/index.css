@@ -28,7 +28,7 @@
   --color-gray-500: #6b7280;
   --color-gray-600: #4b5563;
   --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
+  --color-gray-800: var(--color-primary-dark); /* was #1f2937 slate — brand neutral */
   --color-gray-900: #111827;
 
   /* Accent Colors */
@@ -48,7 +48,7 @@
 
   /* Border Colors */
   --color-border: #e5e7eb;
-  --color-border-dark: #1f2937;
+  --color-border-dark: var(--color-primary-dark);
 
   /* Social Media Colors */
   --color-twitter: #1DA1F2;
@@ -64,7 +64,7 @@
 
   /* Main text colors - for headings, primary content */
   --color-text-main: #111827;       /* text-gray-900 equivalent - main headings */
-  --color-text-heading: #1f2937;   /* text-gray-800 - secondary headings */
+  --color-text-heading: var(--color-primary-dark); /* secondary headings */
 
   /* Body text colors - for paragraphs, descriptions */
   --color-text-body: #374151;       /* text-gray-700 - primary body text */
@@ -170,7 +170,7 @@
   :root {
     --color-background: #0a0a0a;
     --color-foreground: #fafafa;
-    --color-gray-50: #1f2937;
+    --color-gray-50: var(--color-primary-dark);
     --color-gray-100: #111827;
     --color-gray-200: #374151;
   }
