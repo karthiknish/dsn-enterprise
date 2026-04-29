@@ -28,7 +28,7 @@ const Footer = () => {
                 href="https://www.linkedin.com/company/dsn-enterprises/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
+                className="text-white hover:text-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
                 aria-label="DSN Enterprises on LinkedIn"
               >
                 <FaLinkedin size={20} aria-hidden />

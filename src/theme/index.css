@@ -152,8 +152,8 @@
   --color-emerald-500: #10b981;
 
   /* Charts (SVG attributes; not all have Tailwind classes) */
-  --color-chart-line-users: var(--color-info-500);
-  --color-chart-line-sessions: var(--color-emerald-500);
+  --color-chart-line-users: var(--color-accent-500);
+  --color-chart-line-sessions: var(--color-teal-600);
   --color-chart-grid: var(--color-gray-100);
 
   /* Spacing Scale (for reference) */

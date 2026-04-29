@@ -2,6 +2,13 @@
 
 import { useEffect, useState } from "react";
 
+const metricToneClasses = {
+  accent: "bg-accent-50 text-accent-700",
+  teal: "bg-teal-50 text-teal-600",
+  secondary: "bg-secondary-light text-primary",
+  warning: "bg-yellow-50 text-yellow-700",
+};
+
 export default function AnalyticsPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,10 +40,10 @@ export default function AnalyticsPage() {
 
   if (loading && !data) {
     return (
-      <div className="flex items-center justify-center min-h-[40vh]" role="status" aria-live="polite">
+      <output className="flex items-center justify-center min-h-[40vh]" aria-live="polite">
         <span className="sr-only">Loading analytics</span>
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent" aria-hidden />
-      </div>
+      </output>
     );
   }
 
@@ -67,7 +74,7 @@ export default function AnalyticsPage() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       ),
-      color: "blue",
+      tone: "accent",
     },
     {
       name: "Sessions",
@@ -78,7 +85,7 @@ export default function AnalyticsPage() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
         </svg>
       ),
-      color: "green",
+      tone: "teal",
     },
     {
       name: "Page Views",
@@ -88,7 +95,7 @@ export default function AnalyticsPage() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
         </svg>
       ),
-      color: "purple",
+      tone: "secondary",
     },
     {
       name: "Bounce Rate",
@@ -98,7 +105,7 @@ export default function AnalyticsPage() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
         </svg>
       ),
-      color: "orange",
+      tone: "warning",
     },
   ];
 
@@ -146,7 +153,7 @@ export default function AnalyticsPage() {
         {stats.map((stat) => (
           <div key={stat.name} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-lg bg-${stat.color}-50 text-${stat.color}-600`}>
+              <div className={`p-3 rounded-lg ${metricToneClasses[stat.tone]}`}>
                 {stat.icon}
               </div>
             </div>
@@ -164,11 +171,11 @@ export default function AnalyticsPage() {
           <h2 className="text-lg font-semibold text-gray-900">Traffic Trend</h2>
           <div className="flex items-center gap-4 text-xs font-medium">
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-blue-500"></span>
+              <span className="w-3 h-3 rounded-full bg-accent"></span>
               <span className="text-gray-600">Users</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-accent"></span>
+              <span className="w-3 h-3 rounded-full bg-teal-400"></span>
               <span className="text-gray-600">Sessions</span>
             </div>
           </div>
@@ -252,8 +259,8 @@ export default function AnalyticsPage() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Traffic Insights</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                    <span className="text-blue-600 text-xs font-bold">1</span>
+                  <div className="w-8 h-8 rounded-full bg-accent-50 flex items-center justify-center shrink-0">
+                    <span className="text-accent-700 text-xs font-bold">1</span>
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-800">Peak Traffic</h4>
@@ -261,8 +268,8 @@ export default function AnalyticsPage() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center shrink-0">
-                    <span className="text-purple-600 text-xs font-bold">2</span>
+                  <div className="w-8 h-8 rounded-full bg-secondary-light flex items-center justify-center shrink-0">
+                    <span className="text-primary text-xs font-bold">2</span>
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-gray-800">User Retention</h4>
