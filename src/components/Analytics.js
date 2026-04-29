@@ -1,15 +1,14 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, Suspense } from "react";
 import Script from "next/script";
+import { usePathname } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
 const GA_MEASUREMENT_ID = "GT-TQKJ52Q3";
 const FB_PIXEL_ID = "1391622058130598";
 
 function AnalyticsContent() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (pathname && window.gtag) {
@@ -17,13 +16,13 @@ function AnalyticsContent() {
         page_path: pathname,
       });
     }
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   useEffect(() => {
     if (pathname && window.fbq) {
       window.fbq("track", "PageView");
     }
-  }, [pathname, searchParams]);
+  }, [pathname]);
 
   return null;
 }
@@ -76,6 +75,7 @@ export default function GoogleAnalytics() {
         `}
       </Script>
       <noscript>
+        {/* biome-ignore lint/performance/noImgElement: Meta Pixel noscript fallback requires a plain img beacon. */}
         <img
           height="1"
           width="1"
