@@ -5,6 +5,8 @@
  */
 
 :root {
+	color-scheme: light;
+
 	/* Primary Colors */
 	--color-primary: #374941;
 	--color-primary-light: #4a6257;
@@ -167,13 +169,3 @@
 	--spacing-2xl: 3rem;
 }
 
-/* Dark mode support (optional, for future use) */
-@media (prefers-color-scheme: dark) {
-	:root {
-		--color-background: #0a0a0a;
-		--color-foreground: #fafafa;
-		--color-gray-50: var(--color-primary-dark);
-		--color-gray-100: #111827;
-		--color-gray-200: #374151;
-	}
-}

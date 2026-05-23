@@ -109,18 +109,6 @@ const Hero = () => {
 						</div>
 					</motion.div>
 				</div>
-
-				<motion.a
-					href="#products"
-					className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white transition-colors hidden md:flex"
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transition={{ delay: 1 }}
-					aria-label="Scroll to products"
-				>
-					<span className="text-[10px] uppercase tracking-widest">Scroll</span>
-					<span className="block h-8 w-px bg-gradient-to-b from-white/60 to-transparent" />
-				</motion.a>
 			</div>
 		</div>
 	);

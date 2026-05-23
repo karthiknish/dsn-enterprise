@@ -188,7 +188,7 @@ const Footer = () => {
 					</div>
 				</div>
 
-				<div className="border-t border-gray-800 mt-8 pt-6 text-center">
+				<div className="border-t border-white/20 mt-8 pt-6 text-center">
 					<p>
 						&copy; {new Date().getFullYear()} DSN Enterprises. All rights
 						reserved.
