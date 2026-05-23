@@ -15,6 +15,7 @@ import {
 	FaShip,
 	FaTrain,
 } from "react-icons/fa";
+import PageCta from "@/components/layout/PageCta";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -206,7 +207,7 @@ export default function IndustriesPage() {
 				description={pageHeroes.industries}
 			/>
 
-			<section className="py-16 md:py-20 bg-white">
+			<section className="py-16 md:py-20 bg-surface-subtle">
 				<div className="container mx-auto px-4">
 					<div className="space-y-16">
 						{industries.map((industry, index) => (
@@ -317,32 +318,12 @@ export default function IndustriesPage() {
 				</div>
 			</section>
 
-			{/* CTA */}
-			<section className="py-16 bg-primary text-white">
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl font-bold mb-6">
-						Don&apos;t See Your Industry?
-					</h2>
-					<p className="text-xl mb-8 max-w-2xl mx-auto">
-						We serve many more industries beyond those listed. Contact us to
-						discuss your specific gauging requirements.
-					</p>
-					<div className="flex flex-wrap justify-center gap-4">
-						<Link
-							href="/contact"
-							className="inline-block bg-white text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-						>
-							Contact Us
-						</Link>
-						<Link
-							href="/products"
-							className="inline-block bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-md transition-colors"
-						>
-							View All Products
-						</Link>
-					</div>
-				</div>
-			</section>
+			<PageCta
+				title="Don't See Your Industry?"
+				description="We serve many more industries beyond those listed. Contact us to discuss your specific gauging requirements."
+				secondaryHref="/products"
+				secondaryLabel="View All Products"
+			/>
 		</div>
 	);
 }

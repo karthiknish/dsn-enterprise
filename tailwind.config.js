@@ -86,6 +86,11 @@ module.exports = {
         },
         background: "var(--color-background)",
         foreground: "var(--color-foreground)",
+        surface: {
+          subtle: "var(--color-surface-subtle)",
+          muted: "var(--color-surface-muted)",
+          warm: "var(--color-surface-warm)",
+        },
         accent: {
           50: "var(--color-accent-50)",
           100: "var(--color-accent-100)",

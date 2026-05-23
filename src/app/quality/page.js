@@ -13,6 +13,7 @@ import {
 	FaMicroscope,
 	FaThermometerHalf,
 } from "react-icons/fa";
+import PageCta from "@/components/layout/PageCta";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -143,7 +144,7 @@ export default function QualityPage() {
 				<FaAward className="text-5xl opacity-90" aria-hidden />
 			</PageHero>
 
-			<section className="py-16 md:py-20 bg-white">
+			<section className="py-16 md:py-20 bg-surface-subtle">
 				<div className="container mx-auto px-4">
 					<div className="text-center mb-12">
 						<h2 className="text-3xl font-bold mb-4 text-gray-900">
@@ -229,7 +230,7 @@ export default function QualityPage() {
 			</section>
 
 			{/* Standards */}
-			<section className="py-16 bg-white">
+			<section className="py-16 bg-surface-muted">
 				<div className="container mx-auto px-4">
 					<div className="text-center mb-12">
 						<h2 className="text-3xl font-bold mb-4 text-gray-900">
@@ -299,7 +300,7 @@ export default function QualityPage() {
 			</section>
 
 			{/* Quality Commitment */}
-			<section className="py-16 bg-white">
+			<section className="py-16 bg-surface-subtle">
 				<div className="container mx-auto px-4">
 					<div className="max-w-4xl mx-auto text-center">
 						<h2 className="text-3xl font-bold mb-6 text-gray-900">
@@ -323,30 +324,13 @@ export default function QualityPage() {
 				</div>
 			</section>
 
-			{/* CTA */}
-			<section className="py-16 bg-primary text-white">
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl font-bold mb-6">Need Quality Gauges?</h2>
-					<p className="text-xl mb-8 max-w-2xl mx-auto">
-						Experience the DSN Enterprises quality difference. Contact us for
-						precision gauges backed by our rigorous quality assurance.
-					</p>
-					<div className="flex flex-wrap justify-center gap-4">
-						<Link
-							href="/contact"
-							className="inline-block bg-white text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-						>
-							Request Quote
-						</Link>
-						<Link
-							href="/products"
-							className="inline-block bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-md transition-colors"
-						>
-							View Products
-						</Link>
-					</div>
-				</div>
-			</section>
+			<PageCta
+				title="Need Quality Gauges?"
+				description="Experience the DSN Enterprises quality difference. Contact us for precision gauges backed by our rigorous quality assurance."
+				primaryLabel="Request Quote"
+				secondaryHref="/products"
+				secondaryLabel="View Products"
+			/>
 		</div>
 	);
 }

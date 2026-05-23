@@ -148,7 +148,7 @@ const ContactSection = () => {
 	};
 
 	return (
-		<section id="contact" className="py-20 md:py-24 bg-gray-50 relative">
+		<section id="contact" className="py-20 md:py-24 bg-secondary-light relative">
 			<div
 				className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
 				aria-hidden

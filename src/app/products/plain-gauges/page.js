@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight, FaCheck } from "react-icons/fa";
+import PageCta from "@/components/layout/PageCta";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -142,7 +143,7 @@ export default function PlainGaugesPage() {
 				description={pageHeroes.productCategoryHeroes.plainGauges}
 			/>
 
-			<section className="py-16 md:py-20 bg-white">
+			<section className="py-16 md:py-20 bg-surface-subtle">
 				<div className="container mx-auto px-4">
 					<div className="max-w-4xl mx-auto">
 						<h2 className="text-3xl font-bold mb-6 text-gray-900">
@@ -281,7 +282,7 @@ export default function PlainGaugesPage() {
 			</section>
 
 			{/* Specifications */}
-			<section className="py-16 bg-white">
+			<section className="py-16 bg-surface-muted">
 				<div className="container mx-auto px-4">
 					<div className="max-w-4xl mx-auto">
 						<h2 className="text-3xl font-bold mb-8 text-center text-gray-900">
@@ -373,30 +374,12 @@ export default function PlainGaugesPage() {
 				</div>
 			</section>
 
-			{/* CTA */}
-			<section className="py-16 bg-primary text-white">
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl font-bold mb-6">Need Plain Gauges?</h2>
-					<p className="text-xl mb-8 max-w-2xl mx-auto">
-						Contact our team for custom sizes, bulk orders, or technical
-						assistance. We offer competitive pricing and fast delivery.
-					</p>
-					<div className="flex flex-wrap justify-center gap-4">
-						<Link
-							href="/contact?product=Plain%20Gauges"
-							className="inline-block bg-white text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-						>
-							Get a Quote
-						</Link>
-						<Link
-							href="/contact"
-							className="inline-block bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-md transition-colors"
-						>
-							Contact Us
-						</Link>
-					</div>
-				</div>
-			</section>
+			<PageCta
+				title="Need Plain Gauges?"
+				description="Contact our team for custom sizes, bulk orders, or technical assistance. We offer competitive pricing and fast delivery."
+				primaryHref="/contact?product=Plain%20Gauges"
+				primaryLabel="Get a Quote"
+			/>
 		</div>
 	);
 }

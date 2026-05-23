@@ -9,6 +9,7 @@ import {
 	FaRuler,
 	FaTools,
 } from "react-icons/fa";
+import PageCta from "@/components/layout/PageCta";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -78,7 +79,7 @@ const ServicesPage = () => {
 				description={pageHeroes.services}
 			/>
 
-			<section className="py-16 md:py-20 bg-secondary-light/80 relative">
+			<section className="py-16 md:py-20 bg-secondary-light relative">
 				<div
 					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
 					aria-hidden
@@ -117,7 +118,7 @@ const ServicesPage = () => {
 					key={service.id}
 					id={service.id}
 					className={`py-16 ${
-						index % 2 === 0 ? "bg-white" : "bg-secondary-light"
+						index % 2 === 0 ? "bg-surface-subtle" : "bg-secondary-light"
 					}`}
 				>
 					<div className="container mx-auto px-4">
@@ -188,24 +189,10 @@ const ServicesPage = () => {
 				</div>
 			</section>
 
-			{/* CTA */}
-			<section className="py-16 bg-primary text-white">
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl font-bold mb-6">
-						Ready to Experience Our Services?
-					</h2>
-					<p className="text-xl mb-8 max-w-2xl mx-auto">
-						Tell us what you need calibrated, manufactured, or certified—we will
-						scope the job and confirm lead time from Coimbatore.
-					</p>
-					<Link
-						href="/contact"
-						className="inline-block bg-secondary text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-					>
-						Contact Us
-					</Link>
-				</div>
-			</section>
+			<PageCta
+				title="Ready to Experience Our Services?"
+				description="Tell us what you need calibrated, manufactured, or certified—we will scope the job and confirm lead time from Coimbatore."
+			/>
 		</div>
 	);
 };

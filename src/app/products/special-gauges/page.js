@@ -9,6 +9,7 @@ import {
 	FaDrawPolygon,
 	FaWrench,
 } from "react-icons/fa";
+import PageCta from "@/components/layout/PageCta";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -249,7 +250,7 @@ export default function SpecialGaugesPage() {
 			</section>
 
 			{/* Introduction */}
-			<section className="py-16 bg-white">
+			<section className="py-16 bg-surface-subtle">
 				<div className="container mx-auto px-4">
 					<div className="max-w-4xl mx-auto">
 						<h2 className="text-3xl font-bold mb-6 text-gray-900">
@@ -394,7 +395,7 @@ export default function SpecialGaugesPage() {
 			</section>
 
 			{/* Technical Specifications */}
-			<section className="py-16 bg-white">
+			<section className="py-16 bg-surface-muted">
 				<div className="container mx-auto px-4">
 					<div className="max-w-4xl mx-auto">
 						<h2 className="text-3xl font-bold mb-8 text-center text-gray-900">
@@ -525,33 +526,13 @@ export default function SpecialGaugesPage() {
 				</div>
 			</section>
 
-			{/* CTA */}
-			<section className="py-16 bg-primary text-white">
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl font-bold mb-6">
-						Have a Custom Gauge Requirement?
-					</h2>
-					<p className="text-xl mb-8 max-w-2xl mx-auto">
-						Send us your drawings or specifications and our engineering team
-						will provide a detailed quote. We specialize in solving complex
-						measurement challenges.
-					</p>
-					<div className="flex flex-wrap justify-center gap-4">
-						<Link
-							href="/contact?product=Custom%20Gauge"
-							className="inline-block bg-white text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-						>
-							Get a Quote
-						</Link>
-						<Link
-							href="/contact"
-							className="inline-block bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-bold py-3 px-8 rounded-md transition-colors"
-						>
-							Contact Engineering
-						</Link>
-					</div>
-				</div>
-			</section>
+			<PageCta
+				title="Have a Custom Gauge Requirement?"
+				description="Send us your drawings or specifications and our engineering team will provide a detailed quote. We specialize in solving complex measurement challenges."
+				primaryHref="/contact?product=Custom%20Gauge"
+				primaryLabel="Get a Quote"
+				secondaryLabel="Contact Engineering"
+			/>
 		</div>
 	);
 }

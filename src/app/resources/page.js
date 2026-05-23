@@ -12,6 +12,7 @@ import {
 	FaIndustry,
 	FaRuler,
 } from "react-icons/fa";
+import PageCta from "@/components/layout/PageCta";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -321,25 +322,10 @@ export default function ResourcesPage() {
 				</div>
 			</section>
 
-			{/* CTA Section */}
-			<section className="py-16 bg-primary text-white">
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl font-bold mb-6">
-						Need Specific Documentation?
-					</h2>
-					<p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-						If you need specific technical documentation, certificates, or
-						resources not listed here, please contact us and we&apos;ll be happy
-						to assist.
-					</p>
-					<Link
-						href="/contact"
-						className="inline-block bg-white text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-					>
-						Contact Us
-					</Link>
-				</div>
-			</section>
+			<PageCta
+				title="Need Specific Documentation?"
+				description="If you need specific technical documentation, certificates, or resources not listed here, please contact us and we'll be happy to assist."
+			/>
 		</div>
 	);
 }

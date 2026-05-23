@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { FaArrowRight, FaChevronRight, FaSearch } from "react-icons/fa";
+import PageCta from "@/components/layout/PageCta";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -320,7 +321,7 @@ const ProductsPage = () => {
 			</section>
 
 			{/* Product Categories Tabs */}
-			<section className="py-16 bg-white">
+			<section className="py-16 bg-surface-subtle">
 				<div className="container mx-auto px-4">
 					<div className="text-center mb-8">
 						<h2 className="text-3xl font-bold mb-4 text-gray-900">
@@ -417,7 +418,7 @@ const ProductsPage = () => {
 			</section>
 
 			{/* Specifications */}
-			<section className="py-16 bg-white">
+			<section className="py-16 bg-surface-muted">
 				<div className="container mx-auto px-4">
 					<div className="max-w-3xl mx-auto">
 						<h2 className="text-3xl font-bold mb-8 text-center text-gray-900">
@@ -453,22 +454,10 @@ const ProductsPage = () => {
 				</div>
 			</section>
 
-			{/* CTA */}
-			<section className="py-16 bg-primary text-white">
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl font-bold mb-6">Need a Custom Solution?</h2>
-					<p className="text-xl mb-8 max-w-2xl mx-auto">
-						We specialize in manufacturing custom gauges according to your
-						specific requirements. Contact us today to discuss your needs.
-					</p>
-					<Link
-						href="/contact"
-						className="inline-block bg-white text-primary hover:bg-secondary-light font-bold py-3 px-8 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-					>
-						Contact Us
-					</Link>
-				</div>
-			</section>
+			<PageCta
+				title="Need a Custom Solution?"
+				description="We specialize in manufacturing custom gauges according to your specific requirements. Contact us today to discuss your needs."
+			/>
 		</div>
 	);
 };

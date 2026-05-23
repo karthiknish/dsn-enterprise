@@ -21,8 +21,13 @@
 	--color-white: #ffffff;
 	--color-black: #000000;
 
+	/* Section surfaces — sage-tinted alternates (not flat white/grey) */
+	--color-surface-subtle: #f6f8f4;
+	--color-surface-muted: #e8ede3;
+	--color-surface-warm: #dfe8d6;
+
 	/* Gray Scale (Tailwind-aligned; single source for bg/text/border utilities) */
-	--color-gray-50: #f8fafc;
+	--color-gray-50: var(--color-surface-subtle);
 	--color-gray-100: #f3f4f6;
 	--color-gray-200: #e5e7eb;
 	--color-gray-300: #d1d5db;

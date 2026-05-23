@@ -11,6 +11,7 @@ import {
 	FaIndustry,
 	FaUsers,
 } from "react-icons/fa";
+import PageCta from "@/components/layout/PageCta";
 import PageHero from "@/components/layout/PageHero";
 import PageSection from "@/components/layout/PageSection";
 import SectionHeader from "@/components/ui/SectionHeader";
@@ -193,7 +194,7 @@ const AboutPage = () => {
 				</div>
 			</PageSection>
 
-			<PageSection variant="white" bordered>
+			<PageSection variant="muted" bordered>
 				<SectionHeader
 					title="Our Manufacturing Process"
 					description="Controlled steps from material to certificate—so every gauge leaves our works ready for production use."
@@ -434,23 +435,10 @@ const AboutPage = () => {
 				</div>
 			</PageSection>
 
-			<section className="py-16 md:py-20 bg-primary text-white">
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl font-bold mb-6">Ready to Work With Us?</h2>
-					<p className="text-xl mb-8 max-w-2xl mx-auto">
-						Send your drawing or gauge list—we will confirm scope, lead time,
-						and certificate requirements from Coimbatore.
-					</p>
-					<div className="flex flex-wrap justify-center gap-4">
-						<Link
-							href="/contact"
-							className="inline-block bg-transparent hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-md border-2 border-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-						>
-							Contact Us
-						</Link>
-					</div>
-				</div>
-			</section>
+			<PageCta
+				title="Ready to Work With Us?"
+				description="Send your drawing or gauge list—we will confirm scope, lead time, and certificate requirements from Coimbatore."
+			/>
 		</div>
 	);
 };

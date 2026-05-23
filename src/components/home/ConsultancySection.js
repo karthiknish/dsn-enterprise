@@ -40,7 +40,7 @@ const offerings = [
 export default function ConsultancySection() {
 	return (
 		<section
-			className="py-20 md:py-24 bg-accent-50/80 border-y border-accent-100/80 relative"
+			className="py-20 md:py-24 bg-accent-50 border-y border-accent-100 relative"
 			aria-labelledby="consultancy-heading"
 		>
 			<div className="container mx-auto px-4 max-w-6xl">

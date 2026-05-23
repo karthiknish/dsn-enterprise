@@ -35,7 +35,7 @@ const certificates = [
 
 const CertificationsSection = () => {
 	return (
-		<section className="py-20 md:py-24 bg-white">
+		<section className="py-20 md:py-24 bg-surface-subtle">
 			<div className="container mx-auto px-4">
 				<SectionHeader
 					eyebrow="Quality"

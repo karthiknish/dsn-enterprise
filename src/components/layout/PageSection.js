@@ -1,8 +1,10 @@
 const variants = {
 	white: "bg-white",
-	muted: "bg-gray-50",
-	secondary: "bg-secondary-light/80",
-	accent: "bg-accent-50/80",
+	muted: "bg-surface-muted",
+	subtle: "bg-surface-subtle",
+	secondary: "bg-secondary-light",
+	accent: "bg-accent-50",
+	warm: "bg-surface-warm",
 };
 
 export default function PageSection({
