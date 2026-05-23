@@ -3,247 +3,279 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { SITE_URL, getSiteUrl } from "@/lib/site";
+import { getSiteUrl, SITE_URL } from "@/lib/site";
 
 async function getPostBySlug(slug) {
-  try {
-    const postsRef = collection(db, "blogs");
-    const q = query(
-      postsRef,
-      where("slug", "==", slug),
-      where("status", "==", "published"),
-      limit(1)
-    );
-    const snapshot = await getDocs(q);
-    
-    if (snapshot.empty) {
-      return null;
-    }
-    
-    const doc = snapshot.docs[0];
-    return {
-      id: doc.id,
-      ...doc.data(),
-      publishedDate: doc.data().publishedDate?.toDate?.()?.toISOString() || null,
-      createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || null,
-      updatedAt: doc.data().updatedAt?.toDate?.()?.toISOString() || null,
-    };
-  } catch (error) {
-    console.error("Error fetching post:", error);
-    return null;
-  }
+	try {
+		const postsRef = collection(db, "blogs");
+		const q = query(
+			postsRef,
+			where("slug", "==", slug),
+			where("status", "==", "published"),
+			limit(1),
+		);
+		const snapshot = await getDocs(q);
+
+		if (snapshot.empty) {
+			return null;
+		}
+
+		const doc = snapshot.docs[0];
+		return {
+			id: doc.id,
+			...doc.data(),
+			publishedDate:
+				doc.data().publishedDate?.toDate?.()?.toISOString() || null,
+			createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || null,
+			updatedAt: doc.data().updatedAt?.toDate?.()?.toISOString() || null,
+		};
+	} catch (error) {
+		console.error("Error fetching post:", error);
+		return null;
+	}
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
-  
-  if (!post) {
-    return {
-      title: "Post Not Found - DSN Enterprises",
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
-  }
-  
-  const description = post.metaDescription || post.excerpt || post.title;
+	const { slug } = await params;
+	const post = await getPostBySlug(slug);
 
-  return {
-    title: post.metaTitle || `${post.title} - DSN Enterprises`,
-    description,
-    alternates: {
-      canonical: `/blog/${post.slug}`,
-    },
-    openGraph: {
-      title: post.metaTitle || post.title,
-      description,
-      url: `/blog/${post.slug}`,
-      type: "article",
-      images: post.featuredImage ? [post.featuredImage] : ["/images/featured.png"],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.metaTitle || post.title,
-      description,
-      images: post.featuredImage ? [post.featuredImage] : ["/images/featured.png"],
-    },
-  };
+	if (!post) {
+		return {
+			title: "Post Not Found - DSN Enterprises",
+			robots: {
+				index: false,
+				follow: false,
+			},
+		};
+	}
+
+	const description = post.metaDescription || post.excerpt || post.title;
+
+	return {
+		title: post.metaTitle || `${post.title} - DSN Enterprises`,
+		description,
+		alternates: {
+			canonical: `/blog/${post.slug}`,
+		},
+		openGraph: {
+			title: post.metaTitle || post.title,
+			description,
+			url: `/blog/${post.slug}`,
+			type: "article",
+			images: post.featuredImage
+				? [post.featuredImage]
+				: ["/images/featured.png"],
+		},
+		twitter: {
+			card: "summary_large_image",
+			title: post.metaTitle || post.title,
+			description,
+			images: post.featuredImage
+				? [post.featuredImage]
+				: ["/images/featured.png"],
+		},
+	};
 }
 
 export default async function BlogPostPage({ params }) {
-  const { slug } = await params;
-  const post = await getPostBySlug(slug);
-  
-  if (!post) {
-    notFound();
-  }
+	const { slug } = await params;
+	const post = await getPostBySlug(slug);
 
-  const jsonLd = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "image": post.featuredImage ? [post.featuredImage] : [getSiteUrl("/images/featured.png")],
-    "datePublished": post.publishedDate || post.createdAt,
-    "dateModified": post.updatedAt || post.publishedDate || post.createdAt,
-    "author": [{
-      "@type": "Organization",
-      "name": "DSN Enterprises",
-      "url": SITE_URL
-    }],
-    "publisher": {
-      "@type": "Organization",
-      "name": "DSN Enterprises",
-      "logo": {
-        "@type": "ImageObject",
-        "url": getSiteUrl("/images/logo.png")
-      }
-    },
-    "description": post.excerpt || post.title
-  });
+	if (!post) {
+		notFound();
+	}
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* JSON-LD Structured Data */}
-      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
+	const jsonLd = JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		headline: post.title,
+		image: post.featuredImage
+			? [post.featuredImage]
+			: [getSiteUrl("/images/featured.png")],
+		datePublished: post.publishedDate || post.createdAt,
+		dateModified: post.updatedAt || post.publishedDate || post.createdAt,
+		author: [
+			{
+				"@type": "Organization",
+				name: "DSN Enterprises",
+				url: SITE_URL,
+			},
+		],
+		publisher: {
+			"@type": "Organization",
+			name: "DSN Enterprises",
+			logo: {
+				"@type": "ImageObject",
+				url: getSiteUrl("/images/logo.png"),
+			},
+		},
+		description: post.excerpt || post.title,
+	});
 
-      {/* Hero Section */}
-      <section className="bg-primary text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <Link
-              href="/blog"
-              className="inline-flex items-center text-accent-200 hover:text-white mb-6 transition-colors"
-            >
-              <svg
-                aria-hidden="true"
-                className="w-4 h-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              Back to Blog
-            </Link>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-oswald">
-              {post.title}
-            </h1>
-            <div className="flex items-center text-accent-200">
-              <time>
-                {(post.publishedDate || post.createdAt)
-                  ? new Date(post.publishedDate || post.createdAt).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
-                  : "No date"}
-              </time>
-            </div>
-          </div>
-        </div>
-      </section>
+	return (
+		<div className="min-h-screen bg-gray-50">
+			{/* JSON-LD Structured Data */}
+			<script
+				type="application/ld+json"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+				dangerouslySetInnerHTML={{ __html: jsonLd }}
+			/>
 
-      {/* Featured Image */}
-      {post.featuredImage && (
-        <div className="container mx-auto px-4 -mt-8">
-          <div className="max-w-4xl mx-auto">
-            <Image
-              src={post.featuredImage}
-              alt={post.title}
-              width={896}
-              height={384}
-              unoptimized
-              className="w-full h-96 object-cover rounded-xl"
-            />
-          </div>
-        </div>
-      )}
+			{/* Hero Section */}
+			<section className="bg-primary text-white py-16">
+				<div className="container mx-auto px-4">
+					<div className="max-w-4xl mx-auto">
+						<Link
+							href="/blog"
+							className="inline-flex items-center text-accent-200 hover:text-white mb-6 transition-colors"
+						>
+							<svg
+								aria-hidden="true"
+								className="w-4 h-4 mr-2"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M15 19l-7-7 7-7"
+								/>
+							</svg>
+							Back to Blog
+						</Link>
+						<h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-oswald">
+							{post.title}
+						</h1>
+						<div className="flex items-center text-accent-200">
+							<time>
+								{post.publishedDate || post.createdAt
+									? new Date(
+											post.publishedDate || post.createdAt,
+										).toLocaleDateString("en-US", {
+											year: "numeric",
+											month: "long",
+											day: "numeric",
+										})
+									: "No date"}
+							</time>
+						</div>
+					</div>
+				</div>
+			</section>
 
-      {/* Content */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <article className="bg-white rounded-xl shadow-sm p-8 md:p-12">
-              {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Sanitized HTML content from trusted Firestore source */}
-              <div dangerouslySetInnerHTML={{ __html: post.content }} className="prose prose-lg max-w-none prose-headings:font-oswald prose-headings:text-gray-900 prose-a:text-accent prose-img:rounded-lg" />
-            </article>
+			{/* Featured Image */}
+			{post.featuredImage && (
+				<div className="container mx-auto px-4 -mt-8">
+					<div className="max-w-4xl mx-auto">
+						<Image
+							src={post.featuredImage}
+							alt={post.title}
+							width={896}
+							height={384}
+							unoptimized
+							className="w-full h-96 object-cover rounded-xl"
+						/>
+					</div>
+				</div>
+			)}
 
-            {/* Share Section */}
-            <div className="mt-8 bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Share this article
-              </h3>
-              <div className="flex gap-4">
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-4 py-2 bg-[color:var(--color-twitter)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
-                >
-                  <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                  </svg>
-                  Twitter
-                </a>
-                <a
-                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}&title=${encodeURIComponent(post.title)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-4 py-2 bg-[color:var(--color-linkedin)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
-                >
-                  <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                  LinkedIn
-                </a>
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-4 py-2 bg-[color:var(--color-facebook)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
-                >
-                  <svg aria-hidden="true" className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                  </svg>
-                  Facebook
-                </a>
-              </div>
-            </div>
+			{/* Content */}
+			<section className="py-12">
+				<div className="container mx-auto px-4">
+					<div className="max-w-4xl mx-auto">
+						<article className="bg-white rounded-xl shadow-sm p-8 md:p-12">
+							<div
+								// biome-ignore lint/security/noDangerouslySetInnerHtml: trusted Firestore blog HTML
+								dangerouslySetInnerHTML={{ __html: post.content }}
+								className="prose prose-lg max-w-none prose-headings:font-oswald prose-headings:text-gray-900 prose-a:text-accent prose-img:rounded-lg"
+							/>
+						</article>
 
-            {/* Back to Blog */}
-            <div className="mt-8 text-center">
-              <Link
-                href="/blog"
-                className="inline-flex items-center px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors"
-              >
-                <svg
-                  aria-hidden="true"
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-                Back to All Posts
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+						{/* Share Section */}
+						<div className="mt-8 bg-white rounded-xl shadow-sm p-6">
+							<h3 className="text-lg font-semibold text-gray-900 mb-4">
+								Share this article
+							</h3>
+							<div className="flex gap-4">
+								<a
+									href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}`}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="inline-flex items-center px-4 py-2 bg-[color:var(--color-twitter)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
+								>
+									<svg
+										aria-hidden="true"
+										className="w-5 h-5 mr-2"
+										fill="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+									</svg>
+									Twitter
+								</a>
+								<a
+									href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}&title=${encodeURIComponent(post.title)}`}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="inline-flex items-center px-4 py-2 bg-[color:var(--color-linkedin)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
+								>
+									<svg
+										aria-hidden="true"
+										className="w-5 h-5 mr-2"
+										fill="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+									</svg>
+									LinkedIn
+								</a>
+								<a
+									href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}`}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="inline-flex items-center px-4 py-2 bg-[color:var(--color-facebook)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
+								>
+									<svg
+										aria-hidden="true"
+										className="w-5 h-5 mr-2"
+										fill="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+									</svg>
+									Facebook
+								</a>
+							</div>
+						</div>
+
+						{/* Back to Blog */}
+						<div className="mt-8 text-center">
+							<Link
+								href="/blog"
+								className="inline-flex items-center px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors"
+							>
+								<svg
+									aria-hidden="true"
+									className="w-4 h-4 mr-2"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M15 19l-7-7 7-7"
+									/>
+								</svg>
+								Back to All Posts
+							</Link>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	);
 }

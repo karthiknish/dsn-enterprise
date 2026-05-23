@@ -16,55 +16,55 @@ const BREVO_API_KEY = process.env.BREVO_API_KEY;
  * @returns {Promise<Object>} - Response from Brevo API
  */
 export async function sendEmail({
-  to,
-  toName,
-  subject,
-  htmlContent,
-  textContent,
+	to,
+	toName,
+	subject,
+	htmlContent,
+	textContent,
 }) {
-  if (!BREVO_API_KEY) {
-    throw new Error("Brevo API key is not configured");
-  }
+	if (!BREVO_API_KEY) {
+		throw new Error("Brevo API key is not configured");
+	}
 
-  const url = "https://api.sendinblue.com/v3/smtp/email";
+	const url = "https://api.sendinblue.com/v3/smtp/email";
 
-  const payload = {
-    sender: {
-      name: "DSN Enterprises",
-      email: "noreply@dsnenterprises.in",
-    },
-    to: [
-      {
-        email: to,
-        name: toName || to,
-      },
-    ],
-    subject: subject,
-    htmlContent: htmlContent,
-    textContent: textContent || "",
-  };
+	const payload = {
+		sender: {
+			name: "DSN Enterprises",
+			email: "noreply@dsnenterprises.in",
+		},
+		to: [
+			{
+				email: to,
+				name: toName || to,
+			},
+		],
+		subject: subject,
+		htmlContent: htmlContent,
+		textContent: textContent || "",
+	};
 
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "api-key": BREVO_API_KEY,
-      },
-      body: JSON.stringify(payload),
-    });
+	try {
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+				"api-key": BREVO_API_KEY,
+			},
+			body: JSON.stringify(payload),
+		});
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Brevo API error: ${errorData.message || response.statusText}`
-      );
-    }
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error(
+				`Brevo API error: ${errorData.message || response.statusText}`,
+			);
+		}
 
-    return await response.json();
-  } catch (error) {
-    console.error("Error sending email via Brevo:", error);
-    throw error;
-  }
+		return await response.json();
+	} catch (error) {
+		console.error("Error sending email via Brevo:", error);
+		throw error;
+	}
 }

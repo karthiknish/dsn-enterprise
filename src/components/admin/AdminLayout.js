@@ -1,375 +1,528 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 // Fixed positioning tooltip component
 const SidebarTooltip = ({ content, children }) => {
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const triggerRef = useRef(null);
+	const [position, setPosition] = useState({ top: 0, left: 0 });
+	const triggerRef = useRef(null);
 
-  const updatePosition = () => {
-    if (triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.top + rect.height / 2,
-        left: rect.right + 8,
-      });
-    }
-  };
+	const updatePosition = () => {
+		if (triggerRef.current) {
+			const rect = triggerRef.current.getBoundingClientRect();
+			setPosition({
+				top: rect.top + rect.height / 2,
+				left: rect.right + 8,
+			});
+		}
+	};
 
-  return (
-    // biome-ignore lint/a11y/noStaticElementInteractions: tooltip trigger uses onMouseEnter for position tracking only
-    <div
-      ref={triggerRef}
-      className="group/tooltip relative inline-block"
-      onMouseEnter={updatePosition}
-    >
-      {children}
-      <div
-        className="fixed px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity duration-200 z-[99999] shadow-lg"
-        style={{
-          top: `${position.top}px`,
-          left: `${position.left}px`,
-          transform: "translateY(-50%)",
-        }}
-      >
-        {content}
-        <div className="absolute top-1/2 left-0 -translate-x-full border-4 border-transparent border-r-gray-900" />
-      </div>
-    </div>
-  );
+	return (
+		// biome-ignore lint/a11y/noStaticElementInteractions: tooltip trigger uses onMouseEnter for position tracking only
+		<div
+			ref={triggerRef}
+			className="group/tooltip relative inline-block"
+			onMouseEnter={updatePosition}
+		>
+			{children}
+			<div
+				className="fixed px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity duration-200 z-[99999] shadow-lg"
+				style={{
+					top: `${position.top}px`,
+					left: `${position.left}px`,
+					transform: "translateY(-50%)",
+				}}
+			>
+				{content}
+				<div className="absolute top-1/2 left-0 -translate-x-full border-4 border-transparent border-r-gray-900" />
+			</div>
+		</div>
+	);
 };
 
 export default function AdminLayout({ children }) {
-  const { user, logout, loading } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+	const { user, logout, loading } = useAuth();
+	const router = useRouter();
+	const pathname = usePathname();
+	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const [isCollapsed, setIsCollapsed] = useState(false);
 
-  useEffect(() => {
-    if (!loading && !user && pathname !== "/admin/login") {
-      router.push("/admin/login");
-    }
-  }, [user, loading, router, pathname]);
+	useEffect(() => {
+		if (!loading && !user && pathname !== "/admin/login") {
+			router.push("/admin/login");
+		}
+	}, [user, loading, router, pathname]);
 
-  // Load sidebar state from local storage
-  useEffect(() => {
-    const storedState = localStorage.getItem("adminSidebarCollapsed");
-    if (storedState) {
-      setIsCollapsed(JSON.parse(storedState));
-    }
-  }, []);
+	// Load sidebar state from local storage
+	useEffect(() => {
+		const storedState = localStorage.getItem("adminSidebarCollapsed");
+		if (storedState) {
+			setIsCollapsed(JSON.parse(storedState));
+		}
+	}, []);
 
-  const toggleSidebar = () => {
-    const newState = !isCollapsed;
-    setIsCollapsed(newState);
-    localStorage.setItem("adminSidebarCollapsed", JSON.stringify(newState));
-  };
+	const toggleSidebar = () => {
+		const newState = !isCollapsed;
+		setIsCollapsed(newState);
+		localStorage.setItem("adminSidebarCollapsed", JSON.stringify(newState));
+	};
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100" role="status" aria-live="polite">
-        <span className="sr-only">Loading</span>
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent" aria-hidden />
-      </div>
-    );
-  }
+	if (loading) {
+		return (
+			<output
+				className="min-h-screen flex items-center justify-center bg-gray-100 w-full"
+				aria-live="polite"
+			>
+				<span className="sr-only">Loading</span>
+				<div
+					className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"
+					aria-hidden
+				/>
+			</output>
+		);
+	}
 
-  if (!user && pathname !== "/admin/login") {
-    return null;
-  }
+	if (!user && pathname !== "/admin/login") {
+		return null;
+	}
 
-  if (pathname === "/admin/login") {
-    return children;
-  }
+	if (pathname === "/admin/login") {
+		return children;
+	}
 
-  const navigation = [
-    { name: "Dashboard", href: "/admin", icon: DashboardIcon },
-    { name: "Analytics", href: "/admin/analytics", icon: AnalyticsIcon },
-    { name: "Blog Posts", href: "/admin/blog", icon: BlogIcon },
-    { name: "Create Post", href: "/admin/blog/new", icon: CreateIcon },
-    { name: "Contacts", href: "/admin/contacts", icon: ContactsIcon },
-  ];
+	const navigation = [
+		{ name: "Dashboard", href: "/admin", icon: DashboardIcon },
+		{ name: "Analytics", href: "/admin/analytics", icon: AnalyticsIcon },
+		{ name: "Blog Posts", href: "/admin/blog", icon: BlogIcon },
+		{ name: "Create Post", href: "/admin/blog/new", icon: CreateIcon },
+		{ name: "Contacts", href: "/admin/contacts", icon: ContactsIcon },
+	];
 
-  const handleLogout = async () => {
-    await logout();
-    router.push("/admin/login");
-  };
+	const handleLogout = async () => {
+		await logout();
+		router.push("/admin/login");
+	};
 
-  const pageTitle = (() => {
-    const exact = {
-      "/admin": "Dashboard",
-      "/admin/analytics": "Analytics",
-      "/admin/blog": "Blog posts",
-      "/admin/blog/new": "Create post",
-      "/admin/contacts": "Contacts",
-    };
-    if (exact[pathname]) return exact[pathname];
-    if (/^\/admin\/blog\/[^/]+\/edit$/.test(pathname)) return "Edit post";
-    return "Admin";
-  })();
+	const pageTitle = (() => {
+		const exact = {
+			"/admin": "Dashboard",
+			"/admin/analytics": "Analytics",
+			"/admin/blog": "Blog posts",
+			"/admin/blog/new": "Create post",
+			"/admin/contacts": "Contacts",
+		};
+		if (exact[pathname]) return exact[pathname];
+		if (/^\/admin\/blog\/[^/]+\/edit$/.test(pathname)) return "Edit post";
+		return "Admin";
+	})();
 
-  return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && (
-        <button
-          type="button"
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
-          aria-label="Close sidebar"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+	return (
+		<div className="min-h-screen bg-gray-100">
+			{/* Mobile sidebar overlay */}
+			{sidebarOpen && (
+				<button
+					type="button"
+					className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+					aria-label="Close sidebar"
+					onClick={() => setSidebarOpen(false)}
+				/>
+			)}
 
-      {/* Sidebar */}
-      <aside
-        id="admin-sidebar"
-        aria-label="Admin navigation"
-        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-300 ease-in-out flex flex-col 
+			{/* Sidebar */}
+			<aside
+				id="admin-sidebar"
+				aria-label="Admin navigation"
+				className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-300 ease-in-out flex flex-col 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
           ${isCollapsed ? "lg:w-20" : "lg:w-64"}
           w-64
         `}
-      >
-        {/* Logo Area */}
-        <div className={`flex items-center h-16 bg-white border-b border-gray-200 transition-all duration-300 ${isCollapsed ? "justify-center px-0" : "justify-between px-6"}`}>
-          {!isCollapsed ? (
-            <Link href="/admin" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="font-bold text-white">D</span>
-              </div>
-              <span className="text-lg font-bold tracking-tight text-gray-900 whitespace-nowrap">DSN Admin</span>
-            </Link>
-          ) : (
-            <Link href="/admin" className="flex items-center justify-center w-full">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
-                <span className="font-bold text-white">D</span>
-              </div>
-            </Link>
-          )}
-          
-          {/* Mobile Close Button */}
-          <button
-            type="button"
-            className="lg:hidden text-gray-500 hover:text-gray-900 p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-            onClick={() => setSidebarOpen(false)}
-            aria-label="Close menu"
-          >
-            <svg aria-hidden="true" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+			>
+				{/* Logo Area */}
+				<div
+					className={`flex items-center h-16 bg-white border-b border-gray-200 transition-all duration-300 ${isCollapsed ? "justify-center px-0" : "justify-between px-6"}`}
+				>
+					{!isCollapsed ? (
+						<Link href="/admin" className="flex items-center gap-2">
+							<div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
+								<span className="font-bold text-white">D</span>
+							</div>
+							<span className="text-lg font-bold tracking-tight text-gray-900 whitespace-nowrap">
+								DSN Admin
+							</span>
+						</Link>
+					) : (
+						<Link
+							href="/admin"
+							className="flex items-center justify-center w-full"
+						>
+							<div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
+								<span className="font-bold text-white">D</span>
+							</div>
+						</Link>
+					)}
 
-          {/* Desktop Collapse Button */}
-          {!isCollapsed && (
-            <button
-              type="button"
-              onClick={toggleSidebar}
-              className="hidden lg:flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-600 rounded hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-              title="Collapse Sidebar"
-              aria-label="Collapse sidebar"
-            >
-              <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-              </svg>
-            </button>
-          )}
-        </div>
+					{/* Mobile Close Button */}
+					<button
+						type="button"
+						className="lg:hidden text-gray-500 hover:text-gray-900 p-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+						onClick={() => setSidebarOpen(false)}
+						aria-label="Close menu"
+					>
+						<svg
+							aria-hidden="true"
+							className="w-6 h-6"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M6 18L18 6M6 6l12 12"
+							/>
+						</svg>
+					</button>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto overflow-x-hidden">
-          {navigation.map((item) => {
-            // Fix: Don't highlight "Blog Posts" when on "Create Post" page
-            const isActive = item.href === "/admin/blog"
-              ? pathname === "/admin/blog" || (pathname.startsWith("/admin/blog/") && pathname !== "/admin/blog/new")
-              : pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+					{/* Desktop Collapse Button */}
+					{!isCollapsed && (
+						<button
+							type="button"
+							onClick={toggleSidebar}
+							className="hidden lg:flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-600 rounded hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+							title="Collapse Sidebar"
+							aria-label="Collapse sidebar"
+						>
+							<svg
+								aria-hidden="true"
+								className="w-4 h-4"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+								/>
+							</svg>
+						</button>
+					)}
+				</div>
 
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
-                  isActive
-                    ? "bg-accent text-white shadow-md shadow-accent-200"
-                    : "text-gray-600 hover:bg-accent-50 hover:text-accent-700"
-                } ${isCollapsed ? "justify-center" : ""}`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                {isCollapsed ? (
-                  <SidebarTooltip content={item.name}>
-                    <item.icon
-                      className={`w-5 h-5 transition-colors flex-shrink-0 ${
-                        isActive ? "text-white" : "text-gray-400 group-hover:text-accent"
-                      }`}
-                    />
-                  </SidebarTooltip>
-                ) : (
-                  <>
-                    <item.icon
-                      className={`w-5 h-5 transition-colors flex-shrink-0 mr-3 ${
-                        isActive ? "text-white" : "text-gray-400 group-hover:text-accent"
-                      }`}
-                    />
-                    <span className="font-medium">{item.name}</span>
-                  </>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
+				{/* Navigation */}
+				<nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto overflow-x-hidden">
+					{navigation.map((item) => {
+						// Fix: Don't highlight "Blog Posts" when on "Create Post" page
+						const isActive =
+							item.href === "/admin/blog"
+								? pathname === "/admin/blog" ||
+									(pathname.startsWith("/admin/blog/") &&
+										pathname !== "/admin/blog/new")
+								: pathname === item.href ||
+									(item.href !== "/admin" && pathname.startsWith(item.href));
 
-        {/* User Profile & Logout */}
-        <div className={`p-4 border-t border-gray-200 bg-white transition-all duration-300 ${isCollapsed ? "items-center" : ""}`}>
-          {!isCollapsed ? (
-            <>
-              <div className="flex items-center gap-3 mb-4 px-2">
-                <div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center text-sm font-medium text-accent-700 flex-shrink-0">
-                  {user?.email?.[0].toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {user?.email?.split('@')[0]}
-                  </p>
-                  <p className="text-xs text-gray-500 truncate">
-                    Administrator
-                  </p>
-                </div>
-              </div>
-              
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors border border-gray-200 hover:border-red-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-              >
-                <LogoutIcon className="w-4 h-4 mr-2" />
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <div className="flex flex-col items-center gap-4">
-              <SidebarTooltip content={user?.email || "User"}>
-                <div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center text-sm font-medium text-accent-700 cursor-pointer">
-                  {user?.email?.[0].toUpperCase()}
-                </div>
-              </SidebarTooltip>
-              <SidebarTooltip content="Sign Out">
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                  aria-label="Sign out"
-                >
-                  <LogoutIcon className="w-5 h-5" />
-                </button>
-              </SidebarTooltip>
-              <SidebarTooltip content="Expand Sidebar">
-                <button
-                  type="button"
-                  onClick={toggleSidebar}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-                  aria-label="Expand sidebar"
-                >
-                  <svg aria-hidden="true" className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </SidebarTooltip>
-            </div>
-          )}
-        </div>
-      </aside>
+						return (
+							<Link
+								key={item.name}
+								href={item.href}
+								className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 group whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+									isActive
+										? "bg-accent text-white shadow-md shadow-accent-200"
+										: "text-gray-600 hover:bg-accent-50 hover:text-accent-700"
+								} ${isCollapsed ? "justify-center" : ""}`}
+								onClick={() => setSidebarOpen(false)}
+							>
+								{isCollapsed ? (
+									<SidebarTooltip content={item.name}>
+										<item.icon
+											className={`w-5 h-5 transition-colors flex-shrink-0 ${
+												isActive
+													? "text-white"
+													: "text-gray-400 group-hover:text-accent"
+											}`}
+										/>
+									</SidebarTooltip>
+								) : (
+									<>
+										<item.icon
+											className={`w-5 h-5 transition-colors flex-shrink-0 mr-3 ${
+												isActive
+													? "text-white"
+													: "text-gray-400 group-hover:text-accent"
+											}`}
+										/>
+										<span className="font-medium">{item.name}</span>
+									</>
+								)}
+							</Link>
+						);
+					})}
+				</nav>
 
-      {/* Main content */}
-      <div className={`transition-all duration-300 ease-in-out flex flex-col min-h-screen ${isCollapsed ? "lg:pl-20" : "lg:pl-64"}`}>
-        {/* Top bar */}
-        <header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 bg-white/80 backdrop-blur-md border-b border-gray-200">
-          <div className="flex items-center gap-3 min-w-0">
-            <button
-              type="button"
-              className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-              onClick={() => setSidebarOpen(true)}
-              aria-expanded={sidebarOpen}
-              aria-controls="admin-sidebar"
-              aria-label="Open menu"
-            >
-              <svg aria-hidden="true" className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-            <p className="text-lg font-semibold text-gray-900 truncate m-0">{pageTitle}</p>
-          </div>
+				{/* User Profile & Logout */}
+				<div
+					className={`p-4 border-t border-gray-200 bg-white transition-all duration-300 ${isCollapsed ? "items-center" : ""}`}
+				>
+					{!isCollapsed ? (
+						<>
+							<div className="flex items-center gap-3 mb-4 px-2">
+								<div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center text-sm font-medium text-accent-700 flex-shrink-0">
+									{user?.email?.[0].toUpperCase()}
+								</div>
+								<div className="flex-1 min-w-0">
+									<p className="text-sm font-medium text-gray-900 truncate">
+										{user?.email?.split("@")[0]}
+									</p>
+									<p className="text-xs text-gray-500 truncate">
+										Administrator
+									</p>
+								</div>
+							</div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <Link
-              href="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-primary px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-            >
-              <svg aria-hidden="true" className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-              <span className="hidden sm:inline">View site</span>
-            </Link>
-          </div>
-        </header>
+							<button
+								type="button"
+								onClick={handleLogout}
+								className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors border border-gray-200 hover:border-red-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+							>
+								<LogoutIcon className="w-4 h-4 mr-2" />
+								Sign Out
+							</button>
+						</>
+					) : (
+						<div className="flex flex-col items-center gap-4">
+							<SidebarTooltip content={user?.email || "User"}>
+								<div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center text-sm font-medium text-accent-700 cursor-pointer">
+									{user?.email?.[0].toUpperCase()}
+								</div>
+							</SidebarTooltip>
+							<SidebarTooltip content="Sign Out">
+								<button
+									type="button"
+									onClick={handleLogout}
+									className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+									aria-label="Sign out"
+								>
+									<LogoutIcon className="w-5 h-5" />
+								</button>
+							</SidebarTooltip>
+							<SidebarTooltip content="Expand Sidebar">
+								<button
+									type="button"
+									onClick={toggleSidebar}
+									className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+									aria-label="Expand sidebar"
+								>
+									<svg
+										aria-hidden="true"
+										className="w-5 h-5"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M13 5l7 7-7 7M5 5l7 7-7 7"
+										/>
+									</svg>
+								</button>
+							</SidebarTooltip>
+						</div>
+					)}
+				</div>
+			</aside>
 
-        {/* Page content */}
-        <main id="admin-main" className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">{children}</main>
-      </div>
-    </div>
-  );
+			{/* Main content */}
+			<div
+				className={`transition-all duration-300 ease-in-out flex flex-col min-h-screen ${isCollapsed ? "lg:pl-20" : "lg:pl-64"}`}
+			>
+				{/* Top bar */}
+				<header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 bg-white/80 backdrop-blur-md border-b border-gray-200">
+					<div className="flex items-center gap-3 min-w-0">
+						<button
+							type="button"
+							className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+							onClick={() => setSidebarOpen(true)}
+							aria-expanded={sidebarOpen}
+							aria-controls="admin-sidebar"
+							aria-label="Open menu"
+						>
+							<svg
+								aria-hidden="true"
+								className="w-6 h-6"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M4 6h16M4 12h16M4 18h16"
+								/>
+							</svg>
+						</button>
+						<p className="text-lg font-semibold text-gray-900 truncate m-0">
+							{pageTitle}
+						</p>
+					</div>
+
+					<div className="flex items-center gap-2 shrink-0">
+						<Link
+							href="/"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-primary px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+						>
+							<svg
+								aria-hidden="true"
+								className="w-4 h-4"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+								/>
+							</svg>
+							<span className="hidden sm:inline">View site</span>
+						</Link>
+					</div>
+				</header>
+
+				{/* Page content */}
+				<main
+					id="admin-main"
+					className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto"
+				>
+					{children}
+				</main>
+			</div>
+		</div>
+	);
 }
 
 // Icons
 function DashboardIcon({ className }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-    </svg>
-  );
+	return (
+		<svg
+			aria-hidden="true"
+			className={className}
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth={2}
+				d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+			/>
+		</svg>
+	);
 }
 
 function AnalyticsIcon({ className }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-    </svg>
-  );
+	return (
+		<svg
+			aria-hidden="true"
+			className={className}
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth={2}
+				d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+			/>
+		</svg>
+	);
 }
 
 function BlogIcon({ className }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-    </svg>
-  );
+	return (
+		<svg
+			aria-hidden="true"
+			className={className}
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth={2}
+				d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+			/>
+		</svg>
+	);
 }
 
 function CreateIcon({ className }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-    </svg>
-  );
+	return (
+		<svg
+			aria-hidden="true"
+			className={className}
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth={2}
+				d="M12 4v16m8-8H4"
+			/>
+		</svg>
+	);
 }
 
 function ContactsIcon({ className }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-    </svg>
-  );
+	return (
+		<svg
+			aria-hidden="true"
+			className={className}
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth={2}
+				d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+			/>
+		</svg>
+	);
 }
 
 function LogoutIcon({ className }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-    </svg>
-  );
+	return (
+		<svg
+			aria-hidden="true"
+			className={className}
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth={2}
+				d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+			/>
+		</svg>
+	);
 }

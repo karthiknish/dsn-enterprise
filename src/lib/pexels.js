@@ -1,80 +1,45 @@
-const PEXELS_API_KEY = process.env.NEXT_PUBLIC_PEXELS_API_KEY;
-const PEXELS_API_URL = "https://api.pexels.com/v1";
+async function fetchPexels(params) {
+	const search = new URLSearchParams(params);
+	const response = await fetch(`/api/pexels?${search}`);
+
+	const data = await response.json().catch(() => ({}));
+
+	if (!response.ok) {
+		throw new Error(data.error || `Failed to load photos (${response.status})`);
+	}
+
+	return data;
+}
 
 /**
- * Search for photos on Pexels
- * @param {string} query - Search query
- * @param {number} perPage - Number of results per page (default: 15)
- * @param {number} page - Page number (default: 1)
- * @returns {Promise<Object>} Pexels search response
+ * Search for photos on Pexels (via server proxy)
  */
 export async function searchPhotos(query, perPage = 15, page = 1) {
-  if (!PEXELS_API_KEY) {
-    throw new Error("Pexels API key is not configured");
-  }
-
-  const response = await fetch(
-    `${PEXELS_API_URL}/search?query=${encodeURIComponent(query)}&per_page=${perPage}&page=${page}`,
-    {
-      headers: {
-        Authorization: PEXELS_API_KEY,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(`Pexels API error: ${response.status}`);
-  }
-
-  return response.json();
+	return fetchPexels({
+		type: "search",
+		query,
+		per_page: String(perPage),
+		page: String(page),
+	});
 }
 
 /**
- * Get curated photos from Pexels
- * @param {number} perPage - Number of results per page (default: 15)
- * @param {number} page - Page number (default: 1)
- * @returns {Promise<Object>} Pexels curated response
+ * Get curated photos from Pexels (via server proxy)
  */
 export async function getCuratedPhotos(perPage = 15, page = 1) {
-  if (!PEXELS_API_KEY) {
-    throw new Error("Pexels API key is not configured");
-  }
-
-  const response = await fetch(
-    `${PEXELS_API_URL}/curated?per_page=${perPage}&page=${page}`,
-    {
-      headers: {
-        Authorization: PEXELS_API_KEY,
-      },
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error(`Pexels API error: ${response.status}`);
-  }
-
-  return response.json();
+	return fetchPexels({
+		type: "curated",
+		per_page: String(perPage),
+		page: String(page),
+	});
 }
 
 /**
- * Get a specific photo by ID
- * @param {number} id - Photo ID
- * @returns {Promise<Object>} Pexels photo object
+ * Get a specific photo by ID (via server proxy)
  */
 export async function getPhoto(id) {
-  if (!PEXELS_API_KEY) {
-    throw new Error("Pexels API key is not configured");
-  }
-
-  const response = await fetch(`${PEXELS_API_URL}/photos/${id}`, {
-    headers: {
-      Authorization: PEXELS_API_KEY,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Pexels API error: ${response.status}`);
-  }
-
-  return response.json();
+	return fetchPexels({
+		type: "photo",
+		id: String(id),
+	});
 }

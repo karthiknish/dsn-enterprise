@@ -1,128 +1,135 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import { Oswald } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { Geist, Geist_Mono, Oswald } from "next/font/google";
 import GoogleAnalytics from "@/components/Analytics";
 import MotionProvider from "@/components/MotionProvider";
-import { SITE_URL, getSiteUrl } from "@/lib/site";
+import { getSiteUrl, SITE_URL } from "@/lib/site";
 import "./globals.css";
-import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
+import Header from "../components/layout/Header";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+	variable: "--font-geist-sans",
+	subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+	variable: "--font-geist-mono",
+	subsets: ["latin"],
 });
 
 const oswald = Oswald({
-  variable: "--font-oswald",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+	variable: "--font-oswald",
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "DSN Enterprises - Precision Gauges & Measuring Instruments",
-    template: "%s | DSN Enterprises",
-  },
-  description:
-    "DSN Enterprises is a leading manufacturer and supplier of high-precision gauges and measuring instruments for industrial applications.",
-  icons: {
-    icon: "/favicon.ico",
-  },
-  openGraph: {
-    title: "DSN Enterprises - Precision Gauges & Measuring Instruments",
-    description: "Leading manufacturer of high-precision gauges including plain gauges, thread gauges, API gauges for oil & gas industry.",
-    url: "/",
-    siteName: "DSN Enterprises",
-    locale: "en_IN",
-    type: "website",
-    images: [
-      {
-        url: "/images/featured.png",
-        width: 960,
-        height: 640,
-        alt: "DSN Enterprises - Precision Gauges",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "DSN Enterprises - Precision Gauges",
-    description: "Leading manufacturer of high-precision gauges and measuring instruments.",
-    images: ["/images/featured.png"],
-  },
-  alternates: {
-    canonical: "/",
-  },
+	metadataBase: new URL(SITE_URL),
+	title: {
+		default: "DSN Enterprises - Precision Gauges & Measuring Instruments",
+		template: "%s | DSN Enterprises",
+	},
+	description:
+		"DSN Enterprises is a leading manufacturer and supplier of high-precision gauges and measuring instruments for industrial applications.",
+	icons: {
+		icon: "/favicon.ico",
+	},
+	openGraph: {
+		title: "DSN Enterprises - Precision Gauges & Measuring Instruments",
+		description:
+			"Leading manufacturer of high-precision gauges including plain gauges, thread gauges, API gauges for oil & gas industry.",
+		url: "/",
+		siteName: "DSN Enterprises",
+		locale: "en_IN",
+		type: "website",
+		images: [
+			{
+				url: "/images/featured.png",
+				width: 960,
+				height: 640,
+				alt: "DSN Enterprises - Precision Gauges",
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "DSN Enterprises - Precision Gauges",
+		description:
+			"Leading manufacturer of high-precision gauges and measuring instruments.",
+		images: ["/images/featured.png"],
+	},
+	alternates: {
+		canonical: "/",
+	},
 };
 
 const organizationJsonLd = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "DSN Enterprises",
-  url: SITE_URL,
-  logo: getSiteUrl("/images/logo.png"),
-  description:
-    "Leading manufacturer and supplier of high-precision gauges and measuring instruments.",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Coimbatore",
-    addressRegion: "Tamil Nadu",
-    addressCountry: "India",
-  },
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+91-9363122005",
-    contactType: "customer service",
-  },
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	name: "DSN Enterprises",
+	url: SITE_URL,
+	logo: getSiteUrl("/images/logo.png"),
+	description:
+		"Leading manufacturer and supplier of high-precision gauges and measuring instruments.",
+	address: {
+		"@type": "PostalAddress",
+		addressLocality: "Coimbatore",
+		addressRegion: "Tamil Nadu",
+		addressCountry: "India",
+	},
+	contactPoint: {
+		"@type": "ContactPoint",
+		telephone: "+91-9363122005",
+		contactType: "customer service",
+	},
 });
 
 const websiteJsonLd = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "DSN Enterprises",
-  url: SITE_URL,
-  potentialAction: {
-    "@type": "SearchAction",
-    target: getSiteUrl("/blog?q={search_term_string}"),
-    "query-input": "required name=search_term_string",
-  },
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	name: "DSN Enterprises",
+	url: SITE_URL,
+	potentialAction: {
+		"@type": "SearchAction",
+		target: getSiteUrl("/blog?q={search_term_string}"),
+		"query-input": "required name=search_term_string",
+	},
 });
 
 export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <head>
-        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: organizationJsonLd }} />
-        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data requires dangerouslySetInnerHTML */}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: websiteJsonLd }} />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}
-      >
-        <MotionProvider>
-          <a
-            href="#site-main"
-            className="pointer-events-none fixed left-4 top-0 z-[100] -translate-y-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-lg opacity-0 transition focus:pointer-events-auto focus:translate-y-20 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
-          >
-            Skip to main content
-          </a>
-          <Header />
-          <main id="site-main" className="pt-16">
-            {children}
-          </main>
-          <Footer />
-        </MotionProvider>
-        <GoogleAnalytics />
-        <Analytics />
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en">
+			<head>
+				<script
+					type="application/ld+json"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+					dangerouslySetInnerHTML={{ __html: organizationJsonLd }}
+				/>
+				<script
+					type="application/ld+json"
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
+					dangerouslySetInnerHTML={{ __html: websiteJsonLd }}
+				/>
+			</head>
+			<body
+				className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}
+			>
+				<MotionProvider>
+					<a
+						href="#site-main"
+						className="pointer-events-none fixed left-4 top-0 z-[100] -translate-y-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-lg opacity-0 transition focus:pointer-events-auto focus:translate-y-20 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
+					>
+						Skip to main content
+					</a>
+					<Header />
+					<main id="site-main" className="pt-16">
+						{children}
+					</main>
+					<Footer />
+				</MotionProvider>
+				<GoogleAnalytics />
+				<Analytics />
+			</body>
+		</html>
+	);
 }

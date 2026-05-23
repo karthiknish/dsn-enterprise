@@ -1,42 +1,42 @@
 "use client";
 
-import Script from "next/script";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 import { Suspense, useEffect } from "react";
 
 const GA_MEASUREMENT_ID = "GT-TQKJ52Q3";
 const FB_PIXEL_ID = "1391622058130598";
 
 function AnalyticsContent() {
-  const pathname = usePathname();
+	const pathname = usePathname();
 
-  useEffect(() => {
-    if (pathname && window.gtag) {
-      window.gtag("config", GA_MEASUREMENT_ID, {
-        page_path: pathname,
-      });
-    }
-  }, [pathname]);
+	useEffect(() => {
+		if (pathname && window.gtag) {
+			window.gtag("config", GA_MEASUREMENT_ID, {
+				page_path: pathname,
+			});
+		}
+	}, [pathname]);
 
-  useEffect(() => {
-    if (pathname && window.fbq) {
-      window.fbq("track", "PageView");
-    }
-  }, [pathname]);
+	useEffect(() => {
+		if (pathname && window.fbq) {
+			window.fbq("track", "PageView");
+		}
+	}, [pathname]);
 
-  return null;
+	return null;
 }
 
 export default function GoogleAnalytics() {
-  return (
-    <>
-      {/* Google tag (gtag.js) */}
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
+	return (
+		<>
+			{/* Google tag (gtag.js) */}
+			<Script
+				src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+				strategy="afterInteractive"
+			/>
+			<Script id="google-analytics" strategy="afterInteractive">
+				{`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
@@ -57,11 +57,11 @@ export default function GoogleAnalytics() {
             'ad_personalization': 'granted'
           });
         `}
-      </Script>
+			</Script>
 
-      {/* Meta Pixel Code */}
-      <Script id="facebook-pixel" strategy="afterInteractive">
-        {`
+			{/* Meta Pixel Code */}
+			<Script id="facebook-pixel" strategy="afterInteractive">
+				{`
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
           n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -73,21 +73,21 @@ export default function GoogleAnalytics() {
           fbq('init', '${FB_PIXEL_ID}');
           fbq('track', 'PageView');
         `}
-      </Script>
-      <noscript>
-        {/* biome-ignore lint/performance/noImgElement: Meta Pixel noscript fallback requires a plain img beacon. */}
-        <img
-          height="1"
-          width="1"
-          style={{ display: "none" }}
-          src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
-          alt=""
-        />
-      </noscript>
+			</Script>
+			<noscript>
+				{/* biome-ignore lint/performance/noImgElement: Meta Pixel noscript fallback requires a plain img beacon. */}
+				<img
+					height="1"
+					width="1"
+					style={{ display: "none" }}
+					src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
+					alt=""
+				/>
+			</noscript>
 
-      <Suspense fallback={null}>
-        <AnalyticsContent />
-      </Suspense>
-    </>
-  );
+			<Suspense fallback={null}>
+				<AnalyticsContent />
+			</Suspense>
+		</>
+	);
 }

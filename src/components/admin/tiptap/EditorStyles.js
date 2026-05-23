@@ -1,8 +1,8 @@
 "use client";
 
 export function EditorStyles() {
-  return (
-    <style jsx global>{`
+	return (
+		<style jsx global>{`
       /* Table styles for TipTap */
       .ProseMirror table {
         border-collapse: collapse;
@@ -51,5 +51,5 @@ export function EditorStyles() {
         animation: fadeIn 0.15s ease-out;
       }
     `}</style>
-  );
+	);
 }

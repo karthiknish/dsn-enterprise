@@ -2,199 +2,201 @@
 
 import Link from "next/link";
 import {
-  FaPhone,
-  FaEnvelope,
-  FaMapMarkerAlt,
-  FaLinkedin,
+	FaEnvelope,
+	FaLinkedin,
+	FaMapMarkerAlt,
+	FaPhone,
 } from "react-icons/fa";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const Footer = () => {
-  const { trackPhoneClick, trackEmailClick } = useGoogleAdsTracking();
+	const { trackPhoneClick, trackEmailClick } = useGoogleAdsTracking();
 
-  return (
-    <footer className="bg-primary text-white pt-12 pb-6">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">DSN Enterprises</h3>
-            <p className="mb-4">
-              Leading manufacturer and supplier of precision gauges and
-              measuring instruments in India.
-            </p>
-            <div className="flex space-x-4">
-              <a
-                href="https://www.linkedin.com/company/dsn-enterprises/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white hover:text-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
-                aria-label="DSN Enterprises on LinkedIn"
-              >
-                <FaLinkedin size={20} aria-hidden />
-              </a>
-            </div>
-          </div>
+	return (
+		<footer className="bg-primary text-white pt-12 pb-6">
+			<div className="container mx-auto px-4">
+				<div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+					{/* Company Info */}
+					<div>
+						<h3 className="text-xl font-bold mb-4">DSN Enterprises</h3>
+						<p className="mb-4">
+							Leading manufacturer and supplier of precision gauges and
+							measuring instruments in India.
+						</p>
+						<div className="flex space-x-4">
+							<a
+								href="https://www.linkedin.com/company/dsn-enterprises/"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-white hover:text-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
+								aria-label="DSN Enterprises on LinkedIn"
+							>
+								<FaLinkedin size={20} aria-hidden />
+							</a>
+						</div>
+					</div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="hover:text-secondary transition-colors"
-                >
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/industries"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Industries
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/quality"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Quality Assurance
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/calibration"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Calibration
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/blog"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
+					{/* Quick Links */}
+					<div>
+						<h3 className="text-xl font-bold mb-4">Quick Links</h3>
+						<ul className="space-y-2">
+							<li>
+								<Link
+									href="/"
+									className="hover:text-secondary transition-colors"
+								>
+									Home
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/about"
+									className="hover:text-secondary transition-colors"
+								>
+									About Us
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/industries"
+									className="hover:text-secondary transition-colors"
+								>
+									Industries
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/quality"
+									className="hover:text-secondary transition-colors"
+								>
+									Quality Assurance
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/calibration"
+									className="hover:text-secondary transition-colors"
+								>
+									Calibration
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/blog"
+									className="hover:text-secondary transition-colors"
+								>
+									Blog
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/contact"
+									className="hover:text-secondary transition-colors"
+								>
+									Contact
+								</Link>
+							</li>
+						</ul>
+					</div>
 
-          {/* Products */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">Our Products</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/products/thread-gauges"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Thread Gauges
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products/plain-gauges"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Plain Gauges
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products/api-gauges"
-                  className="hover:text-secondary transition-colors"
-                >
-                  API Gauges
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products/special-gauges"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Special Gauges
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/resources"
-                  className="hover:text-secondary transition-colors"
-                >
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/faq"
-                  className="hover:text-secondary transition-colors"
-                >
-                  FAQ
-                </Link>
-              </li>
-            </ul>
-          </div>
+					{/* Products */}
+					<div>
+						<h3 className="text-xl font-bold mb-4">Our Products</h3>
+						<ul className="space-y-2">
+							<li>
+								<Link
+									href="/products/thread-gauges"
+									className="hover:text-secondary transition-colors"
+								>
+									Thread Gauges
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/products/plain-gauges"
+									className="hover:text-secondary transition-colors"
+								>
+									Plain Gauges
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/products/api-gauges"
+									className="hover:text-secondary transition-colors"
+								>
+									API Gauges
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/products/special-gauges"
+									className="hover:text-secondary transition-colors"
+								>
+									Special Gauges
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/resources"
+									className="hover:text-secondary transition-colors"
+								>
+									Resources
+								</Link>
+							</li>
+							<li>
+								<Link
+									href="/faq"
+									className="hover:text-secondary transition-colors"
+								>
+									FAQ
+								</Link>
+							</li>
+						</ul>
+					</div>
 
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start">
-                <FaMapMarkerAlt className="mt-1 mr-3 text-secondary" />
-                <span>Coimbatore, Tamil Nadu, India</span>
-              </li>
-              <li className="flex items-center">
-                <FaPhone className="mr-3 text-secondary" />
-                <span>
-                  <a 
-                    href="tel:+919363122005"
-                    onClick={() => trackPhoneClick('+919363122005')}
-                  >+91 9363122005</a>
-                </span>
-              </li>
-              <li className="flex items-center">
-                <FaEnvelope className="mr-3 text-secondary" />
-                <span>
-                  <a 
-                    href="mailto:microfin2001@gmail.com"
-                    onClick={() => trackEmailClick('microfin2001@gmail.com')}
-                  >
-                    microfin2001@gmail.com
-                  </a>
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
+					{/* Contact Info */}
+					<div>
+						<h3 className="text-xl font-bold mb-4">Contact Us</h3>
+						<ul className="space-y-3">
+							<li className="flex items-start">
+								<FaMapMarkerAlt className="mt-1 mr-3 text-secondary" />
+								<span>Coimbatore, Tamil Nadu, India</span>
+							</li>
+							<li className="flex items-center">
+								<FaPhone className="mr-3 text-secondary" />
+								<span>
+									<a
+										href="tel:+919363122005"
+										onClick={() => trackPhoneClick("+919363122005")}
+									>
+										+91 9363122005
+									</a>
+								</span>
+							</li>
+							<li className="flex items-center">
+								<FaEnvelope className="mr-3 text-secondary" />
+								<span>
+									<a
+										href="mailto:microfin2001@gmail.com"
+										onClick={() => trackEmailClick("microfin2001@gmail.com")}
+									>
+										microfin2001@gmail.com
+									</a>
+								</span>
+							</li>
+						</ul>
+					</div>
+				</div>
 
-        <div className="border-t border-gray-800 mt-8 pt-6 text-center">
-          <p>
-            &copy; {new Date().getFullYear()} DSN Enterprises. All rights
-            reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
+				<div className="border-t border-gray-800 mt-8 pt-6 text-center">
+					<p>
+						&copy; {new Date().getFullYear()} DSN Enterprises. All rights
+						reserved.
+					</p>
+				</div>
+			</div>
+		</footer>
+	);
 };
 
 export default Footer;
