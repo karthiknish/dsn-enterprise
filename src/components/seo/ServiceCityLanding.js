@@ -78,12 +78,12 @@ export default function ServiceCityLanding({
 						<p className="text-accent-200 text-sm font-medium uppercase tracking-wide mb-2">
 							Gauge services · Tamil Nadu
 						</p>
-						<h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-oswald leading-tight">
+						<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald leading-tight">
 							{pageData.serviceName} in {pageData.cityName}
 						</h1>
 						<p className="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl">
 							{service?.description || "Professional gauge services"} for{" "}
-							{pageData.cityName} plants—run from our Coimbatore facility with
+							{pageData.cityName} plants,run from our Coimbatore facility with
 							audit-ready documentation.
 						</p>
 						<div className="flex flex-wrap gap-3">
@@ -108,7 +108,7 @@ export default function ServiceCityLanding({
 				<div className="container mx-auto px-4">
 					<div className="max-w-4xl mx-auto space-y-8">
 						<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
-							<h2 className="text-2xl font-bold text-primary mb-4">
+							<h2 className="text-2xl font-semibold text-primary mb-4">
 								{pageData.serviceName} for {pageData.cityName} industries
 							</h2>
 							<p className="text-gray-700 mb-4 leading-relaxed">
@@ -130,7 +130,7 @@ export default function ServiceCityLanding({
 									</span>
 								))}
 							</div>
-							<p className="text-sm text-gray-600 border-l-4 border-accent pl-4">
+							<p className="text-sm text-gray-600 bg-accent/5 rounded-lg px-4 py-3">
 								<strong className="text-gray-900">Service coverage:</strong>{" "}
 								{cityProfile.logistics}
 							</p>
@@ -138,7 +138,7 @@ export default function ServiceCityLanding({
 
 						{serviceProfile && (
 							<div className="bg-accent/10 rounded-xl p-8 border border-accent/20">
-								<h2 className="text-xl font-bold text-primary mb-4">
+								<h2 className="text-xl font-semibold text-primary mb-4">
 									Our process
 								</h2>
 								<ol className="list-decimal list-inside space-y-2 text-gray-700">
@@ -187,7 +187,7 @@ export default function ServiceCityLanding({
 						</div>
 
 						<div className="bg-gradient-to-br from-primary to-primary-dark rounded-xl p-8 text-white">
-							<h2 className="text-xl font-bold mb-6">Why DSN Enterprises</h2>
+							<h2 className="text-xl font-semibold mb-6">Why DSN Enterprises</h2>
 							<div className="grid md:grid-cols-2 gap-6">
 								{[
 									[
@@ -210,7 +210,7 @@ export default function ServiceCityLanding({
 						</div>
 
 						<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
-							<h2 className="text-2xl font-bold text-primary mb-6">
+							<h2 className="text-2xl font-semibold text-primary mb-6">
 								Frequently asked questions
 							</h2>
 							<div className="space-y-6">
@@ -231,11 +231,11 @@ export default function ServiceCityLanding({
 						</div>
 
 						<div className="bg-secondary-light rounded-xl p-8 text-center border border-primary/10">
-							<h2 className="text-2xl font-bold text-primary mb-3">
+							<h2 className="text-2xl font-semibold text-primary mb-3">
 								Book {pageData.serviceName} in {pageData.cityName}
 							</h2>
 							<p className="text-gray-700 mb-6">
-								Send your gauge list or drawing—we confirm scope, pickup, and
+								Send your gauge list or drawing,we confirm scope, pickup, and
 								lead time.
 							</p>
 							<div className="flex flex-wrap justify-center gap-4">
@@ -255,19 +255,23 @@ export default function ServiceCityLanding({
 						</div>
 
 						<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
-							<h2 className="text-xl font-bold text-primary mb-4">
+							<h2 className="text-xl font-semibold text-primary mb-4">
 								Other service locations
 							</h2>
 							<div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-								{CITIES.filter((c) => c.slug !== citySlug).map((otherCity) => (
-									<Link
-										key={otherCity.slug}
-										href={`/services/${serviceSlug}-${otherCity.slug}`}
-										className="text-accent hover:text-accent-700 hover:underline"
-									>
-										{otherCity.name}
-									</Link>
-								))}
+								{CITIES.flatMap((c) =>
+									c.slug !== citySlug
+										? [
+												<Link
+													key={c.slug}
+													href={`/services/${serviceSlug}-${c.slug}`}
+													className="text-accent hover:text-accent-700 hover:underline"
+												>
+													{c.name}
+												</Link>,
+											]
+										: [],
+								)}
 							</div>
 						</div>
 					</div>

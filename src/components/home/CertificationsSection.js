@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
 import { FaCertificate } from "react-icons/fa";
 import SectionHeader from "./SectionHeader";
@@ -47,7 +47,7 @@ const CertificationsSection = () => {
 					{certificates.map((certificate, index) => {
 						const Icon = certificate.icon;
 						return (
-							<motion.article
+							<m.article
 								key={certificate.id}
 								className="group bg-gray-50 rounded-2xl overflow-hidden border border-gray-200/80 hover:border-accent/20 hover:shadow-lg transition-all duration-300"
 								initial={{ opacity: 0, y: 24 }}
@@ -83,7 +83,7 @@ const CertificationsSection = () => {
 										<span className="text-accent mt-0.5">
 											<Icon className="text-lg" aria-hidden />
 										</span>
-										<h3 className="text-lg font-bold text-gray-900 leading-snug">
+										<h3 className="text-lg font-semibold text-gray-900 leading-snug">
 											{certificate.name}
 										</h3>
 									</div>
@@ -91,12 +91,12 @@ const CertificationsSection = () => {
 										{certificate.description}
 									</p>
 								</div>
-							</motion.article>
+							</m.article>
 						);
 					})}
 				</div>
 
-				<motion.p
+				<m.p
 					className="mt-12 text-center text-gray-600 italic max-w-3xl mx-auto text-sm leading-relaxed"
 					initial={{ opacity: 0 }}
 					whileInView={{ opacity: 1 }}
@@ -106,7 +106,7 @@ const CertificationsSection = () => {
 					Our certifications reflect our dedication to maintaining the highest
 					standards in manufacturing, calibration, and quality control
 					processes.
-				</motion.p>
+				</m.p>
 			</div>
 		</section>
 	);

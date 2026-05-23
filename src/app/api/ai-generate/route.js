@@ -10,15 +10,15 @@ import {
 
 export async function POST(request) {
 	try {
-		const body = await request.json();
-		const { action, topic, keywords, content, instruction, category } = body;
-
 		if (!process.env.GEMINI_API_KEY) {
 			return NextResponse.json(
 				{ success: false, error: "Gemini API key not configured" },
 				{ status: 500 },
 			);
 		}
+
+		const body = await request.json();
+		const { action, topic, keywords, content, instruction, category } = body;
 
 		let result;
 

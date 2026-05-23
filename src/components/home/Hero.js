@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
@@ -18,6 +18,7 @@ const Hero = () => {
 	return (
 		<div className="relative text-white min-h-[calc(100dvh-4rem)] flex items-center overflow-hidden">
 			<video
+				tabIndex={-1}
 				className="absolute inset-0 w-full h-full object-cover scale-105"
 				autoPlay
 				muted
@@ -38,7 +39,7 @@ const Hero = () => {
 
 			<div className="container mx-auto px-4 z-10 py-16 md:py-20 relative">
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-					<motion.div
+					<m.div
 						initial={{ opacity: 0, y: 24 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -50,7 +51,7 @@ const Hero = () => {
 							/>
 							Coimbatore · Precision metrology
 						</p>
-						<h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold mb-6 text-white text-balance leading-[1.1] tracking-tight">
+						<h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-semibold mb-6 text-white text-balance leading-[1.1] tracking-tight">
 							Precision Gauges & Measuring Instruments
 						</h1>
 						<p className="text-lg sm:text-xl mb-8 text-white/90 max-w-lg leading-relaxed">
@@ -74,9 +75,9 @@ const Hero = () => {
 								Contact Us
 							</Link>
 						</div>
-					</motion.div>
+					</m.div>
 
-					<motion.div
+					<m.div
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{
@@ -87,12 +88,12 @@ const Hero = () => {
 						className="hidden lg:block"
 					>
 						<div className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-md p-8 shadow-2xl">
-							<h3 className="text-xl font-bold mb-6 text-white">
+							<h3 className="text-xl font-semibold mb-6 text-white">
 								Industry-Leading Quality
 							</h3>
 							<ul className="space-y-3">
 								{trustPoints.map((point, i) => (
-									<motion.li
+									<m.li
 										key={point}
 										initial={{ opacity: 0, x: 12 }}
 										animate={{ opacity: 1, x: 0 }}
@@ -103,11 +104,11 @@ const Hero = () => {
 											✓
 										</span>
 										<span className="font-medium text-sm">{point}</span>
-									</motion.li>
+									</m.li>
 								))}
 							</ul>
 						</div>
-					</motion.div>
+					</m.div>
 				</div>
 			</div>
 		</div>

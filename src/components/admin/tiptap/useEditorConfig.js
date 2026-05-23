@@ -56,9 +56,13 @@ export function createEditorProps(_isExternalUpdate, _onChange) {
 		handlePaste: (event, view) => {
 			if (!view || !event.clipboardData) return false;
 
-			const images = Array.from(event.clipboardData.items)
-				.map((item) => item.getAsFile())
-				.filter((file) => file?.type.startsWith("image/"));
+			const images = [];
+			for (const item of event.clipboardData.items) {
+				const file = item.getAsFile();
+				if (file?.type.startsWith("image/")) {
+					images.push(file);
+				}
+			}
 
 			if (images.length === 0) return false;
 

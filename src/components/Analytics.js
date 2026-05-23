@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { Suspense, useEffect } from "react";
@@ -75,11 +76,11 @@ export default function GoogleAnalytics() {
         `}
 			</Script>
 			<noscript>
-				{/* biome-ignore lint/performance/noImgElement: Meta Pixel noscript fallback requires a plain img beacon. */}
-				<img
-					height="1"
-					width="1"
-					style={{ display: "none" }}
+				<Image
+					height={1}
+					width={1}
+					unoptimized
+					className="hidden"
 					src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
 					alt=""
 				/>

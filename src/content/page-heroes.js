@@ -32,15 +32,3 @@ export const pageHeroes = {
 			"ACME, buttress, spline, and fully custom profiles manufactured to your drawing—with feasibility review before we cut metal.",
 	},
 };
-
-/** @deprecated Import pageHeroes.productCategoryHeroes instead */
-export const productCategoryHeroes = {
-	plainGauges:
-		"GO/NO-GO plain plug, ring, snap, and setting masters from 1 mm to 250 mm—manufactured in OHNS (W) or carbide with certificates aligned to your tolerance band.",
-	threadGauges:
-		"Thread plug, ring, and setting gauges for Metric, Unified, BSP, NPT, and special forms—matched pairs and progressive designs for production and incoming inspection.",
-	apiGauges:
-		"API 5B and API 7-2 licensed gauges for casing, tubing, line pipe, and rotary shouldered connections—with field-ready packaging and traceable calibration.",
-	specialGauges:
-		"ACME, buttress, spline, and fully custom profiles manufactured to your drawing—with feasibility review before we cut metal.",
-};

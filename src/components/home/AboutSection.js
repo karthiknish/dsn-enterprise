@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,7 +20,7 @@ const AboutSection = () => {
 			/>
 			<div className="container mx-auto px-4 relative">
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-16 items-center">
-					<motion.div
+					<m.div
 						initial={{ opacity: 0, x: -24 }}
 						whileInView={{ opacity: 1, x: 0 }}
 						viewport={{ once: true, margin: "-60px" }}
@@ -30,7 +30,7 @@ const AboutSection = () => {
 						<p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-3">
 							About us
 						</p>
-						<h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 text-balance leading-tight">
+						<h2 className="text-3xl md:text-4xl font-semibold mb-6 text-gray-900 text-balance leading-tight">
 							About DSN Enterprises
 						</h2>
 						<p className="text-lg text-gray-600 mb-5 leading-relaxed">
@@ -45,7 +45,7 @@ const AboutSection = () => {
 						</p>
 						<div className="grid grid-cols-2 gap-4 mb-8">
 							{stats.map((stat, i) => (
-								<motion.div
+								<m.div
 									key={stat.label}
 									initial={{ opacity: 0, y: 12 }}
 									whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ const AboutSection = () => {
 										{stat.value}
 									</p>
 									<p className="text-sm text-gray-600">{stat.label}</p>
-								</motion.div>
+								</m.div>
 							))}
 						</div>
 						<Link
@@ -66,9 +66,9 @@ const AboutSection = () => {
 						>
 							Contact Now
 						</Link>
-					</motion.div>
+					</m.div>
 
-					<motion.div
+					<m.div
 						initial={{ opacity: 0, x: 24 }}
 						whileInView={{ opacity: 1, x: 0 }}
 						viewport={{ once: true, margin: "-60px" }}
@@ -86,7 +86,7 @@ const AboutSection = () => {
 								/>
 							</div>
 							<div className="absolute -bottom-4 -right-2 md:-bottom-6 md:-right-6 bg-primary rounded-xl p-6 shadow-xl max-w-[280px] border border-primary-dark/20">
-								<h3 className="text-lg font-bold text-white mb-2">
+								<h3 className="text-lg font-semibold text-white mb-2">
 									ISO Certified
 								</h3>
 								<p className="text-secondary-light text-sm leading-relaxed">
@@ -96,7 +96,7 @@ const AboutSection = () => {
 								</p>
 							</div>
 						</div>
-					</motion.div>
+					</m.div>
 				</div>
 			</div>
 		</section>

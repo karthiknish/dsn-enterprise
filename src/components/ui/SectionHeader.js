@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export default function SectionHeader({
 	eyebrow,
@@ -12,7 +12,7 @@ export default function SectionHeader({
 	const isCenter = align === "center";
 
 	return (
-		<motion.header
+		<m.header
 			id={id}
 			className={`mb-12 md:mb-14 ${isCenter ? "text-center max-w-2xl mx-auto" : "max-w-prose"}`}
 			initial={{ opacity: 0, y: 16 }}
@@ -25,7 +25,7 @@ export default function SectionHeader({
 					{eyebrow}
 				</p>
 			)}
-			<h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-balance leading-tight">
+			<h2 className="text-3xl md:text-4xl font-semibold text-gray-900 text-balance leading-tight">
 				{title}
 			</h2>
 			{description && (
@@ -38,6 +38,6 @@ export default function SectionHeader({
 					<span className="h-px w-12 bg-accent/40" />
 				</div>
 			)}
-		</motion.header>
+		</m.header>
 	);
 }

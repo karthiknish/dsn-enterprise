@@ -25,7 +25,7 @@ export default function PageCta({
 			<div className="container mx-auto px-4 text-center">
 				<h2
 					id="page-cta-heading"
-					className="text-3xl md:text-4xl font-bold mb-5 text-primary-dark text-balance"
+					className="text-3xl md:text-4xl font-semibold mb-5 text-primary-dark text-balance"
 				>
 					{title}
 				</h2>

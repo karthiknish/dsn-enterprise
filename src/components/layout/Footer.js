@@ -18,12 +18,12 @@ const Footer = () => {
 				<div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
 					{/* Company Info */}
 					<div>
-						<h3 className="text-xl font-bold mb-4">DSN Enterprises</h3>
+						<h3 className="text-xl font-semibold mb-4">DSN Enterprises</h3>
 						<p className="mb-4">
 							Leading manufacturer and supplier of precision gauges and
 							measuring instruments in India.
 						</p>
-						<div className="flex space-x-4">
+						<div className="flex gap-x-4">
 							<a
 								href="https://www.linkedin.com/company/dsn-enterprises/"
 								target="_blank"
@@ -38,7 +38,7 @@ const Footer = () => {
 
 					{/* Quick Links */}
 					<div>
-						<h3 className="text-xl font-bold mb-4">Quick Links</h3>
+						<h3 className="text-xl font-semibold mb-4">Quick Links</h3>
 						<ul className="space-y-2">
 							<li>
 								<Link
@@ -101,7 +101,7 @@ const Footer = () => {
 
 					{/* Products */}
 					<div>
-						<h3 className="text-xl font-bold mb-4">Our Products</h3>
+						<h3 className="text-xl font-semibold mb-4">Our Products</h3>
 						<ul className="space-y-2">
 							<li>
 								<Link
@@ -156,7 +156,7 @@ const Footer = () => {
 
 					{/* Contact Info */}
 					<div>
-						<h3 className="text-xl font-bold mb-4">Contact Us</h3>
+						<h3 className="text-xl font-semibold mb-4">Contact Us</h3>
 						<ul className="space-y-3">
 							<li className="flex items-start">
 								<FaMapMarkerAlt className="mt-1 mr-3 text-secondary" />
@@ -189,7 +189,7 @@ const Footer = () => {
 				</div>
 
 				<div className="border-t border-white/20 mt-8 pt-6 text-center">
-					<p>
+					<p suppressHydrationWarning>
 						&copy; {new Date().getFullYear()} DSN Enterprises. All rights
 						reserved.
 					</p>

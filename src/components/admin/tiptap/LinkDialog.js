@@ -1,33 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
+function LinkDialogForm({ initialUrl, onClose, onConfirm }) {
 	const [url, setUrl] = useState(initialUrl || "");
 	const [text, setText] = useState("");
-
-	useEffect(() => {
-		if (isOpen) {
-			setUrl(initialUrl || "");
-			setText("");
-		}
-	}, [isOpen, initialUrl]);
 
 	const handleConfirm = () => {
 		onConfirm(url, text);
 		onClose();
 	};
 
-	if (!isOpen) return null;
-
 	return (
-		<div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black bg-opacity-50">
+		<div className="fixed inset-0 z-[99999] flex items-center justify-center bg-gray-950 bg-opacity-50">
 			<div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4 animate-fadeIn">
 				<div className="flex items-center justify-between mb-4">
 					<h3 className="text-lg font-semibold text-gray-900">Add Link</h3>
 					<button
 						type="button"
 						onClick={onClose}
+						aria-label="Close dialog"
 						className="text-gray-400 hover:text-gray-600"
 					>
 						<svg
@@ -50,6 +42,7 @@ export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
 				<div className="space-y-4">
 					<div>
 						<label
+							id="link-url-label"
 							htmlFor="link-url"
 							className="block text-sm font-medium text-gray-700 mb-1"
 						>
@@ -57,6 +50,7 @@ export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
 						</label>
 						<input
 							id="link-url"
+							aria-labelledby="link-url-label"
 							type="url"
 							value={url}
 							onChange={(e) => setUrl(e.target.value)}
@@ -67,6 +61,7 @@ export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
 
 					<div>
 						<label
+							id="link-text-label"
 							htmlFor="link-text"
 							className="block text-sm font-medium text-gray-700 mb-1"
 						>
@@ -74,6 +69,7 @@ export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
 						</label>
 						<input
 							id="link-text"
+							aria-labelledby="link-text-label"
 							type="text"
 							value={text}
 							onChange={(e) => setText(e.target.value)}
@@ -101,5 +97,17 @@ export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
 				</div>
 			</div>
 		</div>
+	);
+}
+
+export default function LinkDialog({ isOpen, onClose, onConfirm, initialUrl }) {
+	if (!isOpen) return null;
+
+	return (
+		<LinkDialogForm
+			initialUrl={initialUrl}
+			onClose={onClose}
+			onConfirm={onConfirm}
+		/>
 	);
 }

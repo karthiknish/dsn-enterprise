@@ -8,7 +8,7 @@ export default function ProductCategoryHero({
 	title,
 	description,
 	quoteProduct,
-	badges,
+	badgeSlot: BadgeSlot,
 }) {
 	return (
 		<PageHero
@@ -21,7 +21,7 @@ export default function ProductCategoryHero({
 				{ label: title },
 			]}
 		>
-			{badges}
+			{BadgeSlot ? <BadgeSlot /> : null}
 			<Link
 				href={`/contact?product=${encodeURIComponent(quoteProduct || title)}`}
 				className="inline-flex items-center gap-2 bg-white text-primary font-semibold py-3 px-6 rounded-lg hover:bg-secondary-light transition-colors"

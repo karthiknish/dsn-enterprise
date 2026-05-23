@@ -1,692 +1,182 @@
 "use client";
 
+import { deleteDoc, doc } from "firebase/firestore";
+import { Suspense, use, useEffect, useReducer, useRef } from "react";
+import BlogDeleteDialog from "@/components/admin/blog/BlogDeleteDialog";
+import BlogListToolbar from "@/components/admin/blog/BlogListToolbar";
+import BlogNotificationToast from "@/components/admin/blog/BlogNotificationToast";
+import BlogPostsEmptyState from "@/components/admin/blog/BlogPostsEmptyState";
+import BlogPostsPagination from "@/components/admin/blog/BlogPostsPagination";
+import BlogPostsTable from "@/components/admin/blog/BlogPostsTable";
 import {
-	collection,
-	deleteDoc,
-	doc,
-	getDocs,
-	orderBy,
-	query,
-} from "firebase/firestore";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+	BLOG_LIST_ITEMS_PER_PAGE,
+	blogListReducer,
+	initialBlogListState,
+} from "@/lib/blog-list-reducer";
+import { fetchBlogPosts } from "@/lib/admin-firestore";
 import { db } from "@/lib/firebase";
 
-export default function BlogListPage() {
-	const [posts, setPosts] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [deleting, setDeleting] = useState(null);
-	const [searchTerm, setSearchTerm] = useState("");
-	const [notification, setNotification] = useState(null);
-	const [showDeleteDialog, setShowDeleteDialog] = useState(null);
-	const [currentPage, setCurrentPage] = useState(1);
-	const itemsPerPage = 10;
-	const [fetchError, setFetchError] = useState(null);
+const postsResource = fetchBlogPosts()
+	.then((posts) => ({ ok: true, posts }))
+	.catch((error) => {
+		console.error("Error fetching posts:", error);
+		return {
+			ok: false,
+			error:
+				error instanceof Error ? error.message : "Failed to load blog posts",
+		};
+	});
+
+function BlogListPageContent() {
+	const result = use(postsResource);
+	const [state, dispatch] = useReducer(blogListReducer, {
+		...initialBlogListState,
+		posts: result.ok ? result.posts : [],
+		loading: false,
+		fetchError: result.ok ? null : result.error,
+	});
+	const deleteDialogRef = useRef(null);
 
 	const showNotification = (message, type = "info") => {
-		setNotification({ message, type });
-		setTimeout(() => setNotification(null), 5000);
+		dispatch({ type: "SET_NOTIFICATION", notification: { message, type } });
+		setTimeout(() => dispatch({ type: "CLEAR_NOTIFICATION" }), 5000);
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: fetchPosts is stable at component level
 	useEffect(() => {
-		fetchPosts();
-	}, []);
+		if (!state.showDeleteDialog) return;
+		const onKey = (e) => {
+			if (e.key === "Escape") dispatch({ type: "HIDE_DELETE_DIALOG" });
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	}, [state.showDeleteDialog]);
 
-	const fetchPosts = async () => {
-		try {
-			setFetchError(null);
-			const postsRef = collection(db, "blogs");
-			const q = query(postsRef, orderBy("createdAt", "desc"));
-			const snapshot = await getDocs(q);
-			const postsData = snapshot.docs.map((doc) => ({
-				id: doc.id,
-				...doc.data(),
-			}));
-			setPosts(postsData);
-		} catch (error) {
-			console.error("Error fetching posts:", error);
-			setFetchError("Could not load posts. Check connection and try again.");
-		} finally {
-			setLoading(false);
+	useEffect(() => {
+		const dialog = deleteDialogRef.current;
+		if (!dialog) return;
+		if (state.showDeleteDialog) {
+			if (!dialog.open) dialog.showModal();
+		} else if (dialog.open) {
+			dialog.close();
 		}
-	};
+	}, [state.showDeleteDialog]);
 
-	const handleDelete = async (id, title) => {
-		setShowDeleteDialog({ id, title });
+	const handleDelete = (id, title) => {
+		dispatch({ type: "SHOW_DELETE_DIALOG", target: { id, title } });
 	};
 
 	const confirmDelete = async () => {
-		if (!showDeleteDialog) return;
+		if (!state.showDeleteDialog) return;
 
-		const { id } = showDeleteDialog;
-		setShowDeleteDialog(null);
-		setDeleting(id);
+		const { id, title } = state.showDeleteDialog;
+		dispatch({ type: "DELETE_START", id });
+
 		try {
 			await deleteDoc(doc(db, "blogs", id));
-			setPosts(posts.filter((post) => post.id !== id));
-			showNotification("Post deleted successfully", "success");
+			dispatch({ type: "DELETE_SUCCESS", id });
+			showNotification(`"${title}" deleted successfully`, "success");
 		} catch (error) {
 			console.error("Error deleting post:", error);
+			dispatch({ type: "DELETE_ERROR" });
 			showNotification("Failed to delete post", "error");
-		} finally {
-			setDeleting(null);
 		}
 	};
 
-	const filteredPosts = posts.filter((post) =>
-		post.title.toLowerCase().includes(searchTerm.toLowerCase()),
+	const filteredPosts = state.posts.filter((post) =>
+		post.title.toLowerCase().includes(state.searchTerm.toLowerCase()),
 	);
 
-	// Pagination logic
-	const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
-	const startIndex = (currentPage - 1) * itemsPerPage;
+	const totalPages = Math.ceil(filteredPosts.length / BLOG_LIST_ITEMS_PER_PAGE);
+	const startIndex = (state.currentPage - 1) * BLOG_LIST_ITEMS_PER_PAGE;
 	const paginatedPosts = filteredPosts.slice(
 		startIndex,
-		startIndex + itemsPerPage,
+		startIndex + BLOG_LIST_ITEMS_PER_PAGE,
 	);
 
-	const handlePageChange = (newPage) => {
-		setCurrentPage(newPage);
+	const handleSearchChange = (e) => {
+		dispatch({ type: "SET_SEARCH", searchTerm: e.target.value });
+	};
+
+	const handlePageChange = (page) => {
+		dispatch({ type: "SET_PAGE", page });
 		window.scrollTo({ top: 0, behavior: "smooth" });
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: searchTerm drives the reset but is not used inside the effect body
-	useEffect(() => {
-		setCurrentPage(1);
-	}, [searchTerm]);
-
-	useEffect(() => {
-		if (!showDeleteDialog) return;
-		const onKey = (e) => {
-			if (e.key === "Escape") setShowDeleteDialog(null);
-		};
-		window.addEventListener("keydown", onKey);
-		return () => window.removeEventListener("keydown", onKey);
-	}, [showDeleteDialog]);
-
-	if (loading) {
-		return (
-			<output
-				className="flex items-center justify-center min-h-[40vh] w-full"
-				aria-live="polite"
-			>
-				<span className="sr-only">Loading posts</span>
-				<div
-					className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"
-					aria-hidden
-				/>
-			</output>
-		);
-	}
-
 	return (
 		<div className="space-y-6">
-			{/* Notification Toast */}
-			{notification && (
-				<div
-					role={notification.type === "error" ? "alert" : "status"}
-					className={`fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-slideIn max-w-[min(100vw-2rem,24rem)] ${
-						notification.type === "error"
-							? "bg-red-50 border border-red-200 text-red-800"
-							: notification.type === "success"
-								? "bg-accent-50 border border-accent-200 text-accent-800"
-								: "bg-gray-50 border border-gray-200 text-gray-800"
-					}`}
-				>
-					{notification.type === "error" && (
-						<svg
-							aria-hidden="true"
-							className="w-5 h-5 text-red-500"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg>
-					)}
-					{notification.type === "success" && (
-						<svg
-							aria-hidden="true"
-							className="w-5 h-5 text-accent"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-							/>
-						</svg>
-					)}
-					<span className="font-medium">{notification.message}</span>
-					<button
-						type="button"
-						onClick={() => setNotification(null)}
-						className="ml-2 shrink-0 p-1 rounded-md text-gray-400 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-						aria-label="Dismiss notification"
-					>
-						<svg
-							aria-hidden="true"
-							className="w-4 h-4"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
-					</button>
-				</div>
-			)}
+			<BlogNotificationToast
+				notification={state.notification}
+				onDismiss={() => dispatch({ type: "CLEAR_NOTIFICATION" })}
+			/>
 
-			{/* Delete Confirmation Dialog */}
-			{showDeleteDialog && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-					<button
-						type="button"
-						className="absolute inset-0 bg-black/50"
-						onClick={() => setShowDeleteDialog(null)}
-						aria-label="Close delete dialog"
-					/>
-					<div
-						className="relative bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4 animate-fadeIn"
-						role="dialog"
-						aria-modal="true"
-						aria-labelledby="delete-post-title"
-					>
-						<div className="flex items-center gap-3 mb-4">
-							<div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-								<svg
-									aria-hidden="true"
-									className="w-5 h-5 text-red-600"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={2}
-										d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-									/>
-								</svg>
-							</div>
-							<h3
-								id="delete-post-title"
-								className="text-lg font-semibold text-gray-900"
-							>
-								Delete post?
-							</h3>
-						</div>
-						<p className="text-gray-600 mb-4">
-							Are you sure you want to delete{" "}
-							<span className="font-medium text-gray-900">
-								"{showDeleteDialog.title}"
-							</span>
-							? This action cannot be undone.
-						</p>
-						<div className="flex flex-col-reverse sm:flex-row gap-3">
-							<button
-								type="button"
-								onClick={() => setShowDeleteDialog(null)}
-								className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
-							>
-								Cancel
-							</button>
-							<button
-								type="button"
-								onClick={confirmDelete}
-								className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
-							>
-								Delete
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
+			<BlogDeleteDialog
+				dialogRef={deleteDialogRef}
+				target={state.showDeleteDialog}
+				onClose={() => dispatch({ type: "HIDE_DELETE_DIALOG" })}
+				onConfirm={confirmDelete}
+			/>
 
-			{fetchError && (
+			{state.fetchError && (
 				<div
 					className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
 					role="alert"
 				>
-					{fetchError}
+					{state.fetchError}
 				</div>
 			)}
 
-			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-				<div>
-					<h1 className="sr-only">Blog posts</h1>
-					<p className="text-gray-600">Manage your blog posts</p>
-				</div>
-				<div className="flex gap-3">
-					<Link
-						href="/blog"
-						target="_blank"
-						className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
-					>
-						<svg
-							aria-hidden="true"
-							className="w-5 h-5 mr-2"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-							/>
-						</svg>
-						View Live
-					</Link>
-					<Link
-						href="/admin/blog/new"
-						className="inline-flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors shadow-sm"
-					>
-						<svg
-							aria-hidden="true"
-							className="w-5 h-5 mr-2"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M12 4v16m8-8H4"
-							/>
-						</svg>
-						New Post
-					</Link>
-				</div>
-			</div>
+			<BlogListToolbar
+				searchTerm={state.searchTerm}
+				onSearchChange={handleSearchChange}
+			/>
 
-			{/* Search Bar */}
-			<div className="relative">
-				<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-					<svg
-						aria-hidden="true"
-						className="h-5 w-5 text-gray-400"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-						/>
-					</svg>
-				</div>
-				<input
-					type="search"
-					placeholder="Search posts..."
-					aria-label="Search posts by title"
-					className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-accent sm:text-sm transition duration-150 ease-in-out"
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-				/>
-			</div>
-
-			{/* Pagination Status */}
 			{filteredPosts.length > 0 && (
 				<div className="text-sm text-gray-500">
 					Showing {startIndex + 1} to{" "}
-					{Math.min(startIndex + itemsPerPage, filteredPosts.length)} of{" "}
-					{filteredPosts.length} entries
+					{Math.min(startIndex + BLOG_LIST_ITEMS_PER_PAGE, filteredPosts.length)}{" "}
+					of {filteredPosts.length} entries
 				</div>
 			)}
 
-			{posts.length === 0 ? (
-				<div className="bg-white rounded-xl shadow-sm p-12 text-center border border-gray-100">
-					<div className="w-16 h-16 bg-accent-50 rounded-full flex items-center justify-center mx-auto mb-4">
-						<svg
-							aria-hidden="true"
-							className="w-8 h-8 text-accent"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-							/>
-						</svg>
-					</div>
-					<h3 className="text-lg font-medium text-gray-900 mb-2">
-						No blog posts yet
-					</h3>
-					<p className="text-gray-500 mb-6">
-						Get started by creating your first blog post.
-					</p>
-					<Link
-						href="/admin/blog/new"
-						className="inline-flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors shadow-sm"
-					>
-						Create First Post
-					</Link>
-				</div>
+			{state.posts.length === 0 ? (
+				<BlogPostsEmptyState />
 			) : (
-				<div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-					<div className="overflow-x-auto">
-						<table className="min-w-full divide-y divide-gray-200">
-							<thead className="bg-gray-50">
-								<tr>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										Title
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										Status
-									</th>
-									<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-										Published Date
-									</th>
-									<th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-										Actions
-									</th>
-								</tr>
-							</thead>
-							<tbody className="bg-white divide-y divide-gray-200">
-								{paginatedPosts.length > 0 ? (
-									paginatedPosts.map((post) => (
-										<tr
-											key={post.id}
-											className="hover:bg-gray-50 transition-colors"
-										>
-											<td className="px-6 py-4 whitespace-nowrap">
-												<div className="flex items-center">
-													{post.featuredImage ? (
-														<Image
-															src={post.featuredImage}
-															alt=""
-															width={40}
-															height={40}
-															unoptimized
-															className="w-10 h-10 rounded-lg object-cover mr-3 border border-gray-200"
-														/>
-													) : (
-														<div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center mr-3 border border-gray-200">
-															<svg
-																aria-hidden="true"
-																className="w-5 h-5 text-gray-400"
-																fill="none"
-																stroke="currentColor"
-																viewBox="0 0 24 24"
-															>
-																<path
-																	strokeLinecap="round"
-																	strokeLinejoin="round"
-																	strokeWidth={2}
-																	d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-																/>
-															</svg>
-														</div>
-													)}
-													<div>
-														<div className="text-sm font-medium text-gray-900">
-															{post.title}
-														</div>
-														<div className="text-xs text-gray-500 font-mono">
-															/{post.slug}
-														</div>
-													</div>
-												</div>
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap">
-												<span
-													className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-														post.status === "published"
-															? "bg-accent-100 text-accent-800"
-															: "bg-yellow-100 text-yellow-800"
-													}`}
-												>
-													<span
-														className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-															post.status === "published"
-																? "bg-accent-400"
-																: "bg-yellow-400"
-														}`}
-													></span>
-													{post.status.charAt(0).toUpperCase() +
-														post.status.slice(1)}
-												</span>
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-												{(
-													post.publishedDate?.toDate?.() ||
-													post.createdAt?.toDate?.()
-												)?.toLocaleDateString(undefined, {
-													year: "numeric",
-													month: "short",
-													day: "numeric",
-												}) || "No date"}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-												<div className="flex items-center justify-end gap-3">
-													<Link
-														href={`/blog/${post.slug}`}
-														target="_blank"
-														className="text-gray-400 hover:text-accent transition-colors"
-														title="View Live"
-													>
-														<svg
-															aria-hidden="true"
-															className="w-5 h-5"
-															fill="none"
-															stroke="currentColor"
-															viewBox="0 0 24 24"
-														>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-															/>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-															/>
-														</svg>
-													</Link>
-													<Link
-														href={`/admin/blog/${post.id}/edit`}
-														className="text-gray-400 hover:text-accent transition-colors"
-														title="Edit"
-													>
-														<svg
-															aria-hidden="true"
-															className="w-5 h-5"
-															fill="none"
-															stroke="currentColor"
-															viewBox="0 0 24 24"
-														>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-															/>
-														</svg>
-													</Link>
-													<button
-														type="button"
-														onClick={() => handleDelete(post.id, post.title)}
-														disabled={deleting === post.id}
-														className="text-gray-400 hover:text-red-600 disabled:opacity-50 transition-colors"
-														title="Delete"
-													>
-														{deleting === post.id ? (
-															<svg
-																aria-hidden="true"
-																className="w-5 h-5 animate-spin"
-																fill="none"
-																viewBox="0 0 24 24"
-															>
-																<circle
-																	className="opacity-25"
-																	cx="12"
-																	cy="12"
-																	r="10"
-																	stroke="currentColor"
-																	strokeWidth="4"
-																/>
-																<path
-																	className="opacity-75"
-																	fill="currentColor"
-																	d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-																/>
-															</svg>
-														) : (
-															<svg
-																aria-hidden="true"
-																className="w-5 h-5"
-																fill="none"
-																stroke="currentColor"
-																viewBox="0 0 24 24"
-															>
-																<path
-																	strokeLinecap="round"
-																	strokeLinejoin="round"
-																	strokeWidth={2}
-																	d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-																/>
-															</svg>
-														)}
-													</button>
-												</div>
-											</td>
-										</tr>
-									))
-								) : (
-									<tr>
-										<td
-											colSpan="4"
-											className="px-6 py-12 text-center text-gray-500"
-										>
-											No posts found matching "{searchTerm}"
-										</td>
-									</tr>
-								)}
-							</tbody>
-						</table>
-					</div>
-				</div>
+				<BlogPostsTable
+					posts={paginatedPosts}
+					searchTerm={state.searchTerm}
+					deleting={state.deleting}
+					onDelete={handleDelete}
+				/>
 			)}
 
-			{/* Pagination Controls */}
-			{totalPages > 1 && (
-				<div className="flex items-center justify-between bg-white px-4 py-3 sm:px-6 rounded-xl shadow-sm border border-gray-100">
-					<div className="flex flex-1 justify-between sm:hidden">
-						<button
-							type="button"
-							onClick={() => handlePageChange(currentPage - 1)}
-							disabled={currentPage === 1}
-							className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-						>
-							Previous
-						</button>
-						<button
-							type="button"
-							onClick={() => handlePageChange(currentPage + 1)}
-							disabled={currentPage === totalPages}
-							className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-						>
-							Next
-						</button>
-					</div>
-					<div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-						<div>
-							<nav
-								className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-								aria-label="Pagination"
-							>
-								<button
-									type="button"
-									onClick={() => handlePageChange(currentPage - 1)}
-									disabled={currentPage === 1}
-									className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-								>
-									<span className="sr-only">Previous</span>
-									<svg
-										className="h-5 w-5"
-										viewBox="0 0 20 20"
-										fill="currentColor"
-										aria-hidden="true"
-									>
-										<path
-											fillRule="evenodd"
-											d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-											clipRule="evenodd"
-										/>
-									</svg>
-								</button>
-
-								{Array.from({ length: totalPages }, (_, i) => i + 1).map(
-									(pageNum) => (
-										<button
-											type="button"
-											key={pageNum}
-											onClick={() => handlePageChange(pageNum)}
-											aria-current={
-												currentPage === pageNum ? "page" : undefined
-											}
-											className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors ${
-												currentPage === pageNum
-													? "z-10 bg-accent text-white focus-visible:outline-accent"
-													: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
-											}`}
-										>
-											{pageNum}
-										</button>
-									),
-								)}
-
-								<button
-									type="button"
-									onClick={() => handlePageChange(currentPage + 1)}
-									disabled={currentPage === totalPages}
-									className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-								>
-									<span className="sr-only">Next</span>
-									<svg
-										className="h-5 w-5"
-										viewBox="0 0 20 20"
-										fill="currentColor"
-										aria-hidden="true"
-									>
-										<path
-											fillRule="evenodd"
-											d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-											clipRule="evenodd"
-										/>
-									</svg>
-								</button>
-							</nav>
-						</div>
-					</div>
-				</div>
-			)}
+			<BlogPostsPagination
+				currentPage={state.currentPage}
+				totalPages={totalPages}
+				onPageChange={handlePageChange}
+			/>
 		</div>
+	);
+}
+
+function BlogListLoading() {
+	return (
+		<output
+			className="flex items-center justify-center min-h-[40vh]"
+			aria-live="polite"
+		>
+			<span className="sr-only">Loading blog posts</span>
+			<div
+				className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"
+				aria-hidden
+			/>
+		</output>
+	);
+}
+
+export default function BlogListPage() {
+	return (
+		<Suspense fallback={<BlogListLoading />}>
+			<BlogListPageContent />
+		</Suspense>
 	);
 }

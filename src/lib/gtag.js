@@ -4,14 +4,14 @@
  */
 
 // Google Tag IDs
-export const GA_TRACKING_ID = "GT-TQKJ52Q3";
-export const GOOGLE_ADS_ID = "AW-17769294111";
+const GA_TRACKING_ID = "GT-TQKJ52Q3";
+const GOOGLE_ADS_ID = "AW-17769294111";
 
 /**
  * Track page views
  * @param {string} url - The URL of the page
  */
-export const pageview = (url) => {
+const pageview = (url) => {
 	if (typeof window !== "undefined" && window.gtag) {
 		window.gtag("config", GA_TRACKING_ID, {
 			page_path: url,
@@ -38,7 +38,7 @@ export const event = (action, params = {}) => {
  * @param {string} conversionLabel - The conversion label from Google Ads
  * @param {object} params - Additional parameters
  */
-export const trackConversion = (conversionLabel, params = {}) => {
+const trackConversion = (conversionLabel, params = {}) => {
 	if (typeof window !== "undefined" && window.gtag) {
 		window.gtag("event", "conversion", {
 			send_to: `${GOOGLE_ADS_ID}/${conversionLabel}`,

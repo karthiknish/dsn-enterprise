@@ -1,36 +1,29 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useReducer, useRef } from "react";
+import {
+	imageDialogReducer,
+	initialImageDialogState,
+} from "@/lib/image-dialog-reducer";
 
 export default function ImageDialog({ isOpen, onClose, onConfirm }) {
-	const [url, setUrl] = useState("");
-	const [alt, setAlt] = useState("");
-	const [isDragging, setIsDragging] = useState(false);
-	const [preview, setPreview] = useState(null);
-	const [fileName, setFileName] = useState("");
+	const [state, dispatch] = useReducer(imageDialogReducer, initialImageDialogState);
 	const dragCounter = useRef(0);
 	const fileInputRef = useRef(null);
 
-	useEffect(() => {
-		if (isOpen) {
-			setUrl("");
-			setAlt("");
-			setPreview(null);
-			setFileName("");
-			dragCounter.current = 0;
-		}
-	}, [isOpen]);
-
 	const processFile = (file) => {
 		if (file?.type.startsWith("image/")) {
-			setFileName(file.name);
 			const reader = new FileReader();
 			reader.onload = (e) => {
 				const result = e.target?.result;
 				if (result && typeof result === "string") {
-					setUrl(result);
-					setPreview(result);
+					dispatch({
+						type: "SET_FILE_PREVIEW",
+						url: result,
+						preview: result,
+						fileName: file.name,
+					});
 				}
 			};
 			reader.readAsDataURL(file);
@@ -41,7 +34,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 		e.preventDefault();
 		dragCounter.current++;
 		if (dragCounter.current === 1) {
-			setIsDragging(true);
+			dispatch({ type: "SET_DRAGGING", isDragging: true });
 		}
 	};
 
@@ -49,7 +42,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 		e.preventDefault();
 		dragCounter.current--;
 		if (dragCounter.current === 0) {
-			setIsDragging(false);
+			dispatch({ type: "SET_DRAGGING", isDragging: false });
 		}
 	};
 
@@ -60,7 +53,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 	const handleDrop = (e) => {
 		e.preventDefault();
 		dragCounter.current = 0;
-		setIsDragging(false);
+		dispatch({ type: "SET_DRAGGING", isDragging: false });
 
 		const files = Array.from(e.dataTransfer.files).filter((file) =>
 			file.type.startsWith("image/"),
@@ -79,20 +72,28 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 	};
 
 	const handleConfirm = () => {
-		onConfirm(url, alt || fileName);
+		onConfirm(state.url, state.alt || state.fileName);
 		onClose();
+	};
+
+	const clearFile = () => {
+		dispatch({ type: "CLEAR_FILE" });
+		if (fileInputRef.current) {
+			fileInputRef.current.value = "";
+		}
 	};
 
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black bg-opacity-50">
+		<div className="fixed inset-0 z-[99999] flex items-center justify-center bg-gray-950 bg-opacity-50">
 			<div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4 animate-fadeIn">
 				<div className="flex items-center justify-between mb-4">
 					<h3 className="text-lg font-semibold text-gray-900">Insert Image</h3>
 					<button
 						type="button"
 						onClick={onClose}
+						aria-label="Close dialog"
 						className="text-gray-400 hover:text-gray-600"
 					>
 						<svg
@@ -112,11 +113,10 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 					</button>
 				</div>
 
-				{/* Drag and Drop Zone */}
 				{/* biome-ignore lint/a11y/noStaticElementInteractions: drag-and-drop zone requires drag event handlers */}
 				<div
 					className={`relative border-2 border-dashed rounded-lg transition-colors ${
-						isDragging
+						state.isDragging
 							? "border-accent bg-accent-50"
 							: "border-gray-300 hover:border-gray-400"
 					}`}
@@ -130,30 +130,24 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 						type="file"
 						accept="image/*"
 						onChange={handleFileSelect}
+						aria-label="Upload image file"
 						className="hidden"
 					/>
 
-					{preview ? (
+					{state.preview ? (
 						<div className="p-6 text-center space-y-3">
 							<Image
-								src={preview}
+								src={state.preview}
 								alt="Preview"
 								width={320}
 								height={160}
 								unoptimized
 								className="max-h-40 mx-auto rounded-lg object-contain"
 							/>
-							<p className="text-sm text-gray-600 truncate">{fileName}</p>
+							<p className="text-sm text-gray-600 truncate">{state.fileName}</p>
 							<button
 								type="button"
-								onClick={() => {
-									setUrl("");
-									setPreview(null);
-									setFileName("");
-									if (fileInputRef.current) {
-										fileInputRef.current.value = "";
-									}
-								}}
+								onClick={clearFile}
 								className="text-red-500 hover:text-red-700 text-sm font-medium"
 							>
 								Remove image
@@ -180,7 +174,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 								/>
 							</svg>
 							<p className="text-gray-700 font-medium mt-2">
-								{isDragging ? "Drop image here" : "Drag & drop an image"}
+								{state.isDragging ? "Drop image here" : "Drag & drop an image"}
 							</p>
 							<p className="text-gray-500 text-sm">or click to browse</p>
 							<p className="text-gray-400 text-xs">
@@ -190,9 +184,9 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 					)}
 				</div>
 
-				{/* URL input as alternative */}
 				<div className="mt-4">
 					<label
+						id="image-url-label"
 						htmlFor="image-url"
 						className="block text-sm font-medium text-gray-700 mb-1"
 					>
@@ -200,13 +194,12 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 					</label>
 					<input
 						id="image-url"
+						aria-labelledby="image-url-label"
 						type="url"
-						value={url}
-						onChange={(e) => {
-							setUrl(e.target.value);
-							setPreview(null);
-							setFileName("");
-						}}
+						value={state.url}
+						onChange={(e) =>
+							dispatch({ type: "SET_URL", url: e.target.value })
+						}
 						placeholder="https://example.com/image.jpg"
 						className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
 					/>
@@ -214,6 +207,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 
 				<div className="mt-4">
 					<label
+						id="image-alt-label"
 						htmlFor="image-alt"
 						className="block text-sm font-medium text-gray-700 mb-1"
 					>
@@ -221,9 +215,12 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 					</label>
 					<input
 						id="image-alt"
+						aria-labelledby="image-alt-label"
 						type="text"
-						value={alt}
-						onChange={(e) => setAlt(e.target.value)}
+						value={state.alt}
+						onChange={(e) =>
+							dispatch({ type: "SET_ALT", alt: e.target.value })
+						}
 						placeholder="Image description"
 						className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
 					/>
@@ -240,7 +237,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 					<button
 						type="button"
 						onClick={handleConfirm}
-						disabled={!url}
+						disabled={!state.url}
 						className="flex-1 px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						Insert Image

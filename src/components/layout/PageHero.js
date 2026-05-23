@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 
 /**
@@ -47,42 +47,42 @@ export default function PageHero({
 					</nav>
 				)}
 				{eyebrow && (
-					<motion.p
+					<m.p
 						className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-200 mb-3"
 						initial={{ opacity: 0, y: 12 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.45 }}
 					>
 						{eyebrow}
-					</motion.p>
+					</m.p>
 				)}
-				<motion.h1
-					className="text-4xl md:text-5xl font-bold mb-5 text-balance leading-tight"
+				<m.h1
+					className="text-4xl md:text-5xl font-semibold mb-5 text-balance leading-tight"
 					initial={{ opacity: 0, y: 16 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.5, delay: 0.05 }}
 				>
 					{title}
-				</motion.h1>
+				</m.h1>
 				{description && (
-					<motion.p
+					<m.p
 						className={`text-lg md:text-xl text-white/90 leading-relaxed ${children ? "mb-8" : ""} ${centered ? "max-w-2xl mx-auto" : "max-w-3xl"}`}
 						initial={{ opacity: 0, y: 16 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, delay: 0.1 }}
 					>
 						{description}
-					</motion.p>
+					</m.p>
 				)}
 				{children && (
-					<motion.div
+					<m.div
 						className={`flex flex-wrap gap-3 ${centered ? "justify-center" : ""}`}
 						initial={{ opacity: 0, y: 12 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, delay: 0.15 }}
 					>
 						{children}
-					</motion.div>
+					</m.div>
 				)}
 			</div>
 		</section>

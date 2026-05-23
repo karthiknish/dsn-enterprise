@@ -2,7 +2,7 @@
 
 export function EditorStyles() {
 	return (
-		<style jsx global>{`
+		<style>{`
       /* Table styles for TipTap */
       .ProseMirror table {
         border-collapse: collapse;

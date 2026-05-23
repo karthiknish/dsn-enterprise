@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import SectionHeader from "./SectionHeader";
@@ -86,7 +86,7 @@ const FeaturedProducts = () => {
 
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
 					{products.map((product, index) => (
-						<motion.article
+						<m.article
 							key={product.id}
 							className="group bg-white rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5"
 							initial={{ opacity: 0, y: 24 }}
@@ -107,7 +107,7 @@ const FeaturedProducts = () => {
 								</span>
 							</div>
 							<div className="p-6">
-								<h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+								<h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
 									{product.name}
 								</h3>
 								<p className="text-gray-600 text-sm leading-relaxed mb-4">
@@ -126,7 +126,7 @@ const FeaturedProducts = () => {
 									</span>
 								</Link>
 							</div>
-						</motion.article>
+						</m.article>
 					))}
 				</div>
 

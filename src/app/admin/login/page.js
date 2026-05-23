@@ -11,7 +11,7 @@ export default function AdminLoginPage() {
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
 	const { login } = useAuth();
-	const router = useRouter();
+	const { push } = useRouter();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
 
 		try {
 			await login(email, password);
-			router.push("/admin");
+			push("/admin");
 		} catch (error) {
 			console.error("Login error:", error);
 			setError(
@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
 		<div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
 			<div className="max-w-md w-full space-y-8">
 				<div>
-					<h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+					<h2 className="mt-6 text-center text-3xl font-semibold text-gray-900">
 						Admin Login
 					</h2>
 					<p className="mt-2 text-center text-sm text-gray-600">
@@ -64,9 +64,10 @@ export default function AdminLoginPage() {
 								id="email"
 								name="email"
 								type="email"
+								aria-label="Email address"
 								autoComplete="email"
 								required
-								className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-lg focus:outline-none focus:ring-primary focus:border-primary focus:z-10"
+								className="appearance-none rounded-none relative block w-full p-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-lg focus:outline-none focus:ring-primary focus:border-primary focus:z-10"
 								placeholder="Email address"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
@@ -80,9 +81,10 @@ export default function AdminLoginPage() {
 								id="password"
 								name="password"
 								type="password"
+								aria-label="Password"
 								autoComplete="current-password"
 								required
-								className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-lg focus:outline-none focus:ring-primary focus:border-primary focus:z-10"
+								className="appearance-none rounded-none relative block w-full p-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-lg focus:outline-none focus:ring-primary focus:border-primary focus:z-10"
 								placeholder="Password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
@@ -118,7 +120,7 @@ export default function AdminLoginPage() {
 											d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
 										/>
 									</svg>
-									Signing in...
+									Signing in…
 								</span>
 							) : (
 								"Sign in"

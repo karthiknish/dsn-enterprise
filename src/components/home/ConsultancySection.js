@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 import {
 	FaArrowRight,
@@ -45,7 +45,7 @@ export default function ConsultancySection() {
 		>
 			<div className="container mx-auto px-4 max-w-6xl">
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-					<motion.div
+					<m.div
 						className="lg:col-span-5"
 						initial={{ opacity: 0, y: 24 }}
 						whileInView={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ export default function ConsultancySection() {
 						</p>
 						<h2
 							id="consultancy-heading"
-							className="text-3xl md:text-4xl font-bold mb-5 text-gray-900 text-balance leading-tight"
+							className="text-3xl md:text-4xl font-semibold mb-5 text-gray-900 text-balance leading-tight"
 						>
 							Engineering support around your gauges
 						</h2>
@@ -81,13 +81,13 @@ export default function ConsultancySection() {
 								View all services
 							</Link>
 						</div>
-					</motion.div>
+					</m.div>
 
 					<ul className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5 list-none p-0 m-0">
 						{offerings.map((item, index) => {
 							const Icon = item.icon;
 							return (
-								<motion.li
+								<m.li
 									key={item.title}
 									initial={{ opacity: 0, y: 20 }}
 									whileInView={{ opacity: 1, y: 0 }}
@@ -107,7 +107,7 @@ export default function ConsultancySection() {
 									<p className="text-sm text-gray-600 leading-relaxed grow">
 										{item.description}
 									</p>
-								</motion.li>
+								</m.li>
 							);
 						})}
 					</ul>

@@ -1,17 +1,14 @@
 "use client";
 
-import * as React from "react";
 import { cn } from "@/lib/utils";
 
-const Popover = React.forwardRef(function Popover(
-	{
-		className,
-		align: _align = "center",
-		sideOffset: _sideOffset = 4,
-		...props
-	},
+function Popover({
+	className,
+	align: _align = "center",
+	sideOffset: _sideOffset = 4,
 	ref,
-) {
+	...props
+}) {
 	return (
 		<div
 			ref={ref}
@@ -22,13 +19,9 @@ const Popover = React.forwardRef(function Popover(
 			{...props}
 		/>
 	);
-});
-Popover.displayName = "Popover";
+}
 
-const PopoverTrigger = React.forwardRef(function PopoverTrigger(
-	{ className, children, ...props },
-	ref,
-) {
+function PopoverTrigger({ className, children, ref, ...props }) {
 	return (
 		<button
 			type="button"
@@ -42,27 +35,18 @@ const PopoverTrigger = React.forwardRef(function PopoverTrigger(
 			{children}
 		</button>
 	);
-});
-PopoverTrigger.displayName = "PopoverTrigger";
+}
 
-const PopoverContent = React.forwardRef(function PopoverContent(
-	{ className, children, ...props },
-	ref,
-) {
+function PopoverContent({ className, children, ref, ...props }) {
 	return (
 		<div ref={ref} className={cn("relative w-full", className)} {...props}>
 			{children}
 		</div>
 	);
-});
-PopoverContent.displayName = "PopoverContent";
+}
 
-const PopoverAnchor = React.forwardRef(function PopoverAnchor(
-	{ className, ...props },
-	ref,
-) {
+function PopoverAnchor({ className, ref, ...props }) {
 	return <div ref={ref} className={className} {...props} />;
-});
-PopoverAnchor.displayName = "PopoverAnchor";
+}
 
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor };

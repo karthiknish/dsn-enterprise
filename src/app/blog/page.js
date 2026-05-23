@@ -100,11 +100,16 @@ export default async function BlogPage({ searchParams }) {
 					<div className="max-w-2xl mx-auto">
 						<search>
 							<form action="/blog" method="GET" className="relative group">
-								<label htmlFor="blog-search" className="sr-only">
+								<label
+									id="blog-search-label"
+									htmlFor="blog-search"
+									className="sr-only"
+								>
 									Search blog posts
 								</label>
 								<input
 									id="blog-search"
+									aria-labelledby="blog-search-label"
 									type="search"
 									name="q"
 									defaultValue={searchQuery}
@@ -161,7 +166,7 @@ export default async function BlogPage({ searchParams }) {
 				<div className="container mx-auto px-4">
 					{searchQuery && (
 						<div className="mb-8 max-w-7xl mx-auto">
-							<h2 className="text-2xl font-bold text-gray-900">
+							<h2 className="text-2xl font-semibold text-gray-900">
 								{totalPosts > 0
 									? `Search results for "${searchQuery}" (${totalPosts})`
 									: `No results found for "${searchQuery}"`}
@@ -208,7 +213,7 @@ export default async function BlogPage({ searchParams }) {
 									d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
 								/>
 							</svg>
-							<h2 className="text-2xl font-bold text-gray-900 mb-2">
+							<h2 className="text-2xl font-semibold text-gray-900 mb-2">
 								No posts yet
 							</h2>
 							<p className="text-gray-600">
@@ -252,7 +257,7 @@ export default async function BlogPage({ searchParams }) {
 														: "No date"}
 												</div>
 												<Link href={`/blog/${post.slug}`}>
-													<h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-accent transition-colors">
+													<h2 className="text-xl font-semibold text-gray-900 mb-2 hover:text-accent transition-colors">
 														{post.title}
 													</h2>
 												</Link>

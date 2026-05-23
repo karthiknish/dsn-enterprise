@@ -1,29 +1,36 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
+import {
+	initialPexelsPickerState,
+	pexelsPickerReducer,
+} from "@/lib/pexels-picker-reducer";
 import { getCuratedPhotos, searchPhotos } from "@/lib/pexels";
 
 export default function PexelsImagePicker({ onSelect, onClose }) {
-	const [query, setQuery] = useState("");
-	const [photos, setPhotos] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
+	const [state, dispatch] = useReducer(
+		pexelsPickerReducer,
+		initialPexelsPickerState,
+	);
+	const pageRef = useRef(1);
 
 	const loadCuratedPhotos = useCallback(async () => {
-		setLoading(true);
-		setError("");
+		dispatch({ type: "LOAD_START" });
 		try {
 			const result = await getCuratedPhotos(15, 1);
-			setPhotos(result.photos || []);
-			setHasMore(result.photos?.length === 15);
-			setPage(1);
+			const photos = result.photos || [];
+			dispatch({
+				type: "LOAD_SUCCESS",
+				photos,
+				hasMore: photos.length === 15,
+			});
+			pageRef.current = 1;
 		} catch (err) {
-			setError(err.message || "Failed to load photos");
-		} finally {
-			setLoading(false);
+			dispatch({
+				type: "LOAD_ERROR",
+				error: err.message || "Failed to load photos",
+			});
 		}
 	}, []);
 
@@ -33,56 +40,62 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 
 	const handleSearch = async (e) => {
 		e?.preventDefault();
-		if (!query.trim()) {
+		if (!state.query.trim()) {
 			loadCuratedPhotos();
 			return;
 		}
 
-		setLoading(true);
-		setError("");
+		dispatch({ type: "LOAD_START" });
 		try {
-			const result = await searchPhotos(query.trim(), 15, 1);
-			setPhotos(result.photos || []);
-			setHasMore(result.photos?.length === 15);
-			setPage(1);
+			const result = await searchPhotos(state.query.trim(), 15, 1);
+			const photos = result.photos || [];
+			dispatch({
+				type: "LOAD_SUCCESS",
+				photos,
+				hasMore: photos.length === 15,
+			});
+			pageRef.current = 1;
 		} catch (err) {
-			setError(err.message || "Failed to search photos");
-		} finally {
-			setLoading(false);
+			dispatch({
+				type: "LOAD_ERROR",
+				error: err.message || "Failed to search photos",
+			});
 		}
 	};
 
 	const loadMore = async () => {
-		if (loading || !hasMore) return;
+		if (state.loading || !state.hasMore) return;
 
-		setLoading(true);
+		dispatch({ type: "LOAD_START" });
 		try {
-			const nextPage = page + 1;
-			const result = query.trim()
-				? await searchPhotos(query.trim(), 15, nextPage)
+			const nextPage = pageRef.current + 1;
+			const result = state.query.trim()
+				? await searchPhotos(state.query.trim(), 15, nextPage)
 				: await getCuratedPhotos(15, nextPage);
 
-			// Deduplicate photos by ID
-			const existingIds = new Set(photos.map((p) => p.id));
+			const existingIds = new Set(state.photos.map((p) => p.id));
 			const newPhotos = (result.photos || []).filter(
 				(p) => !existingIds.has(p.id),
 			);
 
-			setPhotos([...photos, ...newPhotos]);
-			setHasMore((result.photos?.length || 0) > 0);
-			setPage(nextPage);
+			dispatch({
+				type: "APPEND_PHOTOS",
+				photos: newPhotos,
+				hasMore: (result.photos?.length || 0) > 0,
+			});
+			pageRef.current = nextPage;
 		} catch (err) {
-			setError(err.message || "Failed to load more photos");
-		} finally {
-			setLoading(false);
+			dispatch({
+				type: "LOAD_ERROR",
+				error: err.message || "Failed to load more photos",
+			});
 		}
 	};
 
 	const handleSelect = (photo) => {
-		// Use the large2x size for good quality
 		onSelect({
 			url: photo.src.large2x,
-			alt: photo.alt || query || "Blog image",
+			alt: photo.alt || state.query || "Blog image",
 			photographer: photo.photographer,
 			photographerUrl: photo.photographer_url,
 			pexelsUrl: photo.url,
@@ -92,17 +105,14 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 	return (
 		<div className="fixed inset-0 z-50 overflow-y-auto">
 			<div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-				{/* Backdrop */}
 				<button
 					type="button"
-					className="fixed inset-0 bg-black bg-opacity-50 transition-opacity cursor-default"
+					className="fixed inset-0 bg-gray-950 bg-opacity-50 transition-opacity cursor-default"
 					onClick={onClose}
 					aria-label="Close image picker"
 				/>
 
-				{/* Modal */}
 				<div className="relative bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-					{/* Header */}
 					<div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-6 py-4">
 						<div className="flex items-center justify-between mb-4">
 							<h2 className="text-xl font-semibold text-gray-900">
@@ -131,18 +141,28 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 							</button>
 						</div>
 
-						{/* Search */}
 						<form onSubmit={handleSearch} className="flex gap-2">
+							<label
+								id="pexels-search-label"
+								htmlFor="pexels-search"
+								className="sr-only"
+							>
+								Search stock images
+							</label>
 							<input
+								id="pexels-search"
+								aria-labelledby="pexels-search-label"
 								type="text"
-								value={query}
-								onChange={(e) => setQuery(e.target.value)}
+								value={state.query}
+								onChange={(e) =>
+									dispatch({ type: "SET_QUERY", query: e.target.value })
+								}
 								placeholder="Search for images (e.g., technology, business, nature)"
 								className="flex-1 px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
 							/>
 							<button
 								type="submit"
-								disabled={loading}
+								disabled={state.loading}
 								className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
 							>
 								Search
@@ -150,17 +170,15 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 						</form>
 					</div>
 
-					{/* Content */}
 					<div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
-						{error && (
+						{state.error && (
 							<div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4">
-								{error}
+								{state.error}
 							</div>
 						)}
 
-						{/* Photo Grid */}
 						<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-							{photos.map((photo) => (
+							{state.photos.map((photo) => (
 								<button
 									type="button"
 									key={photo.id}
@@ -175,12 +193,12 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 										sizes="(min-width: 768px) 33vw, 50vw"
 										className="object-cover transition-transform group-hover:scale-105"
 									/>
-									<div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
+									<div className="absolute inset-0 bg-gray-950 bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
 										<span className="text-white opacity-0 group-hover:opacity-100 transition-opacity font-medium">
 											Select
 										</span>
 									</div>
-									<div className="absolute bottom-0 left-0 right-0 bg-black/60 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+									<div className="absolute bottom-0 left-0 right-0 bg-gray-950/60 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
 										<p className="text-white text-xs truncate">
 											📷 {photo.photographer}
 										</p>
@@ -189,15 +207,13 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 							))}
 						</div>
 
-						{/* Loading */}
-						{loading && (
+						{state.loading && (
 							<div className="flex items-center justify-center py-8">
-								<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+								<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary" />
 							</div>
 						)}
 
-						{/* Load More */}
-						{!loading && hasMore && photos.length > 0 && (
+						{!state.loading && state.hasMore && state.photos.length > 0 && (
 							<div className="text-center mt-6">
 								<button
 									type="button"
@@ -209,8 +225,7 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 							</div>
 						)}
 
-						{/* Empty State */}
-						{!loading && photos.length === 0 && (
+						{!state.loading && state.photos.length === 0 && (
 							<div className="text-center py-12 text-gray-500">
 								<svg
 									aria-hidden="true"
@@ -231,7 +246,6 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 						)}
 					</div>
 
-					{/* Footer */}
 					<div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-3">
 						<p className="text-xs text-gray-500 text-center">
 							Photos provided by{" "}

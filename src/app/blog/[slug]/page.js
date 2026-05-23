@@ -2,6 +2,7 @@ import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import BlogPostBody from "@/components/blog/BlogPostBody";
 import { db } from "@/lib/firebase";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
 
@@ -85,7 +86,7 @@ export default async function BlogPostPage({ params }) {
 		notFound();
 	}
 
-	const jsonLd = JSON.stringify({
+	const blogPostSchema = {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
 		headline: post.title,
@@ -110,16 +111,14 @@ export default async function BlogPostPage({ params }) {
 			},
 		},
 		description: post.excerpt || post.title,
-	});
+	};
 
 	return (
 		<div className="min-h-screen bg-gray-50">
 			{/* JSON-LD Structured Data */}
-			<script
-				type="application/ld+json"
-				// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
-				dangerouslySetInnerHTML={{ __html: jsonLd }}
-			/>
+			<script type="application/ld+json">
+				{JSON.stringify(blogPostSchema)}
+			</script>
 
 			{/* Hero Section */}
 			<section className="bg-primary text-white py-16">
@@ -145,7 +144,7 @@ export default async function BlogPostPage({ params }) {
 							</svg>
 							Back to Blog
 						</Link>
-						<h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-oswald">
+						<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald">
 							{post.title}
 						</h1>
 						<div className="flex items-center text-accent-200">
@@ -186,11 +185,7 @@ export default async function BlogPostPage({ params }) {
 				<div className="container mx-auto px-4">
 					<div className="max-w-4xl mx-auto">
 						<article className="bg-white rounded-xl shadow-sm p-8 md:p-12">
-							<div
-								// biome-ignore lint/security/noDangerouslySetInnerHtml: trusted Firestore blog HTML
-								dangerouslySetInnerHTML={{ __html: post.content }}
-								className="prose prose-lg max-w-none prose-headings:font-oswald prose-headings:text-gray-900 prose-a:text-accent prose-img:rounded-lg"
-							/>
+							<BlogPostBody html={post.content} />
 						</article>
 
 						{/* Share Section */}

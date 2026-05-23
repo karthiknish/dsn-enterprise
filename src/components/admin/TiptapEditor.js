@@ -1,7 +1,11 @@
 "use client";
 
 import { EditorContent, useEditor } from "@tiptap/react";
-import { useEffect, useRef, useState } from "react";
+import { useReducer, useRef } from "react";
+import {
+	initialTiptapEditorUiState,
+	tiptapEditorUiReducer,
+} from "@/lib/tiptap-editor-ui-reducer";
 import { EditorStyles } from "./tiptap/EditorStyles";
 import ImageDialog from "./tiptap/ImageDialog";
 import LinkDialog from "./tiptap/LinkDialog";
@@ -12,48 +16,46 @@ export default function TiptapEditor({
 	content,
 	onChange,
 	placeholder = "Start writing...",
+	editorKey = 0,
 }) {
 	const isExternalUpdate = useRef(false);
 	const editorRef = useRef(null);
 	const dragCounter = useRef(0);
-	const [showLinkDialog, setShowLinkDialog] = useState(false);
-	const [showImageDialog, setShowImageDialog] = useState(false);
-	const [linkUrl, setLinkUrl] = useState("");
-	const [isDragging, setIsDragging] = useState(false);
+	const [ui, dispatch] = useReducer(
+		tiptapEditorUiReducer,
+		initialTiptapEditorUiState,
+	);
 
-	const editor = useEditor({
-		immediatelyRender: false,
-		extensions: createExtensions(placeholder),
-		content,
-		onUpdate: ({ editor }) => {
-			if (!isExternalUpdate.current) {
-				onChange(editor.getHTML());
-			}
-		},
-		editorProps: {
-			attributes: {
-				class: "prose prose-lg max-w-none focus:outline-none min-h-[300px] p-4",
+	const editor = useEditor(
+		{
+			immediatelyRender: false,
+			extensions: createExtensions(placeholder),
+			content,
+			onUpdate: ({ editor: activeEditor }) => {
+				if (!isExternalUpdate.current) {
+					onChange(activeEditor.getHTML());
+				}
 			},
-			...createEditorProps(isExternalUpdate, onChange),
+			editorProps: {
+				attributes: {
+					class: "prose prose-lg max-w-none focus:outline-none min-h-[300px] p-4",
+				},
+				...createEditorProps(isExternalUpdate, onChange),
+			},
 		},
-	});
-
-	// Update editor content when content prop changes externally (e.g., from AI generator)
-	useEffect(() => {
-		if (editor && content !== editor.getHTML()) {
-			isExternalUpdate.current = true;
-			editor.commands.setContent(content, false);
-			isExternalUpdate.current = false;
-		}
-	}, [content, editor]);
+		[editorKey],
+	);
 
 	const handleLinkClick = () => {
-		setLinkUrl(editor.getAttributes("link").href || "");
-		setShowLinkDialog(true);
+		if (!editor) return;
+		dispatch({
+			type: "OPEN_LINK_DIALOG",
+			linkUrl: editor.getAttributes("link").href || "",
+		});
 	};
 
 	const handleImageClick = () => {
-		setShowImageDialog(true);
+		dispatch({ type: "OPEN_IMAGE_DIALOG" });
 	};
 
 	const handleConfirmLink = (url, text) => {
@@ -86,22 +88,23 @@ export default function TiptapEditor({
 		<div>
 			<EditorStyles />
 			<section
+				key={editorKey}
 				aria-label="Rich text editor"
 				className={`border border-gray-300 rounded-lg bg-white overflow-visible relative transition-colors ${
-					isDragging ? "border-accent ring-2 ring-accent-200" : ""
+					ui.isDragging ? "border-accent ring-2 ring-accent-200" : ""
 				}`}
 				onDragEnter={(e) => {
 					e.preventDefault();
 					dragCounter.current++;
 					if (dragCounter.current === 1) {
-						setIsDragging(true);
+						dispatch({ type: "SET_DRAGGING", isDragging: true });
 					}
 				}}
 				onDragLeave={(e) => {
 					e.preventDefault();
 					dragCounter.current--;
 					if (dragCounter.current === 0) {
-						setIsDragging(false);
+						dispatch({ type: "SET_DRAGGING", isDragging: false });
 					}
 				}}
 				onDragOver={(e) => {
@@ -110,8 +113,7 @@ export default function TiptapEditor({
 				onDrop={(e) => {
 					e.preventDefault();
 					dragCounter.current = 0;
-					setIsDragging(false);
-					// The actual drop handling is done by the editor's handleDrop
+					dispatch({ type: "SET_DRAGGING", isDragging: false });
 				}}
 			>
 				<MenuBar
@@ -123,8 +125,7 @@ export default function TiptapEditor({
 					<EditorContent editor={editor} ref={editorRef} />
 				</div>
 
-				{/* Drop zone overlay */}
-				{isDragging && (
+				{ui.isDragging && (
 					<div className="absolute inset-0 bg-accent-50/90 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center pointer-events-none z-10 border-2 border-dashed border-accent-400">
 						<svg
 							aria-hidden="true"
@@ -150,18 +151,18 @@ export default function TiptapEditor({
 				)}
 			</section>
 
-			{/* Link Dialog */}
 			<LinkDialog
-				isOpen={showLinkDialog}
-				onClose={() => setShowLinkDialog(false)}
+				key={ui.linkDialogKey}
+				isOpen={ui.showLinkDialog}
+				onClose={() => dispatch({ type: "CLOSE_LINK_DIALOG" })}
 				onConfirm={handleConfirmLink}
-				initialUrl={linkUrl}
+				initialUrl={ui.linkUrl}
 			/>
 
-			{/* Image Dialog */}
 			<ImageDialog
-				isOpen={showImageDialog}
-				onClose={() => setShowImageDialog(false)}
+				key={ui.imageDialogKey}
+				isOpen={ui.showImageDialog}
+				onClose={() => dispatch({ type: "CLOSE_IMAGE_DIALOG" })}
 				onConfirm={handleConfirmImage}
 			/>
 		</div>

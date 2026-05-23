@@ -6,7 +6,13 @@ import * as React from "react";
 import { cn } from "@/lib/utils.js";
 import { Calendar } from "./calendar.jsx";
 
-export function DatePicker({ value, onChange, placeholder = "Pick a date" }) {
+export function DatePicker({
+	value,
+	onChange,
+	placeholder = "Pick a date",
+	"aria-label": ariaLabel,
+	"aria-labelledby": ariaLabelledBy,
+}) {
 	const [open, setOpen] = React.useState(false);
 	const containerRef = React.useRef(null);
 	const buttonRef = React.useRef(null);
@@ -29,17 +35,19 @@ export function DatePicker({ value, onChange, placeholder = "Pick a date" }) {
 		setOpen(false);
 	};
 
-	React.useEffect(() => {
-		if (open) {
-			if (buttonRef.current) {
-				const rect = buttonRef.current.getBoundingClientRect();
-				setPosition({
-					top: rect.bottom + 4,
-					left: rect.left,
-				});
-			}
-		}
-	}, [open]);
+	const updatePosition = () => {
+		if (!buttonRef.current) return;
+		const rect = buttonRef.current.getBoundingClientRect();
+		setPosition({
+			top: rect.bottom + 4,
+			left: rect.left,
+		});
+	};
+
+	const toggleOpen = () => {
+		if (!open) updatePosition();
+		setOpen((prev) => !prev);
+	};
 
 	// Close when clicking outside
 	React.useEffect(() => {
@@ -68,7 +76,9 @@ export function DatePicker({ value, onChange, placeholder = "Pick a date" }) {
 			<button
 				ref={buttonRef}
 				type="button"
-				onClick={() => setOpen(!open)}
+				onClick={toggleOpen}
+				aria-label={ariaLabel}
+				aria-labelledby={ariaLabelledBy}
 				className={cn(
 					"w-full justify-start text-left font-normal px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent",
 					!date ? "text-gray-400" : "text-gray-900",

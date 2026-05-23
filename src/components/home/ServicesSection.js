@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 import {
 	FaArrowRight,
@@ -74,7 +74,7 @@ const ServicesSection = () => {
 					{services.map((service, index) => {
 						const Icon = service.icon;
 						return (
-							<motion.div
+							<m.div
 								key={service.id}
 								className="group bg-white rounded-2xl border border-gray-200/80 p-8 flex flex-col h-full transition-all duration-300 hover:border-accent/25 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5"
 								initial={{ opacity: 0, y: 24 }}
@@ -85,7 +85,7 @@ const ServicesSection = () => {
 								<div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors">
 									<Icon className="text-2xl" aria-hidden />
 								</div>
-								<h3 className="text-xl font-bold mb-3 text-gray-900">
+								<h3 className="text-xl font-semibold mb-3 text-gray-900">
 									{service.name}
 								</h3>
 								<p className="text-gray-600 mb-5 leading-relaxed">
@@ -114,7 +114,7 @@ const ServicesSection = () => {
 										aria-hidden
 									/>
 								</Link>
-							</motion.div>
+							</m.div>
 						);
 					})}
 				</div>

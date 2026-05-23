@@ -63,7 +63,7 @@ export const metadata = {
 	},
 };
 
-const organizationJsonLd = JSON.stringify({
+const organizationSchema = {
 	"@context": "https://schema.org",
 	"@type": "Organization",
 	name: "DSN Enterprises",
@@ -82,9 +82,9 @@ const organizationJsonLd = JSON.stringify({
 		telephone: "+91-9363122005",
 		contactType: "customer service",
 	},
-});
+};
 
-const websiteJsonLd = JSON.stringify({
+const websiteSchema = {
 	"@context": "https://schema.org",
 	"@type": "WebSite",
 	name: "DSN Enterprises",
@@ -94,22 +94,18 @@ const websiteJsonLd = JSON.stringify({
 		target: getSiteUrl("/blog?q={search_term_string}"),
 		"query-input": "required name=search_term_string",
 	},
-});
+};
 
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
 			<head>
-				<script
-					type="application/ld+json"
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
-					dangerouslySetInnerHTML={{ __html: organizationJsonLd }}
-				/>
-				<script
-					type="application/ld+json"
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data
-					dangerouslySetInnerHTML={{ __html: websiteJsonLd }}
-				/>
+				<script type="application/ld+json">
+					{JSON.stringify(organizationSchema)}
+				</script>
+				<script type="application/ld+json">
+					{JSON.stringify(websiteSchema)}
+				</script>
 			</head>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}
