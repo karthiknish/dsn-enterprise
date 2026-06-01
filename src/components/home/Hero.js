@@ -16,7 +16,7 @@ const Hero = () => {
 	const { trackCTAClick } = useGoogleAdsTracking();
 
 	return (
-		<div className="relative text-white min-h-[calc(100dvh-4rem)] flex items-center overflow-hidden">
+		<div className="relative text-white -mt-16 min-h-dvh flex items-center overflow-hidden">
 			<video
 				tabIndex={-1}
 				className="absolute inset-0 w-full h-full object-cover scale-105"
