@@ -2,10 +2,8 @@
 
 import { m, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useState } from "react";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
-
-const VIDEO_LOAD_TIMEOUT_MS = 4000;
 
 const trustPoints = [
 	"ISO Certified Manufacturing",
@@ -22,30 +20,8 @@ const Hero = () => {
 
 	const handleVideoReady = useCallback(() => setVideoLoaded(true), []);
 
-	// Safety net: some browsers (esp. mobile Safari with autoplay disabled)
-	// never fire canplay/loadeddata until user interaction, so don't let the
-	// spinner block the hero forever.
-	useEffect(() => {
-		const timer = setTimeout(() => setVideoLoaded(true), VIDEO_LOAD_TIMEOUT_MS);
-		return () => clearTimeout(timer);
-	}, []);
-
 	return (
 		<div className="relative text-white -mt-16 min-h-dvh flex items-center overflow-hidden">
-			{/* Loading overlay, shows until video can play */}
-			{!videoLoaded && (
-				<div className="absolute inset-0 z-[1] flex items-center justify-center bg-primary-dark">
-					<div className="flex flex-col items-center gap-3">
-						<div
-							className="h-8 w-8 animate-spin rounded-full border-2 border-white/30 border-t-white"
-							aria-hidden
-						/>
-						<span className="text-sm font-medium text-white/60">
-							Loading…
-						</span>
-					</div>
-				</div>
-			)}
 			<video
 				tabIndex={-1}
 				className={`absolute inset-0 w-full h-full object-cover scale-105 transition-opacity duration-700 ${
@@ -59,7 +35,6 @@ const Hero = () => {
 				aria-hidden
 				onCanPlay={handleVideoReady}
 				onLoadedData={handleVideoReady}
-				onError={handleVideoReady}
 			>
 				<source src="/hero-video.mp4" type="video/mp4" />
 			</video>
