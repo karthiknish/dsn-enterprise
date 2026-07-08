@@ -26,6 +26,7 @@ const cards = [
 	{
 		icon: FaClock,
 		title: "Business Hours",
+		align: "left",
 		content: (
 			<>
 				Monday - Friday: 9:00 AM - 6:00 PM
@@ -43,7 +44,7 @@ export default function ContactPageInfoCards() {
 	return (
 		<div className="mt-8">
 			<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-				{cards.map(({ icon: Icon, title, content, delay }) => (
+				{cards.map(({ icon: Icon, title, content, align, delay }) => (
 					<m.div
 						key={title}
 						className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 text-center"
@@ -58,7 +59,13 @@ export default function ContactPageInfoCards() {
 						<h3 className="text-lg font-semibold mb-2 text-gray-900">
 							{title}
 						</h3>
-						<p className="text-sm text-gray-600">{content}</p>
+						<p
+							className={`text-sm text-gray-600 ${
+								align === "left" ? "text-left" : ""
+							}`}
+						>
+							{content}
+						</p>
 					</m.div>
 				))}
 			</div>

@@ -215,10 +215,10 @@ export function useContactPageForm({ prefillProduct = "" } = {}) {
 		submitError,
 		errorMessage,
 		lastSaved,
-		handleSubmit,
-		updateContactFormField,
-		trackContactFieldFocus,
-		validateContactFieldOnBlur,
-		clearForm,
+		onSubmit: handleSubmit,
+		onFieldChange: updateContactFormField,
+		onFieldFocus: trackContactFieldFocus,
+		onFieldBlur: validateContactFieldOnBlur,
+		onClear: clearForm,
 	};
 }
