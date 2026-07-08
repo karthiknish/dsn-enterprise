@@ -1,8 +1,21 @@
 import Link from "next/link";
+import { LinkButton } from "@/components/ui/button";
 
 export const metadata = {
 	title: "Page not found",
 };
+
+const popularLinks = [
+	{ href: "/products", label: "Products" },
+	{ href: "/services", label: "Services" },
+	{ href: "/calibration", label: "Calibration" },
+	{ href: "/about", label: "About Us" },
+	{ href: "/industries", label: "Industries" },
+	{ href: "/quality", label: "Quality" },
+	{ href: "/resources", label: "Resources" },
+	{ href: "/blog", label: "Blog" },
+	{ href: "/faq", label: "FAQ" },
+];
 
 export default function NotFound() {
 	return (
@@ -19,18 +32,36 @@ export default function NotFound() {
 					below or the site menu to continue.
 				</p>
 				<div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto max-w-sm sm:max-w-none">
-					<Link
+					<LinkButton
 						href="/"
-						className="inline-flex justify-center items-center px-6 py-3 bg-primary hover:bg-primary-dark text-white font-medium rounded-md transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+						variant="default"
+						className="px-6 py-3 font-medium"
 					>
 						Back to home
-					</Link>
-					<Link
+					</LinkButton>
+					<LinkButton
 						href="/contact"
-						className="inline-flex justify-center items-center px-6 py-3 border-2 border-primary text-primary font-medium rounded-md hover:bg-primary/5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+						variant="outline"
+						className="px-6 py-3 font-medium"
 					>
 						Contact us
-					</Link>
+					</LinkButton>
+				</div>
+				<div className="mt-16 w-full max-w-2xl">
+					<p className="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-5">
+						Popular pages
+					</p>
+					<div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+						{popularLinks.map((link) => (
+							<Link
+								key={link.href}
+								href={link.href}
+								className="block rounded-lg border border-gray-200 bg-white px-4 py-3 text-left text-gray-700 font-medium hover:border-primary/40 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+							>
+								{link.label}
+							</Link>
+						))}
+					</div>
 				</div>
 			</div>
 		</div>

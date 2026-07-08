@@ -6,6 +6,7 @@ import { getSiteUrl, SITE_URL } from "@/lib/site";
 import "./globals.css";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
+import ScrollToTop from "../components/layout/ScrollToTop";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -23,6 +24,12 @@ const oswald = Oswald({
 	weight: ["400", "500", "600", "700"],
 });
 
+export const viewport = {
+	themeColor: "#1a3c5e",
+	width: "device-width",
+	initialScale: 1,
+};
+
 export const metadata = {
 	metadataBase: new URL(SITE_URL),
 	title: {
@@ -33,7 +40,9 @@ export const metadata = {
 		"DSN Enterprises is a leading manufacturer and supplier of high-precision gauges and measuring instruments for industrial applications.",
 	icons: {
 		icon: "/favicon.ico",
+		apple: "/images/logo.png",
 	},
+	manifest: "/manifest.webmanifest",
 	openGraph: {
 		title: "DSN Enterprises - Precision Gauges & Measuring Instruments",
 		description:
@@ -121,6 +130,7 @@ export default function RootLayout({ children }) {
 					<main id="site-main" className="pt-16">
 						{children}
 					</main>
+					<ScrollToTop />
 					<Footer />
 				</MotionProvider>
 				<GoogleAnalytics />

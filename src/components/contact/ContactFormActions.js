@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 
 export default function ContactFormActions({
@@ -7,6 +8,21 @@ export default function ContactFormActions({
 	lastSaved,
 	onClear,
 }) {
+	const [confirming, setConfirming] = useState(false);
+
+	const handleClearClick = () => {
+		if (confirming) {
+			onClear();
+			setConfirming(false);
+		} else {
+			setConfirming(true);
+		}
+	};
+
+	const handleClearBlur = () => {
+		setConfirming(false);
+	};
+
 	return (
 		<>
 			<div className="flex gap-3">
@@ -49,11 +65,17 @@ export default function ContactFormActions({
 
 				<button
 					type="button"
-					onClick={onClear}
-					className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+					onClick={handleClearClick}
+					onBlur={handleClearBlur}
+					className={`px-6 py-3 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+						confirming
+							? "bg-red-600 text-white hover:bg-red-700"
+							: "border border-gray-300 text-gray-700 hover:bg-gray-50"
+					}`}
 					disabled={isSubmitting}
+					aria-label={confirming ? "Confirm clear form" : "Clear form"}
 				>
-					Clear
+					{confirming ? "Confirm?" : "Clear"}
 				</button>
 			</div>
 

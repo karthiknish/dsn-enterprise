@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site";
+
 export const metadata = {
 	title: "FAQ - Frequently Asked Questions | DSN Enterprises",
 	description:
@@ -18,7 +20,7 @@ export const metadata = {
 	authors: [{ name: "DSN Enterprises" }],
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
-	metadataBase: new URL("https://www.dsnenterprises.in"),
+	metadataBase: new URL(SITE_URL),
 	alternates: {
 		canonical: "/faq",
 	},
@@ -26,7 +28,7 @@ export const metadata = {
 		title: "FAQ - Frequently Asked Questions | DSN Enterprises",
 		description:
 			"Find answers to common questions about our precision gauges, calibration services, API gauges, custom manufacturing, and ordering process.",
-		url: "https://www.dsnenterprises.in/faq",
+		url: "/faq",
 		siteName: "DSN Enterprises",
 		type: "website",
 		locale: "en_IN",

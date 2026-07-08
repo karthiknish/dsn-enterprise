@@ -36,6 +36,29 @@ async function getPostBySlug(slug) {
 	}
 }
 
+// Pre-render published blog slugs at build time; ISR revalidates hourly.
+// fallback: "blocking" ensures new posts render on first request instead of 404.
+export async function generateStaticParams() {
+	try {
+		const postsRef = collection(db, "blogs");
+		const q = query(
+			postsRef,
+			where("status", "==", "published"),
+			limit(100),
+		);
+		const snapshot = await getDocs(q);
+		return snapshot.docs.map((doc) => ({
+			slug: doc.data().slug,
+		}));
+	} catch (error) {
+		console.error("generateStaticParams: Unable to fetch blog slugs:", error);
+		return [];
+	}
+}
+
+// Revalidate ISR-cached pages every hour so new/updated posts surface.
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }) {
 	const { slug } = await params;
 	const post = await getPostBySlug(slug);
@@ -63,9 +86,14 @@ export async function generateMetadata({ params }) {
 			description,
 			url: `/blog/${post.slug}`,
 			type: "article",
+			siteName: "DSN Enterprises",
+			locale: "en_IN",
+			publishedTime: post.publishedDate || post.createdAt,
+			modifiedTime: post.updatedAt || post.publishedDate || post.createdAt,
+			authors: ["DSN Enterprises"],
 			images: post.featuredImage
-				? [post.featuredImage]
-				: ["/images/featured.png"],
+				? [{ url: post.featuredImage, alt: post.title }]
+				: [{ url: "/images/featured.png", width: 1200, height: 630, alt: post.title }],
 		},
 		twitter: {
 			card: "summary_large_image",
@@ -74,6 +102,11 @@ export async function generateMetadata({ params }) {
 			images: post.featuredImage
 				? [post.featuredImage]
 				: ["/images/featured.png"],
+		},
+		robots: {
+			index: true,
+			follow: true,
+			googleBot: { index: true, follow: true },
 		},
 	};
 }

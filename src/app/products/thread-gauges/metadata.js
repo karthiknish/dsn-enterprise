@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site";
+
 export const metadata = {
 	title:
 		"Thread Gauges Manufacturer | Thread Plug & Ring Gauges - DSN Enterprises",
@@ -23,7 +25,7 @@ export const metadata = {
 	authors: [{ name: "DSN Enterprises" }],
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
-	metadataBase: new URL("https://www.dsnenterprises.in"),
+	metadataBase: new URL(SITE_URL),
 	alternates: {
 		canonical: "/products/thread-gauges",
 	},
@@ -32,7 +34,7 @@ export const metadata = {
 			"Thread Gauges Manufacturer | Thread Plug & Ring Gauges - DSN Enterprises",
 		description:
 			"Precision thread gauges including thread plug gauges, ring gauges, setting plugs, taper gauges, and all standard thread forms.",
-		url: "https://www.dsnenterprises.in/products/thread-gauges",
+		url: "/products/thread-gauges",
 		siteName: "DSN Enterprises",
 		type: "website",
 		locale: "en_IN",

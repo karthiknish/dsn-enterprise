@@ -284,7 +284,6 @@ const ProductsPage = () => {
 											src={category.image}
 											alt={category.name}
 											fill
-											unoptimized
 											sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
 											className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
 										/>
@@ -333,7 +332,7 @@ const ProductsPage = () => {
 								key={category.id}
 								type="button"
 								className={`px-6 py-3 rounded-full font-medium transition-colors ${
-									activeCategory === category.id
+									activeCategory === category.id && !searchTerm
 										? "bg-primary text-white"
 										: "bg-white text-gray-700 hover:bg-gray-100"
 								}`}
@@ -344,75 +343,98 @@ const ProductsPage = () => {
 						))}
 					</div>
 
-					{filteredProducts.map((category) => (
-						<div
-							key={category.id}
-							className={`${
-								activeCategory === category.id || searchTerm
-									? "block"
-									: "hidden"
-							}`}
-						>
-							<div className="mb-12">
-								<h2 className="text-3xl font-semibold mb-2 text-gray-900">
-									{category.name}
-								</h2>
-								<p className="text-lg text-gray-600 mb-8">
-									{category.description}
-								</p>
+					{filteredProducts.length === 0 && searchTerm ? (
+						<div className="text-center py-16">
+							<FaSearch
+								className="text-4xl text-gray-300 mx-auto mb-4"
+								aria-hidden
+							/>
+							<h3 className="text-xl font-semibold text-gray-900 mb-2">
+								No products found for &quot;{searchTerm}&quot;
+							</h3>
+							<p className="text-gray-600 mb-6">
+								Try a different search term or browse all product categories.
+							</p>
+							<button
+								type="button"
+								onClick={() => setSearchTerm("")}
+								className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-2.5 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+							>
+								Clear search
+							</button>
+						</div>
+					) : (
+						filteredProducts.map((category) => (
+							<div
+								key={category.id}
+								className={`${
+									activeCategory === category.id || searchTerm
+										? "block"
+										: "hidden"
+								}`}
+							>
+								<div className="mb-12">
+									<h2 className="text-3xl font-semibold mb-2 text-gray-900">
+										{category.name}
+									</h2>
+									<p className="text-lg text-gray-600 mb-8">
+										{category.description}
+									</p>
 
-								<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-									{category.items.map((item, index) => (
-										<m.div
-											key={item.id}
-											className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 hover:border-accent/25"
-											initial={{ opacity: 0, y: 30 }}
-											animate={{ opacity: 1, y: 0 }}
-											transition={{ duration: 0.5, delay: index * 0.1 }}
-										>
-											<div className="relative h-48 bg-secondary-light overflow-hidden">
-												<Image
-													className="object-contain"
-													src={item.image}
-													alt={item.name}
-													fill
-													unoptimized
-													sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-												/>
-											</div>
-											<div className="p-6">
-												<h3 className="text-xl font-semibold mb-2 text-gray-900">
-													{item.name}
-												</h3>
-												<p className="text-primary font-medium mb-3">
-													{item.specs}
-												</p>
-												<p className="text-gray-600 mb-4">{item.description}</p>
-												<div className="flex gap-3">
-													<Link
-														href={`/contact?product=${encodeURIComponent(
-															item.name,
-														)}`}
-														className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
-													>
-														Request Quote
-														<FaArrowRight className="ml-2" />
-													</Link>
-													<Link
-														href={`/products/${category.id}`}
-														className="text-gray-500 hover:text-primary font-medium inline-flex items-center"
-													>
-														View All
-														<FaChevronRight className="ml-1" />
-													</Link>
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+										{category.items.map((item, index) => (
+											<m.div
+												key={item.id}
+												className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 hover:border-accent/25"
+												initial={{ opacity: 0, y: 30 }}
+												animate={{ opacity: 1, y: 0 }}
+												transition={{ duration: 0.5, delay: index * 0.1 }}
+											>
+												<div className="relative h-48 bg-secondary-light overflow-hidden">
+													<Image
+														className="object-contain"
+														src={item.image}
+														alt={item.name}
+														fill
+														sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+													/>
 												</div>
-											</div>
-										</m.div>
-									))}
+												<div className="p-6">
+													<h3 className="text-xl font-semibold mb-2 text-gray-900">
+														{item.name}
+													</h3>
+													<p className="text-primary font-medium mb-3">
+														{item.specs}
+													</p>
+													<p className="text-gray-600 mb-4">
+														{item.description}
+													</p>
+													<div className="flex gap-3">
+														<Link
+															href={`/contact?product=${encodeURIComponent(
+																item.name,
+															)}`}
+															className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
+														>
+															Request Quote
+															<FaArrowRight className="ml-2" />
+														</Link>
+														<Link
+															href={`/products/${category.id}`}
+															className="text-gray-500 hover:text-primary font-medium inline-flex items-center"
+														>
+															View All
+															<FaChevronRight className="ml-1" />
+														</Link>
+													</div>
+												</div>
+											</m.div>
+										))}
+									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						))
+					)}
 				</div>
 			</section>
 

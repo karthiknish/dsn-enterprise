@@ -149,6 +149,10 @@ export default function CalibrationPage() {
 				eyebrow="Calibration"
 				title="Calibration Services"
 				description={pageHeroes.calibration}
+			breadcrumbs={[
+				{ href: "/", label: "Home" },
+				{ href: "/calibration", label: "Calibration" },
+			]}
 			>
 				<span className="inline-flex items-center bg-white/15 border border-white/20 px-4 py-2 rounded-full text-sm">
 					<FaCertificate className="mr-2" aria-hidden />

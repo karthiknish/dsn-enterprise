@@ -5,10 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 const stats = [
-	{ value: "20+", label: "Years of Experience" },
-	{ value: "200+", label: "Satisfied Clients" },
-	{ value: "10+", label: "Types of Gauges" },
-	{ value: "50+", label: "Cities covered in South India" },
+	{ value: "30+", label: "Years of Experience" },
+	{ value: "5000+", label: "Satisfied Customers" },
+	{ value: "8", label: "TN Cities Served" },
 ];
 
 const AboutSection = () => {
@@ -43,20 +42,21 @@ const AboutSection = () => {
 							highly skilled engineers, we provide comprehensive solutions for
 							dimensional measurement needs across various industries.
 						</p>
-						<div className="grid grid-cols-2 gap-4 mb-8">
+						<div className="flex flex-wrap gap-x-8 gap-y-3 mb-8">
 							{stats.map((stat, i) => (
 								<m.div
 									key={stat.label}
-									initial={{ opacity: 0, y: 12 }}
+									initial={{ opacity: 0, y: 8 }}
 									whileInView={{ opacity: 1, y: 0 }}
 									viewport={{ once: true }}
 									transition={{ delay: i * 0.06 }}
-									className="bg-gray-50 border border-gray-100 rounded-xl p-5 border-l-4 border-l-accent"
 								>
-									<p className="text-2xl md:text-3xl font-bold text-primary mb-1">
+									<span className="text-xl font-semibold text-primary">
 										{stat.value}
-									</p>
-									<p className="text-sm text-gray-600">{stat.label}</p>
+									</span>
+									<span className="text-sm text-gray-500 ml-2">
+										{stat.label}
+									</span>
 								</m.div>
 							))}
 						</div>
@@ -79,7 +79,7 @@ const AboutSection = () => {
 							<div className="rounded-2xl overflow-hidden bg-secondary-light/60 border border-gray-100 aspect-[4/3] relative">
 								<Image
 									src="/images/bnr1.png"
-									alt="Cylinder Maters"
+									alt="Cylinder Masters"
 									fill
 									className="object-contain p-6"
 									sizes="(max-width: 1024px) 100vw, 50vw"

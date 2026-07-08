@@ -3,6 +3,15 @@
 import Link from "next/link";
 import { FaChevronDown } from "react-icons/fa";
 
+function isActive(pathname, href) {
+	if (href === "/") return pathname === "/";
+	return pathname === href || pathname.startsWith(href + "/");
+}
+
+function isSectionActive(pathname, links) {
+	return links.some((link) => isActive(pathname, link.href));
+}
+
 export default function HeaderDesktopNav({
 	linkClass,
 	companyLinks,
@@ -18,12 +27,18 @@ export default function HeaderDesktopNav({
 	onOpenProducts,
 	onCloseProducts,
 	onContactClick,
+	pathname = "",
 }) {
+	const companyActive = isSectionActive(pathname, companyLinks);
+	const productActive = isSectionActive(pathname, productLinks);
+
 	return (
 		<nav className="hidden lg:flex items-center gap-x-6">
 			<Link
 				href="/"
-				className={`${linkClass} hover:text-primary font-medium transition-colors`}
+				className={`${linkClass} hover:text-primary font-medium transition-colors ${
+					isActive(pathname, "/") ? "text-primary" : ""
+				}`}
 			>
 				Home
 			</Link>
@@ -31,20 +46,25 @@ export default function HeaderDesktopNav({
 			<div className="relative" ref={companyDropdownRef}>
 				<button
 					type="button"
-					className={`${linkClass} hover:text-primary font-medium transition-colors flex items-center gap-1`}
+					className={`${linkClass} hover:text-primary font-medium transition-colors flex items-center gap-1 ${
+						companyActive ? "text-primary" : ""
+					}`}
 					onClick={onToggleCompany}
 					onMouseEnter={onOpenCompany}
+					onFocus={onOpenCompany}
+					aria-haspopup="menu"
+					aria-expanded={companyDropdown}
 				>
 					Company
 					<FaChevronDown
-						className={`text-xs transition-transform ${companyDropdown ? "rotate-180" : ""}`}
+						className={`text-xs transition-transform duration-200 ${companyDropdown ? "rotate-180" : ""}`}
 					/>
 				</button>
 				{companyDropdown && (
 					<div
 						role="menu"
 						tabIndex={-1}
-						className="absolute top-full left-0 mt-2 w-52 bg-white rounded-lg shadow-lg py-2 z-50"
+						className="absolute top-full left-0 mt-2 w-52 bg-white rounded-lg shadow-lg py-2 z-50 animate-fadeIn"
 						onMouseLeave={onCloseCompany}
 						onKeyDown={(e) => {
 							if (e.key === "Escape") onCloseCompany();
@@ -54,7 +74,11 @@ export default function HeaderDesktopNav({
 							<Link
 								key={link.href}
 								href={link.href}
-								className="block px-4 py-2 text-gray-700 hover:bg-secondary-light hover:text-primary transition-colors"
+								className={`block px-4 py-2 transition-colors ${
+									isActive(pathname, link.href)
+										? "bg-secondary-light text-primary font-medium"
+										: "text-gray-700 hover:bg-secondary-light hover:text-primary"
+								}`}
 								onClick={onCloseCompany}
 							>
 								{link.label}
@@ -67,20 +91,25 @@ export default function HeaderDesktopNav({
 			<div className="relative" ref={productDropdownRef}>
 				<button
 					type="button"
-					className={`${linkClass} hover:text-primary font-medium transition-colors flex items-center gap-1`}
+					className={`${linkClass} hover:text-primary font-medium transition-colors flex items-center gap-1 ${
+						productActive ? "text-primary" : ""
+					}`}
 					onClick={onToggleProducts}
 					onMouseEnter={onOpenProducts}
+					onFocus={onOpenProducts}
+					aria-haspopup="menu"
+					aria-expanded={productDropdown}
 				>
 					Products
 					<FaChevronDown
-						className={`text-xs transition-transform ${productDropdown ? "rotate-180" : ""}`}
+						className={`text-xs transition-transform duration-200 ${productDropdown ? "rotate-180" : ""}`}
 					/>
 				</button>
 				{productDropdown && (
 					<div
 						role="menu"
 						tabIndex={-1}
-						className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50"
+						className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 animate-fadeIn"
 						onMouseLeave={onCloseProducts}
 						onKeyDown={(e) => {
 							if (e.key === "Escape") onCloseProducts();
@@ -90,7 +119,11 @@ export default function HeaderDesktopNav({
 							<Link
 								key={link.href}
 								href={link.href}
-								className="block px-4 py-2 text-gray-700 hover:bg-secondary-light hover:text-primary transition-colors"
+								className={`block px-4 py-2 transition-colors ${
+									isActive(pathname, link.href)
+										? "bg-secondary-light text-primary font-medium"
+										: "text-gray-700 hover:bg-secondary-light hover:text-primary"
+								}`}
 								onClick={onCloseProducts}
 							>
 								{link.label}
@@ -102,25 +135,33 @@ export default function HeaderDesktopNav({
 
 			<Link
 				href="/services"
-				className={`${linkClass} hover:text-primary font-medium transition-colors`}
+				className={`${linkClass} hover:text-primary font-medium transition-colors ${
+					isActive(pathname, "/services") ? "text-primary" : ""
+				}`}
 			>
 				Services
 			</Link>
 			<Link
 				href="/blog"
-				className={`${linkClass} hover:text-primary font-medium transition-colors`}
+				className={`${linkClass} hover:text-primary font-medium transition-colors ${
+					isActive(pathname, "/blog") ? "text-primary" : ""
+				}`}
 			>
 				Blog
 			</Link>
 			<Link
 				href="/resources"
-				className={`${linkClass} hover:text-primary font-medium transition-colors`}
+				className={`${linkClass} hover:text-primary font-medium transition-colors ${
+					isActive(pathname, "/resources") ? "text-primary" : ""
+				}`}
 			>
 				Resources
 			</Link>
 			<Link
 				href="/faq"
-				className={`${linkClass} hover:text-primary font-medium transition-colors`}
+				className={`${linkClass} hover:text-primary font-medium transition-colors ${
+					isActive(pathname, "/faq") ? "text-primary" : ""
+				}`}
 			>
 				FAQ
 			</Link>

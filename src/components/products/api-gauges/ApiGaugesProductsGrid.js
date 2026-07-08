@@ -8,7 +8,7 @@ import { products } from "@/content/api-gauges-data";
 
 export default function ApiGaugesProductsGrid() {
 	return (
-		<section id="products" className="py-16 bg-secondary-light">
+		<section id="products" className="scroll-mt-24 py-16 bg-secondary-light">
 			<div className="container mx-auto px-4">
 				<div className="text-center mb-12">
 					<h2 className="text-3xl font-semibold mb-4 text-gray-900">
@@ -36,7 +36,6 @@ export default function ApiGaugesProductsGrid() {
 									alt={product.name}
 									fill
 									sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-									unoptimized
 									className="object-contain p-6"
 								/>
 							</div>

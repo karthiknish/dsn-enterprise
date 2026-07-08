@@ -10,7 +10,7 @@ import {
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 import { useMetaTracking } from "@/hooks/useMetaTracking";
 
-export function useContactPageForm() {
+export function useContactPageForm({ prefillProduct = "" } = {}) {
 	const { push } = useRouter();
 	const {
 		trackContactSubmission,
@@ -27,9 +27,14 @@ export function useContactPageForm() {
 		trackTimeOnPage,
 	} = useGoogleAdsTracking();
 
-	const [formData, setFormData] = useState(
-		() => loadContactDraft().formData,
-	);
+	const [formData, setFormData] = useState(() => {
+		const draft = loadContactDraft();
+		// Only prefill from query param if the draft doesn't already have a product selected
+		if (prefillProduct && !draft.formData.productInterest) {
+			return { ...draft.formData, productInterest: prefillProduct };
+		}
+		return draft.formData;
+	});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [submitError, setSubmitError] = useState(false);

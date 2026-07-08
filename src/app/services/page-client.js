@@ -77,6 +77,10 @@ const ServicesPage = () => {
 				eyebrow="Services"
 				title="Our Services"
 				description={pageHeroes.services}
+			breadcrumbs={[
+				{ href: "/", label: "Home" },
+				{ href: "/services", label: "Services" },
+			]}
 			/>
 
 			<section className="py-16 md:py-20 bg-secondary-light relative">

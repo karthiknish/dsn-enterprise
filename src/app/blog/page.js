@@ -8,6 +8,10 @@ import { db } from "@/lib/firebase";
 export async function generateMetadata({ searchParams }) {
 	const params = await searchParams;
 	const searchQuery = params?.q || "";
+	const page = params?.page;
+	// Search results and paginated views are duplicate content — keep them
+	// out of the index while still following links to individual posts.
+	const isFiltered = Boolean(searchQuery || (page && page !== "1"));
 
 	const title = searchQuery
 		? `Search results for "${searchQuery}" - Blog - DSN Enterprises`
@@ -35,6 +39,9 @@ export async function generateMetadata({ searchParams }) {
 			description,
 			images: ["/images/featured.png"],
 		},
+		robots: isFiltered
+			? { index: false, follow: true }
+			: { index: true, follow: true },
 	};
 }
 
@@ -55,14 +62,15 @@ async function getPublishedPosts() {
 			createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || null,
 		}));
 		// Sort by published date when set so the blog feels current
-		return posts.sort((a, b) => {
+		const sorted = posts.sort((a, b) => {
 			const dateA = new Date(a.publishedDate || a.createdAt || 0).getTime();
 			const dateB = new Date(b.publishedDate || b.createdAt || 0).getTime();
 			return dateB - dateA;
 		});
+		return { posts: sorted, error: false };
 	} catch (error) {
 		console.error("Error fetching posts:", error);
-		return [];
+		return { posts: [], error: true };
 	}
 }
 
@@ -72,7 +80,7 @@ export default async function BlogPage({ searchParams }) {
 	const searchQuery = params?.q || "";
 	const postsPerPage = 9;
 
-	const allPosts = await getPublishedPosts();
+	const { posts: allPosts, error: fetchError } = await getPublishedPosts();
 
 	// Filter posts based on search query
 	const filteredPosts = searchQuery
@@ -92,7 +100,15 @@ export default async function BlogPage({ searchParams }) {
 
 	return (
 		<div className="min-h-screen bg-gray-50">
-			<PageHero eyebrow="Blog" title="Our Blog" description={pageHeroes.blog} />
+			<PageHero
+				eyebrow="Blog"
+				title="Our Blog"
+				description={pageHeroes.blog}
+				breadcrumbs={[
+					{ href: "/", label: "Home" },
+					{ href: "/blog", label: "Blog" },
+				]}
+			/>
 
 			{/* Search and Filters Bar */}
 			<section className="bg-white border-b border-gray-200 py-4 sticky top-16 z-10 shadow-sm">
@@ -197,7 +213,37 @@ export default async function BlogPage({ searchParams }) {
 						</div>
 					)}
 
-					{posts.length === 0 && !searchQuery ? (
+					{fetchError && !searchQuery ? (
+						<div className="text-center py-16" role="alert">
+							<svg
+								aria-hidden="true"
+								className="w-16 h-16 mx-auto text-gray-400 mb-4"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+								/>
+							</svg>
+							<h2 className="text-2xl font-semibold text-gray-900 mb-2">
+								Couldn&apos;t load blog posts
+							</h2>
+							<p className="text-gray-600 mb-6 max-w-md mx-auto">
+								We&apos;re having trouble connecting to our blog. Please try
+								again in a moment.
+							</p>
+							<a
+								href="/blog"
+								className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-2.5 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+							>
+								Try again
+							</a>
+						</div>
+					) : posts.length === 0 && !searchQuery ? (
 						<div className="text-center py-16">
 							<svg
 								aria-hidden="true"

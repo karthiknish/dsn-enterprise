@@ -1,6 +1,6 @@
 "use client";
 
-import { m } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
@@ -14,13 +14,15 @@ const trustPoints = [
 
 const Hero = () => {
 	const { trackCTAClick } = useGoogleAdsTracking();
+	const prefersReducedMotion = useReducedMotion();
 
 	return (
 		<div className="relative text-white -mt-16 min-h-dvh flex items-center overflow-hidden">
 			<video
 				tabIndex={-1}
 				className="absolute inset-0 w-full h-full object-cover scale-105"
-				autoPlay
+				poster="/images/featured.png"
+				autoPlay={!prefersReducedMotion}
 				muted
 				loop
 				playsInline

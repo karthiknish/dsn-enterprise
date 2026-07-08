@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site";
+
 export const metadata = {
 	title: "Quality Assurance | ISO 9001 & NABL Certified - DSN Enterprises",
 	description:
@@ -18,7 +20,7 @@ export const metadata = {
 	authors: [{ name: "DSN Enterprises" }],
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
-	metadataBase: new URL("https://www.dsnenterprises.in"),
+	metadataBase: new URL(SITE_URL),
 	alternates: {
 		canonical: "/quality",
 	},
@@ -26,7 +28,7 @@ export const metadata = {
 		title: "Quality Assurance | ISO 9001 & NABL Certified - DSN Enterprises",
 		description:
 			"Learn about our quality assurance processes, ISO 9001:2015 certification, NABL accreditation, and API 5B & 7-2 licensing.",
-		url: "https://www.dsnenterprises.in/quality",
+		url: "/quality",
 		siteName: "DSN Enterprises",
 		type: "website",
 		locale: "en_IN",

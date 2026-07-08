@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LinkButton } from "@/components/ui/button";
 
 /**
  * Bottom-of-page call-to-action band. Uses the secondary palette so it
@@ -35,19 +35,21 @@ export default function PageCta({
 					</p>
 				)}
 				<div className="flex flex-wrap justify-center gap-4">
-					<Link
+					<LinkButton
 						href={primaryHref}
-						className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-bold py-3 px-8 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
+						variant="onDark"
+						className="font-bold focus-visible:ring-offset-secondary"
 					>
 						{primaryLabel}
-					</Link>
+					</LinkButton>
 					{secondaryHref && secondaryLabel && (
-						<Link
+						<LinkButton
 							href={secondaryHref}
-							className="inline-flex items-center justify-center bg-white/70 hover:bg-white text-primary-dark font-bold py-3 px-8 rounded-lg border-2 border-primary/30 hover:border-primary/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-secondary"
+							variant="outline"
+							className="font-bold border-primary/30 hover:border-primary/50 bg-white/70 hover:bg-white focus-visible:ring-offset-secondary"
 						>
 							{secondaryLabel}
-						</Link>
+						</LinkButton>
 					)}
 				</div>
 			</div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { m } from "framer-motion";
-import { FaClock, FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
+import { FaClock, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 
 const cards = [
 	{
@@ -24,14 +24,6 @@ const cards = [
 		delay: 0.1,
 	},
 	{
-		icon: FaEnvelope,
-		title: "Email",
-		content: (
-			<a href="mailto:microfin2001@gmail.com">microfin2001@gmail.com</a>
-		),
-		delay: 0.2,
-	},
-	{
 		icon: FaClock,
 		title: "Business Hours",
 		content: (
@@ -43,7 +35,7 @@ const cards = [
 				Sunday: Closed
 			</>
 		),
-		delay: 0.3,
+		delay: 0.2,
 	},
 ];
 
@@ -51,7 +43,7 @@ export default function ContactPageInfoCards() {
 	return (
 		<section className="py-16 bg-secondary-light">
 			<div className="container mx-auto px-4">
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
 					{cards.map(({ icon: Icon, title, content, delay }) => (
 						<m.div
 							key={title}

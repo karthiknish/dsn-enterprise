@@ -9,7 +9,7 @@ import { pageHeroes } from "@/content/page-heroes";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 export default function ThankYouPage() {
-	const { trackThankYouPageView, trackPhoneClick, trackEmailClick } =
+	const { trackThankYouPageView, trackPhoneClick } =
 		useGoogleAdsTracking();
 
 	// Track conversion on page load
@@ -127,15 +127,6 @@ export default function ThankYouPage() {
 										onClick={() => trackPhoneClick("+919363122005")}
 									>
 										+91 9363122005
-									</a>
-									<br />
-									Email:{" "}
-									<a
-										href="mailto:info@dsnenterprises.com"
-										className="underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
-										onClick={() => trackEmailClick("info@dsnenterprises.com")}
-									>
-										info@dsnenterprises.com
 									</a>
 								</p>
 							</m.div>

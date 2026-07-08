@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import {
-	FaEnvelope,
 	FaLinkedin,
 	FaMapMarkerAlt,
 	FaPhone,
@@ -10,7 +9,7 @@ import {
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const Footer = () => {
-	const { trackPhoneClick, trackEmailClick } = useGoogleAdsTracking();
+	const { trackPhoneClick } = useGoogleAdsTracking();
 
 	return (
 		<footer className="bg-primary text-white pt-12 pb-6">
@@ -170,17 +169,6 @@ const Footer = () => {
 										onClick={() => trackPhoneClick("+919363122005")}
 									>
 										+91 9363122005
-									</a>
-								</span>
-							</li>
-							<li className="flex items-center">
-								<FaEnvelope className="mr-3 text-secondary" />
-								<span>
-									<a
-										href="mailto:microfin2001@gmail.com"
-										onClick={() => trackEmailClick("microfin2001@gmail.com")}
-									>
-										microfin2001@gmail.com
 									</a>
 								</span>
 							</li>

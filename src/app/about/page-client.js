@@ -15,6 +15,10 @@ const AboutPage = () => {
 				eyebrow="About"
 				title="About DSN Enterprises"
 				description={pageHeroes.about}
+			breadcrumbs={[
+				{ href: "/", label: "Home" },
+				{ href: "/about", label: "About" },
+			]}
 			/>
 
 			<AboutStorySection />

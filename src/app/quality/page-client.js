@@ -140,6 +140,10 @@ export default function QualityPage() {
 				eyebrow="Quality"
 				title="Quality Assurance"
 				description={pageHeroes.quality}
+			breadcrumbs={[
+				{ href: "/", label: "Home" },
+				{ href: "/quality", label: "Quality" },
+			]}
 			>
 				<FaAward className="text-5xl opacity-90" aria-hidden />
 			</PageHero>
@@ -213,7 +217,6 @@ export default function QualityPage() {
 										alt={cert.name}
 										fill
 							sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-										unoptimized
 										className="object-cover hover:scale-105 transition-transform duration-300"
 									/>
 								</div>

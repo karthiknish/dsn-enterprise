@@ -1,4 +1,4 @@
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, getSiteUrl } from "@/lib/site";
 import AboutSection from "../components/home/AboutSection";
 import CertificationsSection from "../components/home/CertificationsSection";
 import ConsultancySection from "../components/home/ConsultancySection";
@@ -78,14 +78,49 @@ export const metadata = {
 			"max-snippet": -1,
 		},
 	},
-	verification: {
-		google: "your-google-verification-code",
-	},
 };
 
 export default function Home() {
+	// ItemList schema for featured products — helps Google understand the
+	// product catalogue surfaced on the home page.
+	const itemListSchema = {
+		"@context": "https://schema.org",
+		"@type": "ItemList",
+		name: "Featured Precision Gauges",
+		itemListElement: [
+			{
+				name: "Plain Plug Gauges",
+				url: getSiteUrl("/products/plain-gauges"),
+			},
+			{
+				name: "Thread Plug Gauges",
+				url: getSiteUrl("/products/thread-gauges"),
+			},
+			{
+				name: "API Master Gauges",
+				url: getSiteUrl("/products/api-gauges"),
+			},
+			{
+				name: "Special & Custom Gauges",
+				url: getSiteUrl("/products/special-gauges"),
+			},
+		].map((item, index) => ({
+			"@type": "ListItem",
+			position: index + 1,
+			item: {
+				"@type": "Product",
+				name: item.name,
+				brand: { "@type": "Brand", name: "DSN Enterprises" },
+				url: item.url,
+			},
+		})),
+	};
+
 	return (
 		<div>
+			<script type="application/ld+json">
+				{JSON.stringify(itemListSchema)}
+			</script>
 			<Hero />
 			<FeaturedProducts />
 			<AboutSection />

@@ -78,6 +78,10 @@ export default function FAQPage() {
 				eyebrow="Support"
 				title="Frequently Asked Questions"
 				description={pageHeroes.faq}
+			breadcrumbs={[
+				{ href: "/", label: "Home" },
+				{ href: "/faq", label: "FAQ" },
+			]}
 			/>
 
 			<section className="py-16 md:py-20 bg-white">

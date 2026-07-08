@@ -8,8 +8,8 @@ import ContactPageInfoCards from "@/components/contact/ContactPageInfoCards";
 import { pageHeroes } from "@/content/page-heroes";
 import { useContactPageForm } from "@/hooks/useContactPageForm";
 
-export default function ContactPage() {
-	const form = useContactPageForm();
+export default function ContactPage({ prefillProduct = "" }) {
+	const form = useContactPageForm({ prefillProduct });
 
 	return (
 		<div>

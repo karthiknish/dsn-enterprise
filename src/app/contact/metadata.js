@@ -1,7 +1,9 @@
+import { SITE_URL } from "@/lib/site";
+
 export const metadata = {
 	title: "Contact Us - DSN Enterprises | Precision Gauge Manufacturers",
 	description:
-		"Get in touch with DSN Enterprises for precision gauges, calibration services, and custom solutions. Contact us at +91 9363122005 or email info@dsnenterprises.com. Located in Coimbatore, Tamil Nadu, India.",
+		"Get in touch with DSN Enterprises for precision gauges, calibration services, and custom solutions. Call us at +91 9363122005. Located in Coimbatore, Tamil Nadu, India.",
 	keywords: [
 		"contact DSN Enterprises",
 		"gauge manufacturers contact",
@@ -11,20 +13,19 @@ export const metadata = {
 		"Coimbatore gauge suppliers",
 		"Tamil Nadu precision tools",
 		"DSN Enterprises phone",
-		"DSN Enterprises email",
 	],
 	authors: [{ name: "DSN Enterprises" }],
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
-	metadataBase: new URL("https://www.dsnenterprises.in"),
+	metadataBase: new URL(SITE_URL),
 	alternates: {
 		canonical: "/contact",
 	},
 	openGraph: {
 		title: "Contact Us - DSN Enterprises | Precision Gauge Manufacturers",
 		description:
-			"Get in touch with DSN Enterprises for precision gauges, calibration services, and custom solutions. Contact us at +91 9363122005 or email info@dsnenterprises.com.",
-		url: "https://www.dsnenterprises.in/contact",
+			"Get in touch with DSN Enterprises for precision gauges, calibration services, and custom solutions. Call us at +91 9363122005.",
+		url: "/contact",
 		siteName: "DSN Enterprises",
 		type: "website",
 		locale: "en_IN",

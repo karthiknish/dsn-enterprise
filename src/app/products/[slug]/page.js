@@ -47,7 +47,14 @@ export async function generateMetadata({ params }) {
 			type: "website",
 			siteName: "DSN Enterprises",
 			locale: "en_IN",
-			images: ["/images/featured.png"],
+			images: [
+				{
+					url: "/images/featured.png",
+					width: 1200,
+					height: 630,
+					alt: `${pageData.productName} in ${pageData.cityName}`,
+				},
+			],
 		},
 		twitter: {
 			card: "summary_large_image",

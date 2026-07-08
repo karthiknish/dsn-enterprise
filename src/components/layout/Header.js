@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useReducer, useRef } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
@@ -28,6 +29,7 @@ const companyLinks = [
 ];
 
 const Header = () => {
+	const pathname = usePathname();
 	const [nav, dispatch] = useReducer(
 		headerNavReducer,
 		null,
@@ -36,6 +38,18 @@ const Header = () => {
 	const productDropdownRef = useRef(null);
 	const companyDropdownRef = useRef(null);
 	const { trackCTAClick } = useGoogleAdsTracking();
+
+	// Lock body scroll when mobile menu is open
+	useEffect(() => {
+		if (nav.isOpen) {
+			document.body.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = "";
+		}
+		return () => {
+			document.body.style.overflow = "";
+		};
+	}, [nav.isOpen]);
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -101,6 +115,7 @@ const Header = () => {
 					productDropdown={nav.productDropdown}
 					companyDropdownRef={companyDropdownRef}
 					productDropdownRef={productDropdownRef}
+					pathname={pathname}
 					onToggleCompany={() =>
 						dispatch({
 							type: "SET_COMPANY_DROPDOWN",
@@ -153,6 +168,7 @@ const Header = () => {
 				productLinks={productLinks}
 				mobileCompanyExpanded={nav.mobileCompanyExpanded}
 				mobileProductExpanded={nav.mobileProductExpanded}
+			pathname={pathname}
 				onToggleCompany={() =>
 					dispatch({
 						type: "SET_MOBILE_COMPANY_EXPANDED",

@@ -7,7 +7,7 @@ import { products } from "@/content/special-gauges-data";
 
 export default function SpecialGaugesProductsGrid() {
 	return (
-		<section id="products" className="py-16 bg-secondary-light">
+		<section id="products" className="scroll-mt-24 py-16 bg-secondary-light">
 			<div className="container mx-auto px-4">
 				<div className="text-center mb-12">
 					<h2 className="text-3xl font-semibold mb-4 text-gray-900">

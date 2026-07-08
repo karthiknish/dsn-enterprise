@@ -72,7 +72,10 @@ const products = [
 
 const FeaturedProducts = () => {
 	return (
-		<section id="products" className="py-20 md:py-24 bg-surface-muted relative">
+		<section
+			id="products"
+			className="scroll-mt-24 py-20 md:py-24 bg-surface-muted relative"
+		>
 			<div
 				className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
 				aria-hidden

@@ -205,6 +205,10 @@ export default function IndustriesPage() {
 				eyebrow="Industries"
 				title="Industries We Serve"
 				description={pageHeroes.industries}
+			breadcrumbs={[
+				{ href: "/", label: "Home" },
+				{ href: "/industries", label: "Industries" },
+			]}
 			/>
 
 			<section className="py-16 md:py-20 bg-surface-subtle">
@@ -266,7 +270,6 @@ export default function IndustriesPage() {
 												alt={industry.name}
 												fill
 							sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-												unoptimized
 												className="object-contain"
 											/>
 										</div>

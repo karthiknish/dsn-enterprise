@@ -3,7 +3,7 @@
 import { FaExclamationTriangle } from "react-icons/fa";
 
 const inputClass = (hasError) =>
-	`w-full px-4 py-2 border text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+	`w-full px-4 py-2 border text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
 		hasError ? "border-red-500 focus:ring-red-500" : "border-gray-300"
 	}`;
 
@@ -47,7 +47,10 @@ export default function ContactFormFields({
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 				<div>
-					<label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+					<label
+						htmlFor="email"
+						className="block text-gray-700 font-medium mb-2"
+					>
 						Email *
 					</label>
 					<input
@@ -59,7 +62,7 @@ export default function ContactFormFields({
 						onChange={onFieldChange}
 						onFocus={onFieldFocus}
 						onBlur={onFieldBlur}
-						className={`w-full px-4 text-primary py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+						className={`w-full px-4 text-gray-900 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
 							fieldErrors.email
 								? "border-red-500 focus:ring-red-500"
 								: "border-gray-300"
@@ -79,7 +82,10 @@ export default function ContactFormFields({
 					)}
 				</div>
 				<div>
-					<label htmlFor="phone" className="block text-gray-700 font-medium mb-2">
+					<label
+						htmlFor="phone"
+						className="block text-gray-700 font-medium mb-2"
+					>
 						Phone
 					</label>
 					<input
@@ -108,7 +114,10 @@ export default function ContactFormFields({
 			</div>
 
 			<div className="mb-4">
-				<label htmlFor="company" className="block text-gray-700 font-medium mb-2">
+				<label
+					htmlFor="company"
+					className="block text-gray-700 font-medium mb-2"
+				>
 					Company
 				</label>
 				<input
@@ -150,7 +159,7 @@ export default function ContactFormFields({
 					onChange={onFieldChange}
 					onFocus={onFieldFocus}
 					onBlur={onFieldBlur}
-					className="w-full px-4 py-2 border text-primary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+					className="w-full px-4 py-2 border text-gray-900 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
 				>
 					<option value="">Select a product</option>
 					<option value="Plain Plug Gauges">Plain Plug Gauges</option>
@@ -158,7 +167,9 @@ export default function ContactFormFields({
 					<option value="Cylindrical Setting Masters">
 						Cylindrical Setting Masters
 					</option>
-					<option value="Cylindrical Measuring Pin">Cylindrical Measuring Pin</option>
+					<option value="Cylindrical Measuring Pin">
+						Cylindrical Measuring Pin
+					</option>
 					<option value="Snap Gauges">Snap Gauges</option>
 					<option value="Thread Plug Gauge">Thread Plug Gauge</option>
 					<option value="Thread Ring Gauge">Thread Ring Gauge</option>
@@ -167,7 +178,10 @@ export default function ContactFormFields({
 			</div>
 
 			<div className="mb-6">
-				<label htmlFor="message" className="block text-gray-700 font-medium mb-2">
+				<label
+					htmlFor="message"
+					className="block text-gray-700 font-medium mb-2"
+				>
 					Message *
 				</label>
 				<div className="relative">
@@ -180,7 +194,7 @@ export default function ContactFormFields({
 						onChange={onFieldChange}
 						onFocus={onFieldFocus}
 						onBlur={onFieldBlur}
-						className={`w-full px-4 py-2 border text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none ${
+						className={`w-full px-4 py-2 border text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none ${
 							fieldErrors.message
 								? "border-red-500 focus:ring-red-500"
 								: "border-gray-300"

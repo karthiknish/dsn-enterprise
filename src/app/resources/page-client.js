@@ -184,6 +184,10 @@ export default function ResourcesPage() {
 				eyebrow="Resources"
 				title="Resources & Downloads"
 				description={pageHeroes.resources}
+			breadcrumbs={[
+				{ href: "/", label: "Home" },
+				{ href: "/resources", label: "Resources" },
+			]}
 			>
 				<FaDownload className="text-4xl opacity-90" aria-hidden />
 			</PageHero>

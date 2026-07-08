@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site";
+
 export const metadata = {
 	title:
 		"Industries We Serve | Oil & Gas, Automotive, Aerospace - DSN Enterprises",
@@ -20,7 +22,7 @@ export const metadata = {
 	authors: [{ name: "DSN Enterprises" }],
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
-	metadataBase: new URL("https://www.dsnenterprises.in"),
+	metadataBase: new URL(SITE_URL),
 	alternates: {
 		canonical: "/industries",
 	},
@@ -29,7 +31,7 @@ export const metadata = {
 			"Industries We Serve | Oil & Gas, Automotive, Aerospace - DSN Enterprises",
 		description:
 			"DSN Enterprises serves diverse industries including Oil & Gas, Automotive, Aerospace & Defense, General Engineering, and Heavy Machinery with precision gauging solutions.",
-		url: "https://www.dsnenterprises.in/industries",
+		url: "/industries",
 		siteName: "DSN Enterprises",
 		type: "website",
 		locale: "en_IN",

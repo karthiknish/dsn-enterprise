@@ -69,7 +69,6 @@ export default function AboutCertificationsSection() {
 								alt={cert.alt}
 								fill
 								sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-								unoptimized
 								className="object-cover transition-transform hover:scale-105 duration-300"
 							/>
 						</div>
