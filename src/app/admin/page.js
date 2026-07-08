@@ -1,60 +1,69 @@
 "use client";
 
-import { Suspense, use } from "react";
+import { useEffect, useState } from "react";
 import AdminDashboardView from "@/components/admin/AdminDashboardView";
 import { fetchAdminDashboardStats } from "@/lib/admin-firestore";
+import { describeFirestoreError } from "@/lib/firebase-errors";
 
-const dashboardResource = fetchAdminDashboardStats()
-	.then((data) => ({ ok: true, data }))
-	.catch((error) => {
-		console.error("Error fetching dashboard data:", error);
-		return {
-			ok: false,
-			error: "Could not load dashboard data. Check connection and try again.",
-		};
+export default function AdminDashboardPage() {
+	const [stats, setStats] = useState({
+		totalPosts: 0,
+		publishedPosts: 0,
+		draftPosts: 0,
 	});
+	const [recentPosts, setRecentPosts] = useState([]);
+	const [fetchError, setFetchError] = useState(null);
+	const [loading, setLoading] = useState(true);
 
-function AdminDashboardContent() {
-	const result = use(dashboardResource);
+	useEffect(() => {
+		let cancelled = false;
+		setLoading(true);
+		setFetchError(null);
 
-	if (!result.ok) {
+		fetchAdminDashboardStats()
+			.then((data) => {
+				if (!cancelled) {
+					setStats(data.stats);
+					setRecentPosts(data.recentPosts);
+					setLoading(false);
+				}
+			})
+			.catch((error) => {
+				if (!cancelled) {
+					console.error("Error fetching dashboard data:", error);
+					setFetchError(
+						describeFirestoreError(
+							error,
+							"Could not load dashboard data. Check connection and try again.",
+						),
+					);
+					setLoading(false);
+				}
+			});
+
+		return () => { cancelled = true; };
+	}, []);
+
+	if (loading) {
 		return (
-			<AdminDashboardView
-				stats={{ totalPosts: 0, publishedPosts: 0, draftPosts: 0 }}
-				recentPosts={[]}
-				fetchError={result.error}
-			/>
+			<output
+				className="flex items-center justify-center min-h-[40vh] w-full"
+				aria-live="polite"
+			>
+				<span className="sr-only">Loading dashboard</span>
+				<div
+					className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"
+					aria-hidden
+				/>
+			</output>
 		);
 	}
 
 	return (
 		<AdminDashboardView
-			stats={result.data.stats}
-			recentPosts={result.data.recentPosts}
-			fetchError={null}
+			stats={stats}
+			recentPosts={recentPosts}
+			fetchError={fetchError}
 		/>
-	);
-}
-
-function AdminDashboardLoading() {
-	return (
-		<output
-			className="flex items-center justify-center min-h-[40vh] w-full"
-			aria-live="polite"
-		>
-			<span className="sr-only">Loading dashboard</span>
-			<div
-				className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"
-				aria-hidden
-			/>
-		</output>
-	);
-}
-
-export default function AdminDashboardPage() {
-	return (
-		<Suspense fallback={<AdminDashboardLoading />}>
-			<AdminDashboardContent />
-		</Suspense>
 	);
 }

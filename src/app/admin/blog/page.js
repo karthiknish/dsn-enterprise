@@ -1,42 +1,58 @@
 "use client";
 
 import { deleteDoc, doc } from "firebase/firestore";
-import { Suspense, use, useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
+
+
 import BlogDeleteDialog from "@/components/admin/blog/BlogDeleteDialog";
 import BlogListToolbar from "@/components/admin/blog/BlogListToolbar";
 import BlogNotificationToast from "@/components/admin/blog/BlogNotificationToast";
 import BlogPostsEmptyState from "@/components/admin/blog/BlogPostsEmptyState";
 import BlogPostsPagination from "@/components/admin/blog/BlogPostsPagination";
 import BlogPostsTable from "@/components/admin/blog/BlogPostsTable";
+import { fetchBlogPosts } from "@/lib/admin-firestore";
 import {
 	BLOG_LIST_ITEMS_PER_PAGE,
 	blogListReducer,
 	initialBlogListState,
 } from "@/lib/blog-list-reducer";
-import { fetchBlogPosts } from "@/lib/admin-firestore";
 import { db } from "@/lib/firebase";
 import { describeFirestoreError } from "@/lib/firebase-errors";
 
-const postsResource = fetchBlogPosts()
-	.then((posts) => ({ ok: true, posts }))
-	.catch((error) => {
-		console.error("Error fetching posts:", error);
-		return {
-			ok: false,
-			error:
-				error instanceof Error ? error.message : "Failed to load blog posts",
-		};
-	});
-
-function BlogListPageContent() {
-	const result = use(postsResource);
+export default function BlogListPage() {
 	const [state, dispatch] = useReducer(blogListReducer, {
 		...initialBlogListState,
-		posts: result.ok ? result.posts : [],
-		loading: false,
-		fetchError: result.ok ? null : result.error,
+		posts: [],
+		loading: true,
 	});
 	const deleteDialogRef = useRef(null);
+
+	useEffect(() => {
+		let cancelled = false;
+
+		fetchBlogPosts()
+			.then((posts) => {
+				if (!cancelled) {
+					dispatch({ type: "LOAD_SUCCESS", posts });
+				}
+			})
+			.catch((error) => {
+				if (!cancelled) {
+					console.error("Error fetching posts:", error);
+					dispatch({
+						type: "LOAD_ERROR",
+						error: describeFirestoreError(
+							error,
+							error instanceof Error
+								? error.message
+								: "Failed to load blog posts",
+						),
+					});
+				}
+			});
+
+		return () => { cancelled = true; };
+	}, []);
 
 	const showNotification = (message, type = "info") => {
 		dispatch({ type: "SET_NOTIFICATION", notification: { message, type } });
@@ -79,9 +95,27 @@ function BlogListPageContent() {
 		} catch (error) {
 			console.error("Error deleting post:", error);
 			dispatch({ type: "DELETE_ERROR" });
-			showNotification(describeFirestoreError(error, "Failed to delete post"), "error");
+			showNotification(
+				describeFirestoreError(error, "Failed to delete post"),
+				"error",
+			);
 		}
 	};
+
+	if (state.loading) {
+		return (
+			<output
+				className="flex items-center justify-center min-h-[40vh]"
+				aria-live="polite"
+			>
+				<span className="sr-only">Loading blog posts</span>
+				<div
+					className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"
+					aria-hidden
+				/>
+			</output>
+		);
+	}
 
 	const filteredPosts = state.posts.filter((post) =>
 		post.title.toLowerCase().includes(state.searchTerm.toLowerCase()),
@@ -134,7 +168,10 @@ function BlogListPageContent() {
 			{filteredPosts.length > 0 && (
 				<div className="text-sm text-gray-500">
 					Showing {startIndex + 1} to{" "}
-					{Math.min(startIndex + BLOG_LIST_ITEMS_PER_PAGE, filteredPosts.length)}{" "}
+					{Math.min(
+						startIndex + BLOG_LIST_ITEMS_PER_PAGE,
+						filteredPosts.length,
+					)}{" "}
 					of {filteredPosts.length} entries
 				</div>
 			)}
@@ -156,28 +193,5 @@ function BlogListPageContent() {
 				onPageChange={handlePageChange}
 			/>
 		</div>
-	);
-}
-
-function BlogListLoading() {
-	return (
-		<output
-			className="flex items-center justify-center min-h-[40vh]"
-			aria-live="polite"
-		>
-			<span className="sr-only">Loading blog posts</span>
-			<div
-				className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"
-				aria-hidden
-			/>
-		</output>
-	);
-}
-
-export default function BlogListPage() {
-	return (
-		<Suspense fallback={<BlogListLoading />}>
-			<BlogListPageContent />
-		</Suspense>
 	);
 }

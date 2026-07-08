@@ -159,8 +159,8 @@ const ProductSpecs1 = ({
                   <div className="border-t">
                     <Table>
                       <TableBody>
-                        {category.specs.map((spec, index) => (
-                          <TableRow key={index} className="hover:bg-transparent">
+                        {category.specs.map((spec) => (
+                          <TableRow key={spec.label} className="hover:bg-transparent">
                             <TableCell className="w-1/2 py-3 text-muted-foreground">
                               {spec.label}
                             </TableCell>

@@ -1,7 +1,7 @@
 "use client";
 
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { Suspense, use, useState } from "react";
+import { useEffect, useState } from "react";
 import BlogNotificationToast from "@/components/admin/blog/BlogNotificationToast";
 import ContactDetailPanel from "@/components/admin/contacts/ContactDetailPanel";
 import ContactsList from "@/components/admin/contacts/ContactsList";
@@ -9,24 +9,40 @@ import { fetchContacts } from "@/lib/admin-firestore";
 import { db } from "@/lib/firebase";
 import { describeFirestoreError } from "@/lib/firebase-errors";
 
-const contactsResource = fetchContacts()
-	.then((data) => ({ ok: true, data }))
-	.catch((error) => {
-		console.error("Error fetching contacts:", error);
-		return {
-			ok: false,
-			error: "Could not load contacts. Check connection and try again.",
-		};
-	});
-
-function ContactsPageContent() {
-	const result = use(contactsResource);
-	const [contacts, setContacts] = useState(
-		result.ok ? result.data : [],
-	);
-	const fetchError = result.ok ? null : result.error;
+export default function ContactsPage() {
+	const [contacts, setContacts] = useState([]);
+	const [fetchError, setFetchError] = useState(null);
+	const [loading, setLoading] = useState(true);
 	const [selectedContact, setSelectedContact] = useState(null);
 	const [notification, setNotification] = useState(null);
+
+	useEffect(() => {
+		let cancelled = false;
+		setLoading(true);
+		setFetchError(null);
+
+		fetchContacts()
+			.then((data) => {
+				if (!cancelled) {
+					setContacts(data);
+					setLoading(false);
+				}
+			})
+			.catch((error) => {
+				if (!cancelled) {
+					console.error("Error fetching contacts:", error);
+					setFetchError(
+						describeFirestoreError(
+							error,
+							"Could not load contacts. Check connection and try again.",
+						),
+					);
+					setLoading(false);
+				}
+			});
+
+		return () => { cancelled = true; };
+	}, []);
 
 	const showNotification = (message, type = "error") => {
 		setNotification({ message, type });
@@ -63,6 +79,21 @@ function ContactsPageContent() {
 			);
 		}
 	};
+
+	if (loading) {
+		return (
+			<output
+				className="flex items-center justify-center min-h-[40vh] w-full"
+				aria-live="polite"
+			>
+				<span className="sr-only">Loading contacts</span>
+				<div
+					className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"
+					aria-hidden
+				/>
+			</output>
+		);
+	}
 
 	return (
 		<div>
@@ -102,25 +133,4 @@ function ContactsPageContent() {
 	);
 }
 
-function ContactsLoading() {
-	return (
-		<output
-			className="flex items-center justify-center min-h-[40vh] w-full"
-			aria-live="polite"
-		>
-			<span className="sr-only">Loading contacts</span>
-			<div
-				className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"
-				aria-hidden
-			/>
-		</output>
-	);
-}
 
-export default function ContactsPage() {
-	return (
-		<Suspense fallback={<ContactsLoading />}>
-			<ContactsPageContent />
-		</Suspense>
-	);
-}

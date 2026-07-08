@@ -62,9 +62,9 @@ const Compliance1 = ({
             </h1>
             <p className="text-lg text-muted-foreground">{description}</p>
             <div className="flex items-center gap-6">
-              {badges.map((badge, index) => (
+              {badges.map((badge) => (
                 <img
-                  key={index}
+                  key={badge.alt}
                   src={badge.image}
                   alt={badge.alt}
                   className="h-22 opacity-50 grayscale md:h-28 dark:invert" />
@@ -74,7 +74,7 @@ const Compliance1 = ({
           <div className="rounded-2xl border border-border bg-background">
             {features.map((feature, index) => (
               <div
-                key={index}
+                key={feature.title}
                 className={cn(
                   "relative overflow-hidden p-6 lg:px-8 lg:py-11",
                   index === 0 && "border-b border-border",

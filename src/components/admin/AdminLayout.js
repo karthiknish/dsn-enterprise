@@ -39,9 +39,14 @@ export default function AdminLayout({ children }) {
 		}
 	}, []);
 
+	// Redirect logic in a single effect so all hooks run before any return.
 	useEffect(() => {
-		if (!loading && !user && pathname !== "/admin/login") {
+		if (loading) return;
+		if (!user && pathname !== "/admin/login") {
 			push("/admin/login");
+		}
+		if (user && pathname === "/admin/login") {
+			push("/admin");
 		}
 	}, [user, loading, push, pathname]);
 
@@ -55,6 +60,13 @@ export default function AdminLayout({ children }) {
 		await logout();
 		push("/admin/login");
 	};
+
+	// Let the login page render even while the auth state is still resolving.
+	// Without this, a hung onAuthStateChanged leaves the user stuck on a
+	// forever-spinner with no way to retry. (See AuthContext timeout.)
+	if (pathname === "/admin/login") {
+		return children;
+	}
 
 	if (loading) {
 		return (
@@ -71,12 +83,8 @@ export default function AdminLayout({ children }) {
 		);
 	}
 
-	if (!user && pathname !== "/admin/login") {
+	if (!user) {
 		return null;
-	}
-
-	if (pathname === "/admin/login") {
-		return children;
 	}
 
 	const pageTitle = getAdminPageTitle(pathname);

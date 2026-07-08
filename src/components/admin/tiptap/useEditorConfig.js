@@ -1,14 +1,12 @@
 "use client";
 
 import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Table } from "@tiptap/extension-table";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableRow } from "@tiptap/extension-table-row";
 import TextAlign from "@tiptap/extension-text-align";
-import Underline from "@tiptap/extension-underline";
 import StarterKit from "@tiptap/starter-kit";
 
 export function createEditorProps(_isExternalUpdate, _onChange) {
@@ -96,16 +94,18 @@ export function createExtensions(placeholder) {
 			heading: {
 				levels: [1, 2, 3],
 			},
+			// Link is bundled in StarterKit (v3) — configure it here instead of
+			// adding a separate Link extension, which would create a duplicate.
+			link: {
+				openOnClick: false,
+				HTMLAttributes: {
+					class: "text-primary hover:text-primary-dark underline",
+				},
+			},
 		}),
 		Image.configure({
 			HTMLAttributes: {
 				class: "max-w-full h-auto rounded-lg",
-			},
-		}),
-		Link.configure({
-			openOnClick: false,
-			HTMLAttributes: {
-				class: "text-primary hover:text-primary-dark underline",
 			},
 		}),
 		Placeholder.configure({
@@ -114,7 +114,7 @@ export function createExtensions(placeholder) {
 		TextAlign.configure({
 			types: ["heading", "paragraph"],
 		}),
-		Underline,
+		// Underline is bundled in StarterKit (v3) — no need to add it again.
 		Table.configure({
 			resizable: true,
 			HTMLAttributes: {

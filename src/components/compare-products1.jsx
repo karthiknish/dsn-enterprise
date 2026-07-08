@@ -139,14 +139,14 @@ const CompareProducts1 = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {specs.map((spec, index) => (
-                <TableRow key={index}>
+              {specs.map((spec) => (
+                <TableRow key={spec.name}>
                   <TableCell className="border-r font-medium">
                     {spec.name}
                   </TableCell>
                   {spec.values.map((value, vIndex) => (
                     <TableCell
-                      key={vIndex}
+                      key={`${spec.name}-${vIndex}`}
                       className={cn("text-center", vIndex < spec.values.length - 1 && "border-r")}>
                       <div className="flex items-center justify-center">
                         {renderValue(value)}

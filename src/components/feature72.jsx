@@ -123,9 +123,9 @@ const Feature72 = (props) => {
           )}
         </div>
         <div className="grid gap-6 md:grid-cols-2">
-          {features?.slice(0, 4).map((feature, i) => (
+          {features?.slice(0, 4).map((feature) => (
             <div
-              key={i}
+              key={feature.title}
               className="flex flex-col overflow-clip rounded-xl border border-border">
               <a href={feature.href}>
                 <img

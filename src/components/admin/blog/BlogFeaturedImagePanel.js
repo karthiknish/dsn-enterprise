@@ -1,5 +1,79 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import PexelsImagePicker from "@/components/admin/PexelsImagePicker";
+
+function ImagePreviewPlaceholder() {
+	return (
+		<div className="mb-4 rounded-lg overflow-hidden border border-dashed border-gray-300 bg-gray-50">
+			<div className="flex flex-col items-center justify-center h-48 text-gray-400">
+				<svg
+					aria-hidden="true"
+					className="w-12 h-12 mb-2"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+				>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={1.5}
+						d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+					/>
+				</svg>
+				<p className="text-sm font-medium">No featured image</p>
+				<p className="text-xs mt-1">Upload or paste an image URL above</p>
+			</div>
+		</div>
+	);
+}
+
+function BrokenImageFallback({ onClear }) {
+	return (
+		<div className="mb-4 relative rounded-lg overflow-hidden border border-red-200 bg-red-50">
+			<div className="flex flex-col items-center justify-center h-48 text-red-400">
+				<svg
+					aria-hidden="true"
+					className="w-12 h-12 mb-2"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+				>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={1.5}
+						d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+					/>
+				</svg>
+				<p className="text-sm font-medium">Image failed to load</p>
+				<p className="text-xs mt-1">The URL may be broken or unreachable</p>
+			</div>
+			<button
+				type="button"
+				onClick={onClear}
+				className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 shadow-sm"
+				aria-label="Remove featured image"
+			>
+				<svg
+					aria-hidden="true"
+					className="w-4 h-4"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+				>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={2}
+						d="M6 18L18 6M6 6l12 12"
+					/>
+				</svg>
+			</button>
+		</div>
+	);
+}
 
 export default function BlogFeaturedImagePanel({
 	formData,
@@ -13,6 +87,18 @@ export default function BlogFeaturedImagePanel({
 	onClearFeaturedImage,
 	onPexelsSelect,
 }) {
+	const [imageError, setImageError] = useState(false);
+
+	const handleUrlChange = (e) => {
+		setImageError(false);
+		onFeaturedUrlChange(e);
+	};
+
+	const handleClearImage = () => {
+		setImageError(false);
+		onClearFeaturedImage();
+	};
+
 	return (
 		<div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
 			<h3 className="text-lg font-medium text-gray-900 mb-4">Featured Image</h3>
@@ -53,7 +139,7 @@ export default function BlogFeaturedImagePanel({
 				</button>
 			</div>
 
-			{formData.featuredImage && (
+			{formData.featuredImage && !imageError ? (
 				<div className="mb-4 relative rounded-lg overflow-hidden border border-gray-200">
 					<Image
 						src={formData.featuredImage}
@@ -61,11 +147,12 @@ export default function BlogFeaturedImagePanel({
 						width={400}
 						height={225}
 						unoptimized
+						onError={() => setImageError(true)}
 						className="w-full h-48 object-cover"
 					/>
 					<button
 						type="button"
-						onClick={onClearFeaturedImage}
+						onClick={handleClearImage}
 						className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 shadow-sm"
 						aria-label="Remove featured image"
 					>
@@ -85,6 +172,10 @@ export default function BlogFeaturedImagePanel({
 						</svg>
 					</button>
 				</div>
+			) : formData.featuredImage && imageError ? (
+				<BrokenImageFallback onClear={handleClearImage} />
+			) : (
+				<ImagePreviewPlaceholder />
 			)}
 
 			{imageTab === "upload" && (
@@ -145,7 +236,7 @@ export default function BlogFeaturedImagePanel({
 						type="url"
 						aria-labelledby="featured-image-url-label"
 						value={formData.featuredImage}
-						onChange={onFeaturedUrlChange}
+						onChange={handleUrlChange}
 						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm"
 						placeholder="https://example.com/image.jpg"
 					/>

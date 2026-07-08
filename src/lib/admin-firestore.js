@@ -12,7 +12,11 @@ import { db } from "@/lib/firebase";
 export async function fetchBlogPosts() {
 	const postsRef = collection(db, "blogs");
 	const q = query(postsRef, orderBy("createdAt", "desc"));
-	const snapshot = await getDocs(q);
+	const snapshot = await withTimeout(
+		getDocs(q),
+		FETCH_TIMEOUT_MS,
+		"Timed out loading blog posts. Check your connection and try again.",
+	);
 	return snapshot.docs.map((docSnap) => ({
 		id: docSnap.id,
 		...docSnap.data(),
@@ -55,7 +59,11 @@ export async function fetchBlogPostById(id) {
 export async function fetchContacts() {
 	const contactsRef = collection(db, "contacts");
 	const q = query(contactsRef, orderBy("createdAt", "desc"));
-	const snapshot = await getDocs(q);
+	const snapshot = await withTimeout(
+		getDocs(q),
+		FETCH_TIMEOUT_MS,
+		"Timed out loading contacts. Check your connection and try again.",
+	);
 	return snapshot.docs.map((docSnap) => ({
 		id: docSnap.id,
 		...docSnap.data(),
@@ -64,7 +72,11 @@ export async function fetchContacts() {
 
 export async function fetchAdminDashboardStats() {
 	const postsRef = collection(db, "blogs");
-	const postsSnapshot = await getDocs(postsRef);
+	const postsSnapshot = await withTimeout(
+		getDocs(postsRef),
+		FETCH_TIMEOUT_MS,
+		"Timed out loading dashboard stats. Check your connection and try again.",
+	);
 
 	let published = 0;
 	let draft = 0;
@@ -83,7 +95,11 @@ export async function fetchAdminDashboardStats() {
 		orderBy("createdAt", "desc"),
 		limit(5),
 	);
-	const recentSnapshot = await getDocs(recentQuery);
+	const recentSnapshot = await withTimeout(
+		getDocs(recentQuery),
+		FETCH_TIMEOUT_MS,
+		"Timed out loading recent posts. Check your connection and try again.",
+	);
 	const recentPosts = recentSnapshot.docs.map((docSnap) => ({
 		id: docSnap.id,
 		...docSnap.data(),

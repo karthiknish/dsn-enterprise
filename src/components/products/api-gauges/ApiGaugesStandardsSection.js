@@ -59,9 +59,9 @@ export default function ApiGaugesStandardsSection() {
 
           {/* Right: API spec cards */}
           <div className="flex flex-col gap-6">
-            {apiSpecs.map((spec, index) => (
+            {apiSpecs.map((spec) => (
               <div
-                key={index}
+                key={spec.title}
                 className="rounded-2xl border border-border bg-card p-8 shadow-sm lg:p-12"
               >
                 <div>
@@ -72,9 +72,9 @@ export default function ApiGaugesStandardsSection() {
                     {spec.description}
                   </p>
                   <ul className="mt-6 space-y-3">
-                    {spec.items.map((item, i) => (
+                    {spec.items.map((item) => (
                       <li
-                        key={i}
+                        key={item}
                         className="flex items-start gap-3 text-sm text-muted-foreground"
                       >
                         <span className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />
@@ -120,9 +120,9 @@ export default function ApiGaugesStandardsSection() {
               Industries Served
             </h2>
             <ul className="space-y-3">
-              {industries.map((item, i) => (
+              {industries.map((item) => (
                 <li
-                  key={i}
+                  key={item.label}
                   className="flex items-center gap-3 rounded-lg bg-muted/50 px-4 py-3 text-sm font-medium"
                 >
                   <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">

@@ -1,8 +1,8 @@
 export const initialTiptapEditorUiState = {
 	showLinkDialog: false,
 	showImageDialog: false,
-	linkDialogKey: 0,
-	imageDialogKey: 0,
+	linkDialogKey: 1,
+	imageDialogKey: 2,
 	linkUrl: "",
 	isDragging: false,
 };
