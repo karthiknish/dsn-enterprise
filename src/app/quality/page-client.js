@@ -2,7 +2,6 @@
 
 import { m } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import {
 	FaAward,
 	FaCertificate,
@@ -13,7 +12,7 @@ import {
 	FaMicroscope,
 	FaThermometerHalf,
 } from "react-icons/fa";
-import PageCta from "@/components/layout/PageCta";
+import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -22,14 +21,14 @@ const qualitySteps = [
 		step: 1,
 		title: "Material Selection",
 		description:
-			"Premium grade OHNS and Tungsten Carbide materials from certified suppliers with full traceability.",
+			"Premium grade OHNS and Tungsten Carbide from certified suppliers, with complete material traceability documentation.",
 		icon: FaFlask,
 	},
 	{
 		step: 2,
 		title: "Precision Manufacturing",
 		description:
-			"State-of-the-art CNC machining with tight tolerances and skilled craftsmanship.",
+			"CNC machining centres operating at tight tolerances, executed by craftsmen with decades of gauge-making experience.",
 		icon: FaCogs,
 	},
 	{
@@ -43,21 +42,21 @@ const qualitySteps = [
 		step: 4,
 		title: "Precision Grinding",
 		description:
-			"High-precision cylindrical and surface grinding to achieve specified dimensions and surface finish.",
+			"High-precision cylindrical and surface grinding to achieve specified dimensions and surface finish, verified on every gauge.",
 		icon: FaCogs,
 	},
 	{
 		step: 5,
 		title: "Inspection & Calibration",
 		description:
-			"Comprehensive dimensional inspection using calibrated instruments traceable to national standards.",
+			"Comprehensive dimensional inspection on calibrated CMMs, optical comparators, and air-gauging equipment traceable to national standards.",
 		icon: FaMicroscope,
 	},
 	{
 		step: 6,
 		title: "Final Verification",
 		description:
-			"100% final inspection and documentation with calibration certificates.",
+			"100% final functional inspection with documented calibration certificates delivered with every order, nothing ships without a pass.",
 		icon: FaClipboardCheck,
 	},
 ];
@@ -66,25 +65,25 @@ const certifications = [
 	{
 		name: "ISO 9001:2015",
 		description:
-			"Quality Management System certification ensuring consistent quality processes.",
+			"Quality Management System certification ensuring consistent quality processes from material receipt through final dispatch, audited annually.",
 		image: "/images/certificates/isocert.jpg",
 	},
 	{
 		name: "API 5B",
 		description:
-			"Licensed manufacturer for threading, gauging, and inspection of casing, tubing, and line pipe threads.",
+			"Licensed manufacturer for threading, gauging, and inspection of casing, tubing, and line pipe threads, verified through continuing API audits.",
 		image: "/images/certificates/API-5B-0039-2023_page-0001.jpg",
 	},
 	{
 		name: "API 7-2",
 		description:
-			"Licensed manufacturer for threading and gauging of rotary shouldered thread connections.",
+			"Licensed manufacturer for threading and gauging of rotary shouldered thread connections, critical for drill string integrity and safety.",
 		image: "/images/certificates/api72.jpg",
 	},
 	{
 		name: "NABL Accreditation",
 		description:
-			"National Accreditation Board for Testing and Calibration Laboratories certification.",
+			"National Accreditation Board for Testing and Calibration Laboratories certification, ensuring full traceability to national measurement standards.",
 		image: "/images/certificates/SMCS-NABL-SCOPE-23-25-1_page-0002.jpg",
 	},
 ];
@@ -133,6 +132,23 @@ const specifications = [
 	},
 ];
 
+const containerVariants = {
+	hidden: { opacity: 0 },
+	visible: {
+		opacity: 1,
+		transition: { staggerChildren: 0.1 },
+	},
+};
+
+const itemVariants = {
+	hidden: { opacity: 0, y: 24 },
+	visible: {
+		opacity: 1,
+		y: 0,
+		transition: { duration: 0.5, ease: "easeOut" },
+	},
+};
+
 export default function QualityPage() {
 	return (
 		<div>
@@ -148,126 +164,260 @@ export default function QualityPage() {
 				<FaAward className="text-5xl opacity-90" aria-hidden />
 			</PageHero>
 
-			<section className="py-16 md:py-20 bg-surface-subtle">
+			{/* ====== Quality Process, Bento Grid ====== */}
+			<section className="py-20 md:py-28 bg-surface-subtle relative">
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+					aria-hidden
+				/>
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-12">
-						<h2 className="text-3xl font-semibold mb-4 text-gray-900">
-							Our Quality Process
+					{/* Section header */}
+					<div className="text-center mb-16">
+						<h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
+							Six-Step Quality Assurance
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
-							A systematic approach ensuring every gauge meets the highest
-							standards
+						<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+							Every gauge moves through a systematic, documented process, from material
+							certification through to final functional acceptance.
 						</p>
 					</div>
 
-					<div className="max-w-5xl mx-auto">
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-							{qualitySteps.map((step, index) => (
-								<m.div
-									key={step.step}
-									className="relative bg-gray-50 rounded-2xl border border-gray-100 p-6"
-									initial={{ opacity: 0, y: 30 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true }}
-									transition={{ duration: 0.5, delay: index * 0.1 }}
-								>
-									<div className="absolute -top-4 -left-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">
-										{step.step}
-									</div>
-									<div className="pt-4">
-										<step.icon className="text-3xl text-primary mb-4" />
-										<h3 className="text-xl font-semibold text-gray-900 mb-2">
-											{step.title}
-										</h3>
-										<p className="text-gray-600">{step.description}</p>
-									</div>
-								</m.div>
-							))}
-						</div>
+					{/* Bento grid: varied column spans for visual rhythm */}
+					<div className="max-w-6xl mx-auto">
+						<m.div
+							className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+							variants={containerVariants}
+							initial="hidden"
+							whileInView="visible"
+							viewport={{ once: true }}
+						>
+							{qualitySteps.map((step, index) => {
+							const isFeatured = index === 0 || index === 3;
+							const isGreen = index === 5;
+								const Icon = step.icon;
+
+								return (
+									<m.div
+										key={step.step}
+										variants={itemVariants}
+										className={`relative rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 ${
+											isGreen
+												? "lg:col-span-2 bg-primary border-primary/20 shadow-sm"
+												: isFeatured
+												? "lg:col-span-2 bg-white border-gray-200/80 shadow-sm"
+												: "bg-white border-gray-200/80 shadow-sm"
+										}`}
+									>
+										{/* Accent gradient bar, top edge */}
+										{!isGreen && (
+											<div className="h-1 w-full bg-gradient-to-r from-primary to-accent" />
+										)}
+
+										<div className="p-6 md:p-8">
+											{/* Step number badge */}
+											<div
+												className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${
+													isGreen
+														? "bg-white/15 text-white"
+														: isFeatured
+														? "bg-primary text-white"
+														: "bg-primary/10 text-primary"
+												}`}
+											>
+												<span className="text-lg font-bold">
+													{String(step.step).padStart(2, "0")}
+												</span>
+											</div>
+
+											<Icon
+												className={`text-3xl mb-4 ${
+													isGreen ? "text-white" : "text-primary"
+												}`}
+												aria-hidden
+											/>
+
+											<h3
+												className={`text-xl font-semibold mb-2 ${
+													isGreen ? "text-white" : "text-gray-900"
+												}`}
+											>
+												{step.title}
+											</h3>
+
+											<p
+												className={`leading-relaxed ${
+													isGreen ? "text-white" : "text-gray-600"
+												}`}
+											>
+												{step.description}
+											</p>
+										</div>
+									</m.div>
+								);
+							})}
+						</m.div>
 					</div>
 				</div>
 			</section>
 
-			{/* Certifications */}
-			<section className="py-16 bg-secondary-light">
+			{/* ====== Certifications ====== */}
+			<section className="py-20 md:py-28 bg-secondary-light relative">
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/10 to-transparent"
+					aria-hidden
+				/>
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-12">
-						<h2 className="text-3xl font-semibold mb-4 text-gray-900">
-							Our Certifications
+					{/* Section header */}
+					<div className="text-center mb-16">
+						<h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
+							Industry-Recognized Credentials
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
-							Recognized by leading industry organizations for our commitment to
-							quality
+						<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+							Our quality systems are certified, licensed, and accredited by the bodies that
+							define the standards we manufacture to, verified through regular independent
+							audits.
 						</p>
 					</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-						{certifications.map((cert, index) => (
+					<m.div
+						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+						variants={containerVariants}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+					>
+						{certifications.map((cert) => (
 							<m.div
 								key={cert.name}
-								className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden"
-								initial={{ opacity: 0, y: 30 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true }}
-								transition={{ duration: 0.5, delay: index * 0.1 }}
+								className="group bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+								variants={itemVariants}
 							>
-								<div className="relative h-48 bg-gray-100 overflow-hidden">
+								{/* Image with gradient overlay on hover */}
+								<div className="relative h-52 bg-gray-100 overflow-hidden">
 									<Image
 										src={cert.image}
 										alt={cert.name}
 										fill
-							sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-										className="object-cover hover:scale-105 transition-transform duration-300"
+										sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+										className="object-cover transition-transform duration-500 group-hover:scale-110"
 									/>
+									{/* Hover overlay */}
+									<div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+										<span className="text-white text-sm font-medium tracking-wide border border-white/30 px-4 py-2 rounded-full backdrop-blur-sm">
+											View Certificate
+										</span>
+									</div>
 								</div>
-								<div className="p-4">
-									<div className="flex items-center mb-2">
-										<FaCertificate className="text-primary mr-2" />
+								{/* Content */}
+								<div className="p-5">
+									<div className="flex items-center gap-2 mb-2">
+										<FaCertificate className="text-primary flex-shrink-0" aria-hidden />
 										<h3 className="font-semibold text-gray-900">{cert.name}</h3>
 									</div>
-									<p className="text-gray-600 text-sm">{cert.description}</p>
+									<p className="text-gray-600 text-sm leading-relaxed">
+										{cert.description}
+									</p>
 								</div>
 							</m.div>
 						))}
-					</div>
+					</m.div>
 				</div>
 			</section>
 
-			{/* Standards */}
-			<section className="py-16 bg-surface-muted">
+			{/* ====== Standards ====== */}
+			<section className="py-20 md:py-28 bg-white relative">
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+					aria-hidden
+				/>
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-12">
-						<h2 className="text-3xl font-semibold mb-4 text-gray-900">
-							Standards We Follow
+					{/* Section header */}
+					<div className="text-center mb-16">
+						<h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
+							Standards We Manufacture To
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
-							Manufacturing to international and Indian standards ensures global
-							compatibility
+						<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+							Every gauge is produced in full compliance with the applicable national and
+							international standards, ensuring interchangeability, traceability, and audit
+							readiness for our customers.
 						</p>
 					</div>
 
-					<div className="max-w-4xl mx-auto">
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-							{standards.map((group, index) => (
-								<m.div
-									key={group.category}
-									className="bg-gray-50 rounded-2xl border border-gray-100 p-6"
-									initial={{ opacity: 0, y: 30 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true }}
-									transition={{ duration: 0.5, delay: index * 0.1 }}
-								>
-									<h3 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-300">
+					<m.div
+						className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
+						variants={containerVariants}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+					>
+						{standards.map((group) => (
+							<m.div
+								key={group.category}
+								className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+								variants={itemVariants}
+							>
+								{/* Colored accent bar */}
+								<div className="h-1 w-full bg-gradient-to-r from-primary to-accent" />
+								<div className="p-6">
+									<h3 className="text-lg font-semibold text-gray-900 mb-4">
 										{group.category}
 									</h3>
-									<ul className="space-y-2">
+									<ul className="space-y-2.5">
 										{group.standards.map((standard) => (
-											<li key={standard} className="flex items-start text-sm">
-												<FaCheck className="text-primary mt-1 mr-2 flex-shrink-0 text-xs" />
-												<span className="text-gray-700">{standard}</span>
+											<li key={standard} className="flex items-start gap-2.5">
+												<FaCheck
+													className="text-accent mt-0.5 flex-shrink-0 text-xs"
+													aria-hidden
+												/>
+												<span className="text-sm text-gray-700 leading-relaxed">
+													{standard}
+												</span>
 											</li>
 										))}
 									</ul>
+								</div>
+							</m.div>
+						))}
+					</m.div>
+				</div>
+			</section>
+
+			{/* ====== Technical Specifications ====== */}
+			<section className="py-20 md:py-28 bg-white relative">
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/10 to-transparent"
+					aria-hidden
+				/>
+				<div className="container mx-auto px-4">
+					<div className="max-w-3xl mx-auto">
+						{/* Section header */}
+						<div className="text-center mb-14">
+							<h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
+								Technical Specifications
+							</h2>
+							<p className="text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
+								Our standard manufacturing parameters, contact our engineering team for
+								custom requirements beyond these ranges.
+							</p>
+						</div>
+
+						{/* Premium spec card with row layout */}
+						<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm divide-y divide-gray-100 overflow-hidden">
+							{specifications.map((item, index) => (
+								<m.div
+									key={item.spec}
+									className="flex items-center justify-between gap-4 px-6 py-4 md:px-8 transition-colors hover:bg-accent/5"
+									initial={{ opacity: 0, x: -12 }}
+									whileInView={{ opacity: 1, x: 0 }}
+									viewport={{ once: true }}
+									transition={{ duration: 0.3, delay: index * 0.05 }}
+								>
+									<span className="font-semibold text-gray-900 text-sm md:text-base">
+										{item.spec}
+									</span>
+									<span className="text-gray-600 text-sm md:text-base text-right max-w-[60%]">
+										{item.value}
+									</span>
 								</m.div>
 							))}
 						</div>
@@ -275,65 +425,91 @@ export default function QualityPage() {
 				</div>
 			</section>
 
-			{/* Technical Specifications */}
-			<section className="py-16 bg-secondary-light">
-				<div className="container mx-auto px-4">
-					<div className="max-w-3xl mx-auto">
-						<h2 className="text-3xl font-semibold mb-8 text-center text-gray-900">
-							Technical Specifications
-						</h2>
-						<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-							<table className="w-full">
-								<tbody>
-									{specifications.map((item, index) => (
-										<tr
-											key={item.spec}
-											className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
-										>
-											<td className="px-6 py-4 font-medium text-gray-900">
-												{item.spec}
-											</td>
-											<td className="px-6 py-4 text-gray-700">{item.value}</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
+			{/* ====== Quality Commitment ====== */}
+			<section className="py-20 md:py-28 bg-surface-subtle relative overflow-hidden">
+				{/* Decorative background blur */}
+
+				<div
+					className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-primary/[0.03] to-accent/[0.03] blur-3xl pointer-events-none"
+					aria-hidden
+				/>
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+					aria-hidden
+				/>
+				<div className="container mx-auto px-4 relative">
+					<div className="max-w-5xl mx-auto text-center">
+						{/* Section header */}
+						<div className="mb-16">
+							<h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
+								The Quality Commitment
+							</h2>
+							<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+								Three principles that define how we manufacture, inspect, and deliver every
+								gauge that leaves our facility.
+							</p>
+						</div>
+
+						{/* Stats */}
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+							{/* 100% */}
+							<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+								<div className="text-6xl md:text-7xl font-bold text-primary mb-3 leading-none">
+									100
+									<span className="text-3xl md:text-4xl text-accent">%</span>
+								</div>
+								<div className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
+								<p className="font-semibold text-gray-900 mb-1">
+									Inspection on Every Gauge
+								</p>
+								<p className="text-gray-500 text-sm leading-relaxed">
+									Every dimension, every feature, 100% verified before shipment.
+								</p>
+							</div>
+
+							{/* Zero */}
+							<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 relative">
+
+								<div
+									className="absolute -top-3 -right-3 w-16 h-16 rounded-full bg-gradient-to-br from-accent/10 to-accent/5 pointer-events-none"
+									aria-hidden
+								/>
+								<div className="text-6xl md:text-7xl font-bold text-primary mb-3 leading-none">
+									0
+								</div>
+								<div className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
+								<p className="font-semibold text-gray-900 mb-1">Defect Tolerance</p>
+								<p className="text-gray-500 text-sm leading-relaxed">
+									Not a target, a methodology embedded in every stage of production.
+								</p>
+							</div>
+
+							{/* Infinity */}
+							<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+								<div className="text-6xl md:text-7xl font-bold text-primary mb-3 leading-none">
+									∞
+								</div>
+								<div className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
+								<p className="font-semibold text-gray-900 mb-1">
+									End-to-End Traceability
+								</p>
+								<p className="text-gray-500 text-sm leading-relaxed">
+									From material batch to final calibration certificate, every gauge has
+									a complete, auditable history.
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			{/* Quality Commitment */}
-			<section className="py-16 bg-surface-subtle">
-				<div className="container mx-auto px-4">
-					<div className="max-w-4xl mx-auto text-center">
-						<h2 className="text-3xl font-semibold mb-6 text-gray-900">
-							Our Quality Commitment
-						</h2>
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-							<div className="p-6">
-								<div className="text-5xl font-bold text-primary mb-2">100%</div>
-								<div className="text-gray-600">Inspection on all products</div>
-							</div>
-							<div className="p-6">
-								<div className="text-5xl font-bold text-primary mb-2">0</div>
-								<div className="text-gray-600">Tolerance for defects</div>
-							</div>
-							<div className="p-6">
-								<div className="text-5xl font-bold text-primary mb-2">∞</div>
-								<div className="text-gray-600">Commitment to excellence</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<PageCta
-				title="Need Quality Gauges?"
+			<Cta10
+				heading="Need Quality Gauges?"
 				description="Experience the DSN Enterprises quality difference. Contact us for precision gauges backed by our rigorous quality assurance."
-				primaryLabel="Request Quote"
-				secondaryHref="/products"
-				secondaryLabel="View Products"
+				buttons={{
+					primary: { text: "Request Quote", url: "/contact" },
+					secondary: { text: "View Products", url: "/products" },
+				}}
 			/>
 		</div>
 	);
