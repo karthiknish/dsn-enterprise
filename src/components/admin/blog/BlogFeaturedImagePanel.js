@@ -60,6 +60,7 @@ export default function BlogFeaturedImagePanel({
 						alt="Featured preview"
 						width={400}
 						height={225}
+						unoptimized
 						className="w-full h-48 object-cover"
 					/>
 					<button

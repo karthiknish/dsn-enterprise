@@ -7,7 +7,6 @@ import {
 	orderBy,
 	query,
 } from "firebase/firestore";
-import { notFound } from "next/navigation";
 import { db } from "@/lib/firebase";
 
 export async function fetchBlogPosts() {
@@ -20,42 +19,14 @@ export async function fetchBlogPosts() {
 	}));
 }
 
-const FETCH_TIMEOUT_MS = 12000;
+export const FETCH_TIMEOUT_MS = 12000;
 
-function withTimeout(promise, ms, message) {
+export function withTimeout(promise, ms, message) {
 	let timer;
 	const timeout = new Promise((_, reject) => {
 		timer = setTimeout(() => reject(new Error(message)), ms);
 	});
 	return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
-}
-
-export function loadEditBlogPost(postId) {
-	return withTimeout(
-		fetchBlogPostById(postId),
-		FETCH_TIMEOUT_MS,
-		"Timed out loading this post. Check your connection and try again.",
-	)
-		.then((data) => {
-			if (!data) notFound();
-			return data;
-		})
-		.catch((error) => {
-			// notFound() throws internally to trigger the not-found page; let
-			// that pass through instead of being treated as a fetch failure.
-			// Its digest is "NEXT_HTTP_ERROR_FALLBACK;404", not "NEXT_NOT_FOUND".
-			if (String(error?.digest || "").startsWith("NEXT_HTTP_ERROR_FALLBACK")) {
-				throw error;
-			}
-			console.error("Error loading post for edit:", error);
-			throw new Error(
-				error?.code === "permission-denied"
-					? "You don't have permission to view this post."
-					: error?.message?.startsWith("Timed out")
-						? error.message
-						: "Could not load this post. Check your connection and try again.",
-			);
-		});
 }
 
 export async function fetchBlogPostById(id) {
