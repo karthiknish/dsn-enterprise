@@ -11,7 +11,7 @@ import {
 	FaTools,
 	FaTruck,
 } from "react-icons/fa";
-import PageCta from "@/components/layout/PageCta";
+import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -142,6 +142,23 @@ const processSteps = [
 	},
 ];
 
+const containerVariants = {
+	hidden: { opacity: 0 },
+	visible: {
+		opacity: 1,
+		transition: { staggerChildren: 0.1 },
+	},
+};
+
+const itemVariants = {
+	hidden: { opacity: 0, y: 30 },
+	visible: {
+		opacity: 1,
+		y: 0,
+		transition: { duration: 0.5 },
+	},
+};
+
 export default function CalibrationPage() {
 	return (
 		<div>
@@ -167,128 +184,233 @@ export default function CalibrationPage() {
 				</Link>
 			</PageHero>
 
-			<section className="py-16 md:py-20 bg-white">
+			{/* Services Section */}
+			<section className="py-20 md:py-28 bg-white">
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-12">
-						<h2 className="text-3xl font-semibold mb-4 text-gray-900">
-							Our Calibration Services
-						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
-							Comprehensive calibration and repair services for precision gauges
-						</p>
+					{/* Section header, shadcnblocks eyebrow + title + description */}
+					<div className="text-center mb-14">
+						<m.h2
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.1 }}
+							className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+						>
+							Comprehensive Calibration Services
+						</m.h2>
+						<m.p
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+							className="text-lg text-gray-600 max-w-2xl mx-auto"
+						>
+							End-to-end precision calibration and repair backed by NABL
+							accreditation and decades of metrology expertise
+						</m.p>
 					</div>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-						{services.map((service, index) => (
+					{/* Service cards, 2x2 grid with colored top accent bar */}
+					<m.div
+						variants={containerVariants}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+						className="grid grid-cols-1 md:grid-cols-2 gap-8"
+					>
+						{services.map((service) => (
 							<m.div
 								key={service.title}
-								className="bg-gray-50 rounded-2xl border border-gray-100 p-8"
-								initial={{ opacity: 0, y: 30 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true }}
-								transition={{ duration: 0.5, delay: index * 0.1 }}
+								variants={itemVariants}
+								className="bg-white rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
 							>
-								<div className="flex items-start justify-between mb-4">
-									<h3 className="text-2xl font-semibold text-gray-900">
-										{service.title}
-									</h3>
-									<div className="flex items-center text-primary text-sm">
-										<FaClock className="mr-1" />
-										{service.turnaround}
+								{/* Colored accent bar at top */}
+								<div className="h-1.5 bg-primary w-full" />
+								<div className="p-8">
+									<div className="flex items-start justify-between mb-4 gap-4">
+										<h3 className="text-2xl font-bold text-gray-900">
+											{service.title}
+										</h3>
+										<div className="flex items-center gap-1.5 text-accent text-sm font-medium whitespace-nowrap bg-accent-50 px-3 py-1 rounded-full">
+											<FaClock className="text-xs" aria-hidden />
+											{service.turnaround}
+										</div>
 									</div>
+									<p className="text-gray-600 mb-6 leading-relaxed">
+										{service.description}
+									</p>
+									<ul className="space-y-2.5">
+										{service.features.map((feature) => (
+											<li key={feature} className="flex items-start text-sm">
+												<span className="flex-shrink-0 w-5 h-5 rounded-full bg-accent-50 flex items-center justify-center mr-3 mt-0.5">
+													<FaCheck
+														className="text-accent text-[10px]"
+														aria-hidden
+													/>
+												</span>
+												<span className="text-gray-700">{feature}</span>
+											</li>
+										))}
+									</ul>
 								</div>
-								<p className="text-gray-700 mb-6">{service.description}</p>
-								<ul className="space-y-2">
-									{service.features.map((feature) => (
-										<li key={feature} className="flex items-start text-sm">
-											<FaCheck className="text-primary mt-1 mr-2 flex-shrink-0" />
-											<span className="text-gray-600">{feature}</span>
-										</li>
-									))}
-								</ul>
 							</m.div>
 						))}
-					</div>
+					</m.div>
 				</div>
 			</section>
 
+			{/* Gradient accent divider */}
+			<div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
 			{/* Calibration Capabilities */}
-			<section className="py-16 bg-secondary-light">
+			<section className="py-20 md:py-28 bg-surface-subtle">
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-12">
-						<h2 className="text-3xl font-semibold mb-4 text-gray-900">
+					{/* Section header */}
+					<div className="text-center mb-14">
+						<m.h2
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.1 }}
+							className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+						>
 							Calibration Capabilities
-						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
-							Our laboratory is equipped to calibrate a wide range of gauges
-						</p>
+						</m.h2>
+						<m.p
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+							className="text-lg text-gray-600 max-w-2xl mx-auto"
+						>
+							Our laboratory is equipped to calibrate a wide range of gauge
+							types across multiple standards
+						</m.p>
 					</div>
 
-					<div className="max-w-5xl mx-auto overflow-x-auto">
-						<table className="w-full bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-							<thead className="bg-primary text-white">
-								<tr>
-									<th className="px-6 py-4 text-left">Gauge Type</th>
-									<th className="px-6 py-4 text-left">Range</th>
-									<th className="px-6 py-4 text-left">Accuracy</th>
-									<th className="px-6 py-4 text-left">Standards</th>
+					{/* Premium table with rounded container and header */}
+					<m.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						transition={{ duration: 0.6 }}
+						className="max-w-5xl mx-auto overflow-x-auto rounded-2xl border border-gray-200/80 shadow-sm"
+					>
+						<table className="w-full">
+							<thead>
+								<tr className="bg-primary text-white">
+									<th
+										scope="col"
+										className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider"
+									>
+										Gauge Type
+									</th>
+									<th
+										scope="col"
+										className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider"
+									>
+										Range
+									</th>
+									<th
+										scope="col"
+										className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider"
+									>
+										Accuracy
+									</th>
+									<th
+										scope="col"
+										className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider"
+									>
+										Standards
+									</th>
 								</tr>
 							</thead>
 							<tbody>
 								{calibrationCapabilities.map((cap, index) => (
 									<tr
 										key={cap.type}
-										className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+										className={`${
+											index % 2 === 0 ? "bg-white" : "bg-surface-subtle"
+										} transition-colors hover:bg-accent-50`}
 									>
-										<td className="px-6 py-4 font-medium text-gray-900">
+										<td className="px-6 py-4 font-semibold text-gray-900 border-t border-gray-100">
 											{cap.type}
 										</td>
-										<td className="px-6 py-4 text-gray-700">{cap.range}</td>
-										<td className="px-6 py-4 text-gray-700">{cap.accuracy}</td>
-										<td className="px-6 py-4 text-gray-700">{cap.standards}</td>
+										<td className="px-6 py-4 text-gray-700 border-t border-gray-100">
+											{cap.range}
+										</td>
+										<td className="px-6 py-4 text-gray-700 border-t border-gray-100">
+											{cap.accuracy}
+										</td>
+										<td className="px-6 py-4 text-gray-700 border-t border-gray-100 font-mono text-sm">
+											{cap.standards}
+										</td>
 									</tr>
 								))}
 							</tbody>
 						</table>
-					</div>
+					</m.div>
 				</div>
 			</section>
 
+			{/* Gradient accent divider */}
+			<div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
 			{/* Process */}
-			<section className="py-16 bg-white">
+			<section className="py-20 md:py-28 bg-white">
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-12">
-						<h2 className="text-3xl font-semibold mb-4 text-gray-900">
-							Calibration Process
-						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
-							Simple and transparent process from submission to delivery
-						</p>
+					{/* Section header */}
+					<div className="text-center mb-14">
+						<m.h2
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.1 }}
+							className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+						>
+							Our Calibration Process
+						</m.h2>
+						<m.p
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+							className="text-lg text-gray-600 max-w-2xl mx-auto"
+						>
+							A transparent five-step workflow from submission to delivery
+						</m.p>
 					</div>
 
 					<div className="max-w-4xl mx-auto">
 						<div className="relative">
-							{/* Timeline line */}
-							<div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary hidden md:block"></div>
+							{/* Connecting line behind the dots */}
+							<div className="absolute left-8 top-0 bottom-0 w-0.5 bg-primary/10 hidden md:block" />
 
-							<div className="space-y-8">
+							<div className="space-y-10">
 								{processSteps.map((step, index) => (
 									<m.div
 										key={step.step}
-										className="flex items-start gap-6"
 										initial={{ opacity: 0, x: -30 }}
 										whileInView={{ opacity: 1, x: 0 }}
 										viewport={{ once: true }}
 										transition={{ duration: 0.5, delay: index * 0.1 }}
+										className="flex items-start gap-6 group"
 									>
-										<div className="flex-shrink-0 w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl z-10">
-											{step.step}
+										{/* Numbered step circle */}
+										<div className="relative flex-shrink-0 z-10">
+											<div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+												{step.step}
+											</div>
 										</div>
-										<div className="flex-1 bg-gray-50 rounded-2xl border border-gray-100 p-6">
-											<h3 className="text-xl font-semibold text-gray-900 mb-2">
+
+										{/* Step content card */}
+										<div className="flex-1 bg-surface-subtle rounded-2xl border border-gray-200/80 p-6 shadow-sm hover:shadow-md transition-all duration-300">
+											<h3 className="text-xl font-bold text-gray-900 mb-2">
 												{step.title}
 											</h3>
-											<p className="text-gray-600">{step.description}</p>
+											<p className="text-gray-600 leading-relaxed">
+												{step.description}
+											</p>
 										</div>
 									</m.div>
 								))}
@@ -298,78 +420,109 @@ export default function CalibrationPage() {
 				</div>
 			</section>
 
-			{/* Benefits */}
-			<section className="py-16 bg-secondary-light">
+			{/* Gradient accent divider */}
+			<div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+			{/* Benefits, 3x2 grid with decorative accent and hover states */}
+			<section className="py-20 md:py-28 bg-surface-subtle">
 				<div className="container mx-auto px-4">
-					<div className="max-w-4xl mx-auto">
-						<h2 className="text-3xl font-semibold mb-8 text-center text-gray-900">
+					{/* Section header */}
+					<div className="text-center mb-14">
+						<m.h2
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.1 }}
+							className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+						>
 							Why Choose Our Calibration Services
-						</h2>
-						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-							<div className="bg-white p-6 rounded-lg shadow-md text-center">
-								<FaCertificate className="text-4xl text-primary mx-auto mb-4" />
-								<h3 className="font-semibold text-gray-900 mb-2">
-									NABL Accredited
-								</h3>
-								<p className="text-gray-600 text-sm">
-									Nationally recognized calibration laboratory
-								</p>
-							</div>
-							<div className="bg-white p-6 rounded-lg shadow-md text-center">
-								<FaTools className="text-4xl text-primary mx-auto mb-4" />
-								<h3 className="font-semibold text-gray-900 mb-2">
-									Expert Technicians
-								</h3>
-								<p className="text-gray-600 text-sm">
-									Trained and experienced calibration staff
-								</p>
-							</div>
-							<div className="bg-white p-6 rounded-lg shadow-md text-center">
-								<FaClipboardList className="text-4xl text-primary mx-auto mb-4" />
-								<h3 className="font-semibold text-gray-900 mb-2">
-									Full Documentation
-								</h3>
-								<p className="text-gray-600 text-sm">
-									Comprehensive certificates with traceability
-								</p>
-							</div>
-							<div className="bg-white p-6 rounded-lg shadow-md text-center">
-								<FaClock className="text-4xl text-primary mx-auto mb-4" />
-								<h3 className="font-semibold text-gray-900 mb-2">
-									Quick Turnaround
-								</h3>
-								<p className="text-gray-600 text-sm">
-									Fast service with express options
-								</p>
-							</div>
-							<div className="bg-white p-6 rounded-lg shadow-md text-center">
-								<FaTruck className="text-4xl text-primary mx-auto mb-4" />
-								<h3 className="font-semibold text-gray-900 mb-2">
-									Pickup & Delivery
-								</h3>
-								<p className="text-gray-600 text-sm">
-									Convenient logistics support
-								</p>
-							</div>
-							<div className="bg-white p-6 rounded-lg shadow-md text-center">
-								<FaCheck className="text-4xl text-primary mx-auto mb-4" />
-								<h3 className="font-semibold text-gray-900 mb-2">
-									Competitive Pricing
-								</h3>
-								<p className="text-gray-600 text-sm">
-									Quality service at reasonable rates
-								</p>
-							</div>
-						</div>
+						</m.h2>
+						<m.p
+							initial={{ opacity: 0, y: 20 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.2 }}
+							className="text-lg text-gray-600 max-w-2xl mx-auto"
+						>
+							Trusted by leading manufacturers for precision, reliability, and
+							service excellence
+						</m.p>
 					</div>
+
+					{/* Benefits cards, decorative dot + accent icon container + bold copy */}
+					<m.div
+						variants={containerVariants}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
+					>
+						{[
+							{
+								icon: FaCertificate,
+								title: "NABL-Accredited Lab",
+								desc: "Nationally recognized accreditation. Every certificate carries full traceability to national standards.",
+							},
+							{
+								icon: FaTools,
+								title: "Skilled Metrologists",
+								desc: "Years of hands-on experience with precision gauges across every major industry standard.",
+							},
+							{
+								icon: FaClipboardList,
+								title: "Complete Traceability",
+								desc: "Detailed calibration certificates with full measurement data and uncertainty analysis.",
+							},
+							{
+								icon: FaClock,
+								title: "Rapid Turnaround",
+								desc: "Standard 3–5 days. Express 24–48 hours available. On-site service by appointment.",
+							},
+							{
+								icon: FaTruck,
+								title: "Door-to-Door Logistics",
+								desc: "We handle pickup and delivery so you focus on production, not shipping.",
+							},
+							{
+								icon: FaCheck,
+								title: "Transparent Pricing",
+								desc: "No hidden fees. Detailed quotes provided before any work begins.",
+							},
+						].map((item) => (
+							<m.div
+								key={item.title}
+								variants={itemVariants}
+								className="bg-white rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 p-8 relative overflow-hidden"
+							>
+								{/* Decorative accent circle */}
+								<div className="absolute -top-4 -right-4 w-16 h-16 bg-accent-50 rounded-full opacity-60" />
+								<div className="relative z-10">
+									<div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
+										<item.icon
+											className="text-xl text-primary"
+											aria-hidden
+										/>
+									</div>
+									<h3 className="text-lg font-bold text-gray-900 mb-2">
+										{item.title}
+									</h3>
+									<p className="text-gray-600 text-sm leading-relaxed">
+										{item.desc}
+									</p>
+								</div>
+							</m.div>
+						))}
+					</m.div>
 				</div>
 			</section>
 
-			<PageCta
-				title="Ready to Calibrate Your Gauges?"
+			<Cta10
+				heading="Ready to Calibrate Your Gauges?"
 				description="Contact us today for a calibration quote. We offer competitive pricing and quick turnaround times."
-				primaryHref="/contact?service=Calibration"
-				primaryLabel="Request Calibration"
+				buttons={{
+					primary: { text: "Request Calibration", url: "/contact?service=Calibration" },
+					secondary: { text: "View Services", url: "/services" },
+				}}
 			/>
 		</div>
 	);
