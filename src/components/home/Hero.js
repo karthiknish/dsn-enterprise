@@ -3,7 +3,7 @@
 import { m, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const trustPoints = [
@@ -18,8 +18,19 @@ const Hero = () => {
 	const { trackCTAClick } = useGoogleAdsTracking();
 	const prefersReducedMotion = useReducedMotion();
 	const [videoLoaded, setVideoLoaded] = useState(false);
+	const [logoExited, setLogoExited] = useState(prefersReducedMotion ?? false);
 
 	const handleVideoReady = useCallback(() => setVideoLoaded(true), []);
+
+	useEffect(() => {
+		if (!videoLoaded) return;
+		if (prefersReducedMotion) {
+			setLogoExited(true);
+			return;
+		}
+		const timer = setTimeout(() => setLogoExited(true), 1200);
+		return () => clearTimeout(timer);
+	}, [videoLoaded, prefersReducedMotion]);
 
 	return (
 		<div className="relative text-white -mt-16 min-h-dvh flex items-center overflow-hidden bg-primary-dark">
@@ -40,8 +51,14 @@ const Hero = () => {
 				<source src="/hero-video.mp4" type="video/mp4" />
 			</video>
 			<div
-				className={`absolute inset-0 z-[1] flex items-center justify-center bg-gradient-to-br from-primary-dark/90 via-primary/75 to-black/50 pointer-events-none transition-opacity duration-700 ${
+				className={`absolute inset-0 z-[1] bg-gradient-to-br from-primary-dark/90 via-primary/75 to-black/50 pointer-events-none transition-opacity duration-700 ${
 					videoLoaded ? "opacity-100" : "opacity-0"
+				}`}
+				aria-hidden
+			/>
+			<div
+				className={`absolute inset-0 z-[2] flex items-center justify-center pointer-events-none transition-opacity duration-700 ${
+					videoLoaded && !logoExited ? "opacity-100" : "opacity-0"
 				}`}
 				aria-hidden
 			>
