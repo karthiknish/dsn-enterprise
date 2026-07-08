@@ -93,7 +93,28 @@ export function validateContactField(name, value, fieldErrors) {
 				delete errors.company;
 			}
 			break;
+
+		case "productInterest":
+			if (value && value.trim().length > 100) {
+				errors.productInterest =
+					"Product interest must be less than 100 characters";
+			} else {
+				delete errors.productInterest;
+			}
+			break;
 	}
 
+	return errors;
+}
+
+// Validates every field in one pass and returns the full error set. Unlike
+// calling validateContactField() in a loop, this doesn't depend on stale
+// closures over previous state, so it can't silently stop early on the
+// first invalid field.
+export function validateAllContactFields(formData) {
+	let errors = {};
+	for (const field of Object.keys(formData)) {
+		errors = validateContactField(field, formData[field], errors);
+	}
 	return errors;
 }

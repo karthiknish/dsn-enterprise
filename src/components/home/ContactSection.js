@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { useReducer } from "react";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 import {
+	validateAllContactFields,
+	validateContactField,
+} from "@/lib/contact-form-state";
+import {
 	homeContactReducer,
 	initialHomeContactState,
 } from "@/lib/home-contact-reducer";
@@ -25,8 +29,27 @@ const ContactSection = () => {
 		dispatch({ type: "UPDATE_FIELD", field: fieldName, value });
 	};
 
+	const validateHomeContactField = (e) => {
+		const { id, name, value } = e.target;
+		const fieldName = name || id;
+		const fieldErrors = validateContactField(fieldName, value, state.fieldErrors);
+		dispatch({ type: "SET_FIELD_ERRORS", fieldErrors });
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		const fieldErrors = validateAllContactFields(state.formData);
+		dispatch({ type: "SET_FIELD_ERRORS", fieldErrors });
+		if (Object.keys(fieldErrors).length > 0) {
+			dispatch({
+				type: "SUBMIT_ERROR",
+				errorMessage: "Please fix the errors in the form before submitting.",
+			});
+			setTimeout(() => dispatch({ type: "CLEAR_SUBMIT_ERROR" }), 5000);
+			return;
+		}
+
 		dispatch({ type: "SUBMIT_START" });
 
 		try {
@@ -48,14 +71,16 @@ const ContactSection = () => {
 			const result = JSON.parse(responseText);
 
 			if (!response.ok) {
-				if (response.status === 400) {
-					throw new Error(
-						result.error || "Please fill out all required fields",
-					);
+				if (response.status === 400 && result.validationErrors) {
+					dispatch({
+						type: "SET_FIELD_ERRORS",
+						fieldErrors: result.validationErrors,
+					});
+					throw new Error("Please correct the errors in the form.");
 				}
-				if (response.status === 403) {
+				if (response.status === 429) {
 					throw new Error(
-						"Database permission error. Your form could not be submitted.",
+						"Too many requests. Please wait a moment and try again.",
 					);
 				}
 				throw new Error(
@@ -106,11 +131,13 @@ const ContactSection = () => {
 					<div className="bg-white p-8 md:p-10 rounded-2xl border border-gray-200/80 shadow-sm">
 						<HomeContactForm
 							formData={state.formData}
+							fieldErrors={state.fieldErrors}
 							isSubmitting={state.isSubmitting}
 							submitSuccess={state.submitSuccess}
 							submitError={state.submitError}
 							errorMessage={state.errorMessage}
 							onFieldChange={updateHomeContactField}
+							onFieldBlur={validateHomeContactField}
 							onSubmit={handleSubmit}
 						/>
 					</div>

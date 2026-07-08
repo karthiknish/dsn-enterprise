@@ -7,6 +7,7 @@ export const initialHomeContactState = {
 		message: "",
 		productInterest: "",
 	},
+	fieldErrors: {},
 	isSubmitting: false,
 	submitSuccess: false,
 	submitError: false,
@@ -22,6 +23,11 @@ export function homeContactReducer(state, action) {
 					...state.formData,
 					[action.field]: action.value,
 				},
+			};
+		case "SET_FIELD_ERRORS":
+			return {
+				...state,
+				fieldErrors: action.fieldErrors,
 			};
 		case "SUBMIT_START":
 			return {
@@ -42,6 +48,7 @@ export function homeContactReducer(state, action) {
 				isSubmitting: false,
 				submitError: true,
 				errorMessage: action.errorMessage,
+				fieldErrors: action.fieldErrors || state.fieldErrors,
 			};
 		case "CLEAR_SUBMIT_ERROR":
 			return {

@@ -1,12 +1,19 @@
 "use client";
 
+import { FaExclamationTriangle } from "react-icons/fa";
+
+const fieldErrorClass = (hasError) =>
+	hasError ? "border-red-500 focus:ring-red-500/40 focus:border-red-500" : "";
+
 export default function HomeContactForm({
 	formData,
+	fieldErrors = {},
 	isSubmitting,
 	submitSuccess,
 	submitError,
 	errorMessage,
 	onFieldChange,
+	onFieldBlur,
 	onSubmit,
 }) {
 	return (
@@ -33,7 +40,7 @@ export default function HomeContactForm({
 				</div>
 			)}
 
-			<form onSubmit={onSubmit} aria-busy={isSubmitting}>
+			<form onSubmit={onSubmit} aria-busy={isSubmitting} noValidate>
 				<div className="mb-4">
 					<label
 						id="name-label"
@@ -50,10 +57,22 @@ export default function HomeContactForm({
 						autoComplete="name"
 						value={formData.name}
 						onChange={onFieldChange}
-						className="w-full px-4 py-2.5 text-gray-900 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent"
+						onBlur={onFieldBlur}
+						className={`w-full px-4 py-2.5 text-gray-900 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent ${fieldErrorClass(fieldErrors.name)}`}
 						placeholder="Enter your name"
 						required
+						aria-invalid={fieldErrors.name ? "true" : "false"}
+						aria-describedby={fieldErrors.name ? "name-error" : undefined}
 					/>
+					{fieldErrors.name && (
+						<p
+							id="name-error"
+							className="mt-1 text-sm text-red-600 flex items-center field-error"
+						>
+							<FaExclamationTriangle className="mr-1" aria-hidden />
+							{fieldErrors.name}
+						</p>
+					)}
 				</div>
 				<div className="mb-4">
 					<label
@@ -71,10 +90,22 @@ export default function HomeContactForm({
 						autoComplete="email"
 						value={formData.email}
 						onChange={onFieldChange}
-						className="w-full px-4 py-2.5 border text-gray-900 bg-gray-50 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent"
+						onBlur={onFieldBlur}
+						className={`w-full px-4 py-2.5 border text-gray-900 bg-gray-50 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent ${fieldErrorClass(fieldErrors.email)}`}
 						placeholder="Enter your email"
 						required
+						aria-invalid={fieldErrors.email ? "true" : "false"}
+						aria-describedby={fieldErrors.email ? "email-error" : undefined}
 					/>
+					{fieldErrors.email && (
+						<p
+							id="email-error"
+							className="mt-1 text-sm text-red-600 flex items-center field-error"
+						>
+							<FaExclamationTriangle className="mr-1" aria-hidden />
+							{fieldErrors.email}
+						</p>
+					)}
 				</div>
 				<div className="mb-4">
 					<label
@@ -92,9 +123,21 @@ export default function HomeContactForm({
 						autoComplete="tel"
 						value={formData.phone}
 						onChange={onFieldChange}
-						className="w-full px-4 py-2.5 border text-gray-900 bg-gray-50 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent"
+						onBlur={onFieldBlur}
+						className={`w-full px-4 py-2.5 border text-gray-900 bg-gray-50 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent ${fieldErrorClass(fieldErrors.phone)}`}
 						placeholder="Enter your phone number"
+						aria-invalid={fieldErrors.phone ? "true" : "false"}
+						aria-describedby={fieldErrors.phone ? "phone-error" : undefined}
 					/>
+					{fieldErrors.phone && (
+						<p
+							id="phone-error"
+							className="mt-1 text-sm text-red-600 flex items-center field-error"
+						>
+							<FaExclamationTriangle className="mr-1" aria-hidden />
+							{fieldErrors.phone}
+						</p>
+					)}
 				</div>
 				<div className="mb-4">
 					<label
@@ -163,10 +206,33 @@ export default function HomeContactForm({
 						aria-labelledby="message-label"
 						value={formData.message}
 						onChange={onFieldChange}
-						className="w-full px-4 text-gray-900 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent"
+						onBlur={onFieldBlur}
+						className={`w-full px-4 text-gray-900 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent ${fieldErrorClass(fieldErrors.message)}`}
 						placeholder="Enter your message"
 						required
+						maxLength={2000}
+						aria-invalid={fieldErrors.message ? "true" : "false"}
+						aria-describedby={
+							fieldErrors.message ? "message-error" : "message-help"
+						}
 					></textarea>
+					<div className="flex justify-between items-center mt-1">
+						<p id="message-help" className="text-xs text-gray-500">
+							Please provide at least 10 characters
+						</p>
+						<span className="text-xs text-gray-500">
+							{formData.message.length}/2000
+						</span>
+					</div>
+					{fieldErrors.message && (
+						<p
+							id="message-error"
+							className="mt-1 text-sm text-red-600 flex items-center field-error"
+						>
+							<FaExclamationTriangle className="mr-1" aria-hidden />
+							{fieldErrors.message}
+						</p>
+					)}
 				</div>
 				<button
 					type="submit"

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import {
 	EMPTY_CONTACT_FORM,
 	loadContactDraft,
+	validateAllContactFields,
 	validateContactField,
 } from "@/lib/contact-form-state";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
@@ -146,12 +147,15 @@ export function useContactPageForm({ prefillProduct = "" } = {}) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const isValid = Object.keys(formData).every((field) =>
-			validateField(field, formData[field]),
-		);
+		// Validate every field in a single pass so one invalid field can't stop
+		// the rest from being checked (an .every()-based loop over stale state
+		// used to short-circuit on the first error and hide the others).
+		const allErrors = validateAllContactFields(formData);
+		setFieldErrors(allErrors);
+		const isValid = Object.keys(allErrors).length === 0;
 
 		if (!isValid) {
-			trackValidationErrors(fieldErrors);
+			trackValidationErrors(allErrors);
 			setSubmitError(true);
 			setErrorMessage("Please fix the errors in the form before submitting.");
 			const firstErrorField = document.querySelector(".field-error");
