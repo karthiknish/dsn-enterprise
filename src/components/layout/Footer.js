@@ -1,11 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-	FaLinkedin,
-	FaMapMarkerAlt,
-	FaPhone,
-} from "react-icons/fa";
+import { FaLinkedin, FaPhone } from "react-icons/fa";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const Footer = () => {
@@ -157,10 +153,6 @@ const Footer = () => {
 					<div>
 						<h3 className="text-xl font-semibold mb-4">Contact Us</h3>
 						<ul className="space-y-3">
-							<li className="flex items-start">
-								<FaMapMarkerAlt className="mt-1 mr-3 text-secondary" />
-								<span>Coimbatore, Tamil Nadu, India</span>
-							</li>
 							<li className="flex items-center">
 								<FaPhone className="mr-3 text-secondary" />
 								<span>

@@ -51,7 +51,7 @@ const Hero = () => {
 								className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse"
 								aria-hidden
 							/>
-							Coimbatore · Precision metrology
+							Precision metrology
 						</p>
 						<h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-semibold mb-6 text-white text-balance leading-[1.1] tracking-tight">
 							Precision Gauges & Measuring Instruments
