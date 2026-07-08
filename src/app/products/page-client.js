@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { FaArrowRight, FaChevronRight, FaSearch } from "react-icons/fa";
-import PageCta from "@/components/layout/PageCta";
+import { CheckCircle2, Ruler, BadgeCheck, BookOpen } from "lucide-react";
+import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -14,7 +15,7 @@ const categories = [
 		id: "plain-gauges",
 		name: "Plain Gauges",
 		description:
-			"Plug, ring, snap, and setting masters for bore and OD acceptance—1 mm to 250 mm in gauge steel or carbide",
+			"Master your dimensional inspection with precision plug, ring, snap, and setting gauges, from 1 mm to 250 mm in hardened gauge steel or wear-resistant carbide",
 		href: "/products/plain-gauges",
 		image: "/images/plain-plug-gauge.png",
 		highlights: [
@@ -28,7 +29,7 @@ const categories = [
 		id: "thread-gauges",
 		name: "Thread Gauges",
 		description:
-			"Plug, ring, and setting gauges for Metric, Unified, BSP, NPT, and special thread programmes",
+			"Full-spectrum thread inspection across Metric, Unified, BSP, NPT, and custom thread forms, every plug, ring, and setting gauge engineered to class tolerances",
 		href: "/products/thread-gauges",
 		image: "/images/thread-plug-gauge.png",
 		highlights: [
@@ -42,7 +43,7 @@ const categories = [
 		id: "api-gauges",
 		name: "API Gauges",
 		description:
-			"Licensed API 5B and 7-2 gauges for OCTG, line pipe, and rotary shouldered connections",
+			"API-licensed 5B and 7-2 gauges for critical OCTG, line pipe, and rotary shouldered connections, certified for oilfield compliance",
 		href: "/products/api-gauges",
 		image: "/images/api-thread-gauge.png",
 		highlights: [
@@ -56,7 +57,7 @@ const categories = [
 		id: "special-gauges",
 		name: "Special Gauges",
 		description:
-			"ACME, buttress, spline, and fully custom profiles engineered and manufactured to your drawing",
+			"Beyond standard threads, ACME, buttress, spline, and fully custom profiles machined exactly to your drawing",
 		href: "/products/special-gauges",
 		image: "/images/featured.png",
 		highlights: [
@@ -78,35 +79,40 @@ const products = [
 				id: "plain-plug-gauge",
 				name: "Plain Plug Gauge",
 				specs: "1mm to 250mm - OHNS (W) & Carbide",
-				description: "Precision plug gauges for accurate hole measurement.",
+				description:
+					"GO/NO-GO plain plug gauges for precise bore diameter verification, 1 mm to 250 mm range.",
 				image: "/images/plain-plug-gauge.png",
 			},
 			{
 				id: "plain-ring-gauge",
 				name: "Plain Ring Gauge",
 				specs: "6mm to 125mm",
-				description: "Precision ring gauges for accurate shaft measurement.",
+				description:
+					"External diameter master gauges for accepting or rejecting shaft OD, 6 mm to 125 mm.",
 				image: "/images/plain-ring-gauge.png",
 			},
 			{
 				id: "cylindrical-setting-masters",
 				name: "Cylindrical Setting Masters",
 				specs: "6mm to 250mm",
-				description: "Master setting gauges for calibration and reference.",
+				description:
+					"Primary reference masters for calibrating your measurement systems, traceable accuracy.",
 				image: "/images/cylinder-maters.png",
 			},
 			{
 				id: "cylindrical-measuring-pin",
 				name: "Cylindrical Measuring Pin",
 				specs: "1mm to 20mm",
-				description: "Precision pins for accurate measurement.",
+				description:
+					"Hardened and ground reference pins for comparative dimensional setup and inspection.",
 				image: "/images/cylinder-maters.png",
 			},
 			{
 				id: "snap-gauges",
 				name: "Snap Gauges",
 				specs: "Various sizes available",
-				description: "Quick and accurate external dimension measurement.",
+				description:
+					"Progressive snap gauges for high-speed OD sorting, single-ended design up to 160 mm.",
 				image: "/images/snap-gauge.png",
 			},
 		],
@@ -120,28 +126,32 @@ const products = [
 				id: "thread-plug-gauge",
 				name: "Thread Plug Gauge",
 				specs: "Various thread forms and sizes",
-				description: "For accurate internal thread inspection.",
+				description:
+					"GO/NO-GO thread plug gauges for internal thread acceptance, all major thread forms.",
 				image: "/images/thread-plug-gauge.png",
 			},
 			{
 				id: "thread-ring-gauge",
 				name: "Thread Ring Gauge",
 				specs: "Various thread forms and sizes",
-				description: "For accurate external thread inspection.",
+				description:
+					"External thread verification rings, adjustable and solid designs for production inspection.",
 				image: "/images/thread-ring-gauge.png",
 			},
 			{
 				id: "thread-setting-plug",
 				name: "Thread Setting Plug",
 				specs: "Various thread forms and sizes",
-				description: "For calibrating thread ring gauges.",
+				description:
+					"Master setting plugs to calibrate thread ring gauges to working tolerance.",
 				image: "/images/thread-setting-plug-gauge.png",
 			},
 			{
 				id: "taper-thread-gauges",
 				name: "Taper Thread Gauges",
 				specs: "Various thread forms and sizes",
-				description: "For inspecting tapered thread forms.",
+				description:
+					"Tapered thread inspection for pipe connections, valves, and fittings, NPT, BSPT, and API.",
 				image: "/images/thread-ring-gauge.png",
 			},
 		],
@@ -155,14 +165,16 @@ const products = [
 				id: "api-thread-gauges",
 				name: "API Thread Gauges",
 				specs: "API 5B & 7-2 certified",
-				description: "For oil and gas industry thread inspection.",
+				description:
+					"API 5B and 7-2 certified thread gauges for OCTG, casing, tubing, and rotary connections.",
 				image: "/images/api-thread-gauge.png",
 			},
 			{
 				id: "api-master-gauges",
 				name: "API Master Gauges",
 				specs: "API 5B & 7-2 certified",
-				description: "Reference gauges for calibration.",
+				description:
+					"API reference master gauges for calibrating working gauges in oilfield inspection.",
 				image: "/images/api-master-gauge.png",
 			},
 		],
@@ -177,21 +189,23 @@ const products = [
 				name: "Special Gauges as per Drawing",
 				specs: "Custom specifications",
 				description:
-					"Manufactured according to customer drawings and specifications.",
+					"Custom gauge solutions machined to your exact drawing, thread, spline, or plain profiles.",
 				image: "/images/featured.png",
 			},
 			{
 				id: "acme-thread-gauges",
 				name: "ACME Thread Gauges",
 				specs: "Various sizes",
-				description: "For ACME thread inspection.",
+				description:
+					"ACME and stub ACME thread gauges for lead screw and power transmission inspection.",
 				image: "/images/featured.png",
 			},
 			{
 				id: "buttress-thread-gauges",
 				name: "Buttress Thread Gauges",
 				specs: "Various sizes",
-				description: "For Buttress thread inspection.",
+				description:
+					"Buttress thread gauges for high-load connection inspection, API and custom profiles.",
 				image: "/images/featured.png",
 			},
 		],
@@ -213,6 +227,23 @@ const standards = [
 	"IS 3485 - Specification for Plain & Master Setting Ring Gauges (Size- Range From 1 to & Including 315mm)",
 	"IS 8023 - Single Ended Progressive Type Plate Snap Gauges (Upto 160mm)",
 ];
+
+const containerVariants = {
+	hidden: { opacity: 0 },
+	visible: {
+		opacity: 1,
+		transition: { staggerChildren: 0.1 },
+	},
+};
+
+const itemVariants = {
+	hidden: { opacity: 0, y: 30 },
+	visible: {
+		opacity: 1,
+		y: 0,
+		transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+	},
+};
 
 const ProductsPage = () => {
 	const [activeCategory, setActiveCategory] = useState("plain-gauges");
@@ -254,87 +285,114 @@ const ProductsPage = () => {
 			</PageHero>
 
 			{/* Product Category Cards */}
-			<section className="py-16 bg-secondary-light">
+			<section className="py-16 md:py-20 bg-secondary-light relative overflow-hidden">
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+					aria-hidden
+				/>
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-12">
-						<h2 className="text-3xl font-semibold mb-4 text-gray-900">
-							Product Categories
+					<m.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						transition={{ duration: 0.5 }}
+						className="text-center mb-12"
+					>
+						<h2 className="text-3xl md:text-4xl font-semibold mb-4 text-gray-900">
+							Browse by Category
 						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
-							Select a category to view specifications, standards, and typical
-							applications,or search by product name below.
+						<p className="text-lg text-text-body max-w-2xl mx-auto">
+							Select a category to explore specifications, standards, and
+							available configurations, or use the search above to find a
+							specific product.
 						</p>
-					</div>
+					</m.div>
 
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-						{categories.map((category, index) => (
-							<m.div
-								key={category.id}
-								initial={{ opacity: 0, y: 30 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true }}
-								transition={{ duration: 0.5, delay: index * 0.1 }}
-							>
+					<m.div
+						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+						variants={containerVariants}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+					>
+						{categories.map((category) => (
+							<m.div key={category.id} variants={itemVariants}>
 								<Link
 									href={category.href}
-									className="block bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-xl transition-all group h-full"
+									className="group block bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-full"
 								>
-									<div className="relative h-48 bg-gray-100 flex items-center justify-center p-4">
+									<div className="relative h-52 bg-[linear-gradient(135deg,#f6f8f4_0%,#e8ede3_100%)] overflow-hidden">
+										<div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent z-10 pointer-events-none" />
 										<Image
 											src={category.image}
 											alt={category.name}
 											fill
 											sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-											className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+											className="object-contain p-6 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
 										/>
 									</div>
 									<div className="p-6">
-										<h3 className="text-xl font-semibold mb-2 text-gray-900 group-hover:text-primary transition-colors">
-											{category.name}
-										</h3>
-										<p className="text-gray-600 text-sm mb-4">
+										<div className="flex items-start justify-between mb-2">
+											<h3 className="text-xl font-semibold text-gray-900 group-hover:text-primary transition-colors duration-300">
+												{category.name}
+											</h3>
+											<span className="text-accent/60 group-hover:text-accent transition-colors duration-300 mt-1">
+												<FaArrowRight className="text-sm" />
+											</span>
+										</div>
+										<p className="text-text-body text-sm leading-relaxed mb-4">
 											{category.description}
 										</p>
-										<ul className="space-y-1 mb-4">
+										<div className="flex flex-wrap gap-1.5 mb-4">
 											{category.highlights.map((item) => (
-												<li
+												<span
 													key={`${category.id}-${item}`}
-													className="text-sm text-gray-500 flex items-center"
+													className="inline-block text-xs font-medium text-primary bg-primary/5 px-2.5 py-1 rounded-full"
 												>
-													<FaChevronRight className="text-primary mr-2 text-xs" />
 													{item}
-												</li>
+												</span>
 											))}
-										</ul>
-										<span className="inline-flex items-center text-primary font-medium text-sm group-hover:translate-x-1 transition-transform">
+										</div>
+										<span className="inline-flex items-center text-sm font-medium text-accent group-hover:translate-x-1 transition-transform duration-300">
 											View Products
-											<FaArrowRight className="ml-2" />
+											<FaChevronRight className="ml-1 text-[10px]" />
 										</span>
 									</div>
 								</Link>
 							</m.div>
 						))}
-					</div>
+					</m.div>
 				</div>
 			</section>
 
 			{/* Product Categories Tabs */}
-			<section className="py-16 bg-surface-subtle">
+			<section className="py-16 md:py-20 bg-surface-subtle">
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-8">
-						<h2 className="text-3xl font-semibold mb-4 text-gray-900">
+					<m.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						transition={{ duration: 0.5 }}
+						className="text-center mb-8"
+					>
+						<h2 className="text-3xl md:text-4xl font-semibold mb-4 text-gray-900">
 							Quick Product Overview
 						</h2>
-					</div>
-					<div className="flex flex-wrap justify-center mb-12 gap-4">
+						<p className="text-lg text-text-body max-w-2xl mx-auto">
+							Browse our complete range of precision gauges, filter by category
+							to find exactly what you need.
+						</p>
+					</m.div>
+
+					<div className="flex flex-wrap justify-center mb-10 gap-2">
 						{products.map((category) => (
 							<button
 								key={category.id}
 								type="button"
-								className={`px-6 py-3 rounded-full font-medium transition-colors ${
+								className={`relative px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
 									activeCategory === category.id && !searchTerm
-										? "bg-primary text-white"
-										: "bg-white text-gray-700 hover:bg-gray-100"
+										? "bg-primary text-white shadow-md shadow-primary/20"
+										: "bg-white text-text-body hover:text-primary hover:bg-primary/5 border border-gray-200/60"
 								}`}
 								onClick={() => setActiveCategory(category.id)}
 							>
@@ -344,55 +402,68 @@ const ProductsPage = () => {
 					</div>
 
 					{filteredProducts.length === 0 && searchTerm ? (
-						<div className="text-center py-16">
-							<FaSearch
-								className="text-4xl text-gray-300 mx-auto mb-4"
-								aria-hidden
-							/>
+						<m.div
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							className="text-center py-16 max-w-md mx-auto"
+						>
+							<div className="w-16 h-16 rounded-2xl bg-surface-muted flex items-center justify-center mx-auto mb-5">
+								<FaSearch className="text-2xl text-text-muted" aria-hidden />
+							</div>
 							<h3 className="text-xl font-semibold text-gray-900 mb-2">
 								No products found for &quot;{searchTerm}&quot;
 							</h3>
-							<p className="text-gray-600 mb-6">
-								Try a different search term or browse all product categories.
+							<p className="text-text-body mb-6">
+								Try a different search term or browse all product categories
+								below.
 							</p>
 							<button
 								type="button"
 								onClick={() => setSearchTerm("")}
-								className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-2.5 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+								className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-2.5 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
 							>
 								Clear search
 							</button>
-						</div>
+						</m.div>
 					) : (
 						filteredProducts.map((category) => (
 							<div
 								key={category.id}
-								className={`${
+								className={
 									activeCategory === category.id || searchTerm
 										? "block"
 										: "hidden"
-								}`}
+								}
 							>
 								<div className="mb-12">
-									<h2 className="text-3xl font-semibold mb-2 text-gray-900">
-										{category.name}
-									</h2>
-									<p className="text-lg text-gray-600 mb-8">
+									<div className="flex items-center gap-3 mb-2">
+										<div className="w-1 h-6 bg-accent rounded-full" />
+										<h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
+											{category.name}
+										</h2>
+									</div>
+									<p className="text-text-body ml-4 mb-8 max-w-3xl">
 										{category.description}
 									</p>
 
-									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 										{category.items.map((item, index) => (
 											<m.div
 												key={item.id}
-												className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 hover:border-accent/25"
+												className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
 												initial={{ opacity: 0, y: 30 }}
-												animate={{ opacity: 1, y: 0 }}
-												transition={{ duration: 0.5, delay: index * 0.1 }}
+												whileInView={{ opacity: 1, y: 0 }}
+												viewport={{ once: true }}
+												transition={{
+													duration: 0.5,
+													delay: index * 0.08,
+													ease: [0.16, 1, 0.3, 1],
+												}}
 											>
 												<div className="relative h-48 bg-secondary-light overflow-hidden">
+													<div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/30 z-10 pointer-events-none" />
 													<Image
-														className="object-contain"
+														className="object-contain p-6 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
 														src={item.image}
 														alt={item.name}
 														fill
@@ -400,31 +471,33 @@ const ProductsPage = () => {
 													/>
 												</div>
 												<div className="p-6">
-													<h3 className="text-xl font-semibold mb-2 text-gray-900">
+													<div className="mb-3">
+														<span className="inline-block text-[11px] font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2.5 py-1 rounded-full mb-2">
+															{item.specs}
+														</span>
+													</div>
+													<h3 className="text-lg font-semibold mb-2 text-gray-900">
 														{item.name}
 													</h3>
-													<p className="text-primary font-medium mb-3">
-														{item.specs}
-													</p>
-													<p className="text-gray-600 mb-4">
+													<p className="text-text-body text-sm leading-relaxed mb-5">
 														{item.description}
 													</p>
-													<div className="flex gap-3">
+													<div className="flex gap-4 pt-3 border-t border-gray-100">
 														<Link
 															href={`/contact?product=${encodeURIComponent(
 																item.name,
 															)}`}
-															className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
+															className="text-accent hover:text-accent-dark font-medium text-sm inline-flex items-center gap-1.5 group/link"
 														>
 															Request Quote
-															<FaArrowRight className="ml-2" />
+															<FaArrowRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 														<Link
 															href={`/products/${category.id}`}
-															className="text-gray-500 hover:text-primary font-medium inline-flex items-center"
+															className="text-text-muted hover:text-primary font-medium text-sm inline-flex items-center gap-1 group/link"
 														>
 															View All
-															<FaChevronRight className="ml-1" />
+															<FaChevronRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 													</div>
 												</div>
@@ -439,45 +512,128 @@ const ProductsPage = () => {
 			</section>
 
 			{/* Specifications */}
-			<section className="py-16 bg-surface-muted">
-				<div className="container mx-auto px-4">
-					<div className="max-w-3xl mx-auto">
-						<h2 className="text-3xl font-semibold mb-8 text-center text-gray-900">
+			<section className="py-16 md:py-20 bg-primary relative overflow-hidden">
+				<div
+					className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] bg-[size:40px_40px]"
+					aria-hidden
+				/>
+				<div
+					className="absolute inset-0 bg-gradient-to-br from-primary-dark/40 via-transparent to-black/10 pointer-events-none"
+					aria-hidden
+				/>
+				<div className="relative z-10">
+					<m.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						transition={{ duration: 0.5 }}
+						className="text-center mb-12 px-4"
+					>
+						<h2 className="text-3xl md:text-4xl font-semibold mb-4 text-white">
 							Product Specifications
 						</h2>
+						<p className="text-lg text-white max-w-2xl mx-auto">
+							Every gauge we manufacture meets rigorous internal standards for
+							material, hardness, and dimensional accuracy.
+						</p>
+					</m.div>
 
-						<div className="bg-secondary-light p-8 rounded-lg mb-12">
-							<h3 className="text-xl font-semibold mb-4 text-gray-900">
-								General Specifications
-							</h3>
-							<ul className="space-y-3">
-								{specifications.map((spec) => (
-									<li key={spec} className="flex items-start">
-										<span className="text-primary mr-2">✓</span>
-										<span className="text-gray-700">{spec}</span>
-									</li>
+					<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto px-4">
+						<m.div
+							initial={{ opacity: 0, x: -20 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+							className="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden"
+						>
+							<div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
+								<div className="flex items-center justify-center w-9 h-9 rounded-lg bg-accent/10">
+									<Ruler className="w-4.5 h-4.5 text-accent" strokeWidth={1.5} />
+								</div>
+								<div>
+									<h3 className="text-base font-semibold text-gray-900">
+										General Specifications
+									</h3>
+									<p className="text-xs text-gray-500">
+										Manufacturing standards
+									</p>
+								</div>
+							</div>
+							<div className="divide-y divide-gray-50">
+								{specifications.map((spec) => {
+									const parts = spec.split(" - ");
+									return (
+										<div key={spec} className="flex items-center gap-3 px-6 py-3.5">
+											<CheckCircle2 className="w-4 h-4 text-accent shrink-0" strokeWidth={1.5} />
+											<div>
+												{parts.length > 1 ? (
+													<>
+														<span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{parts[0]}</span>
+														<p className="text-sm text-gray-700">{parts.slice(1).join(" - ")}</p>
+													</>
+												) : (
+													<span className="text-sm text-gray-700">{spec}</span>
+												)}
+											</div>
+										</div>
+									);
+								})}
+							</div>
+						</m.div>
+
+						<m.div
+							initial={{ opacity: 0, x: 20 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+							className="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden"
+						>
+							<div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
+								<div className="flex items-center justify-center w-9 h-9 rounded-lg bg-accent/10">
+									<BookOpen className="w-4.5 h-4.5 text-accent" strokeWidth={1.5} />
+								</div>
+								<div>
+									<h3 className="text-base font-semibold text-gray-900">
+										Quality Standards Practiced
+									</h3>
+									<p className="text-xs text-gray-500">
+										Indian & international standards
+									</p>
+								</div>
+							</div>
+							<div className="divide-y divide-gray-50">
+								{standards.map((standard) => (
+									<div key={standard} className="flex items-start gap-3 px-6 py-3.5">
+										<BadgeCheck className="w-4 h-4 text-accent shrink-0 mt-0.5" strokeWidth={1.5} />
+										<span className="text-sm text-gray-700 leading-relaxed">{standard}</span>
+									</div>
 								))}
-							</ul>
-						</div>
-
-						<h3 className="text-xl font-semibold mb-4 text-gray-900">
-							Quality Standards Practiced
-						</h3>
-						<ul className="space-y-3 bg-secondary-light p-8 rounded-lg">
-							{standards.map((standard) => (
-								<li key={standard} className="flex items-start">
-									<span className="text-primary mr-2">•</span>
-									<span className="text-gray-700">{standard}</span>
-								</li>
-							))}
-						</ul>
+							</div>
+						</m.div>
 					</div>
+
+					<m.div
+						initial={{ opacity: 0, y: 20 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						transition={{ duration: 0.5, delay: 0.2 }}
+						className="text-center mt-10 px-4"
+					>
+						<p className="text-white text-sm">
+							All gauges manufactured at our Coimbatore facility with full
+							traceability and material certification.
+						</p>
+					</m.div>
 				</div>
 			</section>
 
-			<PageCta
-				title="Need a Custom Solution?"
+			<Cta10
+				heading="Need a Custom Solution?"
 				description="We specialize in manufacturing custom gauges according to your specific requirements. Contact us today to discuss your needs."
+				buttons={{
+					primary: { text: "Contact Us", url: "/contact" },
+					secondary: { text: "Request Quote", url: "/contact?subject=custom-gauge" },
+				}}
 			/>
 		</div>
 	);
