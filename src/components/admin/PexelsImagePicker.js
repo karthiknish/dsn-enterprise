@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useReducer, useRef } from "react";
+import { getCuratedPhotos, searchPhotos } from "@/lib/pexels";
 import {
 	initialPexelsPickerState,
 	pexelsPickerReducer,
 } from "@/lib/pexels-picker-reducer";
-import { getCuratedPhotos, searchPhotos } from "@/lib/pexels";
 
 export default function PexelsImagePicker({ onSelect, onClose }) {
 	const [state, dispatch] = useReducer(
@@ -38,8 +38,7 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 		loadCuratedPhotos();
 	}, [loadCuratedPhotos]);
 
-	const handleSearch = async (e) => {
-		e?.preventDefault();
+	const handleSearch = async () => {
 		if (!state.query.trim()) {
 			loadCuratedPhotos();
 			return;
@@ -60,6 +59,14 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 				type: "LOAD_ERROR",
 				error: err.message || "Failed to search photos",
 			});
+		}
+	};
+
+	const handleKeyDown = (e) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			e.stopPropagation();
+			handleSearch();
 		}
 	};
 
@@ -141,7 +148,7 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 							</button>
 						</div>
 
-						<form onSubmit={handleSearch} className="flex gap-2">
+						<div className="flex gap-2">
 							<label
 								id="pexels-search-label"
 								htmlFor="pexels-search"
@@ -158,16 +165,18 @@ export default function PexelsImagePicker({ onSelect, onClose }) {
 									dispatch({ type: "SET_QUERY", query: e.target.value })
 								}
 								placeholder="Search for images (e.g., technology, business, nature)"
+								onKeyDown={handleKeyDown}
 								className="flex-1 px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
 							/>
 							<button
-								type="submit"
+								type="button"
+								onClick={handleSearch}
 								disabled={state.loading}
 								className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
 							>
 								Search
 							</button>
-						</form>
+						</div>
 					</div>
 
 					<div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">

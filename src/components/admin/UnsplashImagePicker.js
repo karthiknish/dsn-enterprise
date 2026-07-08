@@ -38,8 +38,7 @@ export default function UnsplashImagePicker({ onSelect, onClose }) {
 		loadLatestPhotos();
 	}, [loadLatestPhotos]);
 
-	const handleSearch = async (e) => {
-		e?.preventDefault();
+	const handleSearch = async () => {
 		if (!state.query.trim()) {
 			loadLatestPhotos();
 			return;
@@ -60,6 +59,14 @@ export default function UnsplashImagePicker({ onSelect, onClose }) {
 				type: "LOAD_ERROR",
 				error: err.message || "Failed to search photos",
 			});
+		}
+	};
+
+	const handleKeyDown = (e) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			e.stopPropagation();
+			handleSearch();
 		}
 	};
 
@@ -145,7 +152,7 @@ export default function UnsplashImagePicker({ onSelect, onClose }) {
 							</button>
 						</div>
 
-						<form onSubmit={handleSearch} className="flex gap-2">
+						<div className="flex gap-2">
 							<label
 								id="unsplash-search-label"
 								htmlFor="unsplash-search"
@@ -162,16 +169,18 @@ export default function UnsplashImagePicker({ onSelect, onClose }) {
 									dispatch({ type: "SET_QUERY", query: e.target.value })
 								}
 								placeholder="Search for images (e.g., technology, business, nature)"
+								onKeyDown={handleKeyDown}
 								className="flex-1 px-4 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
 							/>
 							<button
-								type="submit"
+								type="button"
+								onClick={handleSearch}
 								disabled={state.loading}
 								className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 transition-colors"
 							>
 								Search
 							</button>
-						</form>
+						</div>
 					</div>
 
 					<div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
