@@ -41,27 +41,27 @@ const cards = [
 
 export default function ContactPageInfoCards() {
 	return (
-		<section className="py-16 bg-secondary-light">
-			<div className="container mx-auto px-4">
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-					{cards.map(({ icon: Icon, title, content, delay }) => (
-						<m.div
-							key={title}
-							className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 text-center"
-							initial={{ opacity: 0, y: 30 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5, delay }}
-						>
-							<div className="flex justify-center mb-4">
-								<Icon className="text-4xl text-primary" />
-							</div>
-							<h3 className="text-xl font-semibold mb-3 text-gray-900">{title}</h3>
-							<p className="text-gray-600">{content}</p>
-						</m.div>
-					))}
-				</div>
+		<div className="mt-8">
+			<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+				{cards.map(({ icon: Icon, title, content, delay }) => (
+					<m.div
+						key={title}
+						className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 text-center"
+						initial={{ opacity: 0, y: 30 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						transition={{ duration: 0.5, delay }}
+					>
+						<div className="flex justify-center mb-3">
+							<Icon className="text-3xl text-primary" />
+						</div>
+						<h3 className="text-lg font-semibold mb-2 text-gray-900">
+							{title}
+						</h3>
+						<p className="text-sm text-gray-600">{content}</p>
+					</m.div>
+				))}
 			</div>
-		</section>
+		</div>
 	);
 }

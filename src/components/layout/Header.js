@@ -30,6 +30,7 @@ const companyLinks = [
 
 const Header = () => {
 	const pathname = usePathname();
+	const isHome = pathname === "/";
 	const [nav, dispatch] = useReducer(
 		headerNavReducer,
 		null,
@@ -51,12 +52,15 @@ const Header = () => {
 		};
 	}, [nav.isOpen]);
 
+	// Keep scrolled state in sync with scroll position. isHome is derived
+	// from usePathname() so the header background updates immediately on
+	// client-side navigation — no need to wait for a scroll event.
 	useEffect(() => {
 		const handleScroll = () => {
 			dispatch({
 				type: "SCROLL_UPDATE",
 				scrolled: window.scrollY > 10,
-				isHome: window.location.pathname === "/",
+				isHome,
 			});
 		};
 
@@ -77,19 +81,21 @@ const Header = () => {
 
 		window.addEventListener("scroll", handleScroll, { passive: true });
 		document.addEventListener("mousedown", handleClickOutside);
+		// Sync scrolled state when the route changes (e.g. navigating to
+		// the top of a new page where no scroll event fires yet).
+		handleScroll();
 		return () => {
 			window.removeEventListener("scroll", handleScroll);
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
-	}, []);
+	}, [isHome]);
 
-	const linkClass =
-		nav.scrolled || !nav.isHome ? "text-gray-900" : "text-white";
+	const linkClass = nav.scrolled || !isHome ? "text-gray-900" : "text-white";
 
 	return (
 		<header
 			className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-				nav.scrolled || !nav.isHome
+				nav.scrolled || !isHome
 					? "bg-white shadow-md py-2"
 					: "bg-transparent py-4"
 			}`}
@@ -145,7 +151,7 @@ const Header = () => {
 
 				<button
 					type="button"
-					className="lg:hidden text-gray-900"
+					className="lg:hidden"
 					onClick={() => dispatch({ type: "TOGGLE_MENU" })}
 					aria-expanded={nav.isOpen}
 					aria-label={nav.isOpen ? "Close menu" : "Open menu"}
@@ -154,7 +160,7 @@ const Header = () => {
 						<FaTimes className="text-primary" size={24} />
 					) : (
 						<FaBars
-							className={`${nav.scrolled ? "text-gray-900" : "text-white"}`}
+							className={`${nav.scrolled || !isHome ? "text-gray-900" : "text-white"}`}
 							size={24}
 						/>
 					)}
@@ -168,7 +174,7 @@ const Header = () => {
 				productLinks={productLinks}
 				mobileCompanyExpanded={nav.mobileCompanyExpanded}
 				mobileProductExpanded={nav.mobileProductExpanded}
-			pathname={pathname}
+				pathname={pathname}
 				onToggleCompany={() =>
 					dispatch({
 						type: "SET_MOBILE_COMPANY_EXPANDED",
