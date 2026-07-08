@@ -1,78 +1,119 @@
 "use client";
 
 import { m } from "framer-motion";
-import { FaCheck } from "react-icons/fa";
+import { FaRuler, FaIndustry, FaTruck, FaShieldAlt } from "react-icons/fa";
 import PageSection from "@/components/layout/PageSection";
+import SectionHeader from "@/components/ui/SectionHeader";
+
+const values = [
+	{
+		icon: FaRuler,
+		title: "Guaranteed Precision",
+		body: "Every gauge is made to agreed tolerances, inspected, and documented. What we ship matches what your line accepts, no variance.",
+	},
+	{
+		icon: FaIndustry,
+		title: "Technical Depth",
+		body: "Continuous investment in tooling, process control, and application know-how for demanding thread forms and custom profiles.",
+	},
+	{
+		icon: FaTruck,
+		title: "Reliable Delivery",
+		body: "Clear lead times from enquiry to dispatch. Gauges that fit your quality plan and delivery schedule, not generic catalogue lead times.",
+	},
+	{
+		icon: FaShieldAlt,
+		title: "Complete Transparency",
+		body: "We stand behind every measurement and certificate. If a gauge isn't fit for use, we flag it before it reaches your floor.",
+	},
+];
+
+const containerVariants = {
+	hidden: { opacity: 0 },
+	visible: {
+		opacity: 1,
+		transition: { staggerChildren: 0.12 },
+	},
+};
+
+const cardVariants = {
+	hidden: { opacity: 0, y: 20 },
+	visible: { opacity: 1, y: 0, transition: { duration: 0.45 } },
+};
 
 export default function AboutStorySection() {
 	return (
 		<PageSection variant="white">
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+			<SectionHeader
+				eyebrow="About Us"
+				title="Our Story"
+				description="Precision gauge manufacturing built on engineering depth, integrated production, and traceable quality, from a single Coimbatore works."
+				align="left"
+			/>
+
+			<div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-12 items-start">
+				{/* Left, Narrative */}
 				<m.div
 					initial={{ opacity: 0, x: -30 }}
 					whileInView={{ opacity: 1, x: 0 }}
 					viewport={{ once: true }}
 					transition={{ duration: 0.6 }}
 				>
-					<h2 className="text-3xl font-semibold mb-6 text-gray-900">Our Story</h2>
-					<p className="text-lg text-gray-700 mb-6">
-						DSN Enterprises was founded to give Indian manufacturers a
-						dependable source for plain, thread, and API gauges,built to drawing,
-						delivered with certificates, and supported by engineers who understand
-						shop-floor pressure.
+					<p className="text-lg text-gray-700 mb-6 leading-relaxed">
+						DSN Enterprises manufactures precision plain, thread, and API gauges
+						for Indian industry. Every gauge is built to customer drawing,
+						calibrated to traceable standards, and shipped with complete
+						certification, no shortcuts.
 					</p>
-					<p className="text-lg text-gray-700 mb-6">
-						From our Coimbatore works we combine CNC machining, precision grinding,
-						and controlled heat treatment with a NABL-aligned calibration
-						laboratory. That integration means fewer hand-offs between production,
-						inspection, and documentation.
+
+					{/* Pull-quote */}
+					<div className="border-l-4 border-accent pl-5 py-3 mb-6 bg-accent/[0.04] rounded-r-lg">
+						<p className="text-base font-medium text-gray-900 leading-relaxed">
+							Integrated manufacturing means fewer hand-offs between production,
+							inspection, and documentation, resulting in tighter tolerances and
+							shorter lead times.
+						</p>
+					</div>
+
+					<p className="text-lg text-gray-700 mb-6 leading-relaxed">
+						From our Coimbatore works, we combine CNC machining, precision
+						grinding, and controlled heat treatment with a NABL-aligned
+						calibration laboratory. One team responsible from raw material to
+						final certificate.
 					</p>
-					<p className="text-lg text-gray-700">
-						Today we supply plants across Tamil Nadu, national OEM and job-shop
-						networks, and export customers who need the same rigour on every
+
+					<p className="text-lg text-gray-700 leading-relaxed">
+						We supply plants across Tamil Nadu, national OEM and job-shop
+						networks, and export customers who demand the same rigour on every
 						shipment.
 					</p>
 				</m.div>
 
+				{/* Right, Value cards */}
 				<m.div
-					initial={{ opacity: 0, x: 30 }}
-					whileInView={{ opacity: 1, x: 0 }}
+					variants={containerVariants}
+					initial="hidden"
+					whileInView="visible"
 					viewport={{ once: true }}
-					transition={{ duration: 0.6 }}
+					className="grid grid-cols-1 sm:grid-cols-2 gap-5"
 				>
-					<div className="bg-gray-50 rounded-2xl border border-gray-200/80 p-8">
-						<h3 className="text-2xl font-semibold mb-6 text-gray-900">
-							Our Core Values
-						</h3>
-						<ul className="space-y-4">
-							{[
-								{
-									title: "Quality",
-									body: "Every gauge is made to agreed tolerances, inspected, and documented,so acceptance on your line matches what we ship.",
-								},
-								{
-									title: "Innovation",
-									body: "We invest in tooling, process control, and application know-how for demanding thread forms and custom profiles.",
-								},
-								{
-									title: "Customer Satisfaction",
-									body: "We respond with clear lead times, technical clarity, and gauges that fit your quality plan,not generic catalogue lines.",
-								},
-								{
-									title: "Integrity",
-									body: "We stand behind our measurements and certificates. If a gauge is not fit for use, we say so before it reaches your floor.",
-								},
-							].map((value) => (
-								<li key={value.title} className="flex items-start">
-									<FaCheck className="text-primary mt-1 mr-3 flex-shrink-0" />
-									<div>
-										<h4 className="font-semibold text-gray-900">{value.title}</h4>
-										<p className="text-gray-700">{value.body}</p>
-									</div>
-								</li>
-							))}
-						</ul>
-					</div>
+					{values.map((value) => (
+						<m.div
+							key={value.title}
+							variants={cardVariants}
+							className="group bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
+						>
+							<div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors duration-300">
+								<value.icon className="text-accent text-lg" />
+							</div>
+							<h3 className="text-lg font-semibold text-gray-900 mb-2">
+								{value.title}
+							</h3>
+							<p className="text-sm text-gray-600 leading-relaxed">
+								{value.body}
+							</p>
+						</m.div>
+					))}
 				</m.div>
 			</div>
 		</PageSection>
