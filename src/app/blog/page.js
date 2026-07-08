@@ -9,7 +9,7 @@ export async function generateMetadata({ searchParams }) {
 	const params = await searchParams;
 	const searchQuery = params?.q || "";
 	const page = params?.page;
-	// Search results and paginated views are duplicate content — keep them
+	// Search results and paginated views are duplicate content, keep them
 	// out of the index while still following links to individual posts.
 	const isFiltered = Boolean(searchQuery || (page && page !== "1"));
 

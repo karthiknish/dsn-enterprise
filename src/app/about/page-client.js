@@ -4,7 +4,7 @@ import AboutCertificationsSection from "@/components/about/AboutCertificationsSe
 import AboutManufacturingSection from "@/components/about/AboutManufacturingSection";
 import AboutStorySection from "@/components/about/AboutStorySection";
 import AboutWhyChooseSection from "@/components/about/AboutWhyChooseSection";
-import PageCta from "@/components/layout/PageCta";
+import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -26,9 +26,13 @@ const AboutPage = () => {
 			<AboutManufacturingSection />
 			<AboutCertificationsSection />
 
-			<PageCta
-				title="Ready to Work With Us?"
-				description="Send your drawing or gauge list—we will confirm scope, lead time, and certificate requirements from Coimbatore."
+			<Cta10
+				heading="Ready to Work With Us?"
+				description="Send your drawing or gauge list, we will confirm scope, lead time, and certificate requirements from Coimbatore."
+				buttons={{
+					primary: { text: "Contact Us", url: "/contact" },
+					secondary: { text: "View Products", url: "/products" },
+				}}
 			/>
 		</div>
 	);

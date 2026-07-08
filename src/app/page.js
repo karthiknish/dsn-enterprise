@@ -81,7 +81,7 @@ export const metadata = {
 };
 
 export default function Home() {
-	// ItemList schema for featured products — helps Google understand the
+	// ItemList schema for featured products, helps Google understand the
 	// product catalogue surfaced on the home page.
 	const itemListSchema = {
 		"@context": "https://schema.org",

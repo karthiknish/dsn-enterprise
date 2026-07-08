@@ -1,4 +1,4 @@
-/** FAQ copy for /faq — keep answers factual and aligned with Coimbatore operations */
+/** FAQ copy for /faq, keep answers factual and aligned with Coimbatore operations */
 
 export const faqCategories = [
 	{
@@ -12,7 +12,7 @@ export const faqCategories = [
 			{
 				question: "Where is DSN Enterprises located?",
 				answer:
-					"Our manufacturing and calibration facility is in Coimbatore, Tamil Nadu. From here we serve customers across Tamil Nadu, pan-India, and export markets—with technical support available by phone, email, and scheduled plant visits.",
+					"Our manufacturing and calibration facility is in Coimbatore, Tamil Nadu. From here we serve customers across Tamil Nadu, pan-India, and export markets, with technical support available by phone, email, and scheduled plant visits.",
 			},
 			{
 				question: "What industries do you serve?",
@@ -32,7 +32,7 @@ export const faqCategories = [
 			{
 				question: "What is the typical lead time for standard gauges?",
 				answer:
-					"Standard plain and thread gauges are typically 2–3 weeks from confirmed order, depending on size, tolerance class, and quantity. Common sizes may be available faster. Express manufacturing is available when your line cannot wait—share your deadline when requesting a quote.",
+					"Standard plain and thread gauges are typically 2–3 weeks from confirmed order, depending on size, tolerance class, and quantity. Common sizes may be available faster. Express manufacturing is available when your line cannot wait, share your deadline when requesting a quote.",
 			},
 			{
 				question: "Can you manufacture custom gauges as per our drawings?",
@@ -113,7 +113,7 @@ export const faqCategories = [
 			{
 				question: "What is your minimum order quantity?",
 				answer:
-					"There is no fixed minimum. We handle single-gauge custom orders and volume production alike. For very small custom lots, combining items in one order can improve scheduling efficiency—we will advise when quoting.",
+					"There is no fixed minimum. We handle single-gauge custom orders and volume production alike. For very small custom lots, combining items in one order can improve scheduling efficiency, we will advise when quoting.",
 			},
 			{
 				question: "How can I request a quotation?",
@@ -123,7 +123,7 @@ export const faqCategories = [
 			{
 				question: "What payment terms do you offer?",
 				answer:
-					"Domestic orders are typically advance or part-advance before dispatch; regular accounts may qualify for agreed credit terms. Export orders are generally advance payment or confirmed letter of credit—details are confirmed on your proforma invoice.",
+					"Domestic orders are typically advance or part-advance before dispatch; regular accounts may qualify for agreed credit terms. Export orders are generally advance payment or confirmed letter of credit, details are confirmed on your proforma invoice.",
 			},
 			{
 				question: "Do you ship internationally?",

@@ -4,7 +4,7 @@ import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight, FaCheck } from "react-icons/fa";
-import PageCta from "@/components/layout/PageCta";
+import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -374,11 +374,13 @@ export default function PlainGaugesPage() {
 				</div>
 			</section>
 
-			<PageCta
-				title="Need Plain Gauges?"
+			<Cta10
+				heading="Need Plain Gauges?"
 				description="Contact our team for custom sizes, bulk orders, or technical assistance. We offer competitive pricing and fast delivery."
-				primaryHref="/contact?product=Plain%20Gauges"
-				primaryLabel="Get a Quote"
+				buttons={{
+					primary: { text: "Get a Quote", url: "/contact?product=Plain%20Gauges" },
+					secondary: { text: "View Products", url: "/products/plain-gauges" },
+				}}
 			/>
 		</div>
 	);

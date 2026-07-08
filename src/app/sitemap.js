@@ -8,7 +8,7 @@ import { SITE_URL } from "@/lib/site";
 
 export const revalidate = 3600; // Revalidate every hour
 
-// Last-modified timestamp for static pages — update when content changes.
+// Last-modified timestamp for static pages, update when content changes.
 const NOW = new Date();
 
 async function getBlogPosts() {

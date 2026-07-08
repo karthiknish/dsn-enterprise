@@ -53,7 +53,7 @@ function buildProductTitle(productName, cityName) {
 function buildProductDescription(product, city) {
 	const profile = getCityProfile(city.slug);
 	const industries = profile.keyIndustries.slice(0, 2).join(" and ");
-	return `${product.name} for ${city.name}—supplied by DSN Enterprises from Coimbatore. ${product.description}. Serving ${industries}. ISO manufacture, traceable certificates, and reliable TN logistics.`;
+	return `${product.name} for ${city.name}, supplied by DSN Enterprises from Coimbatore. ${product.description}. Serving ${industries}. ISO manufacture, traceable certificates, and reliable TN logistics.`;
 }
 
 function buildServiceTitle(serviceName, cityName) {
@@ -82,7 +82,7 @@ export const PRODUCTS = [
 		slug: "thread-ring-gauges",
 		name: "Thread Ring Gauges",
 		description:
-			"Thread ring gauges for external threads—Metric, UN, BSP, and specials with matched calibration",
+			"Thread ring gauges for external threads, Metric, UN, BSP, and specials with matched calibration",
 		keywords: [
 			"ring gauge",
 			"thread ring",
@@ -118,7 +118,7 @@ export const PRODUCTS = [
 		slug: "thread-plug-gauges",
 		name: "Thread Plug Gauges",
 		description:
-			"Thread plug gauges for internal threads after tapping—production and incoming inspection",
+			"Thread plug gauges for internal threads after tapping, production and incoming inspection",
 		keywords: [
 			"thread plug",
 			"internal thread gauge",

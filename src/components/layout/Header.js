@@ -54,7 +54,7 @@ const Header = () => {
 
 	// Keep scrolled state in sync with scroll position. isHome is derived
 	// from usePathname() so the header background updates immediately on
-	// client-side navigation — no need to wait for a scroll event.
+	// client-side navigation, no need to wait for a scroll event.
 	useEffect(() => {
 		const handleScroll = () => {
 			dispatch({

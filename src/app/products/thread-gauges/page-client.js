@@ -4,7 +4,7 @@ import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight, FaCheck } from "react-icons/fa";
-import PageCta from "@/components/layout/PageCta";
+import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -453,11 +453,13 @@ export default function ThreadGaugesPage() {
 				</div>
 			</section>
 
-			<PageCta
-				title="Need Thread Gauges?"
+			<Cta10
+				heading="Need Thread Gauges?"
 				description="We manufacture thread gauges for all standard and special thread forms. Contact us for custom specifications, bulk orders, or technical support."
-				primaryHref="/contact?product=Thread%20Gauges"
-				primaryLabel="Get a Quote"
+				buttons={{
+					primary: { text: "Get a Quote", url: "/contact?product=Thread%20Gauges" },
+					secondary: { text: "View Products", url: "/products/thread-gauges" },
+				}}
 			/>
 		</div>
 	);

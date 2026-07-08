@@ -38,7 +38,7 @@ export const CITY_PROFILES = {
 		logistics:
 			"As our manufacturing base, Coimbatore customers benefit from same-day pickup options, factory visits, and the fastest turnaround on custom gauges.",
 		localContext:
-			"Coimbatore—the Manchester of South India—has dense clusters of engineering and textile machinery builders. Local manufacturers value direct access to gauge design review and on-site technical discussions.",
+			"Coimbatore, the Manchester of South India, has dense clusters of engineering and textile machinery builders. Local manufacturers value direct access to gauge design review and on-site technical discussions.",
 	},
 	madurai: {
 		industrialAreas: [
@@ -96,7 +96,7 @@ export const CITY_PROFILES = {
 			"General fabrication units",
 		],
 		logistics:
-			"Erode is under 2 hours from Coimbatore—ideal for same-week gauge supply and pickup for calibration.",
+			"Erode is under 2 hours from Coimbatore, ideal for same-week gauge supply and pickup for calibration.",
 		localContext:
 			"Erode’s processing machinery sector uses plain plug and snap gauges heavily for shaft and housing checks on OEM equipment.",
 	},
@@ -344,7 +344,7 @@ export function buildProductFaqs(pageData, productSlug, citySlug) {
 		},
 		{
 			question: `Can you manufacture custom ${product?.shortName || name.toLowerCase()}?`,
-			answer: `Yes—we manufacture custom ${product?.shortName || name.toLowerCase()} to your drawing with GO/NO-GO or progressive members, special materials, and paired sets where required. Email the drawing for feasibility, lead time, and price from our Coimbatore works.`,
+			answer: `Yes, we manufacture custom ${product?.shortName || name.toLowerCase()} to your drawing with GO/NO-GO or progressive members, special materials, and paired sets where required. Email the drawing for feasibility, lead time, and price from our Coimbatore works.`,
 		},
 		{
 			question: "Are calibration certificates included?",
@@ -366,7 +366,7 @@ export function buildServiceFaqs(pageData, serviceSlug, citySlug) {
 	const turnaround =
 		serviceSlug === "gauge-calibration"
 			? "Standard calibration is 3–5 working days from receipt at our Coimbatore lab; express slots are available for line-stop situations."
-			: "Lead time depends on scope—contact us with drawings or a gauge list for a firm schedule.";
+			: "Lead time depends on scope, contact us with drawings or a gauge list for a firm schedule.";
 
 	return [
 		{

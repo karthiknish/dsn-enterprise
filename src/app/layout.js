@@ -7,6 +7,7 @@ import "./globals.css";
 import Footer from "../components/layout/Footer";
 import Header from "../components/layout/Header";
 import ScrollToTop from "../components/layout/ScrollToTop";
+import AgentationWrapper from "@/components/AgentationWrapper";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -135,6 +136,7 @@ export default function RootLayout({ children }) {
 				</MotionProvider>
 				<GoogleAnalytics />
 				<Analytics />
+				{process.env.NODE_ENV === "development" && <AgentationWrapper />}
 			</body>
 		</html>
 	);
