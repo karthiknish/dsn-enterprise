@@ -564,6 +564,7 @@ export default function QualityPage() {
 			</section>
 
 			<Cta10
+				reference="Ref. DSN-QUA-01"
 				heading="Need Quality Gauges?"
 				description="Experience the DSN Enterprises quality difference. Contact us for precision gauges backed by our rigorous quality assurance."
 				buttons={{

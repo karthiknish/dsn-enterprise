@@ -102,6 +102,17 @@ module.exports = {
           800: "var(--color-accent-800)",
           dark: "var(--color-accent-dark)",
         },
+        success: {
+          50: "var(--color-success-50)",
+          100: "var(--color-success-100)",
+          200: "var(--color-success-200)",
+          400: "var(--color-success-400)",
+          500: "var(--color-success-500)",
+          DEFAULT: "var(--color-success)",
+          700: "var(--color-success-700)",
+          800: "var(--color-success-800)",
+          dark: "var(--color-success-dark)",
+        },
         blog: {
           accent: "var(--color-blog-accent)",
           "accent-dark": "var(--color-blog-accent-dark)",

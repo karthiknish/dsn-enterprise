@@ -25,6 +25,7 @@ export default function SpecialGaugesPage() {
 			<SpecialGaugesRelatedCategories />
 
 			<Cta10
+				reference="Ref. DSN-SPG-01"
 				heading="Have a Custom Gauge Requirement?"
 				description="Send us your drawings or specifications and our engineering team will provide a detailed quote. We specialize in solving complex measurement challenges."
 				buttons={{

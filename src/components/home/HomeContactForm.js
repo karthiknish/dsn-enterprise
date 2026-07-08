@@ -25,7 +25,7 @@ export default function HomeContactForm({
 			{submitSuccess && (
 				<div
 					role="alert"
-					className="bg-accent-100 border border-accent text-accent-700 px-4 py-3 rounded mb-6"
+					className="bg-success-100 border border-success text-success-700 px-4 py-3 rounded mb-6"
 				>
 					<p>Thank you for your message! We will get back to you shortly.</p>
 				</div>

@@ -27,6 +27,7 @@ export default function APIGaugesPage() {
 			<ApiGaugesRelatedCategories />
 
 			<Cta10
+				reference="Ref. DSN-API-01"
 				heading="Need API Certified Gauges?"
 				description="As an API licensed manufacturer, we provide certified gauges for the oil and gas industry. Contact us for specifications, pricing, and delivery information."
 				buttons={{

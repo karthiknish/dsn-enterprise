@@ -5,7 +5,7 @@ export default function BlogNotificationToast({ notification, onDismiss }) {
 
 	const toneClasses = {
 		error: "bg-red-50 border border-red-200 text-red-800",
-		success: "bg-accent-50 border border-accent-200 text-accent-800",
+		success: "bg-success-50 border border-success-200 text-success-800",
 		default: "bg-gray-50 border border-gray-200 text-gray-800",
 	};
 
@@ -35,7 +35,7 @@ export default function BlogNotificationToast({ notification, onDismiss }) {
 			{notification.type === "success" && (
 				<svg
 					aria-hidden="true"
-					className="w-5 h-5 text-accent"
+					className="w-5 h-5 text-success"
 					fill="none"
 					stroke="currentColor"
 					viewBox="0 0 24 24"

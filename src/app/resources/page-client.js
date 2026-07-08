@@ -478,6 +478,7 @@ export default function ResourcesPage() {
 			</section>
 
 			<Cta10
+				reference="Ref. DSN-RES-01"
 				heading="Can&rsquo;t Find What You Need?"
 				description="If you require specific technical documentation, certificates, or standards that aren&rsquo;t listed here, our team is ready to source them for you. Contact us with your requirements and we&rsquo;ll respond within 24 hours."
 				buttons={{

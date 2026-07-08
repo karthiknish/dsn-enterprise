@@ -189,6 +189,7 @@ export default function FAQPage() {
 			</script>
 
 			<Cta10
+				reference="Ref. DSN-FAQ-01"
 				heading="Still Have Questions?"
 				description="Send your drawing, gauge list, or calibration requirement, we will connect you with the right engineer and respond within one business day."
 				buttons={{

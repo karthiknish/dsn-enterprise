@@ -55,13 +55,13 @@ export default function BlogPostTableRow({ post, deleting, onDelete }) {
 				<span
 					className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
 						post.status === "published"
-							? "bg-accent-50 text-accent-700"
+							? "bg-success-50 text-success-700"
 							: "bg-gray-100 text-gray-600"
 					}`}
 				>
 					<span
 						className={`w-1.5 h-1.5 rounded-full ${
-							post.status === "published" ? "bg-accent-500" : "bg-gray-400"
+							post.status === "published" ? "bg-success-500" : "bg-gray-400"
 						}`}
 					/>
 					{post.status.charAt(0).toUpperCase() + post.status.slice(1)}

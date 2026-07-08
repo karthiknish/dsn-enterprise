@@ -19,7 +19,7 @@ const defaultProps = {
 };
 
 const Cta10 = (props) => {
-  const { heading, description, buttons, className } = {
+  const { heading, description, buttons, reference, className } = {
     ...defaultProps,
     ...props,
   };
@@ -28,8 +28,13 @@ const Cta10 = (props) => {
     <section className={cn("py-12 md:py-16 lg:py-32", className)}>
       <div className="container mx-auto">
           <div
-            className="mx-auto flex w-full flex-col gap-16 overflow-hidden rounded-lg bg-primary p-8 md:rounded-xl lg:flex-row lg:items-center lg:p-12">
+            className="data-plate relative mx-auto flex w-full flex-col gap-16 bg-primary p-8 lg:flex-row lg:items-center lg:p-12">
             <div className="flex flex-1 flex-col gap-3 md:gap-4 lg:gap-6">
+              {reference && (
+                <span className="data-plate-ref text-[11px] uppercase text-white/40">
+                  {reference}
+                </span>
+              )}
               <h2 className="text-2xl font-semibold tracking-tight text-white md:text-4xl">
                 {heading}
               </h2>

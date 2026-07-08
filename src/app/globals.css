@@ -254,6 +254,33 @@ h6,
 	font-style: italic;
 }
 
+/* Data plate — the site's signature surface treatment, styled after a
+   machined equipment tag / calibration sticker: a folded corner instead
+   of the generic soft-shadow rounded card. Use sparingly, for moments
+   that need to feel certified or load-bearing (certifications, key
+   stats, closing CTAs) rather than on every card. */
+.data-plate {
+	position: relative;
+	clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
+}
+
+.data-plate::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 28px;
+	height: 28px;
+	background: var(--color-accent);
+	clip-path: polygon(100% 0, 0 0, 100% 100%);
+	pointer-events: none;
+}
+
+.data-plate-ref {
+	font-family: var(--font-geist-mono), ui-monospace, monospace;
+	letter-spacing: 0.04em;
+}
+
 /* Line clamp utility */
 .line-clamp-3 {
 	display: -webkit-box;

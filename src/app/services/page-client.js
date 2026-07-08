@@ -350,6 +350,7 @@ const ServicesPage = () => {
 			</section>
 
 			<Cta10
+				reference="Ref. DSN-SVC-01"
 				heading="Ready to Work With Us?"
 				description="Send us your calibration list, manufacturing drawing, or certification requirement. We'll respond with scope, timeline, and pricing from our Coimbatore facility."
 				buttons={{

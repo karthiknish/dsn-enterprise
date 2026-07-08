@@ -5,7 +5,7 @@ export function getContactStatusColor(status) {
 		case "contacted":
 			return "bg-yellow-100 text-yellow-800";
 		case "resolved":
-			return "bg-accent-100 text-accent-800";
+			return "bg-success-100 text-success-800";
 		default:
 			return "bg-gray-100 text-gray-800";
 	}

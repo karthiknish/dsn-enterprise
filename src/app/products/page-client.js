@@ -698,6 +698,7 @@ const ProductsPage = () => {
 			</section>
 
 			<Cta10
+				reference="Ref. DSN-PRD-01"
 				heading="Need a Custom Solution?"
 				description="We specialize in manufacturing custom gauges according to your specific requirements. Contact us today to discuss your needs."
 				buttons={{

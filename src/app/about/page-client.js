@@ -27,6 +27,7 @@ const AboutPage = () => {
 			<AboutCertificationsSection />
 
 			<Cta10
+				reference="Ref. DSN-ABT-01"
 				heading="Ready to Work With Us?"
 				description="Send your drawing or gauge list, we will confirm scope, lead time, and certificate requirements from Coimbatore."
 				buttons={{

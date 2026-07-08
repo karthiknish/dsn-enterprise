@@ -180,7 +180,7 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 									<span
 										className={`px-2 py-1 text-xs font-medium rounded-full ${
 											post.status === "published"
-												? "bg-accent-100 text-accent-800"
+												? "bg-success-100 text-success-800"
 												: "bg-yellow-100 text-yellow-800"
 										}`}
 									>

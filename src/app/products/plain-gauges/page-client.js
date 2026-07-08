@@ -375,6 +375,7 @@ export default function PlainGaugesPage() {
 			</section>
 
 			<Cta10
+				reference="Ref. DSN-PLG-01"
 				heading="Need Plain Gauges?"
 				description="Contact our team for custom sizes, bulk orders, or technical assistance. We offer competitive pricing and fast delivery."
 				buttons={{

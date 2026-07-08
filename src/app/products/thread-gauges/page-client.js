@@ -454,6 +454,7 @@ export default function ThreadGaugesPage() {
 			</section>
 
 			<Cta10
+				reference="Ref. DSN-THG-01"
 				heading="Need Thread Gauges?"
 				description="We manufacture thread gauges for all standard and special thread forms. Contact us for custom specifications, bulk orders, or technical support."
 				buttons={{

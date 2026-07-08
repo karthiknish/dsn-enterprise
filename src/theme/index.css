@@ -40,16 +40,30 @@
 	); /* was #1f2937 slate, brand neutral */
 	--color-gray-900: #111827;
 
-	/* Accent Colors */
-	--color-accent-50: #f0fdf4;
-	--color-accent-100: #dcfce7;
-	--color-accent-200: #bbf7d0;
-	--color-accent-400: #4ade80;
-	--color-accent-500: #22c55e;
-	--color-accent: #16a34a;
-	--color-accent-dark: #15803d;
-	--color-accent-700: #15803d;
-	--color-accent-800: #166534;
+	/* Accent Colors — calibration-tag orange (brand highlight, CTAs, links) */
+	--color-accent-50: #fdf3ec;
+	--color-accent-100: #fbe3d2;
+	--color-accent-200: #f5c7a5;
+	--color-accent-400: #e08a4c;
+	--color-accent-500: #d9691f;
+	--color-accent: #c4551b;
+	--color-accent-dark: #9c4315;
+	--color-accent-700: #9c4315;
+	--color-accent-800: #7a3410;
+
+	/* Success Colors — genuine positive/confirmation states only
+	   (published badges, success banners, saved indicators). Kept
+	   separate from --color-accent so the brand highlight can be
+	   orange without success states losing their green convention. */
+	--color-success-50: #f0fdf4;
+	--color-success-100: #dcfce7;
+	--color-success-200: #bbf7d0;
+	--color-success-400: #4ade80;
+	--color-success-500: #22c55e;
+	--color-success: #16a34a;
+	--color-success-dark: #15803d;
+	--color-success-700: #15803d;
+	--color-success-800: #166534;
 
 	/* Background & Foreground */
 	--color-background: #ffffff;
@@ -121,12 +135,12 @@
 	--color-warning-700: #a16207;
 	--color-warning-800: #854d0e;
 
-	/* Info, maps `blue-*`; aligned with accent green */
-	--color-info-50: var(--color-accent-50);
-	--color-info-400: var(--color-accent-400);
-	--color-info-500: var(--color-accent-500);
-	--color-info-600: var(--color-accent);
-	--color-info-700: var(--color-accent-dark);
+	/* Info, maps `blue-*`; aligned with the success green (not the brand accent) */
+	--color-info-50: var(--color-success-50);
+	--color-info-400: var(--color-success-400);
+	--color-info-500: var(--color-success-500);
+	--color-info-600: var(--color-success);
+	--color-info-700: var(--color-success-dark);
 
 	/* AI / feature purple, maps `purple-*` */
 	--color-ai-50: #faf5ff;
@@ -138,13 +152,13 @@
 	--color-ai-700: #7e22ce;
 	--color-ai-800: #6b21a8;
 
-	/* Teal slot, maps `teal-*`; same tokens as accent (single brand green) */
-	--color-teal-50: var(--color-accent-50);
-	--color-teal-100: var(--color-accent-100);
-	--color-teal-300: var(--color-accent-200);
-	--color-teal-400: var(--color-accent-400);
-	--color-teal-600: var(--color-accent);
-	--color-teal-800: var(--color-accent-800);
+	/* Teal slot, maps `teal-*`; same tokens as success green */
+	--color-teal-50: var(--color-success-50);
+	--color-teal-100: var(--color-success-100);
+	--color-teal-300: var(--color-success-200);
+	--color-teal-400: var(--color-success-400);
+	--color-teal-600: var(--color-success);
+	--color-teal-800: var(--color-success-800);
 
 	/* Green, maps `green-*` (aligned with accent for UI consistency) */
 	--color-green-50: #f0fdf4;
@@ -157,8 +171,8 @@
 	/* Rich text editor, table cell selection highlight (TipTap) */
 	--color-editor-selected-cell: var(--color-accent-200);
 
-	/* Emerald slot, keep Tailwind token; brand green */
-	--color-emerald-500: var(--color-accent-500);
+	/* Emerald slot, keep Tailwind token; success green */
+	--color-emerald-500: var(--color-success-500);
 
 	/* Charts (SVG attributes; not all have Tailwind classes) */
 	--color-chart-line-users: var(--color-accent-500);
