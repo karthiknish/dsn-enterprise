@@ -1,16 +1,11 @@
-"use client";
-
 import Link from "next/link";
-import { FaLinkedin, FaPhone } from "react-icons/fa";
-import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
+import { FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
-	const { trackPhoneClick } = useGoogleAdsTracking();
-
 	return (
 		<footer className="bg-primary text-white pt-12 pb-6">
 			<div className="container mx-auto px-4">
-				<div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+				<div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
 					{/* Company Info */}
 					<div>
 						<h3 className="text-xl font-semibold mb-4">DSN Enterprises</h3>
@@ -145,24 +140,6 @@ const Footer = () => {
 								>
 									FAQ
 								</Link>
-							</li>
-						</ul>
-					</div>
-
-					{/* Contact Info */}
-					<div>
-						<h3 className="text-xl font-semibold mb-4">Contact Us</h3>
-						<ul className="space-y-3">
-							<li className="flex items-center">
-								<FaPhone className="mr-3 text-secondary" />
-								<span>
-									<a
-										href="tel:+919363122005"
-										onClick={() => trackPhoneClick("+919363122005")}
-									>
-										+91 9363122005
-									</a>
-								</span>
 							</li>
 						</ul>
 					</div>
