@@ -1,10 +1,35 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+const DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+async function callDeepSeek(prompt) {
+	const response = await fetch(DEEPSEEK_API_URL, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY || ""}`,
+		},
+		body: JSON.stringify({
+			model: "deepseek-chat",
+			messages: [{ role: "user", content: prompt }],
+			temperature: 0.7,
+		}),
+	});
+
+	if (!response.ok) {
+		const errorBody = await response.text().catch(() => "");
+		throw new Error(
+			`DeepSeek API error (${response.status}): ${errorBody || response.statusText}`,
+		);
+	}
+
+	const data = await response.json();
+	const text = data?.choices?.[0]?.message?.content;
+	if (!text) {
+		throw new Error("DeepSeek API returned an empty response");
+	}
+	return text;
+}
 
 export async function generateBlogContent(topic, keywords = []) {
-	const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
 	const prompt = `You are an expert technical content writer specializing in precision engineering, industrial gauges, and metrology. Write a comprehensive, SEO-optimized blog post about "${topic}" for DSN Enterprises, a leading manufacturer of precision gauges in India.
 
 ${keywords.length > 0 ? `Target Keywords to include naturally: ${keywords.join(", ")}` : ""}
@@ -29,24 +54,15 @@ Requirements:
 Write the blog post content now:`;
 
 	try {
-		const result = await model.generateContent(prompt);
-		const response = await result.response;
-		return {
-			success: true,
-			content: response.text(),
-		};
+		const text = await callDeepSeek(prompt);
+		return { success: true, content: text };
 	} catch (error) {
-		console.error("Gemini API Error:", error);
-		return {
-			success: false,
-			error: error.message,
-		};
+		console.error("DeepSeek API Error:", error);
+		return { success: false, error: error.message };
 	}
 }
 
 export async function generateBlogMetadata(title, content) {
-	const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
 	const prompt = `Based on this blog title and content, generate SEO metadata.
 
 Title: ${title}
@@ -63,32 +79,20 @@ Generate a JSON response with:
 Respond ONLY with valid JSON, no markdown or explanation:`;
 
 	try {
-		const result = await model.generateContent(prompt);
-		const response = await result.response;
-		const text = response.text();
-
-		// Clean up the response to extract JSON
+		const text = await callDeepSeek(prompt);
 		const jsonMatch = text.match(/\{[\s\S]*\}/);
 		if (jsonMatch) {
-			return {
-				success: true,
-				metadata: JSON.parse(jsonMatch[0]),
-			};
+			return { success: true, metadata: JSON.parse(jsonMatch[0]) };
 		}
 		throw new Error("Invalid JSON response");
 	} catch (error) {
-		console.error("Gemini Metadata Error:", error);
-		return {
-			success: false,
-			error: error.message,
-		};
+		console.error("DeepSeek Metadata Error:", error);
+		return { success: false, error: error.message };
 	}
 }
 
 export async function generateBlogIdeas(category = "precision gauges") {
-	const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
-	const prompt = `Generate 10 SEO-optimized blog post ideas for DSN Enterprises, a precision gauge manufacturer in India. 
+	const prompt = `Generate 10 SEO-optimized blog post ideas for DSN Enterprises, a precision gauge manufacturer in India.
 
 Category focus: ${category}
 
@@ -108,30 +112,19 @@ Topics should cover:
 Respond ONLY with a valid JSON array:`;
 
 	try {
-		const result = await model.generateContent(prompt);
-		const response = await result.response;
-		const text = response.text();
-
+		const text = await callDeepSeek(prompt);
 		const jsonMatch = text.match(/\[[\s\S]*\]/);
 		if (jsonMatch) {
-			return {
-				success: true,
-				ideas: JSON.parse(jsonMatch[0]),
-			};
+			return { success: true, ideas: JSON.parse(jsonMatch[0]) };
 		}
 		throw new Error("Invalid JSON response");
 	} catch (error) {
-		console.error("Gemini Ideas Error:", error);
-		return {
-			success: false,
-			error: error.message,
-		};
+		console.error("DeepSeek Ideas Error:", error);
+		return { success: false, error: error.message };
 	}
 }
 
 export async function improveContent(content, instruction) {
-	const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
 	const prompt = `Improve the following content based on this instruction: "${instruction}"
 
 Original content:
@@ -140,24 +133,15 @@ ${content}
 Provide the improved content only, maintaining the same format and structure:`;
 
 	try {
-		const result = await model.generateContent(prompt);
-		const response = await result.response;
-		return {
-			success: true,
-			content: response.text(),
-		};
+		const text = await callDeepSeek(prompt);
+		return { success: true, content: text };
 	} catch (error) {
-		console.error("Gemini Improve Error:", error);
-		return {
-			success: false,
-			error: error.message,
-		};
+		console.error("DeepSeek Improve Error:", error);
+		return { success: false, error: error.message };
 	}
 }
 
 export async function generateTitle(topic) {
-	const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
 	const prompt = `Generate 5 SEO-optimized blog post titles for a precision gauge manufacturing company (DSN Enterprises) about this topic: "${topic}"
 
 Requirements:
@@ -169,30 +153,19 @@ Requirements:
 Respond ONLY with a valid JSON array of strings, no explanation:`;
 
 	try {
-		const result = await model.generateContent(prompt);
-		const response = await result.response;
-		const text = response.text();
-
+		const text = await callDeepSeek(prompt);
 		const jsonMatch = text.match(/\[[\s\S]*\]/);
 		if (jsonMatch) {
-			return {
-				success: true,
-				titles: JSON.parse(jsonMatch[0]),
-			};
+			return { success: true, titles: JSON.parse(jsonMatch[0]) };
 		}
 		throw new Error("Invalid JSON response");
 	} catch (error) {
-		console.error("Gemini Title Error:", error);
-		return {
-			success: false,
-			error: error.message,
-		};
+		console.error("DeepSeek Title Error:", error);
+		return { success: false, error: error.message };
 	}
 }
 
 export async function generateExcerpt(title, content) {
-	const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
 	const prompt = `Generate a compelling blog excerpt/summary for SEO and social sharing.
 
 Title: ${title}
@@ -207,17 +180,13 @@ Requirements:
 Respond with ONLY the excerpt text, no quotes or explanation:`;
 
 	try {
-		const result = await model.generateContent(prompt);
-		const response = await result.response;
+		const text = await callDeepSeek(prompt);
 		return {
 			success: true,
-			excerpt: response.text().trim().replace(/^"|"$/g, ""),
+			excerpt: text.trim().replace(/^"|"$/g, ""),
 		};
 	} catch (error) {
-		console.error("Gemini Excerpt Error:", error);
-		return {
-			success: false,
-			error: error.message,
-		};
+		console.error("DeepSeek Excerpt Error:", error);
+		return { success: false, error: error.message };
 	}
 }

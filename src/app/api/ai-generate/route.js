@@ -6,13 +6,13 @@ import {
 	generateExcerpt,
 	generateTitle,
 	improveContent,
-} from "@/lib/gemini";
+} from "@/lib/deepseek";
 
 export async function POST(request) {
 	try {
-		if (!process.env.GEMINI_API_KEY) {
+		if (!process.env.DEEPSEEK_API_KEY) {
 			return NextResponse.json(
-				{ success: false, error: "Gemini API key not configured" },
+				{ success: false, error: "DeepSeek API key not configured" },
 				{ status: 500 },
 			);
 		}
