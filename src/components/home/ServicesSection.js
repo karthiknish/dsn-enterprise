@@ -1,14 +1,8 @@
 "use client";
 
+import { UilArrowRight, UilCheck, UilRuler, UilShieldCheck, UilWrench } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import Link from "next/link";
-import {
-	FaArrowRight,
-	FaCertificate,
-	FaCheck,
-	FaRuler,
-	FaTools,
-} from "react-icons/fa";
 
 const services = [
 	{
@@ -16,7 +10,7 @@ const services = [
 		name: "Calibration Services",
 		description:
 			"NABL accredited calibration services for all types of gauges and measuring instruments.",
-		icon: FaRuler,
+		icon: UilRuler,
 		link: "/services#calibration",
 		details: [
 			"NABL Certificate available at extra cost",
@@ -30,7 +24,7 @@ const services = [
 		name: "Custom Gauge Manufacturing",
 		description:
 			"Custom designed and manufactured gauges for special applications and unique requirements.",
-		icon: FaTools,
+		icon: UilWrench,
 		link: "/services#custom-manufacturing",
 		details: [
 			"Special Gauges as per Drawing",
@@ -44,7 +38,7 @@ const services = [
 		name: "Certification & Testing",
 		description:
 			"Comprehensive testing and certification services for quality assurance.",
-		icon: FaCertificate,
+		icon: UilShieldCheck,
 		link: "/services#certification",
 		details: [
 			"Quality Standard: IS 919 (Part 1, Part 2) 1993 ISO",
@@ -107,7 +101,7 @@ const ServicesSection = () => {
 								>
 									<div className="flex items-start gap-5">
 										<div className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors">
-											<Icon className="text-xl" aria-hidden />
+											<Icon className="w-5 h-5" aria-hidden />
 										</div>
 										<div className="min-w-0">
 											<h3 className="text-xl font-semibold text-gray-900">
@@ -122,8 +116,8 @@ const ServicesSection = () => {
 														key={detail}
 														className="flex items-start gap-2"
 													>
-														<FaCheck
-															className="text-accent mt-0.5 flex-shrink-0 text-xs"
+														<UilCheck
+															className="text-accent mt-0.5 flex-shrink-0 w-3.5 h-3.5"
 															aria-hidden
 														/>
 														<span>{detail}</span>
@@ -135,7 +129,7 @@ const ServicesSection = () => {
 												className="mt-5 text-primary hover:text-accent font-medium inline-flex items-center gap-2 text-sm group/link"
 											>
 												Learn More
-												<FaArrowRight
+												<UilArrowRight
 													className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5"
 													aria-hidden
 												/>

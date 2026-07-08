@@ -1,8 +1,8 @@
 "use client";
 
+import { UilDownloadAlt, UilShieldCheck } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import Image from "next/image";
-import { FaCertificate, FaDownload } from "react-icons/fa";
 import SectionHeader from "./SectionHeader";
 
 const certificates = [
@@ -12,7 +12,7 @@ const certificates = [
 		description:
 			"ISO 9001:2015 certification for our quality management system.",
 		image: "/images/certificates/iso-9001-2015-certficate-new.webp",
-		icon: FaCertificate,
+		icon: UilShieldCheck,
 	},
 	{
 		id: 2,
@@ -20,7 +20,7 @@ const certificates = [
 		description:
 			"ISO/IEC 17025:2017 accreditation for competence in testing and calibration laboratories.",
 		image: "/images/certificates/certificate-cc-2602_page-0001.jpg",
-		icon: FaCertificate,
+		icon: UilShieldCheck,
 	},
 	{
 		id: 3,
@@ -28,7 +28,7 @@ const certificates = [
 		description:
 			"Scope of NABL accreditation for UNIK Gauges & Tools Calibration Laboratory (PDF).",
 		image: "/images/certificates/scope-cc-2602.pdf",
-		icon: FaCertificate,
+		icon: UilShieldCheck,
 		isPdf: true,
 	},
 ];
@@ -65,7 +65,7 @@ const CertificationsSection = () => {
 						<div className="p-6 md:p-8">
 							<div className="flex items-start gap-3 mb-2">
 								<span className="text-accent mt-0.5">
-									<FaCertificate className="text-lg" aria-hidden />
+									<UilShieldCheck className="w-4 h-4" aria-hidden />
 								</span>
 								<h3 className="text-xl font-semibold text-gray-900 leading-snug">
 									{featured.name}
@@ -95,7 +95,7 @@ const CertificationsSection = () => {
 										rel="noopener noreferrer"
 										className="relative shrink-0 h-24 w-20 rounded-lg bg-secondary-light/40 flex flex-col items-center justify-center gap-1.5 text-primary hover:text-accent transition-colors"
 									>
-										<FaDownload className="text-xl" aria-hidden />
+										<UilDownloadAlt className="w-5 h-5" aria-hidden />
 										<span className="text-[10px] font-semibold uppercase tracking-wide">
 											PDF
 										</span>
@@ -114,7 +114,7 @@ const CertificationsSection = () => {
 								<div className="min-w-0">
 									<div className="flex items-start gap-2 mb-1.5">
 										<Icon
-											className="text-accent mt-0.5 shrink-0"
+											className="text-accent mt-0.5 shrink-0 w-4 h-4"
 											aria-hidden
 										/>
 										<h3 className="text-base font-semibold text-gray-900 leading-snug">

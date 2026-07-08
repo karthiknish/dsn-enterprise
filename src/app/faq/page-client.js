@@ -1,8 +1,8 @@
 "use client";
 
+import { UilMinus, UilPlus } from "@iconscout/react-unicons";
 import { AnimatePresence, m } from "framer-motion";
 import { useState } from "react";
-import { FaPlus, FaMinus } from "react-icons/fa";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { faqCategories } from "@/content/faq";
@@ -44,9 +44,9 @@ function FAQItem({ faq, isOpen, onClick, itemId }) {
 					className="flex-shrink-0 w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center transition-all duration-300 bg-white group-hover:border-primary/30"
 				>
 					{isOpen ? (
-						<FaMinus className="text-primary text-xs" />
+						<UilMinus className="text-primary w-3.5 h-3.5" />
 					) : (
-						<FaPlus className="text-gray-400 text-xs transition-colors duration-200 group-hover:text-primary" />
+						<UilPlus className="text-gray-400 w-3.5 h-3.5 transition-colors duration-200 group-hover:text-primary" />
 					)}
 				</span>
 			</button>
