@@ -29,7 +29,10 @@ export function loadEditBlogPost(postId) {
 		.catch((error) => {
 			// notFound() throws internally to trigger the not-found page; let
 			// that pass through instead of being treated as a fetch failure.
-			if (error?.digest === "NEXT_NOT_FOUND") throw error;
+			// Its digest is "NEXT_HTTP_ERROR_FALLBACK;404", not "NEXT_NOT_FOUND".
+			if (String(error?.digest || "").startsWith("NEXT_HTTP_ERROR_FALLBACK")) {
+				throw error;
+			}
 			console.error("Error loading post for edit:", error);
 			throw new Error(
 				error?.code === "permission-denied"

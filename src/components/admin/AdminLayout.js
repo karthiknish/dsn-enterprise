@@ -24,15 +24,20 @@ export default function AdminLayout({ children }) {
 	const { push } = useRouter();
 	const pathname = usePathname();
 	const [sidebarOpen, setSidebarOpen] = useState(false);
-	const [isCollapsed, setIsCollapsed] = useState(() => {
-		if (typeof window === "undefined") return false;
+	// Starts false (matching the server-rendered markup) and is synced from
+	// localStorage after mount, so the client's first hydration pass never
+	// disagrees with the server's — a mismatch here previously let the
+	// sidebar width and content offset briefly (or persistently) desync.
+	const [isCollapsed, setIsCollapsed] = useState(false);
+
+	useEffect(() => {
 		try {
 			const storedState = localStorage.getItem("adminSidebarCollapsed:v1");
-			return storedState ? JSON.parse(storedState) : false;
+			if (storedState) setIsCollapsed(JSON.parse(storedState));
 		} catch {
-			return false;
+			// ignore malformed/inaccessible storage
 		}
-	});
+	}, []);
 
 	useEffect(() => {
 		if (!loading && !user && pathname !== "/admin/login") {

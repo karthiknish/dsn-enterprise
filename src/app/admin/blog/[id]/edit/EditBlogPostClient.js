@@ -1,11 +1,16 @@
 "use client";
 
-import { Suspense, use } from "react";
+import { Suspense, use, useMemo } from "react";
 import EditBlogPostView from "@/components/admin/blog/EditBlogPostView";
 import { loadEditBlogPost } from "@/lib/admin-firestore";
 
 function EditBlogPostLoader({ postId }) {
-	const initialPostData = use(loadEditBlogPost(postId));
+	// Memoized so use() always sees the same promise across re-renders
+	// (e.g. when AdminLayout re-renders on auth state changes). Without
+	// this, every re-render created a brand new pending promise, which
+	// made the component re-suspend indefinitely instead of ever settling.
+	const postDataPromise = useMemo(() => loadEditBlogPost(postId), [postId]);
+	const initialPostData = use(postDataPromise);
 	return (
 		<EditBlogPostView postId={postId} initialPostData={initialPostData} />
 	);

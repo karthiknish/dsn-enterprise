@@ -14,10 +14,7 @@ export default function EditBlogPostView({ postId, initialPostData }) {
 
 	return (
 		<div className="max-w-7xl mx-auto">
-			<div className="mb-8">
-				<h1 className="text-2xl font-semibold text-gray-900">Edit Blog Post</h1>
-				<p className="text-gray-600 mt-1">Update your blog article</p>
-			</div>
+			<h1 className="sr-only">Edit post</h1>
 
 			<BlogNotificationToast
 				notification={hook.notification}
