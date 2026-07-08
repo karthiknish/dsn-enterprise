@@ -21,7 +21,7 @@
 	--color-white: #ffffff;
 	--color-black: #000000;
 
-	/* Section surfaces — sage-tinted alternates (not flat white/grey) */
+	/* Section surfaces, sage-tinted alternates (not flat white/grey) */
 	--color-surface-subtle: #f6f8f4;
 	--color-surface-muted: #e8ede3;
 	--color-surface-warm: #dfe8d6;
@@ -37,7 +37,7 @@
 	--color-gray-700: #374151;
 	--color-gray-800: var(
 		--color-primary-dark
-	); /* was #1f2937 slate — brand neutral */
+	); /* was #1f2937 slate, brand neutral */
 	--color-gray-900: #111827;
 
 	/* Accent Colors */
@@ -102,7 +102,7 @@
 	--color-admin-bg: #fafaf9;
 	--color-admin-border: #e5e7eb;
 
-	/* Destructive — maps Tailwind `red-*` utilities to tokens */
+	/* Destructive, maps Tailwind `red-*` utilities to tokens */
 	--color-error-50: #fef2f2;
 	--color-error-100: #fee2e2;
 	--color-error-200: #fecaca;
@@ -113,7 +113,7 @@
 	--color-error-700: #b91c1c;
 	--color-error-800: #991b1b;
 
-	/* Warning — maps `yellow-*` */
+	/* Warning, maps `yellow-*` */
 	--color-warning-50: #fefce8;
 	--color-warning-100: #fef9c3;
 	--color-warning-400: #facc15;
@@ -121,14 +121,14 @@
 	--color-warning-700: #a16207;
 	--color-warning-800: #854d0e;
 
-	/* Info — maps `blue-*`; aligned with accent green */
+	/* Info, maps `blue-*`; aligned with accent green */
 	--color-info-50: var(--color-accent-50);
 	--color-info-400: var(--color-accent-400);
 	--color-info-500: var(--color-accent-500);
 	--color-info-600: var(--color-accent);
 	--color-info-700: var(--color-accent-dark);
 
-	/* AI / feature purple — maps `purple-*` */
+	/* AI / feature purple, maps `purple-*` */
 	--color-ai-50: #faf5ff;
 	--color-ai-100: #f3e8ff;
 	--color-ai-200: #e9d5ff;
@@ -138,7 +138,7 @@
 	--color-ai-700: #7e22ce;
 	--color-ai-800: #6b21a8;
 
-	/* Teal slot — maps `teal-*`; same tokens as accent (single brand green) */
+	/* Teal slot, maps `teal-*`; same tokens as accent (single brand green) */
 	--color-teal-50: var(--color-accent-50);
 	--color-teal-100: var(--color-accent-100);
 	--color-teal-300: var(--color-accent-200);
@@ -146,18 +146,18 @@
 	--color-teal-600: var(--color-accent);
 	--color-teal-800: var(--color-accent-800);
 
-	/* Green — maps `green-*` (aligned with accent for UI consistency) */
+	/* Green, maps `green-*` (aligned with accent for UI consistency) */
 	--color-green-50: #f0fdf4;
 	--color-green-600: #16a34a;
 
-	/* Orange — maps `orange-*` (e.g. metric accents) */
+	/* Orange, maps `orange-*` (e.g. metric accents) */
 	--color-orange-50: #fff7ed;
 	--color-orange-600: #ea580c;
 
-	/* Rich text editor — table cell selection highlight (TipTap) */
+	/* Rich text editor, table cell selection highlight (TipTap) */
 	--color-editor-selected-cell: var(--color-accent-200);
 
-	/* Emerald slot — keep Tailwind token; brand green */
+	/* Emerald slot, keep Tailwind token; brand green */
 	--color-emerald-500: var(--color-accent-500);
 
 	/* Charts (SVG attributes; not all have Tailwind classes) */

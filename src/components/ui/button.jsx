@@ -15,7 +15,7 @@ function Button({ className, variant, size, ref, ...props }) {
 }
 
 /**
- * Link-styled button — renders a Next.js <Link> with the same variant
+ * Link-styled button, renders a Next.js <Link> with the same variant
  * classes as Button. Use for navigational CTAs that look like buttons.
  */
 function LinkButton({ className, variant, size, href, ...props }) {

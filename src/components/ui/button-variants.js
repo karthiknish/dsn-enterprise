@@ -5,17 +5,17 @@ export const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				// Solid primary button — used for main CTAs site-wide
+				// Solid primary button, used for main CTAs site-wide
 				default: "bg-primary text-white hover:bg-primary-dark hover:shadow-md active:scale-[0.98]",
-				// Outline button — border + transparent background (secondary CTAs)
+				// Outline button, border + transparent background (secondary CTAs)
 				outline:
 					"border-2 border-primary text-primary bg-transparent hover:bg-primary/5 active:scale-[0.98]",
-				// White button — for use on dark/primary backgrounds (hero, page heroes)
+				// White button, for use on dark/primary backgrounds (hero, page heroes)
 				onDark:
 					"bg-white text-primary hover:bg-secondary-light hover:shadow-lg active:scale-[0.98]",
-				// Ghost button — no border/background, subtle hover
+				// Ghost button, no border/background, subtle hover
 				ghost: "text-primary hover:bg-primary/5 active:scale-[0.98]",
-				// Destructive — for dangerous actions (admin)
+				// Destructive, for dangerous actions (admin)
 				destructive: "bg-red-600 text-white hover:bg-red-700 active:scale-[0.98]",
 			},
 			size: {
