@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ADMIN_NAV_ITEMS, LogoutIcon } from "./admin-nav-icons";
@@ -29,10 +30,14 @@ export default function AdminSidebar({
 				className={`flex items-center h-16 bg-white border-b border-gray-200/80 transition-all duration-300 ${isCollapsed ? "justify-center px-0" : "justify-between px-6"}`}
 			>
 				{!isCollapsed ? (
-					<Link href="/admin" className="flex items-center gap-2">
-						<div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
-							<span className="font-bold text-white">D</span>
-						</div>
+					<Link href="/admin" className="flex items-center gap-3">
+						<Image
+							src="/images/logo.png"
+							alt="DSN Enterprises"
+							width={32}
+							height={32}
+							className="w-8 h-8 object-contain flex-shrink-0"
+						/>
 						<span className="text-lg font-bold tracking-tight text-gray-900 whitespace-nowrap">
 							DSN Admin
 						</span>
@@ -42,9 +47,13 @@ export default function AdminSidebar({
 						href="/admin"
 						className="flex items-center justify-center w-full"
 					>
-						<div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
-							<span className="font-bold text-white">D</span>
-						</div>
+						<Image
+							src="/images/logo.png"
+							alt="DSN Enterprises"
+							width={28}
+							height={28}
+							className="w-7 h-7 object-contain"
+						/>
 					</Link>
 				)}
 
