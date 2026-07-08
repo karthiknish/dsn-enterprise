@@ -5,8 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import {
 	FaArrowRight,
+	FaAward,
 	FaCar,
 	FaCheck,
+	FaClock,
 	FaCogs,
 	FaIndustry,
 	FaMicrochip,
@@ -14,8 +16,9 @@ import {
 	FaPlane,
 	FaShip,
 	FaTrain,
+	FaUsers,
 } from "react-icons/fa";
-import PageCta from "@/components/layout/PageCta";
+import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -25,7 +28,7 @@ const industries = [
 		name: "Oil & Gas",
 		icon: FaOilCan,
 		description:
-			"API 5B and 7-2 gauges for casing, tubing, line pipe, and rotary shouldered connections—built for field and workshop inspection programmes.",
+			"API 5B and 7-2 gauges for casing, tubing, line pipe, and rotary shouldered connections, built for field and workshop inspection programmes.",
 		applications: [
 			"Casing and tubing thread inspection",
 			"Drill pipe connection verification",
@@ -47,7 +50,7 @@ const industries = [
 		name: "Automotive",
 		icon: FaCar,
 		description:
-			"Thread and plain gauges for engine, transmission, and chassis lines—supporting tier suppliers who need repeatable GO/NO-GO acceptance.",
+			"Thread and plain gauges for engine, transmission, and chassis lines, supporting tier suppliers who need repeatable GO/NO-GO acceptance.",
 		applications: [
 			"Engine component inspection",
 			"Transmission shaft verification",
@@ -69,7 +72,7 @@ const industries = [
 		name: "Aerospace & Defense",
 		icon: FaPlane,
 		description:
-			"Tight-tolerance thread and plain gauges for fasteners, landing gear, and avionics housings—documented for defence and aerospace QA.",
+			"Tight-tolerance thread and plain gauges for fasteners, landing gear, and avionics housings, documented for defence and aerospace QA.",
 		applications: [
 			"Aircraft fastener inspection",
 			"Landing gear component verification",
@@ -135,7 +138,7 @@ const industries = [
 		name: "Marine & Shipbuilding",
 		icon: FaShip,
 		description:
-			"BSP, taper, and API gauging for propulsion, deck equipment, and offshore fabrication—with packaging suited to harsh environments.",
+			"BSP, taper, and API gauging for propulsion, deck equipment, and offshore fabrication, with packaging suited to harsh environments.",
 		applications: [
 			"Propeller shaft inspection",
 			"Marine engine components",
@@ -205,55 +208,93 @@ export default function IndustriesPage() {
 				eyebrow="Industries"
 				title="Industries We Serve"
 				description={pageHeroes.industries}
-			breadcrumbs={[
-				{ href: "/", label: "Home" },
-				{ href: "/industries", label: "Industries" },
-			]}
+				breadcrumbs={[
+					{ href: "/", label: "Home" },
+					{ href: "/industries", label: "Industries" },
+				]}
 			/>
 
+			{/* Industry Cards */}
 			<section className="py-16 md:py-20 bg-surface-subtle">
 				<div className="container mx-auto px-4">
-					<div className="space-y-16">
+					{/* Section header */}
+					<m.div
+						className="text-center mb-12 md:mb-16"
+						initial={{ opacity: 0, y: 16 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+					>
+						<h2 className="mt-6 text-3xl md:text-4xl font-semibold text-gray-900 text-balance">
+							Precision Gauging for Every Industry
+						</h2>
+						<p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+							From deep-sea rigs to microelectronics, our precision gauges meet
+							the exacting standards of the world&apos;s most demanding industrial
+							sectors.
+						</p>
+					</m.div>
+
+					<div className="space-y-8 md:space-y-12">
 						{industries.map((industry, index) => (
 							<m.div
 								key={industry.id}
-								className="bg-secondary-light rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm"
+								className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
 								initial={{ opacity: 0, y: 30 }}
 								whileInView={{ opacity: 1, y: 0 }}
 								viewport={{ once: true }}
 								transition={{ duration: 0.5, delay: index * 0.1 }}
 							>
+								{/* Top accent bar */}
 								<div
-									className={`grid grid-cols-1 lg:grid-cols-2 gap-0 ${index % 2 === 1 ? "lg:flex-row-reverse" : ""}`}
-								>
+									className="h-1.5 bg-gradient-to-r from-primary to-accent"
+									aria-hidden
+								/>
+
+								<div className="grid grid-cols-1 lg:grid-cols-2">
+									{/* Content Panel */}
 									<div
-										className={`${industry.color} p-8 lg:p-12 text-white ${index % 2 === 1 ? "lg:order-2" : ""}`}
+										className={`p-8 lg:p-12 ${index % 2 === 1 ? "lg:order-2" : ""}`}
 									>
-										<div className="flex items-center mb-6">
-											<industry.icon className="text-4xl mr-4" />
-											<h2 className="text-3xl font-semibold">{industry.name}</h2>
+										{/* Industry icon + name */}
+										<div className="flex items-center gap-4 mb-6">
+											<div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+												<industry.icon className="text-xl text-primary" />
+											</div>
+											<h2 className="text-2xl lg:text-3xl font-semibold text-gray-900">
+												{industry.name}
+											</h2>
 										</div>
-										<p className="text-lg mb-6 opacity-90">
+
+										{/* Description */}
+										<p className="text-gray-600 leading-relaxed mb-6">
 											{industry.description}
 										</p>
+
+										{/* Key Applications */}
 										<div className="mb-6">
-											<h3 className="font-semibold mb-3">Key Applications:</h3>
+											<h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-500 mb-3">
+												Key Applications
+											</h3>
 											<ul className="space-y-2">
 												{industry.applications.map((app) => (
-													<li key={app} className="flex items-start">
-														<FaCheck className="mt-1 mr-2 flex-shrink-0" />
-														<span className="opacity-90">{app}</span>
+													<li key={app} className="flex items-start gap-3">
+														<FaCheck className="mt-0.5 text-accent flex-shrink-0 text-sm" />
+														<span className="text-gray-700">{app}</span>
 													</li>
 												))}
 											</ul>
 										</div>
+
+										{/* Recommended Products */}
 										<div>
-											<h3 className="font-semibold mb-3">Recommended Products:</h3>
+											<h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-500 mb-3">
+												Recommended Products
+											</h3>
 											<div className="flex flex-wrap gap-2">
 												{industry.products.map((product) => (
 													<span
 														key={product}
-														className="bg-white/20 px-3 py-1 rounded-full text-sm"
+														className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm border border-gray-200/60"
 													>
 														{product}
 													</span>
@@ -261,34 +302,43 @@ export default function IndustriesPage() {
 											</div>
 										</div>
 									</div>
+
+									{/* Image Panel */}
 									<div
-										className={`p-8 lg:p-12 flex flex-col justify-center ${index % 2 === 1 ? "lg:order-1" : ""}`}
+										className={`bg-gray-50 p-8 lg:p-12 flex flex-col items-center justify-center relative min-h-[320px] lg:min-h-full ${index % 2 === 1 ? "lg:order-1" : ""}`}
 									>
-										<div className="relative flex justify-center mb-8 h-48 w-full max-w-xs mx-auto">
+										{/* Subtle pattern overlay */}
+										<div
+											className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#374941_1px,transparent_1px)] bg-[size:20px_20px]"
+											aria-hidden
+										/>
+
+										{/* Decorative gradient orb */}
+										<div
+											className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-accent/5 blur-3xl"
+											aria-hidden
+										/>
+
+										{/* Product image */}
+										<div className="relative w-full max-w-[220px] aspect-square mb-8 z-10">
 											<Image
 												src={industry.image}
-												alt={industry.name}
+												alt={`${industry.name} precision gauge`}
 												fill
-							sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-												className="object-contain"
+												sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+												className="object-contain drop-shadow-sm"
 											/>
 										</div>
-										<div className="text-center">
-											<h3 className="text-xl font-semibold text-gray-900 mb-4">
-												Precision Solutions for {industry.name}
-											</h3>
-											<p className="text-gray-600 mb-6">
-												Get customized gauging solutions designed specifically
-												for your industry requirements.
-											</p>
-											<Link
-												href={`/contact?industry=${encodeURIComponent(industry.name)}`}
-												className="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
-											>
-												Request Industry Quote
-												<FaArrowRight className="ml-2" />
-											</Link>
-										</div>
+
+										{/* CTA */}
+										<Link
+											href={`/contact?industry=${encodeURIComponent(industry.name)}`}
+											className="inline-flex items-center gap-2.5 bg-accent hover:bg-accent-dark text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 z-10"
+											aria-label={`Request quote for ${industry.name} industry`}
+										>
+											Request Industry Quote
+											<FaArrowRight className="text-xs" />
+										</Link>
 									</div>
 								</div>
 							</m.div>
@@ -297,36 +347,99 @@ export default function IndustriesPage() {
 				</div>
 			</section>
 
-			{/* Why Choose Us */}
-			<section className="py-16 bg-secondary-light">
-				<div className="container mx-auto px-4">
-					<div className="max-w-4xl mx-auto text-center">
-						<h2 className="text-3xl font-semibold mb-8 text-gray-900">
+			{/* Why Industries Trust DSN */}
+			<section className="py-16 md:py-20 bg-white relative overflow-hidden">
+				{/* Subtle background pattern */}
+				<div
+					className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#374941_1px,transparent_1px)] bg-[size:24px_24px]"
+					aria-hidden
+				/>
+
+				<div className="container mx-auto px-4 relative z-10">
+					{/* Section header */}
+					<m.div
+						className="text-center mb-12"
+						initial={{ opacity: 0, y: 16 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+					>
+						<h2 className="mt-6 text-3xl md:text-4xl font-semibold text-gray-900 text-balance">
 							Why Industries Trust DSN Enterprises
 						</h2>
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-							<div className="bg-white p-6 rounded-lg shadow-md">
-								<div className="text-4xl font-bold text-primary mb-2">25+</div>
-								<div className="text-gray-600">Years of Experience</div>
+						<p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+							Decades of precision engineering backed by certified quality and
+							deeply rooted industry expertise.
+						</p>
+					</m.div>
+
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto">
+						{/* Stat 1: 25+ Years */}
+						<m.div
+							className="text-center p-8 bg-secondary-light/60 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.05 }}
+						>
+							<div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+								<FaClock className="text-2xl text-primary" />
 							</div>
-							<div className="bg-white p-6 rounded-lg shadow-md">
-								<div className="text-4xl font-bold text-primary mb-2">500+</div>
-								<div className="text-gray-600">Industrial Clients</div>
+							<div className="text-5xl md:text-6xl font-bold text-primary tracking-tight mb-1">
+								25+
 							</div>
-							<div className="bg-white p-6 rounded-lg shadow-md">
-								<div className="text-4xl font-bold text-primary mb-2">API</div>
-								<div className="text-gray-600">Certified Manufacturer</div>
+							<div className="w-10 h-0.5 bg-accent mx-auto mb-4 rounded-full" />
+							<div className="text-gray-600 font-medium">Years of Experience</div>
+							<p className="text-sm text-gray-400 mt-1">Since 1998</p>
+						</m.div>
+
+						{/* Stat 2: 500+ Clients */}
+						<m.div
+							className="text-center p-8 bg-secondary-light/60 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.1 }}
+						>
+							<div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+								<FaUsers className="text-2xl text-primary" />
 							</div>
-						</div>
+							<div className="text-5xl md:text-6xl font-bold text-primary tracking-tight mb-1">
+								500+
+							</div>
+							<div className="w-10 h-0.5 bg-accent mx-auto mb-4 rounded-full" />
+							<div className="text-gray-600 font-medium">Industrial Clients</div>
+							<p className="text-sm text-gray-400 mt-1">Across 15+ countries</p>
+						</m.div>
+
+						{/* Stat 3: API Certified */}
+						<m.div
+							className="text-center p-8 bg-secondary-light/60 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5, delay: 0.15 }}
+						>
+							<div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+								<FaAward className="text-2xl text-primary" />
+							</div>
+							<div className="text-5xl md:text-6xl font-bold text-primary tracking-tight mb-1">
+								API
+							</div>
+							<div className="w-10 h-0.5 bg-accent mx-auto mb-4 rounded-full" />
+							<div className="text-gray-600 font-medium">Certified Manufacturer</div>
+							<p className="text-sm text-gray-400 mt-1">API 5B & 7-2 Licensed</p>
+						</m.div>
 					</div>
 				</div>
 			</section>
 
-			<PageCta
-				title="Don't See Your Industry?"
+			<Cta10
+				heading="Don&apos;t See Your Industry?"
 				description="We serve many more industries beyond those listed. Contact us to discuss your specific gauging requirements."
-				secondaryHref="/products"
-				secondaryLabel="View All Products"
+				buttons={{
+					primary: { text: "Contact Us", url: "/contact" },
+					secondary: { text: "View All Products", url: "/products" },
+				}}
 			/>
 		</div>
 	);
