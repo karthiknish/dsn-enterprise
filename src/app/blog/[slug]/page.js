@@ -1,8 +1,8 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BlogPostBody from "@/components/blog/BlogPostBody";
+import BlogPostImage from "@/components/blog/BlogPostImage";
 import { db } from "@/lib/firebase";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
 
@@ -201,13 +201,13 @@ export default async function BlogPostPage({ params }) {
 			{post.featuredImage && (
 				<div className="container mx-auto px-4 -mt-8">
 					<div className="max-w-4xl mx-auto">
-						<Image
+						<BlogPostImage
 							src={post.featuredImage}
 							alt={post.title}
 							width={896}
 							height={384}
-							unoptimized
-							className="w-full h-96 object-cover rounded-xl"
+							className="w-full h-96 rounded-xl"
+							imageClassName="w-full h-96 object-cover rounded-xl"
 						/>
 					</div>
 				</div>

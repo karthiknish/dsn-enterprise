@@ -1,6 +1,6 @@
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import Image from "next/image";
 import Link from "next/link";
+import BlogPostImage from "@/components/blog/BlogPostImage";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 import { db } from "@/lib/firebase";
@@ -278,14 +278,13 @@ export default async function BlogPage({ searchParams }) {
 										>
 											{post.featuredImage && (
 												<Link href={`/blog/${post.slug}`}>
-													<Image
+													<BlogPostImage
 														src={post.featuredImage}
 														alt={post.title}
 														width={600}
 														height={192}
-														unoptimized
-														className="w-full h-48 object-cover"
-														loading="lazy"
+														className="w-full h-48"
+														imageClassName="w-full h-48 object-cover"
 													/>
 												</Link>
 											)}

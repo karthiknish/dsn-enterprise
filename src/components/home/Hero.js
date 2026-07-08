@@ -2,8 +2,10 @@
 
 import { m, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
+
+const VIDEO_LOAD_TIMEOUT_MS = 4000;
 
 const trustPoints = [
 	"ISO Certified Manufacturing",
@@ -19,6 +21,14 @@ const Hero = () => {
 	const [videoLoaded, setVideoLoaded] = useState(false);
 
 	const handleVideoReady = useCallback(() => setVideoLoaded(true), []);
+
+	// Safety net: some browsers (esp. mobile Safari with autoplay disabled)
+	// never fire canplay/loadeddata until user interaction, so don't let the
+	// spinner block the hero forever.
+	useEffect(() => {
+		const timer = setTimeout(() => setVideoLoaded(true), VIDEO_LOAD_TIMEOUT_MS);
+		return () => clearTimeout(timer);
+	}, []);
 
 	return (
 		<div className="relative text-white -mt-16 min-h-dvh flex items-center overflow-hidden">
@@ -45,8 +55,11 @@ const Hero = () => {
 				muted
 				loop
 				playsInline
+				preload="auto"
 				aria-hidden
 				onCanPlay={handleVideoReady}
+				onLoadedData={handleVideoReady}
+				onError={handleVideoReady}
 			>
 				<source src="/hero-video.mp4" type="video/mp4" />
 			</video>
