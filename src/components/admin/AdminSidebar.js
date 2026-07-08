@@ -34,13 +34,10 @@ export default function AdminSidebar({
 						<Image
 							src="/images/logo.png"
 							alt="DSN Enterprises"
-							width={32}
-							height={32}
-							className="w-8 h-8 object-contain flex-shrink-0"
+							width={36}
+							height={36}
+							className="w-9 h-9 object-contain flex-shrink-0"
 						/>
-						<span className="text-lg font-bold tracking-tight text-gray-900 whitespace-nowrap">
-							DSN Admin
-						</span>
 					</Link>
 				) : (
 					<Link
