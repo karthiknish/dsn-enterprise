@@ -19,14 +19,14 @@ export default function AdminSidebar({
 		<aside
 			id="admin-sidebar"
 			aria-label="Admin navigation"
-			className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-300 ease-in-out flex flex-col 
+			className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200/80 transform transition-all duration-300 ease-in-out flex flex-col
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
           ${isCollapsed ? "lg:w-20" : "lg:w-64"}
           w-64
         `}
 		>
 			<div
-				className={`flex items-center h-16 bg-white border-b border-gray-200 transition-all duration-300 ${isCollapsed ? "justify-center px-0" : "justify-between px-6"}`}
+				className={`flex items-center h-16 bg-white border-b border-gray-200/80 transition-all duration-300 ${isCollapsed ? "justify-center px-0" : "justify-between px-6"}`}
 			>
 				{!isCollapsed ? (
 					<Link href="/admin" className="flex items-center gap-2">
@@ -110,19 +110,25 @@ export default function AdminSidebar({
 						<Link
 							key={item.name}
 							href={item.href}
-							className={`flex items-center p-3 rounded-lg transition-all duration-200 group whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+							className={`relative flex items-center p-3 rounded-lg transition-all duration-200 group whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
 								isActive
-									? "bg-accent text-white shadow-md shadow-accent-200"
-									: "text-gray-600 hover:bg-accent-50 hover:text-accent-700"
+									? "bg-accent-50 text-accent-700"
+									: "text-gray-600 hover:bg-gray-50 hover:text-accent-700"
 							} ${isCollapsed ? "justify-center" : ""}`}
 							onClick={onCloseMobile}
 						>
+							{isActive && (
+								<span
+									aria-hidden="true"
+									className={`absolute rounded-full bg-accent ${isCollapsed ? "left-0.5 top-1/2 -translate-y-1/2 h-5 w-1" : "left-0 top-1/2 -translate-y-1/2 h-5 w-1"}`}
+								/>
+							)}
 							{isCollapsed ? (
 								<AdminSidebarTooltip content={item.name}>
 									<item.icon
 										className={`w-5 h-5 transition-colors flex-shrink-0 ${
 											isActive
-												? "text-white"
+												? "text-accent"
 												: "text-gray-400 group-hover:text-accent"
 										}`}
 									/>
@@ -132,7 +138,7 @@ export default function AdminSidebar({
 									<item.icon
 										className={`w-5 h-5 transition-colors flex-shrink-0 mr-3 ${
 											isActive
-												? "text-white"
+												? "text-accent"
 												: "text-gray-400 group-hover:text-accent"
 										}`}
 									/>
@@ -145,11 +151,11 @@ export default function AdminSidebar({
 			</nav>
 
 			<div
-				className={`p-4 border-t border-gray-200 bg-white transition-all duration-300 ${isCollapsed ? "items-center" : ""}`}
+				className={`p-3 border-t border-gray-200/80 bg-white transition-all duration-300 ${isCollapsed ? "items-center" : ""}`}
 			>
 				{!isCollapsed ? (
-					<>
-						<div className="flex items-center gap-3 mb-4 px-2">
+					<div className="rounded-xl border border-gray-200/80 bg-gray-50/60 p-3">
+						<div className="flex items-center gap-3 mb-3 px-0.5">
 							<div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center text-sm font-medium text-accent-700 flex-shrink-0">
 								{user?.email?.[0].toUpperCase()}
 							</div>
@@ -166,12 +172,12 @@ export default function AdminSidebar({
 						<button
 							type="button"
 							onClick={onLogout}
-							className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-white hover:text-red-700 transition-colors border border-gray-200 hover:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+							className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-white hover:text-red-700 transition-colors border border-gray-200/80 hover:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
 						>
 							<LogoutIcon className="w-4 h-4 mr-2" />
 							Sign Out
 						</button>
-					</>
+					</div>
 				) : (
 					<div className="flex flex-col items-center gap-4">
 						<AdminSidebarTooltip content={user?.email || "User"}>

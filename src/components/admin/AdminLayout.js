@@ -54,7 +54,7 @@ export default function AdminLayout({ children }) {
 	if (loading) {
 		return (
 			<output
-				className="min-h-screen flex items-center justify-center bg-gray-100 w-full"
+				className="min-h-screen flex items-center justify-center bg-gray-50 w-full"
 				aria-live="polite"
 			>
 				<span className="sr-only">Loading</span>
@@ -77,7 +77,7 @@ export default function AdminLayout({ children }) {
 	const pageTitle = getAdminPageTitle(pathname);
 
 	return (
-		<div className="min-h-screen bg-gray-100">
+		<div className="min-h-screen bg-gray-50">
 			{sidebarOpen && (
 				<button
 					type="button"

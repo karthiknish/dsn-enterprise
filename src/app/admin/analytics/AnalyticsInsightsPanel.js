@@ -5,7 +5,7 @@ export default function AnalyticsInsightsPanel({ bounceRateRaw }) {
 
 	return (
 		<div className="space-y-6">
-			<div className="bg-gradient-to-br from-accent to-accent-700 rounded-xl shadow-lg p-6 text-white">
+			<div className="bg-gradient-to-br from-accent to-accent-700 rounded-2xl shadow-lg p-6 text-white">
 				<h3 className="text-lg font-semibold mb-2">Performance Tip</h3>
 				<p className="text-accent-50 opacity-90 text-sm leading-relaxed">
 					Your bounce rate is currently {bouncePercent}%. To improve engagement,
@@ -18,8 +18,8 @@ export default function AnalyticsInsightsPanel({ bounceRateRaw }) {
 				</div>
 			</div>
 
-			<div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-				<h3 className="text-lg font-semibold text-gray-900 mb-4">Traffic Insights</h3>
+			<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6">
+				<h3 className="text-base font-semibold text-gray-900 mb-4">Traffic Insights</h3>
 				<div className="space-y-4">
 					<div className="flex items-start gap-3">
 						<div className="w-8 h-8 rounded-full bg-accent-50 flex items-center justify-center shrink-0">

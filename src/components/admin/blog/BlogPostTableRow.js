@@ -15,8 +15,8 @@ export default function BlogPostTableRow({ post, deleting, onDelete }) {
 		: "No date";
 
 	return (
-		<tr className="hover:bg-gray-50 transition-colors">
-			<td className="px-6 py-4 whitespace-nowrap">
+		<tr className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
+			<td className="py-3.5 px-4 whitespace-nowrap">
 				<div className="flex items-center">
 					{post.featuredImage ? (
 						<Image
@@ -51,31 +51,31 @@ export default function BlogPostTableRow({ post, deleting, onDelete }) {
 					</div>
 				</div>
 			</td>
-			<td className="px-6 py-4 whitespace-nowrap">
+			<td className="py-3.5 px-4 whitespace-nowrap">
 				<span
-					className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+					className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
 						post.status === "published"
-							? "bg-accent-100 text-accent-800"
-							: "bg-yellow-100 text-yellow-800"
+							? "bg-accent-50 text-accent-700"
+							: "bg-gray-100 text-gray-600"
 					}`}
 				>
 					<span
-						className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-							post.status === "published" ? "bg-accent-400" : "bg-yellow-400"
+						className={`w-1.5 h-1.5 rounded-full ${
+							post.status === "published" ? "bg-accent-500" : "bg-gray-400"
 						}`}
 					/>
 					{post.status.charAt(0).toUpperCase() + post.status.slice(1)}
 				</span>
 			</td>
-			<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+			<td className="py-3.5 px-4 whitespace-nowrap text-sm text-gray-500">
 				{formattedDate}
 			</td>
-			<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-				<div className="flex items-center justify-end gap-3">
+			<td className="py-3.5 px-4 whitespace-nowrap text-right text-sm font-medium">
+				<div className="flex items-center justify-end gap-1">
 					<Link
 						href={`/blog/${post.slug}`}
 						target="_blank"
-						className="text-gray-400 hover:text-accent transition-colors"
+						className="text-gray-400 hover:text-accent hover:bg-gray-100 rounded-md p-1.5 transition-colors"
 						title="View Live"
 					>
 						<svg
@@ -101,7 +101,7 @@ export default function BlogPostTableRow({ post, deleting, onDelete }) {
 					</Link>
 					<Link
 						href={`/admin/blog/${post.id}/edit`}
-						className="text-gray-400 hover:text-accent transition-colors"
+						className="text-gray-400 hover:text-accent hover:bg-gray-100 rounded-md p-1.5 transition-colors"
 						title="Edit"
 					>
 						<svg
@@ -123,7 +123,7 @@ export default function BlogPostTableRow({ post, deleting, onDelete }) {
 						type="button"
 						onClick={() => onDelete(post.id, post.title)}
 						disabled={deleting === post.id}
-						className="text-gray-400 hover:text-red-600 disabled:opacity-50 transition-colors"
+						className="text-gray-400 hover:text-red-600 hover:bg-gray-100 disabled:opacity-50 rounded-md p-1.5 transition-colors"
 						title="Delete"
 						aria-label={`Delete ${post.title}`}
 					>

@@ -9,7 +9,7 @@ export default function AdminHeader({
 	onOpenSidebar,
 }) {
 	return (
-		<header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 bg-white/80 backdrop-blur-md border-b border-gray-200">
+		<header className="sticky top-0 z-30 flex items-center justify-between h-16 px-4 sm:px-6 bg-white/80 backdrop-blur-md border-b border-gray-200/80 shadow-sm">
 			<div className="flex items-center gap-3 min-w-0">
 				<button
 					type="button"
@@ -44,7 +44,7 @@ export default function AdminHeader({
 					href="/"
 					target="_blank"
 					rel="noopener noreferrer"
-					className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-primary px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+					className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-primary px-3 py-2 rounded-lg border border-transparent hover:border-gray-200/80 hover:bg-gray-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
 				>
 					<svg
 						aria-hidden="true"

@@ -1,7 +1,7 @@
 export default function AnalyticsTrendGraph({ trends }) {
 	if (!trends || trends.length === 0) {
 		return (
-			<div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg border border-dashed border-gray-200">
+			<div className="h-64 flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
 				<p className="text-sm text-gray-400 text-center px-4">
 					Insufficient data to generate trend visualization
 				</p>

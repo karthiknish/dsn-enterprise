@@ -8,7 +8,7 @@ export default function ContactDetailPanel({
 }) {
 	if (!contact) {
 		return (
-			<div className="bg-white rounded-xl shadow-sm p-6 text-center text-gray-500">
+			<div className="bg-white rounded-2xl border border-gray-200/80 p-6 text-center text-gray-500">
 				<svg
 					aria-hidden="true"
 					className="w-12 h-12 mx-auto text-gray-400 mb-3"
@@ -35,8 +35,8 @@ export default function ContactDetailPanel({
 	}
 
 	return (
-		<div className="bg-white rounded-xl shadow-sm p-6 lg:sticky lg:top-24">
-			<div className="flex items-center justify-between mb-4">
+		<div className="bg-white rounded-2xl border border-gray-200/80 p-6 lg:sticky lg:top-24">
+			<div className="flex items-center justify-between mb-5 pb-4 border-b border-gray-100">
 				<h3 className="text-lg font-semibold text-gray-900">Contact Details</h3>
 				<button
 					type="button"
@@ -63,16 +63,16 @@ export default function ContactDetailPanel({
 
 			<div className="space-y-4">
 				<div>
-					<p className="text-xs font-medium text-gray-500 uppercase">Name</p>
-					<p className="text-gray-900">{contact.name}</p>
+					<p className="text-xs uppercase tracking-wide text-gray-500">Name</p>
+					<p className="text-sm text-gray-900 mt-1">{contact.name}</p>
 				</div>
 
 				<div>
-					<p className="text-xs font-medium text-gray-500 uppercase">Email</p>
-					<p>
+					<p className="text-xs uppercase tracking-wide text-gray-500">Email</p>
+					<p className="mt-1">
 						<a
 							href={`mailto:${contact.email}`}
-							className="text-primary hover:text-primary-dark"
+							className="text-sm text-primary hover:text-primary-dark"
 						>
 							{contact.email}
 						</a>
@@ -81,11 +81,11 @@ export default function ContactDetailPanel({
 
 				{contact.phone && (
 					<div>
-						<p className="text-xs font-medium text-gray-500 uppercase">Phone</p>
-						<p>
+						<p className="text-xs uppercase tracking-wide text-gray-500">Phone</p>
+						<p className="mt-1">
 							<a
 								href={`tel:${contact.phone}`}
-								className="text-primary hover:text-primary-dark"
+								className="text-sm text-primary hover:text-primary-dark"
 							>
 								{contact.phone}
 							</a>
@@ -95,29 +95,31 @@ export default function ContactDetailPanel({
 
 				{contact.company && (
 					<div>
-						<p className="text-xs font-medium text-gray-500 uppercase">Company</p>
-						<p className="text-gray-900">{contact.company}</p>
+						<p className="text-xs uppercase tracking-wide text-gray-500">Company</p>
+						<p className="text-sm text-gray-900 mt-1">{contact.company}</p>
 					</div>
 				)}
 
 				{contact.productInterest && (
 					<div>
-						<p className="text-xs font-medium text-gray-500 uppercase">
+						<p className="text-xs uppercase tracking-wide text-gray-500">
 							Product Interest
 						</p>
-						<p className="text-gray-900">{contact.productInterest}</p>
+						<p className="text-sm text-gray-900 mt-1">{contact.productInterest}</p>
 					</div>
 				)}
 
 				<div>
-					<p className="text-xs font-medium text-gray-500 uppercase">Message</p>
-					<p className="text-gray-900 whitespace-pre-wrap">{contact.message}</p>
+					<p className="text-xs uppercase tracking-wide text-gray-500">Message</p>
+					<p className="text-sm text-gray-900 whitespace-pre-wrap mt-1">
+						{contact.message}
+					</p>
 				</div>
 
 				<div>
 					<label
 						htmlFor="contact-status"
-						className="text-xs font-medium text-gray-500 uppercase"
+						className="text-xs uppercase tracking-wide text-gray-500"
 					>
 						Status
 					</label>
@@ -125,7 +127,7 @@ export default function ContactDetailPanel({
 						id="contact-status"
 						value={contact.status || "new"}
 						onChange={(e) => onStatusChange(contact.id, e.target.value)}
-						className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+						className="mt-1 block w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
 					>
 						<option value="new">New</option>
 						<option value="contacted">Contacted</option>
@@ -134,23 +136,23 @@ export default function ContactDetailPanel({
 				</div>
 
 				<div>
-					<p className="text-xs font-medium text-gray-500 uppercase">Submitted</p>
-					<p className="text-gray-900">
+					<p className="text-xs uppercase tracking-wide text-gray-500">Submitted</p>
+					<p className="text-sm text-gray-900 mt-1">
 						{contact.createdAt?.toDate?.()?.toLocaleString() || "No date"}
 					</p>
 				</div>
 
-				<div className="pt-4 flex gap-2">
+				<div className="pt-4 mt-2 border-t border-gray-100 flex gap-2">
 					<a
 						href={`mailto:${contact.email}?subject=Re: Your inquiry to DSN Enterprises`}
-						className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+						className="flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
 					>
 						Reply
 					</a>
 					<button
 						type="button"
 						onClick={() => onDelete(contact.id)}
-						className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+						className="px-4 py-2 text-sm font-medium border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
 						aria-label="Delete submission"
 					>
 						Delete

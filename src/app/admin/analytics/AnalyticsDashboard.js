@@ -63,7 +63,7 @@ export default function AnalyticsDashboard({
 
 	if (error) {
 		return (
-			<div className="p-6 bg-red-50 border border-red-200 rounded-xl text-red-800">
+			<div className="p-6 bg-red-50 border border-red-200 rounded-2xl text-red-800">
 				<h2 className="text-lg font-semibold mb-2">Analytics Error</h2>
 				<p className="mb-4">{error}</p>
 				<button
@@ -84,7 +84,7 @@ export default function AnalyticsDashboard({
 			<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
 				<div>
 					<h1 className="sr-only">Analytics</h1>
-					<p className="text-gray-600">Website performance overview</p>
+					<p className="text-sm text-gray-500">Website performance overview</p>
 				</div>
 				<AnalyticsPeriodSelector
 					period={period}

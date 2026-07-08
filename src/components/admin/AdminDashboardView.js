@@ -13,16 +13,16 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 				</div>
 			)}
 			<div className="mb-8">
-				<p className="text-gray-600">Welcome to the admin dashboard</p>
+				<p className="text-gray-500">Welcome to the admin dashboard</p>
 			</div>
 
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-				<div className="bg-white rounded-xl shadow-sm p-6">
-					<div className="flex items-center">
-						<div className="p-3 bg-primary/10 rounded-lg">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+				<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6">
+					<div className="flex items-center justify-between">
+						<div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
 							<svg
 								aria-hidden="true"
-								className="w-6 h-6 text-primary"
+								className="w-5 h-5"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -35,21 +35,19 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 								/>
 							</svg>
 						</div>
-						<div className="ml-4">
-							<p className="text-sm font-medium text-gray-600">Total Posts</p>
-							<p className="text-2xl font-semibold text-gray-900">
-								{stats.totalPosts}
-							</p>
-						</div>
 					</div>
+					<p className="mt-4 text-3xl font-semibold tracking-tight text-gray-900 tabular-nums">
+						{stats.totalPosts}
+					</p>
+					<p className="mt-1 text-sm text-gray-500">Total Posts</p>
 				</div>
 
-				<div className="bg-white rounded-xl shadow-sm p-6">
-					<div className="flex items-center">
-						<div className="p-3 bg-accent-100 rounded-lg">
+				<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6">
+					<div className="flex items-center justify-between">
+						<div className="w-10 h-10 rounded-lg bg-accent-100 text-accent flex items-center justify-center">
 							<svg
 								aria-hidden="true"
-								className="w-6 h-6 text-accent"
+								className="w-5 h-5"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -62,21 +60,19 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 								/>
 							</svg>
 						</div>
-						<div className="ml-4">
-							<p className="text-sm font-medium text-gray-600">Published</p>
-							<p className="text-2xl font-semibold text-gray-900">
-								{stats.publishedPosts}
-							</p>
-						</div>
 					</div>
+					<p className="mt-4 text-3xl font-semibold tracking-tight text-gray-900 tabular-nums">
+						{stats.publishedPosts}
+					</p>
+					<p className="mt-1 text-sm text-gray-500">Published</p>
 				</div>
 
-				<div className="bg-white rounded-xl shadow-sm p-6">
-					<div className="flex items-center">
-						<div className="p-3 bg-yellow-100 rounded-lg">
+				<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6">
+					<div className="flex items-center justify-between">
+						<div className="w-10 h-10 rounded-lg bg-yellow-100 text-yellow-600 flex items-center justify-center">
 							<svg
 								aria-hidden="true"
-								className="w-6 h-6 text-yellow-600"
+								className="w-5 h-5"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -89,28 +85,26 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 								/>
 							</svg>
 						</div>
-						<div className="ml-4">
-							<p className="text-sm font-medium text-gray-600">Drafts</p>
-							<p className="text-2xl font-semibold text-gray-900">
-								{stats.draftPosts}
-							</p>
-						</div>
 					</div>
+					<p className="mt-4 text-3xl font-semibold tracking-tight text-gray-900 tabular-nums">
+						{stats.draftPosts}
+					</p>
+					<p className="mt-1 text-sm text-gray-500">Drafts</p>
 				</div>
 			</div>
 
-			<div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-				<h2 className="text-lg font-semibold text-gray-900 mb-4">
+			<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 mb-6">
+				<h2 className="text-sm font-semibold text-gray-900 mb-4">
 					Quick Actions
 				</h2>
-				<div className="flex flex-wrap gap-4">
+				<div className="flex flex-wrap gap-3">
 					<Link
 						href="/admin/blog/new"
-						className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+						className="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-dark transition-colors"
 					>
 						<svg
 							aria-hidden="true"
-							className="w-5 h-5 mr-2"
+							className="w-4 h-4 mr-2"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -126,11 +120,11 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 					</Link>
 					<Link
 						href="/admin/blog"
-						className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+						className="inline-flex items-center px-4 py-2 bg-gray-50 text-gray-700 text-sm font-medium rounded-lg border border-gray-200/80 hover:bg-gray-100 transition-colors"
 					>
 						<svg
 							aria-hidden="true"
-							className="w-5 h-5 mr-2"
+							className="w-4 h-4 mr-2"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
@@ -147,12 +141,12 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 				</div>
 			</div>
 
-			<div className="bg-white rounded-xl shadow-sm p-6">
+			<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6">
 				<div className="flex items-center justify-between mb-4">
-					<h2 className="text-lg font-semibold text-gray-900">Recent Posts</h2>
+					<h2 className="text-sm font-semibold text-gray-900">Recent Posts</h2>
 					<Link
 						href="/admin/blog"
-						className="text-primary hover:text-primary-dark text-sm"
+						className="text-primary hover:text-primary-dark text-sm font-medium"
 					>
 						View all →
 					</Link>
@@ -169,11 +163,11 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 						</Link>
 					</div>
 				) : (
-					<div className="space-y-4">
+					<div className="space-y-2">
 						{recentPosts.map((post) => (
 							<div
 								key={post.id}
-								className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+								className="flex items-center justify-between p-4 rounded-xl border border-gray-200/80 hover:bg-gray-50/60 transition-colors"
 							>
 								<div>
 									<h3 className="font-medium text-gray-900">{post.title}</h3>
@@ -194,7 +188,7 @@ export default function AdminDashboardView({ stats, recentPosts, fetchError }) {
 									</span>
 									<Link
 										href={`/admin/blog/${post.id}/edit`}
-										className="text-primary hover:text-primary-dark"
+										className="text-primary hover:text-primary-dark text-sm font-medium"
 									>
 										Edit
 									</Link>

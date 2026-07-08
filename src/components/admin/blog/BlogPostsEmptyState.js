@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function BlogPostsEmptyState() {
 	return (
-		<div className="bg-white rounded-xl shadow-sm p-12 text-center border border-gray-100">
+		<div className="bg-white rounded-2xl border border-gray-200/80 p-12 text-center">
 			<div className="w-16 h-16 bg-accent-50 rounded-full flex items-center justify-center mx-auto mb-4">
 				<svg
 					aria-hidden="true"
@@ -25,7 +25,7 @@ export default function BlogPostsEmptyState() {
 			</p>
 			<Link
 				href="/admin/blog/new"
-				className="inline-flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors shadow-sm"
+				className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
 			>
 				Create First Post
 			</Link>

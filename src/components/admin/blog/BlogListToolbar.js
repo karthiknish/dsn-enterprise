@@ -17,7 +17,7 @@ export default function BlogListToolbar({
 					<Link
 						href="/blog"
 						target="_blank"
-						className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+						className="inline-flex items-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
 					>
 						<svg
 							aria-hidden="true"
@@ -37,7 +37,7 @@ export default function BlogListToolbar({
 					</Link>
 					<Link
 						href="/admin/blog/new"
-						className="inline-flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-700 transition-colors shadow-sm"
+						className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
 					>
 						<svg
 							aria-hidden="true"
@@ -58,7 +58,7 @@ export default function BlogListToolbar({
 				</div>
 			</div>
 
-			<div className="relative">
+			<div className="relative max-w-sm">
 				<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 					<svg
 						aria-hidden="true"
@@ -79,7 +79,7 @@ export default function BlogListToolbar({
 					type="search"
 					placeholder="Search posts..."
 					aria-label="Search posts by title"
-					className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-accent focus:border-accent sm:text-sm transition duration-150 ease-in-out"
+					className="block w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary sm:text-sm transition duration-150 ease-in-out"
 					value={searchTerm}
 					onChange={onSearchChange}
 				/>

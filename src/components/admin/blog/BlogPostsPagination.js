@@ -8,13 +8,13 @@ export default function BlogPostsPagination({
 	if (totalPages <= 1) return null;
 
 	return (
-		<div className="flex items-center justify-between bg-white px-4 py-3 sm:px-6 rounded-xl shadow-sm border border-gray-100">
+		<div className="flex items-center justify-between bg-white px-4 py-3 sm:px-6 rounded-2xl border border-gray-200/80">
 			<div className="flex flex-1 justify-between sm:hidden">
 				<button
 					type="button"
 					onClick={() => onPageChange(currentPage - 1)}
 					disabled={currentPage === 1}
-					className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+					className="relative inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 				>
 					Previous
 				</button>
@@ -22,7 +22,7 @@ export default function BlogPostsPagination({
 					type="button"
 					onClick={() => onPageChange(currentPage + 1)}
 					disabled={currentPage === totalPages}
-					className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+					className="relative ml-3 inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 				>
 					Next
 				</button>
@@ -30,14 +30,14 @@ export default function BlogPostsPagination({
 			<div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
 				<div>
 					<nav
-						className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+						className="inline-flex items-center gap-1"
 						aria-label="Pagination"
 					>
 						<button
 							type="button"
 							onClick={() => onPageChange(currentPage - 1)}
 							disabled={currentPage === 1}
-							className="relative inline-flex items-center rounded-l-md p-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+							className="relative inline-flex items-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:z-20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 						>
 							<span className="sr-only">Previous</span>
 							<svg
@@ -63,10 +63,10 @@ export default function BlogPostsPagination({
 									aria-current={
 										currentPage === pageNum ? "page" : undefined
 									}
-									className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent transition-colors ${
+									className={`relative inline-flex items-center justify-center min-w-[2.25rem] h-9 rounded-md px-3 text-sm font-medium focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors ${
 										currentPage === pageNum
-											? "z-10 bg-accent text-white focus-visible:outline-accent"
-											: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0"
+											? "bg-primary text-white"
+											: "text-gray-600 hover:bg-gray-100"
 									}`}
 								>
 									{pageNum}
@@ -78,7 +78,7 @@ export default function BlogPostsPagination({
 							type="button"
 							onClick={() => onPageChange(currentPage + 1)}
 							disabled={currentPage === totalPages}
-							className="relative inline-flex items-center rounded-r-md p-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+							className="relative inline-flex items-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:z-20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 						>
 							<span className="sr-only">Next</span>
 							<svg

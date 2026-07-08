@@ -1,3 +1,12 @@
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/components/ui/table";
+
 export default function AnalyticsTopPagesTable({ topPages }) {
 	const totalViews = topPages.reduce(
 		(acc, row) => acc + parseInt(row.metricValues[0].value, 10),
@@ -5,26 +14,31 @@ export default function AnalyticsTopPagesTable({ topPages }) {
 	);
 
 	return (
-		<div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-			<div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-				<h2 className="text-lg font-semibold text-gray-900">Most Visited Pages</h2>
-				<span className="text-xs text-gray-500">Top 10 Pages</span>
+		<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+			<div className="px-6 py-4 border-b border-gray-200/80 flex items-center justify-between">
+				<div>
+					<h2 className="text-base font-semibold text-gray-900">
+						Most Visited Pages
+					</h2>
+					<p className="text-sm text-gray-500">By page views</p>
+				</div>
+				<span className="text-xs font-medium text-gray-500">Top 10 Pages</span>
 			</div>
 			<div className="overflow-x-auto">
-				<table className="min-w-full divide-y divide-gray-200">
-					<thead className="bg-gray-50/50">
-						<tr>
-							<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+				<Table>
+					<TableHeader>
+						<TableRow className="border-b border-gray-200 hover:bg-transparent">
+							<TableHead className="text-xs uppercase tracking-wide text-gray-500">
 								Page Path
-							</th>
-							<th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+							</TableHead>
+							<TableHead className="text-xs uppercase tracking-wide text-gray-500 text-right">
 								Views
-							</th>
-						</tr>
-					</thead>
-					<tbody className="bg-white divide-y divide-gray-200">
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
 						{topPages.length > 0 ? (
-							topPages.map((row) => {
+							topPages.map((row, index) => {
 								const views = parseInt(row.metricValues[0].value, 10);
 								const percentage =
 									totalViews > 0
@@ -32,19 +46,21 @@ export default function AnalyticsTopPagesTable({ topPages }) {
 										: "0";
 
 								return (
-									<tr
+									<TableRow
 										key={row.dimensionValues[0].value}
-										className="hover:bg-gray-50 transition-colors"
+										className={`hover:bg-gray-50 ${
+											index % 2 === 1 ? "bg-gray-50/40" : ""
+										}`}
 									>
-										<td
-											className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-[200px]"
+										<TableCell
+											className="py-3 px-4 text-sm font-medium text-gray-900 truncate max-w-[200px]"
 											title={row.dimensionValues[0].value}
 										>
 											{row.dimensionValues[0].value}
-										</td>
-										<td className="px-6 py-4 whitespace-nowrap text-right">
+										</TableCell>
+										<TableCell className="py-3 px-4 text-right">
 											<div className="flex flex-col items-end">
-												<span className="text-sm font-semibold text-gray-900">
+												<span className="text-sm font-semibold text-gray-900 tabular-nums">
 													{views.toLocaleString()}
 												</span>
 												<div className="flex items-center gap-2 mt-1">
@@ -54,24 +70,27 @@ export default function AnalyticsTopPagesTable({ topPages }) {
 															style={{ width: `${percentage}%` }}
 														/>
 													</div>
-													<span className="text-[10px] text-gray-400">
+													<span className="text-[10px] text-gray-400 tabular-nums">
 														{percentage}%
 													</span>
 												</div>
 											</div>
-										</td>
-									</tr>
+										</TableCell>
+									</TableRow>
 								);
 							})
 						) : (
-							<tr>
-								<td colSpan="2" className="px-6 py-12 text-center text-gray-500">
+							<TableRow className="hover:bg-transparent">
+								<TableCell
+									colSpan={2}
+									className="py-12 px-4 text-center text-gray-500"
+								>
 									No data available
-								</td>
-							</tr>
+								</TableCell>
+							</TableRow>
 						)}
-					</tbody>
-				</table>
+					</TableBody>
+				</Table>
 			</div>
 		</div>
 	);
