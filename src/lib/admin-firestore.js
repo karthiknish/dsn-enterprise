@@ -1,6 +1,7 @@
 import {
 	collection,
 	doc,
+	getCountFromServer,
 	getDoc,
 	getDocs,
 	limit,
@@ -9,18 +10,56 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-export async function fetchBlogPosts() {
+function mapBlogDoc(docSnap) {
+	return {
+		id: docSnap.id,
+		...docSnap.data(),
+	};
+}
+
+export async function fetchBlogPosts(options = {}) {
+	const page = Math.max(1, Number(options.page) || 1);
+	const perPage = Math.max(1, Number(options.limit) || 10);
+	const searchTerm = (options.searchTerm || "").trim();
+
 	const postsRef = collection(db, "blogs");
-	const q = query(postsRef, orderBy("createdAt", "desc"));
+	const baseQuery = query(postsRef, orderBy("createdAt", "desc"));
+
+	if (searchTerm) {
+		const snapshot = await withTimeout(
+			getDocs(baseQuery),
+			FETCH_TIMEOUT_MS,
+			"Timed out loading blog posts. Check your connection and try again.",
+		);
+		const allPosts = snapshot.docs.map(mapBlogDoc);
+		const filtered = allPosts.filter((post) =>
+			post.title?.toLowerCase().includes(searchTerm.toLowerCase()),
+		);
+		const start = (page - 1) * perPage;
+		const paginated = filtered.slice(start, start + perPage);
+		const total = filtered.length;
+		const totalPages = Math.max(1, Math.ceil(total / perPage));
+		return { posts: paginated, total, totalPages };
+	}
+
+	const countSnapshot = await withTimeout(
+		getCountFromServer(postsRef),
+		FETCH_TIMEOUT_MS,
+		"Timed out loading blog posts count. Check your connection and try again.",
+	);
+	const total = countSnapshot.data().count;
+	const totalPages = Math.max(1, Math.ceil(total / perPage));
+
+	const pageLimit = Math.max(perPage, page * perPage);
 	const snapshot = await withTimeout(
-		getDocs(q),
+		getDocs(query(postsRef, orderBy("createdAt", "desc"), limit(pageLimit))),
 		FETCH_TIMEOUT_MS,
 		"Timed out loading blog posts. Check your connection and try again.",
 	);
-	return snapshot.docs.map((docSnap) => ({
-		id: docSnap.id,
-		...docSnap.data(),
-	}));
+	const allPosts = snapshot.docs.map(mapBlogDoc);
+	const start = (page - 1) * perPage;
+	const paginated = allPosts.slice(start, start + perPage);
+	return { posts: paginated, total, totalPages };
 }
 
 export const FETCH_TIMEOUT_MS = 12000;
@@ -90,11 +129,7 @@ export async function fetchAdminDashboardStats() {
 		}
 	});
 
-	const recentQuery = query(
-		postsRef,
-		orderBy("createdAt", "desc"),
-		limit(5),
-	);
+	const recentQuery = query(postsRef, orderBy("createdAt", "desc"), limit(5));
 	const recentSnapshot = await withTimeout(
 		getDocs(recentQuery),
 		FETCH_TIMEOUT_MS,

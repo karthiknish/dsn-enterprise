@@ -1,8 +1,7 @@
 "use client";
 
 import { deleteDoc, doc } from "firebase/firestore";
-import { useEffect, useReducer, useRef } from "react";
-
+import { useCallback, useEffect, useReducer, useRef } from "react";
 
 import BlogDeleteDialog from "@/components/admin/blog/BlogDeleteDialog";
 import BlogListToolbar from "@/components/admin/blog/BlogListToolbar";
@@ -27,32 +26,38 @@ export default function BlogListPage() {
 	});
 	const deleteDialogRef = useRef(null);
 
-	useEffect(() => {
-		let cancelled = false;
-
-		fetchBlogPosts()
-			.then((posts) => {
-				if (!cancelled) {
-					dispatch({ type: "LOAD_SUCCESS", posts });
-				}
+	const loadPosts = useCallback(() => {
+		dispatch({ type: "LOAD_START" });
+		fetchBlogPosts({
+			page: state.currentPage,
+			limit: BLOG_LIST_ITEMS_PER_PAGE,
+			searchTerm: state.searchTerm,
+		})
+			.then((result) => {
+				dispatch({
+					type: "LOAD_SUCCESS",
+					posts: result.posts,
+					total: result.total,
+					totalPages: result.totalPages,
+				});
 			})
 			.catch((error) => {
-				if (!cancelled) {
-					console.error("Error fetching posts:", error);
-					dispatch({
-						type: "LOAD_ERROR",
-						error: describeFirestoreError(
-							error,
-							error instanceof Error
-								? error.message
-								: "Failed to load blog posts",
-						),
-					});
-				}
+				console.error("Error fetching posts:", error);
+				dispatch({
+					type: "LOAD_ERROR",
+					error: describeFirestoreError(
+						error,
+						error instanceof Error
+							? error.message
+							: "Failed to load blog posts",
+					),
+				});
 			});
+	}, [state.currentPage, state.searchTerm]);
 
-		return () => { cancelled = true; };
-	}, []);
+	useEffect(() => {
+		loadPosts();
+	}, [loadPosts]);
 
 	const showNotification = (message, type = "info") => {
 		dispatch({ type: "SET_NOTIFICATION", notification: { message, type } });
@@ -92,6 +97,7 @@ export default function BlogListPage() {
 			await deleteDoc(doc(db, "blogs", id));
 			dispatch({ type: "DELETE_SUCCESS", id });
 			showNotification(`"${title}" deleted successfully`, "success");
+			loadPosts();
 		} catch (error) {
 			console.error("Error deleting post:", error);
 			dispatch({ type: "DELETE_ERROR" });
@@ -117,16 +123,8 @@ export default function BlogListPage() {
 		);
 	}
 
-	const filteredPosts = state.posts.filter((post) =>
-		post.title.toLowerCase().includes(state.searchTerm.toLowerCase()),
-	);
-
-	const totalPages = Math.ceil(filteredPosts.length / BLOG_LIST_ITEMS_PER_PAGE);
 	const startIndex = (state.currentPage - 1) * BLOG_LIST_ITEMS_PER_PAGE;
-	const paginatedPosts = filteredPosts.slice(
-		startIndex,
-		startIndex + BLOG_LIST_ITEMS_PER_PAGE,
-	);
+	const endIndex = Math.min(startIndex + BLOG_LIST_ITEMS_PER_PAGE, state.total);
 
 	const handleSearchChange = (e) => {
 		dispatch({ type: "SET_SEARCH", searchTerm: e.target.value });
@@ -165,14 +163,9 @@ export default function BlogListPage() {
 				onSearchChange={handleSearchChange}
 			/>
 
-			{filteredPosts.length > 0 && (
+			{state.posts.length > 0 && (
 				<div className="text-sm text-gray-500">
-					Showing {startIndex + 1} to{" "}
-					{Math.min(
-						startIndex + BLOG_LIST_ITEMS_PER_PAGE,
-						filteredPosts.length,
-					)}{" "}
-					of {filteredPosts.length} entries
+					Showing {startIndex + 1} to {endIndex} of {state.total} entries
 				</div>
 			)}
 
@@ -180,7 +173,7 @@ export default function BlogListPage() {
 				<BlogPostsEmptyState />
 			) : (
 				<BlogPostsTable
-					posts={paginatedPosts}
+					posts={state.posts}
 					searchTerm={state.searchTerm}
 					deleting={state.deleting}
 					onDelete={handleDelete}
@@ -189,7 +182,7 @@ export default function BlogListPage() {
 
 			<BlogPostsPagination
 				currentPage={state.currentPage}
-				totalPages={totalPages}
+				totalPages={state.totalPages}
 				onPageChange={handlePageChange}
 			/>
 		</div>

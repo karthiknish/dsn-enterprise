@@ -93,6 +93,25 @@ export function ContactsIcon({ className }) {
 	);
 }
 
+export function StatusIcon({ className }) {
+	return (
+		<svg
+			aria-hidden="true"
+			className={className}
+			fill="none"
+			stroke="currentColor"
+			viewBox="0 0 24 24"
+		>
+			<path
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeWidth={2}
+				d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+			/>
+		</svg>
+	);
+}
+
 export function LogoutIcon({ className }) {
 	return (
 		<svg
@@ -118,4 +137,5 @@ export const ADMIN_NAV_ITEMS = [
 	{ name: "Blog Posts", href: "/admin/blog", icon: BlogIcon },
 	{ name: "Create Post", href: "/admin/blog/new", icon: CreateIcon },
 	{ name: "Contacts", href: "/admin/contacts", icon: ContactsIcon },
+	{ name: "Status", href: "/admin/status", icon: StatusIcon },
 ];

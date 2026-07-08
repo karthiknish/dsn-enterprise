@@ -2,6 +2,8 @@ export const BLOG_LIST_ITEMS_PER_PAGE = 10;
 
 export const initialBlogListState = {
 	posts: [],
+	total: 0,
+	totalPages: 1,
 	loading: true,
 	deleting: null,
 	searchTerm: "",
@@ -13,12 +15,17 @@ export const initialBlogListState = {
 
 export function blogListReducer(state, action) {
 	switch (action.type) {
+		case "LOAD_START":
+			return { ...state, loading: true, fetchError: null };
 		case "LOAD_SUCCESS":
 			return {
 				...state,
 				posts: action.posts,
+				total: action.total,
+				totalPages: action.totalPages,
 				loading: false,
 				fetchError: null,
+				currentPage: Math.min(state.currentPage, action.totalPages || 1),
 			};
 		case "LOAD_ERROR":
 			return {
@@ -41,11 +48,7 @@ export function blogListReducer(state, action) {
 		case "DELETE_START":
 			return { ...state, deleting: action.id, showDeleteDialog: null };
 		case "DELETE_SUCCESS":
-			return {
-				...state,
-				posts: state.posts.filter((post) => post.id !== action.id),
-				deleting: null,
-			};
+			return { ...state, deleting: null };
 		case "DELETE_ERROR":
 			return { ...state, deleting: null };
 		default:

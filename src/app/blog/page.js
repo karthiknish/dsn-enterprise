@@ -1,4 +1,12 @@
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+	collection,
+	getCountFromServer,
+	getDocs,
+	limit,
+	orderBy,
+	query,
+	where,
+} from "firebase/firestore";
 import Link from "next/link";
 import BlogPostImage from "@/components/blog/BlogPostImage";
 import PageHero from "@/components/layout/PageHero";
@@ -45,7 +53,48 @@ export async function generateMetadata({ searchParams }) {
 	};
 }
 
-async function getPublishedPosts() {
+function mapPostDoc(docSnap) {
+	const data = docSnap.data();
+	return {
+		id: docSnap.id,
+		...data,
+		publishedDate: data.publishedDate?.toDate?.()?.toISOString() || null,
+		createdAt: data.createdAt?.toDate?.()?.toISOString() || null,
+	};
+}
+
+async function getPublishedPostsCount() {
+	try {
+		const postsRef = collection(db, "blogs");
+		const q = query(postsRef, where("status", "==", "published"));
+		const countSnapshot = await getCountFromServer(q);
+		return { count: countSnapshot.data().count, error: false };
+	} catch (error) {
+		console.error("Error counting posts:", error);
+		return { count: 0, error: true };
+	}
+}
+
+async function getPublishedPostsPage(page, postsPerPage) {
+	try {
+		const postsRef = collection(db, "blogs");
+		const q = query(
+			postsRef,
+			where("status", "==", "published"),
+			orderBy("createdAt", "desc"),
+			limit(page * postsPerPage),
+		);
+		const snapshot = await getDocs(q);
+		const posts = snapshot.docs.map(mapPostDoc);
+		const start = (page - 1) * postsPerPage;
+		return { posts: posts.slice(start, start + postsPerPage), error: false };
+	} catch (error) {
+		console.error("Error fetching posts:", error);
+		return { posts: [], error: true };
+	}
+}
+
+async function getAllPublishedPosts() {
 	try {
 		const postsRef = collection(db, "blogs");
 		const q = query(
@@ -54,20 +103,8 @@ async function getPublishedPosts() {
 			orderBy("createdAt", "desc"),
 		);
 		const snapshot = await getDocs(q);
-		const posts = snapshot.docs.map((doc) => ({
-			id: doc.id,
-			...doc.data(),
-			publishedDate:
-				doc.data().publishedDate?.toDate?.()?.toISOString() || null,
-			createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || null,
-		}));
-		// Sort by published date when set so the blog feels current
-		const sorted = posts.sort((a, b) => {
-			const dateA = new Date(a.publishedDate || a.createdAt || 0).getTime();
-			const dateB = new Date(b.publishedDate || b.createdAt || 0).getTime();
-			return dateB - dateA;
-		});
-		return { posts: sorted, error: false };
+		const posts = snapshot.docs.map(mapPostDoc);
+		return { posts, error: false };
 	} catch (error) {
 		console.error("Error fetching posts:", error);
 		return { posts: [], error: true };
@@ -76,27 +113,44 @@ async function getPublishedPosts() {
 
 export default async function BlogPage({ searchParams }) {
 	const params = await searchParams;
-	const currentPage = parseInt(params?.page, 10) || 1;
+	const requestedPage = parseInt(params?.page, 10) || 1;
 	const searchQuery = params?.q || "";
 	const postsPerPage = 9;
 
-	const { posts: allPosts, error: fetchError } = await getPublishedPosts();
+	let posts = [];
+	let totalPosts = 0;
+	let fetchError = false;
+	let currentPage = requestedPage;
 
-	// Filter posts based on search query
-	const filteredPosts = searchQuery
-		? allPosts.filter(
-				(post) =>
-					post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-					post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-					post.content?.toLowerCase().includes(searchQuery.toLowerCase()),
-			)
-		: allPosts;
+	if (searchQuery) {
+		const { posts: allPosts, error } = await getAllPublishedPosts();
+		fetchError = error;
+		const filtered = allPosts.filter(
+			(post) =>
+				post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				post.content?.toLowerCase().includes(searchQuery.toLowerCase()),
+		);
+		totalPosts = filtered.length;
+		const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
+		currentPage = Math.max(1, Math.min(requestedPage, totalPages));
+		const start = (currentPage - 1) * postsPerPage;
+		posts = filtered.slice(start, start + postsPerPage);
+	} else {
+		const { count, error: countError } = await getPublishedPostsCount();
+		fetchError = countError;
+		totalPosts = count;
+		const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
+		currentPage = Math.max(1, Math.min(requestedPage, totalPages));
+		const { posts: pagePosts, error: pageError } = await getPublishedPostsPage(
+			currentPage,
+			postsPerPage,
+		);
+		if (pageError) fetchError = true;
+		posts = pagePosts;
+	}
 
-	const totalPosts = filteredPosts.length;
-	const totalPages = Math.ceil(totalPosts / postsPerPage);
-
-	const startIndex = (currentPage - 1) * postsPerPage;
-	const posts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
+	const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
 
 	return (
 		<div className="min-h-screen bg-gray-50">
@@ -277,35 +331,35 @@ export default async function BlogPage({ searchParams }) {
 											className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
 										>
 											<Link href={`/blog/${post.slug}`}>
-											{post.featuredImage ? (
-												<BlogPostImage
-													src={post.featuredImage}
-													alt={post.title}
-													width={600}
-													height={192}
-													className="w-full h-48"
-													imageClassName="w-full h-48 object-cover"
-												/>
-											) : (
-												<div className="w-full h-48 bg-gray-50 border-b border-gray-100 flex flex-col items-center justify-center text-gray-400">
-													<svg
-														aria-hidden="true"
-														className="w-10 h-10 mb-1"
-														fill="none"
-														stroke="currentColor"
-														viewBox="0 0 24 24"
-													>
-														<path
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															strokeWidth={1.5}
-															d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-														/>
-													</svg>
-													<span className="text-xs">No featured image</span>
-												</div>
-											)}
-										</Link>
+												{post.featuredImage ? (
+													<BlogPostImage
+														src={post.featuredImage}
+														alt={post.title}
+														width={600}
+														height={192}
+														className="w-full h-48"
+														imageClassName="w-full h-48 object-cover"
+													/>
+												) : (
+													<div className="w-full h-48 bg-gray-50 border-b border-gray-100 flex flex-col items-center justify-center text-gray-400">
+														<svg
+															aria-hidden="true"
+															className="w-10 h-10 mb-1"
+															fill="none"
+															stroke="currentColor"
+															viewBox="0 0 24 24"
+														>
+															<path
+																strokeLinecap="round"
+																strokeLinejoin="round"
+																strokeWidth={1.5}
+																d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+															/>
+														</svg>
+														<span className="text-xs">No featured image</span>
+													</div>
+												)}
+											</Link>
 											<div className="p-6 flex flex-col flex-1">
 												<div className="text-sm text-gray-500 mb-2">
 													{displayDate

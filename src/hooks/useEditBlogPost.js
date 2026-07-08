@@ -203,11 +203,11 @@ export function useEditBlogPost(postId, initialPostData) {
 	const handlePexelsSelect = (photo) => {
 		setFormData((prev) => ({
 			...prev,
-			featuredImage: photo.src.large,
+			featuredImage: photo.url,
 			imageAttribution: {
 				photographer: photo.photographer,
-				photographerUrl: photo.photographer_url,
-				pexelsUrl: photo.url,
+				photographerUrl: photo.photographerUrl,
+				pexelsUrl: photo.pexelsUrl,
 			},
 		}));
 		setShowPexelsPicker(false);

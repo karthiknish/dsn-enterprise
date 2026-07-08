@@ -13,6 +13,7 @@ function getAdminPageTitle(pathname) {
 		"/admin/blog": "Blog posts",
 		"/admin/blog/new": "Create post",
 		"/admin/contacts": "Contacts",
+		"/admin/status": "Status",
 	};
 	if (exact[pathname]) return exact[pathname];
 	if (/^\/admin\/blog\/[^/]+\/edit$/.test(pathname)) return "Edit post";
