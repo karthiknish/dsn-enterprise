@@ -3,7 +3,7 @@
 import { m } from "framer-motion";
 import { FaClock, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 
-const cards = [
+const items = [
 	{
 		icon: FaMapMarkerAlt,
 		title: "Our Location",
@@ -15,18 +15,15 @@ const cards = [
 				India
 			</>
 		),
-		delay: 0,
 	},
 	{
 		icon: FaPhone,
 		title: "Phone",
 		content: <a href="tel:+919363122005">+91 9363122005</a>,
-		delay: 0.1,
 	},
 	{
 		icon: FaClock,
 		title: "Business Hours",
-		align: "left",
 		content: (
 			<>
 				Monday - Friday: 9:00 AM - 6:00 PM
@@ -36,38 +33,37 @@ const cards = [
 				Sunday: Closed
 			</>
 		),
-		delay: 0.2,
 	},
 ];
 
 export default function ContactPageInfoCards() {
 	return (
 		<div className="mt-8">
-			<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-				{cards.map(({ icon: Icon, title, content, align, delay }) => (
-					<m.div
-						key={title}
-						className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 text-center"
-						initial={{ opacity: 0, y: 30 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true }}
-						transition={{ duration: 0.5, delay }}
-					>
-						<div className="flex justify-center mb-3">
-							<Icon className="text-3xl text-primary" />
-						</div>
-						<h3 className="text-lg font-semibold mb-2 text-gray-900">
-							{title}
-						</h3>
-						<p
-							className={`text-sm text-gray-600 ${
-								align === "left" ? "text-left" : ""
-							}`}
+			<div className="bg-white rounded-2xl border border-gray-200/80 hover:shadow-lg transition-all duration-300 overflow-hidden">
+				<div className="grid grid-cols-1 sm:grid-cols-3 divide-y divide-gray-200/80 sm:divide-y-0 sm:divide-x">
+					{items.map(({ icon: Icon, title, content }, index) => (
+						<m.div
+							key={title}
+							className="flex items-start gap-4 p-6 lg:p-8"
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-30px" }}
+							transition={{ duration: 0.45, delay: index * 0.06 }}
 						>
-							{content}
-						</p>
-					</m.div>
-				))}
+							<div className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+								<Icon className="text-lg" />
+							</div>
+							<div>
+								<h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-1.5">
+									{title}
+								</h3>
+								<p className="text-base text-gray-900 leading-relaxed">
+									{content}
+								</p>
+							</div>
+						</m.div>
+					))}
+				</div>
 			</div>
 		</div>
 	);

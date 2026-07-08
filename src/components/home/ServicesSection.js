@@ -9,7 +9,6 @@ import {
 	FaRuler,
 	FaTools,
 } from "react-icons/fa";
-import SectionHeader from "./SectionHeader";
 
 const services = [
 	{
@@ -64,68 +63,89 @@ const ServicesSection = () => {
 				aria-hidden
 			/>
 			<div className="container mx-auto px-4">
-				<SectionHeader
-					eyebrow="Services"
-					title="Our Services"
-					description="We offer a comprehensive range of services to meet all your measurement and calibration needs."
-				/>
-
-				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-7">
-					{services.map((service, index) => {
-						const Icon = service.icon;
-						return (
-							<m.div
-								key={service.id}
-								className="group bg-white rounded-2xl border border-gray-200/80 p-8 flex flex-col h-full transition-all duration-300 hover:border-accent/25 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5"
-								initial={{ opacity: 0, y: 24 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true, margin: "-30px" }}
-								transition={{ duration: 0.45, delay: index * 0.08 }}
-							>
-								<div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors">
-									<Icon className="text-2xl" aria-hidden />
-								</div>
-								<h3 className="text-xl font-semibold mb-3 text-gray-900">
-									{service.name}
-								</h3>
-								<p className="text-gray-600 mb-5 leading-relaxed">
-									{service.description}
-								</p>
-
-								<ul className="text-sm text-gray-600 space-y-2 mb-6 flex-1">
-									{service.details.slice(0, 2).map((detail) => (
-										<li key={detail} className="flex items-start gap-2">
-											<FaCheck
-												className="text-accent mt-0.5 flex-shrink-0 text-xs"
-												aria-hidden
-											/>
-											<span>{detail}</span>
-										</li>
-									))}
-								</ul>
-
-								<Link
-									href={service.link}
-									className="mt-auto text-primary hover:text-accent font-medium inline-flex items-center gap-2 text-sm group/link"
-								>
-									Learn More
-									<FaArrowRight
-										className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5"
-										aria-hidden
-									/>
-								</Link>
-							</m.div>
-						);
-					})}
-				</div>
-
-				<div className="text-center mt-14">
-					<Link
-						href="#contact"
-						className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+				<div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+					<m.div
+						className="lg:col-span-2 lg:sticky lg:top-28"
+						initial={{ opacity: 0, y: 16 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, margin: "-40px" }}
+						transition={{ duration: 0.45 }}
 					>
-						Contact Now
-					</Link>
+						<span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary bg-white border border-gray-200/80 rounded-full px-3 py-1">
+							Services
+						</span>
+						<h2 className="mt-5 text-3xl md:text-4xl font-semibold text-gray-900 text-balance leading-tight">
+							Our Services
+						</h2>
+						<p className="mt-4 text-lg text-gray-600 leading-relaxed">
+							We offer a comprehensive range of services to meet all your
+							measurement and calibration needs.
+						</p>
+						<Link
+							href="#contact"
+							className="mt-8 inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-[0.98]"
+						>
+							Contact Now
+						</Link>
+					</m.div>
+
+					<div className="lg:col-span-3 rounded-2xl border border-gray-200/80 bg-white overflow-hidden">
+						{services.map((service, index) => {
+							const Icon = service.icon;
+							return (
+								<m.div
+									key={service.id}
+									className={`group relative p-8 md:p-10 ${
+										index !== services.length - 1
+											? "border-b border-gray-200/80"
+											: ""
+									}`}
+									initial={{ opacity: 0, y: 16 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true, margin: "-30px" }}
+									transition={{ duration: 0.4, delay: index * 0.06 }}
+								>
+									<div className="flex items-start gap-5">
+										<div className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors">
+											<Icon className="text-xl" aria-hidden />
+										</div>
+										<div className="min-w-0">
+											<h3 className="text-xl font-semibold text-gray-900">
+												{service.name}
+											</h3>
+											<p className="mt-2 text-gray-600 leading-relaxed">
+												{service.description}
+											</p>
+											<ul className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-600">
+												{service.details.slice(0, 2).map((detail) => (
+													<li
+														key={detail}
+														className="flex items-start gap-2"
+													>
+														<FaCheck
+															className="text-accent mt-0.5 flex-shrink-0 text-xs"
+															aria-hidden
+														/>
+														<span>{detail}</span>
+													</li>
+												))}
+											</ul>
+											<Link
+												href={service.link}
+												className="mt-5 text-primary hover:text-accent font-medium inline-flex items-center gap-2 text-sm group/link"
+											>
+												Learn More
+												<FaArrowRight
+													className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5"
+													aria-hidden
+												/>
+											</Link>
+										</div>
+									</div>
+								</m.div>
+							);
+						})}
+					</div>
 				</div>
 			</div>
 		</section>

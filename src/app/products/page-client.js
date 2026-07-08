@@ -228,23 +228,6 @@ const standards = [
 	"IS 8023 - Single Ended Progressive Type Plate Snap Gauges (Upto 160mm)",
 ];
 
-const containerVariants = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: { staggerChildren: 0.1 },
-	},
-};
-
-const itemVariants = {
-	hidden: { opacity: 0, y: 30 },
-	visible: {
-		opacity: 1,
-		y: 0,
-		transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-	},
-};
-
 const ProductsPage = () => {
 	const [activeCategory, setActiveCategory] = useState("plain-gauges");
 	const [searchTerm, setSearchTerm] = useState("");
@@ -308,60 +291,101 @@ const ProductsPage = () => {
 						</p>
 					</m.div>
 
-					<m.div
-						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-						variants={containerVariants}
-						initial="hidden"
-						whileInView="visible"
-						viewport={{ once: true }}
-					>
-						{categories.map((category) => (
-							<m.div key={category.id} variants={itemVariants}>
+					<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+						{/* Featured category - spans 2 cols, taller */}
+						<m.div
+							className="lg:col-span-2 lg:row-span-2"
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-30px" }}
+							transition={{ duration: 0.45 }}
+						>
+							<Link
+								href={categories[0].href}
+								className="group flex flex-col md:flex-row h-full bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+							>
+								<div className="relative h-64 md:h-auto md:w-1/2 bg-[linear-gradient(135deg,#f6f8f4_0%,#e8ede3_100%)] overflow-hidden shrink-0">
+									<div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent z-10 pointer-events-none md:hidden" />
+									<Image
+										src={categories[0].image}
+										alt={categories[0].name}
+										fill
+										sizes="(min-width: 1024px) 40vw, 100vw"
+										className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+									/>
+								</div>
+								<div className="p-6 md:p-8 flex flex-col justify-center flex-1">
+									<span className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">
+										Most requested
+									</span>
+									<div className="flex items-start justify-between mb-2">
+										<h3 className="text-2xl font-semibold text-gray-900 group-hover:text-primary transition-colors duration-300">
+											{categories[0].name}
+										</h3>
+										<span className="text-accent/60 group-hover:text-accent transition-colors duration-300 mt-1">
+											<FaArrowRight className="text-sm" />
+										</span>
+									</div>
+									<p className="text-text-body text-sm leading-relaxed mb-4 max-w-md">
+										{categories[0].description}
+									</p>
+									<div className="flex flex-wrap gap-1.5 mb-4">
+										{categories[0].highlights.map((item) => (
+											<span
+												key={`${categories[0].id}-${item}`}
+												className="inline-block text-xs font-medium text-primary bg-primary/5 px-2.5 py-1 rounded-full"
+											>
+												{item}
+											</span>
+										))}
+									</div>
+									<span className="inline-flex items-center text-sm font-medium text-accent group-hover:translate-x-1 transition-transform duration-300">
+										View Products
+										<FaChevronRight className="ml-1 text-[10px]" />
+									</span>
+								</div>
+							</Link>
+						</m.div>
+
+						{/* Remaining categories - compact tiles */}
+						{categories.slice(1).map((category, index) => (
+							<m.div
+								key={category.id}
+								initial={{ opacity: 0, y: 24 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-30px" }}
+								transition={{ duration: 0.45, delay: (index + 1) * 0.06 }}
+							>
 								<Link
 									href={category.href}
-									className="group block bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-full"
+									className="group flex items-center gap-4 bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 h-full p-4"
 								>
-									<div className="relative h-52 bg-[linear-gradient(135deg,#f6f8f4_0%,#e8ede3_100%)] overflow-hidden">
-										<div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent z-10 pointer-events-none" />
+									<div className="relative h-20 w-20 shrink-0 rounded-xl bg-[linear-gradient(135deg,#f6f8f4_0%,#e8ede3_100%)] overflow-hidden">
 										<Image
 											src={category.image}
 											alt={category.name}
 											fill
-											sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
-											className="object-contain p-6 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+											sizes="80px"
+											className="object-contain p-2.5 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
 										/>
 									</div>
-									<div className="p-6">
-										<div className="flex items-start justify-between mb-2">
-											<h3 className="text-xl font-semibold text-gray-900 group-hover:text-primary transition-colors duration-300">
+									<div className="min-w-0 flex-1">
+										<div className="flex items-start justify-between gap-2 mb-1">
+											<h3 className="text-base font-semibold text-gray-900 group-hover:text-primary transition-colors duration-300 truncate">
 												{category.name}
 											</h3>
-											<span className="text-accent/60 group-hover:text-accent transition-colors duration-300 mt-1">
-												<FaArrowRight className="text-sm" />
+											<span className="text-accent/60 group-hover:text-accent transition-colors duration-300 shrink-0 mt-0.5">
+												<FaArrowRight className="text-xs" />
 											</span>
 										</div>
-										<p className="text-text-body text-sm leading-relaxed mb-4">
+										<p className="text-text-body text-xs leading-relaxed line-clamp-2">
 											{category.description}
 										</p>
-										<div className="flex flex-wrap gap-1.5 mb-4">
-											{category.highlights.map((item) => (
-												<span
-													key={`${category.id}-${item}`}
-													className="inline-block text-xs font-medium text-primary bg-primary/5 px-2.5 py-1 rounded-full"
-												>
-													{item}
-												</span>
-											))}
-										</div>
-										<span className="inline-flex items-center text-sm font-medium text-accent group-hover:translate-x-1 transition-transform duration-300">
-											View Products
-											<FaChevronRight className="ml-1 text-[10px]" />
-										</span>
 									</div>
 								</Link>
 							</m.div>
 						))}
-					</m.div>
+					</div>
 				</div>
 			</section>
 
@@ -446,58 +470,104 @@ const ProductsPage = () => {
 										{category.description}
 									</p>
 
-									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-										{category.items.map((item, index) => (
+									<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+										{/* Lead item - larger spotlight tile */}
+										<m.div
+											className="lg:col-span-2 lg:row-span-2 bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group flex flex-col md:flex-row"
+											initial={{ opacity: 0, y: 24 }}
+											whileInView={{ opacity: 1, y: 0 }}
+											viewport={{ once: true, margin: "-30px" }}
+											transition={{ duration: 0.45 }}
+										>
+											<div className="relative h-56 md:h-auto md:w-1/2 bg-secondary-light overflow-hidden shrink-0">
+												<div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/30 z-10 pointer-events-none md:hidden" />
+												<Image
+													className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+													src={category.items[0].image}
+													alt={category.items[0].name}
+													fill
+													sizes="(min-width: 1024px) 40vw, 100vw"
+												/>
+											</div>
+											<div className="p-6 md:p-8 flex flex-col justify-center flex-1">
+												<span className="inline-block text-[11px] font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2.5 py-1 rounded-full mb-3 w-fit">
+													{category.items[0].specs}
+												</span>
+												<h3 className="text-xl font-semibold mb-2 text-gray-900">
+													{category.items[0].name}
+												</h3>
+												<p className="text-text-body text-sm leading-relaxed mb-5 max-w-md">
+													{category.items[0].description}
+												</p>
+												<div className="flex gap-4 pt-3 border-t border-gray-100">
+													<Link
+														href={`/contact?product=${encodeURIComponent(
+															category.items[0].name,
+														)}`}
+														className="text-accent hover:text-accent-dark font-medium text-sm inline-flex items-center gap-1.5 group/link"
+													>
+														Request Quote
+														<FaArrowRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
+													</Link>
+													<Link
+														href={`/products/${category.id}`}
+														className="text-text-muted hover:text-primary font-medium text-sm inline-flex items-center gap-1 group/link"
+													>
+														View All
+														<FaChevronRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
+													</Link>
+												</div>
+											</div>
+										</m.div>
+
+										{/* Remaining items - compact tiles */}
+										{category.items.slice(1).map((item, index) => (
 											<m.div
 												key={item.id}
-												className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
-												initial={{ opacity: 0, y: 30 }}
+												className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group flex"
+												initial={{ opacity: 0, y: 24 }}
 												whileInView={{ opacity: 1, y: 0 }}
-												viewport={{ once: true }}
+												viewport={{ once: true, margin: "-30px" }}
 												transition={{
-													duration: 0.5,
-													delay: index * 0.08,
-													ease: [0.16, 1, 0.3, 1],
+													duration: 0.45,
+													delay: (index + 1) * 0.06,
 												}}
 											>
-												<div className="relative h-48 bg-secondary-light overflow-hidden">
-													<div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/30 z-10 pointer-events-none" />
+												<div className="relative w-32 shrink-0 bg-secondary-light overflow-hidden">
 													<Image
-														className="object-contain p-6 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+														className="object-contain p-4 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
 														src={item.image}
 														alt={item.name}
 														fill
-														sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+														sizes="130px"
 													/>
 												</div>
-												<div className="p-6">
-													<div className="mb-3">
-														<span className="inline-block text-[11px] font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2.5 py-1 rounded-full mb-2">
-															{item.specs}
-														</span>
-													</div>
-													<h3 className="text-lg font-semibold mb-2 text-gray-900">
+												<div className="p-4 flex-1 min-w-0">
+													<span className="inline-block text-[10px] font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2 py-0.5 rounded-full mb-2">
+														{item.specs}
+													</span>
+													<h3 className="text-base font-semibold mb-1.5 text-gray-900">
 														{item.name}
 													</h3>
-													<p className="text-text-body text-sm leading-relaxed mb-5">
+													<p className="text-text-body text-xs leading-relaxed mb-3 line-clamp-2">
 														{item.description}
 													</p>
-													<div className="flex gap-4 pt-3 border-t border-gray-100">
+													<div className="flex gap-3">
 														<Link
 															href={`/contact?product=${encodeURIComponent(
 																item.name,
 															)}`}
-															className="text-accent hover:text-accent-dark font-medium text-sm inline-flex items-center gap-1.5 group/link"
+															className="text-accent hover:text-accent-dark font-medium text-xs inline-flex items-center gap-1 group/link"
 														>
 															Request Quote
-															<FaArrowRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
+															<FaArrowRight className="text-[9px] group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 														<Link
 															href={`/products/${category.id}`}
-															className="text-text-muted hover:text-primary font-medium text-sm inline-flex items-center gap-1 group/link"
+															className="text-text-muted hover:text-primary font-medium text-xs inline-flex items-center gap-1 group/link"
 														>
 															View All
-															<FaChevronRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
+															<FaChevronRight className="text-[9px] group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 													</div>
 												</div>

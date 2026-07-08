@@ -372,64 +372,79 @@ export default function IndustriesPage() {
 						</p>
 					</m.div>
 
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto">
-						{/* Stat 1: 25+ Years */}
-						<m.div
-							className="text-center p-8 bg-secondary-light/60 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
-							initial={{ opacity: 0, y: 24 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5, delay: 0.05 }}
-						>
-							<div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
-								<FaClock className="text-2xl text-primary" />
-							</div>
-							<div className="text-5xl md:text-6xl font-bold text-primary tracking-tight mb-1">
-								25+
-							</div>
-							<div className="w-10 h-0.5 bg-accent mx-auto mb-4 rounded-full" />
-							<div className="text-gray-600 font-medium">Years of Experience</div>
-							<p className="text-sm text-gray-400 mt-1">Since 1998</p>
-						</m.div>
+					<m.div
+						className="max-w-5xl mx-auto bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden"
+						initial={{ opacity: 0, y: 24 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, margin: "-30px" }}
+						transition={{ duration: 0.45 }}
+					>
+						<div className="grid grid-cols-1 md:grid-cols-[1.3fr_auto_1fr_auto_1fr]">
+							{/* Stat 1: 25+ Years — emphasized */}
+							<m.div
+								className="relative p-8 md:p-10 flex flex-col justify-center bg-secondary-light/60"
+								initial={{ opacity: 0, y: 24 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-30px" }}
+								transition={{ duration: 0.45, delay: 0 }}
+							>
+								<FaClock className="text-xl text-primary/70 mb-4" />
+								<div className="flex items-baseline gap-2">
+									<span className="text-6xl md:text-7xl font-semibold tracking-tight text-primary tabular-nums">
+										25+
+									</span>
+								</div>
+								<div className="mt-3 text-gray-700 font-medium">
+									Years of Experience
+								</div>
+								<p className="text-sm text-gray-400 mt-1">Since 1998</p>
+							</m.div>
 
-						{/* Stat 2: 500+ Clients */}
-						<m.div
-							className="text-center p-8 bg-secondary-light/60 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
-							initial={{ opacity: 0, y: 24 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5, delay: 0.1 }}
-						>
-							<div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
-								<FaUsers className="text-2xl text-primary" />
-							</div>
-							<div className="text-5xl md:text-6xl font-bold text-primary tracking-tight mb-1">
-								500+
-							</div>
-							<div className="w-10 h-0.5 bg-accent mx-auto mb-4 rounded-full" />
-							<div className="text-gray-600 font-medium">Industrial Clients</div>
-							<p className="text-sm text-gray-400 mt-1">Across 15+ countries</p>
-						</m.div>
+							{/* Divider */}
+							<div className="hidden md:block w-px bg-gray-200/80 self-stretch" />
+							<div className="md:hidden h-px bg-gray-200/80" />
 
-						{/* Stat 3: API Certified */}
-						<m.div
-							className="text-center p-8 bg-secondary-light/60 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
-							initial={{ opacity: 0, y: 24 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5, delay: 0.15 }}
-						>
-							<div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
-								<FaAward className="text-2xl text-primary" />
-							</div>
-							<div className="text-5xl md:text-6xl font-bold text-primary tracking-tight mb-1">
-								API
-							</div>
-							<div className="w-10 h-0.5 bg-accent mx-auto mb-4 rounded-full" />
-							<div className="text-gray-600 font-medium">Certified Manufacturer</div>
-							<p className="text-sm text-gray-400 mt-1">API 5B & 7-2 Licensed</p>
-						</m.div>
-					</div>
+							{/* Stat 2: 500+ Clients */}
+							<m.div
+								className="p-8 md:p-10 flex flex-col justify-center"
+								initial={{ opacity: 0, y: 24 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-30px" }}
+								transition={{ duration: 0.45, delay: 0.06 }}
+							>
+								<FaUsers className="text-lg text-primary/70 mb-4" />
+								<span className="text-5xl font-semibold tracking-tight text-primary tabular-nums">
+									500+
+								</span>
+								<div className="mt-3 text-gray-700 font-medium">
+									Industrial Clients
+								</div>
+								<p className="text-sm text-gray-400 mt-1">Across 15+ countries</p>
+							</m.div>
+
+							{/* Divider */}
+							<div className="hidden md:block w-px bg-gray-200/80 self-stretch" />
+							<div className="md:hidden h-px bg-gray-200/80" />
+
+							{/* Stat 3: API Certified */}
+							<m.div
+								className="p-8 md:p-10 flex flex-col justify-center"
+								initial={{ opacity: 0, y: 24 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-30px" }}
+								transition={{ duration: 0.45, delay: 0.12 }}
+							>
+								<FaAward className="text-lg text-primary/70 mb-4" />
+								<span className="text-5xl font-semibold tracking-tight text-primary tabular-nums">
+									API
+								</span>
+								<div className="mt-3 text-gray-700 font-medium">
+									Certified Manufacturer
+								</div>
+								<p className="text-sm text-gray-400 mt-1">API 5B & 7-2 Licensed</p>
+							</m.div>
+						</div>
+					</m.div>
 				</div>
 			</section>
 

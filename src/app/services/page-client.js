@@ -15,23 +15,6 @@ import { pageHeroes } from "@/content/page-heroes";
 
 // ─── Motion Variants ───────────────────────────────────────────
 
-const containerVariants = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: { staggerChildren: 0.18, delayChildren: 0.1 },
-	},
-};
-
-const itemVariants = {
-	hidden: { opacity: 0, y: 40 },
-	visible: {
-		opacity: 1,
-		y: 0,
-		transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-	},
-};
-
 const fadeUp = {
 	hidden: { opacity: 0, y: 30 },
 	visible: {
@@ -149,37 +132,76 @@ const ServicesPage = () => {
 						</p>
 					</m.div>
 
-					{/* Cards */}
-					<m.div
-						variants={containerVariants}
-						initial="hidden"
-						whileInView="visible"
-						viewport={{ once: true, margin: "-50px" }}
-						className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
-					>
-						{services.map((service) => (
+					{/* Bento Grid */}
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+						{/* Featured tile: Calibration Services, spans full height of the two stacked tiles */}
+						<m.div
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-30px" }}
+							transition={{ duration: 0.45, delay: 0 }}
+							className="group relative bg-white rounded-2xl border border-gray-200/80 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 p-8 md:p-12 flex flex-col md:row-span-2 overflow-hidden"
+						>
+							{/* Decorative accent orb */}
+							<div
+								className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-primary/5"
+								aria-hidden
+							/>
+
+							<span className="relative inline-flex w-fit items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary bg-primary/5 border border-primary/10 rounded-full px-3 py-1 mb-6">
+								{services[0].eyebrow}
+							</span>
+
+							<div className="relative w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6">
+								<div className="[&_svg]:w-8 [&_svg]:h-8 [&_svg]:mb-0 [&_svg]:text-primary">
+									{services[0].icon}
+								</div>
+							</div>
+
+							<h3 className="relative text-2xl md:text-3xl font-semibold text-primary-dark mb-4">
+								{services[0].name}
+							</h3>
+							<p className="relative text-gray-600 leading-relaxed mb-8 flex-1">
+								{services[0].description}
+							</p>
+
+							<div className="relative pt-6 border-t border-gray-100">
+								<Link
+									href={`#${services[0].id}`}
+									className="inline-flex items-center text-sm font-medium text-accent hover:text-accent-dark transition-colors duration-200 gap-2 group-hover:gap-3"
+								>
+									<span>Explore Service</span>
+									<FaArrowRight className="text-xs transition-transform duration-200 group-hover:translate-x-0.5" />
+								</Link>
+							</div>
+						</m.div>
+
+						{/* Two smaller stacked tiles */}
+						{services.slice(1).map((service, index) => (
 							<m.div
 								key={service.id}
-								variants={itemVariants}
-								className="group bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col"
+								initial={{ opacity: 0, y: 24 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-30px" }}
+								transition={{ duration: 0.45, delay: (index + 1) * 0.06 }}
+								className="group bg-white rounded-2xl border border-gray-200/80 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 p-8 flex flex-col md:flex-row md:items-start gap-6"
 							>
-								{/* Icon */}
-								<div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6 mx-auto">
-									<div className="[&_svg]:w-7 [&_svg]:h-7 [&_svg]:text-accent">
+								<div className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+									<div className="[&_svg]:w-5 [&_svg]:h-5 [&_svg]:mb-0 [&_svg]:text-primary">
 										{service.icon}
 									</div>
 								</div>
 
-								{/* Content */}
-								<h3 className="text-xl font-semibold text-primary-dark mb-3 text-center">
-									{service.name}
-								</h3>
-								<p className="text-gray-600 leading-relaxed mb-6 text-center flex-1">
-									{service.description}
-								</p>
-
-								{/* Link */}
-								<div className="text-center pt-2 border-t border-gray-100">
+								<div className="min-w-0 flex-1">
+									<span className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5 block">
+										{service.eyebrow}
+									</span>
+									<h3 className="text-xl font-semibold text-primary-dark mb-2">
+										{service.name}
+									</h3>
+									<p className="text-gray-600 leading-relaxed mb-4">
+										{service.description}
+									</p>
 									<Link
 										href={`#${service.id}`}
 										className="inline-flex items-center text-sm font-medium text-accent hover:text-accent-dark transition-colors duration-200 gap-2 group-hover:gap-3"
@@ -190,7 +212,7 @@ const ServicesPage = () => {
 								</div>
 							</m.div>
 						))}
-					</m.div>
+					</div>
 				</div>
 			</section>
 

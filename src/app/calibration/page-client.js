@@ -109,6 +109,41 @@ const calibrationCapabilities = [
 	},
 ];
 
+const benefits = [
+	{
+		icon: FaCertificate,
+		title: "NABL-Accredited Lab",
+		desc: "Nationally recognized accreditation. Every certificate carries full traceability to national standards.",
+		featured: true,
+	},
+	{
+		icon: FaTools,
+		title: "Skilled Metrologists",
+		desc: "Years of hands-on experience with precision gauges across every major industry standard.",
+	},
+	{
+		icon: FaClipboardList,
+		title: "Complete Traceability",
+		desc: "Detailed calibration certificates with full measurement data and uncertainty analysis.",
+	},
+	{
+		icon: FaClock,
+		title: "Rapid Turnaround",
+		desc: "Standard 3–5 days. Express 24–48 hours available. On-site service by appointment.",
+		wide: true,
+	},
+	{
+		icon: FaTruck,
+		title: "Door-to-Door Logistics",
+		desc: "We handle pickup and delivery so you focus on production, not shipping.",
+	},
+	{
+		icon: FaCheck,
+		title: "Transparent Pricing",
+		desc: "No hidden fees. Detailed quotes provided before any work begins.",
+	},
+];
+
 const processSteps = [
 	{
 		step: 1,
@@ -142,23 +177,6 @@ const processSteps = [
 	},
 ];
 
-const containerVariants = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: { staggerChildren: 0.1 },
-	},
-};
-
-const itemVariants = {
-	hidden: { opacity: 0, y: 30 },
-	visible: {
-		opacity: 1,
-		y: 0,
-		transition: { duration: 0.5 },
-	},
-};
-
 export default function CalibrationPage() {
 	return (
 		<div>
@@ -185,50 +203,52 @@ export default function CalibrationPage() {
 			</PageHero>
 
 			{/* Services Section */}
-			<section className="py-20 md:py-28 bg-white">
+			<section id="services" className="py-20 md:py-28 bg-white">
 				<div className="container mx-auto px-4">
-					{/* Section header, shadcnblocks eyebrow + title + description */}
-					<div className="text-center mb-14">
-						<m.h2
-							initial={{ opacity: 0, y: 20 }}
+					<div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+						{/* Intro column */}
+						<m.div
+							className="lg:col-span-2 lg:sticky lg:top-28"
+							initial={{ opacity: 0, y: 24 }}
 							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5, delay: 0.1 }}
-							className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
+							viewport={{ once: true, margin: "-30px" }}
+							transition={{ duration: 0.45 }}
 						>
-							Comprehensive Calibration Services
-						</m.h2>
-						<m.p
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5, delay: 0.2 }}
-							className="text-lg text-gray-600 max-w-2xl mx-auto"
-						>
-							End-to-end precision calibration and repair backed by NABL
-							accreditation and decades of metrology expertise
-						</m.p>
-					</div>
-
-					{/* Service cards, 2x2 grid with colored top accent bar */}
-					<m.div
-						variants={containerVariants}
-						initial="hidden"
-						whileInView="visible"
-						viewport={{ once: true }}
-						className="grid grid-cols-1 md:grid-cols-2 gap-8"
-					>
-						{services.map((service) => (
-							<m.div
-								key={service.title}
-								variants={itemVariants}
-								className="bg-white rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
+							<span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary bg-surface-subtle border border-gray-200/80 rounded-full px-3 py-1">
+								Services
+							</span>
+							<h2 className="mt-5 text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-balance leading-tight">
+								Comprehensive Calibration Services
+							</h2>
+							<p className="mt-4 text-lg text-gray-600 leading-relaxed">
+								End-to-end precision calibration and repair backed by NABL
+								accreditation and decades of metrology expertise.
+							</p>
+							<Link
+								href="/contact?service=Calibration"
+								className="mt-8 inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-[0.98]"
 							>
-								{/* Colored accent bar at top */}
-								<div className="h-1.5 bg-primary w-full" />
-								<div className="p-8">
-									<div className="flex items-start justify-between mb-4 gap-4">
-										<h3 className="text-2xl font-bold text-gray-900">
+								Request Calibration
+							</Link>
+						</m.div>
+
+						{/* Stacked bordered feature-row list */}
+						<div className="lg:col-span-3 rounded-2xl border border-gray-200/80 bg-white overflow-hidden">
+							{services.map((service, index) => (
+								<m.div
+									key={service.title}
+									className={`group relative p-8 md:p-10 ${
+										index !== services.length - 1
+											? "border-b border-gray-200/80"
+											: ""
+									}`}
+									initial={{ opacity: 0, y: 24 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true, margin: "-30px" }}
+									transition={{ duration: 0.45, delay: index * 0.06 }}
+								>
+									<div className="flex items-start justify-between mb-3 gap-4">
+										<h3 className="text-xl md:text-2xl font-bold text-gray-900">
 											{service.title}
 										</h3>
 										<div className="flex items-center gap-1.5 text-accent text-sm font-medium whitespace-nowrap bg-accent-50 px-3 py-1 rounded-full">
@@ -236,10 +256,10 @@ export default function CalibrationPage() {
 											{service.turnaround}
 										</div>
 									</div>
-									<p className="text-gray-600 mb-6 leading-relaxed">
+									<p className="text-gray-600 mb-5 leading-relaxed">
 										{service.description}
 									</p>
-									<ul className="space-y-2.5">
+									<ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
 										{service.features.map((feature) => (
 											<li key={feature} className="flex items-start text-sm">
 												<span className="flex-shrink-0 w-5 h-5 rounded-full bg-accent-50 flex items-center justify-center mr-3 mt-0.5">
@@ -252,10 +272,10 @@ export default function CalibrationPage() {
 											</li>
 										))}
 									</ul>
-								</div>
-							</m.div>
-						))}
-					</m.div>
+								</m.div>
+							))}
+						</div>
+					</div>
 				</div>
 			</section>
 
@@ -423,7 +443,7 @@ export default function CalibrationPage() {
 			{/* Gradient accent divider */}
 			<div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
 
-			{/* Benefits, 3x2 grid with decorative accent and hover states */}
+			{/* Benefits, asymmetric bento layout */}
 			<section className="py-20 md:py-28 bg-surface-subtle">
 				<div className="container mx-auto px-4">
 					{/* Section header */}
@@ -449,70 +469,69 @@ export default function CalibrationPage() {
 						</m.p>
 					</div>
 
-					{/* Benefits cards, decorative dot + accent icon container + bold copy */}
-					<m.div
-						variants={containerVariants}
-						initial="hidden"
-						whileInView="visible"
-						viewport={{ once: true }}
-						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto"
-					>
-						{[
-							{
-								icon: FaCertificate,
-								title: "NABL-Accredited Lab",
-								desc: "Nationally recognized accreditation. Every certificate carries full traceability to national standards.",
-							},
-							{
-								icon: FaTools,
-								title: "Skilled Metrologists",
-								desc: "Years of hands-on experience with precision gauges across every major industry standard.",
-							},
-							{
-								icon: FaClipboardList,
-								title: "Complete Traceability",
-								desc: "Detailed calibration certificates with full measurement data and uncertainty analysis.",
-							},
-							{
-								icon: FaClock,
-								title: "Rapid Turnaround",
-								desc: "Standard 3–5 days. Express 24–48 hours available. On-site service by appointment.",
-							},
-							{
-								icon: FaTruck,
-								title: "Door-to-Door Logistics",
-								desc: "We handle pickup and delivery so you focus on production, not shipping.",
-							},
-							{
-								icon: FaCheck,
-								title: "Transparent Pricing",
-								desc: "No hidden fees. Detailed quotes provided before any work begins.",
-							},
-						].map((item) => (
+					{/* Bento grid: featured NABL tile + wide turnaround tile + standard tiles */}
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-6 max-w-6xl mx-auto">
+						{benefits.map((item, index) => (
 							<m.div
 								key={item.title}
-								variants={itemVariants}
-								className="bg-white rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 p-8 relative overflow-hidden"
+								initial={{ opacity: 0, y: 24 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-30px" }}
+								transition={{ duration: 0.45, delay: index * 0.06 }}
+								className={`bg-white rounded-2xl border border-gray-200/80 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden ${
+									item.featured
+										? "md:col-span-2 lg:col-span-2 lg:row-span-2 p-8 md:p-10 flex flex-col justify-between"
+										: item.wide
+											? "md:col-span-2 lg:col-span-2 p-8"
+											: "p-8"
+								}`}
 							>
 								{/* Decorative accent circle */}
-								<div className="absolute -top-4 -right-4 w-16 h-16 bg-accent-50 rounded-full opacity-60" />
+								<div
+									className={`absolute -top-4 -right-4 rounded-full bg-accent-50 opacity-60 ${
+										item.featured ? "w-24 h-24" : "w-16 h-16"
+									}`}
+								/>
 								<div className="relative z-10">
-									<div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
+									<div
+										className={`bg-primary/10 rounded-xl flex items-center justify-center mb-5 ${
+											item.featured ? "w-14 h-14" : "w-12 h-12"
+										}`}
+									>
 										<item.icon
-											className="text-xl text-primary"
+											className={
+												item.featured
+													? "text-2xl text-primary"
+													: "text-xl text-primary"
+											}
 											aria-hidden
 										/>
 									</div>
-									<h3 className="text-lg font-bold text-gray-900 mb-2">
+									<h3
+										className={`font-bold text-gray-900 mb-2 ${
+											item.featured ? "text-2xl md:text-3xl" : "text-lg"
+										}`}
+									>
 										{item.title}
 									</h3>
-									<p className="text-gray-600 text-sm leading-relaxed">
+									<p
+										className={`text-gray-600 leading-relaxed ${
+											item.featured ? "text-base md:text-lg" : "text-sm"
+										}`}
+									>
 										{item.desc}
 									</p>
 								</div>
+								{item.featured && (
+									<div className="relative z-10 mt-6 pt-6 border-t border-gray-200/80">
+										<span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary bg-accent-50 rounded-full px-3 py-1">
+											NABL Accredited
+										</span>
+									</div>
+								)}
 							</m.div>
 						))}
-					</m.div>
+					</div>
 				</div>
 			</section>
 

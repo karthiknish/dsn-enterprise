@@ -332,64 +332,56 @@ export default function ResourcesPage() {
 			<section className="py-20 md:py-28 bg-secondary-light relative">
 				<div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" aria-hidden />
 				<div className="container mx-auto px-4">
-					<div className="max-w-6xl mx-auto">
-						{/* Section Header */}
+					<div className="max-w-6xl mx-auto grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+						{/* Intro column */}
 						<m.div
-							initial="hidden"
-							whileInView="visible"
-							viewport={{ once: true, margin: "-80px" }}
-							variants={sectionVariants}
-							custom={0}
-							className="text-center mb-16"
+							className="lg:col-span-2 lg:sticky lg:top-28"
+							initial={{ opacity: 0, y: 16 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-40px" }}
+							transition={{ duration: 0.45 }}
 						>
-							<h2 className="text-3xl md:text-4xl font-semibold text-primary-dark mb-4 text-balance">
+							<span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary bg-white border border-gray-200/80 rounded-full px-3 py-1">
+								Standards
+							</span>
+							<h2 className="mt-5 text-3xl md:text-4xl font-semibold text-primary-dark text-balance leading-tight">
 								Standards Reference
 							</h2>
-							<p className="text-lg text-text-body max-w-3xl mx-auto leading-relaxed">
-								Every gauge we manufacture is designed, inspected, and certified against national and
-								international standards. Browse the key specifications that govern our production
-								processes.
+							<p className="mt-4 text-lg text-text-body leading-relaxed">
+								Every gauge we manufacture is designed, inspected, and certified against
+								national and international standards. Browse the key specifications that
+								govern our production processes.
 							</p>
-							<div className="mt-6 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent max-w-xs mx-auto" aria-hidden />
 						</m.div>
 
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+						{/* Stacked checklist rows */}
+						<div className="lg:col-span-3 rounded-2xl border border-gray-200/80 bg-white overflow-hidden">
 							{standardsInfo.map((standard, index) => (
 								<m.div
 									key={standard.standard}
-									initial="hidden"
-									whileInView="visible"
-									viewport={{ once: true, margin: "-60px" }}
-									variants={cardVariants}
-									custom={index}
+									className={`group relative p-8 md:p-10 ${
+										index !== standardsInfo.length - 1
+											? "border-b border-gray-200/80"
+											: ""
+									}`}
+									initial={{ opacity: 0, y: 24 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true, margin: "-30px" }}
+									transition={{ duration: 0.45, delay: index * 0.06 }}
 								>
-									<div
-										className="group bg-white rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 overflow-hidden"
-									>
-										{/* Colored Top Accent Bar */}
-										<div
-											className={`h-1.5 w-full ${
-												index === 0
-													? "bg-gradient-to-r from-primary/60 to-primary/30"
-													: index === 1
-														? "bg-gradient-to-r from-accent/60 to-accent/30"
-														: "bg-gradient-to-r from-secondary-dark/60 to-secondary/60"
-											}`}
-											aria-hidden
-										/>
-										<div className="p-6">
-											<h3 className="text-lg font-semibold text-primary-dark mb-4 flex items-center gap-2">
-												<FaBook className="text-accent text-sm" />
+									<div className="flex items-start gap-5">
+										<div className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors">
+											<FaBook className="text-lg" aria-hidden />
+										</div>
+										<div className="min-w-0 flex-1">
+											<h3 className="text-xl font-semibold text-primary-dark">
 												{standard.standard}
 											</h3>
-											<ul className="space-y-2.5">
+											<ul className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-text-body">
 												{standard.items.map((item) => (
-													<li
-														key={item}
-														className="text-sm text-text-body leading-relaxed flex items-start gap-2.5"
-													>
+													<li key={item} className="flex items-start gap-2.5">
 														<span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
-														{item}
+														<span className="leading-relaxed">{item}</span>
 													</li>
 												))}
 											</ul>
@@ -406,27 +398,30 @@ export default function ResourcesPage() {
 			<section className="py-20 md:py-28 bg-white relative">
 				<div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" aria-hidden />
 				<div className="container mx-auto px-4">
-					<div className="max-w-5xl mx-auto">
-						{/* Section Header */}
+					<div className="max-w-6xl mx-auto grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+						{/* Intro column */}
 						<m.div
-							initial="hidden"
-							whileInView="visible"
-							viewport={{ once: true, margin: "-80px" }}
-							variants={sectionVariants}
-							custom={0}
-							className="text-center mb-16"
+							className="lg:col-span-2 lg:sticky lg:top-28"
+							initial={{ opacity: 0, y: 16 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-40px" }}
+							transition={{ duration: 0.45 }}
 						>
-							<h2 className="text-3xl md:text-4xl font-semibold text-primary-dark mb-4 text-balance">
+							<span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary bg-secondary-light border border-gray-200/80 rounded-full px-3 py-1">
+								Compliance
+							</span>
+							<h2 className="mt-5 text-3xl md:text-4xl font-semibold text-primary-dark text-balance leading-tight">
 								Industry Organisations &amp; Standards Bodies
 							</h2>
-							<p className="text-lg text-text-body max-w-3xl mx-auto leading-relaxed">
-								We work within the frameworks defined by the world&rsquo;s most respected standards
-								organisations, ensuring every gauge meets or exceeds regulatory requirements.
+							<p className="mt-4 text-lg text-text-body leading-relaxed">
+								We work within the frameworks defined by the world&rsquo;s most respected
+								standards organisations, ensuring every gauge meets or exceeds regulatory
+								requirements.
 							</p>
-							<div className="mt-6 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent max-w-xs mx-auto" aria-hidden />
 						</m.div>
 
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+						{/* Org badge list */}
+						<div className="lg:col-span-3 rounded-2xl border border-gray-200/80 bg-white overflow-hidden">
 							{[
 								{
 									name: "Bureau of Indian Standards",
@@ -448,28 +443,30 @@ export default function ResourcesPage() {
 									abbr: "ISO",
 									description: "Worldwide standards federation",
 								},
-							].map((org, index) => (
+							].map((org, index, arr) => (
 								<m.div
 									key={org.abbr}
-									initial="hidden"
-									whileInView="visible"
-									viewport={{ once: true, margin: "-60px" }}
-									variants={cardVariants}
-									custom={index}
+									className={`group flex items-center gap-5 p-6 md:p-7 ${
+										index !== arr.length - 1
+											? "border-b border-gray-200/80"
+											: ""
+									}`}
+									initial={{ opacity: 0, y: 24 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true, margin: "-30px" }}
+									transition={{ duration: 0.45, delay: index * 0.06 }}
 								>
-									<div
-										className="group bg-white rounded-2xl border border-gray-200/80 p-6 text-center shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 cursor-default"
-									>
-										<div className="w-14 h-14 rounded-2xl bg-accent-50 flex items-center justify-center mx-auto mb-4 group-hover:bg-accent-100 transition-colors duration-300">
-											<FaIndustry className="text-xl text-accent" />
+									<div className="w-14 h-14 shrink-0 rounded-2xl bg-accent-50 flex items-center justify-center group-hover:bg-accent-100 transition-colors duration-300">
+										<FaIndustry className="text-xl text-accent" aria-hidden />
+									</div>
+									<div className="min-w-0 flex-1">
+										<div className="flex items-baseline gap-2 flex-wrap">
+											<h3 className="text-lg font-bold text-primary-dark">
+												{org.abbr}
+											</h3>
+											<span className="text-sm text-text-body">{org.name}</span>
 										</div>
-										<h3 className="text-xl font-bold text-primary-dark mb-1">
-											{org.abbr}
-										</h3>
-										<p className="text-sm text-text-body leading-snug mb-3">
-											{org.name}
-										</p>
-										<p className="text-xs text-text-muted">
+										<p className="mt-1 text-sm text-text-muted leading-relaxed">
 											{org.description}
 										</p>
 									</div>

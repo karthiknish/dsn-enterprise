@@ -70,6 +70,51 @@ const products = [
 	},
 ];
 
+const [spotlight, ...secondary] = products;
+
+const ProductCard = ({ product, index, className = "" }) => (
+	<m.article
+		className={`group bg-white rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 ${className}`}
+		initial={{ opacity: 0, y: 24 }}
+		whileInView={{ opacity: 1, y: 0 }}
+		viewport={{ once: true, margin: "-30px" }}
+		transition={{ duration: 0.45, delay: index * 0.05 }}
+	>
+		<div className="relative h-44 bg-secondary-light/50 p-6 flex items-center justify-center overflow-hidden">
+			<Image
+				src={product.image}
+				alt={product.name}
+				width={200}
+				height={160}
+				className="object-contain max-h-full w-auto transition-transform duration-500 group-hover:scale-105"
+			/>
+			<span className="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-wider text-primary/70 bg-white/90 px-2 py-1 rounded-md">
+				{product.specs}
+			</span>
+		</div>
+		<div className="p-6">
+			<h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+				{product.name}
+			</h3>
+			<p className="text-gray-600 text-sm leading-relaxed mb-4">
+				{product.description}
+			</p>
+			<Link
+				href={product.link}
+				className="text-sm font-medium text-accent hover:text-accent-dark inline-flex items-center gap-1"
+			>
+				Learn more
+				<span
+					className="transition-transform group-hover:translate-x-0.5"
+					aria-hidden
+				>
+					→
+				</span>
+			</Link>
+		</div>
+	</m.article>
+);
+
 const FeaturedProducts = () => {
 	return (
 		<section
@@ -87,51 +132,67 @@ const FeaturedProducts = () => {
 					description="Our company supplies precision measuring instruments engineered for industrial applications. Distribution and after‑sales support are provided via our trusted partner, Unik Gauges, located in Pune."
 				/>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
-					{products.map((product, index) => (
-						<m.article
-							key={product.id}
-							className="group bg-white rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5"
-							initial={{ opacity: 0, y: 24 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true, margin: "-30px" }}
-							transition={{ duration: 0.45, delay: index * 0.05 }}
-						>
-							<div className="relative h-44 bg-secondary-light/50 p-6 flex items-center justify-center overflow-hidden">
-								<Image
-									src={product.image}
-									alt={product.name}
-									width={200}
-									height={160}
-									className="object-contain max-h-full w-auto transition-transform duration-500 group-hover:scale-105"
-								/>
-								<span className="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-wider text-primary/70 bg-white/90 px-2 py-1 rounded-md">
-									{product.specs}
-								</span>
-							</div>
-							<div className="p-6">
-								<h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
-									{product.name}
-								</h3>
-								<p className="text-gray-600 text-sm leading-relaxed mb-4">
-									{product.description}
-								</p>
-								<Link
-									href={product.link}
-									className="text-sm font-medium text-accent hover:text-accent-dark inline-flex items-center gap-1"
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-7">
+					<m.article
+						className="group lg:col-span-1 lg:row-span-2 bg-white rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-300 hover:border-accent/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 flex flex-col"
+						initial={{ opacity: 0, y: 24 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true, margin: "-30px" }}
+						transition={{ duration: 0.45 }}
+					>
+						<div className="relative h-64 md:h-80 bg-secondary-light/50 p-8 flex items-center justify-center overflow-hidden">
+							<Image
+								src={spotlight.image}
+								alt={spotlight.name}
+								width={260}
+								height={220}
+								className="object-contain max-h-full w-auto transition-transform duration-500 group-hover:scale-105"
+							/>
+							<span className="absolute top-4 right-4 text-[10px] font-semibold uppercase tracking-wider text-primary/70 bg-white/90 px-2 py-1 rounded-md">
+								{spotlight.specs}
+							</span>
+						</div>
+						<div className="p-6 md:p-8 flex-1 flex flex-col">
+							<span className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">
+								Most requested
+							</span>
+							<h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+								{spotlight.name}
+							</h3>
+							<p className="text-gray-600 text-sm leading-relaxed mb-4">
+								{spotlight.description}
+							</p>
+							<Link
+								href={spotlight.link}
+								className="mt-auto text-sm font-medium text-accent hover:text-accent-dark inline-flex items-center gap-1"
+							>
+								Learn more
+								<span
+									className="transition-transform group-hover:translate-x-0.5"
+									aria-hidden
 								>
-									Learn more
-									<span
-										className="transition-transform group-hover:translate-x-0.5"
-										aria-hidden
-									>
-										→
-									</span>
-								</Link>
-							</div>
-						</m.article>
+									→
+								</span>
+							</Link>
+						</div>
+					</m.article>
+
+					{secondary.slice(0, 4).map((product, index) => (
+						<ProductCard key={product.id} product={product} index={index + 1} />
 					))}
 				</div>
+
+				{secondary.length > 4 && (
+					<div className="mt-6 md:mt-7 grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-7">
+						{secondary.slice(4).map((product, index) => (
+							<ProductCard
+								key={product.id}
+								product={product}
+								index={index + 5}
+							/>
+						))}
+					</div>
+				)}
 
 				<div className="text-center mt-14">
 					<Link

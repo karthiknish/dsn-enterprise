@@ -14,6 +14,11 @@ import {
 } from "react-icons/fa";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
+import {
+	Collapsible,
+	CollapsibleContent,
+	CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { pageHeroes } from "@/content/page-heroes";
 
 const qualitySteps = [
@@ -120,6 +125,8 @@ const standards = [
 	},
 ];
 
+const [certFeatured, ...certRest] = certifications;
+
 const specifications = [
 	{ spec: "Material", value: "OHNS (W) / Tungsten Carbide" },
 	{ spec: "Hardness", value: "60 ± 2 HRC" },
@@ -132,22 +139,28 @@ const specifications = [
 	},
 ];
 
-const containerVariants = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: { staggerChildren: 0.1 },
+const commitmentStats = [
+	{
+		value: "100",
+		suffix: "%",
+		label: "Inspection on Every Gauge",
+		description: "Every dimension, every feature, 100% verified before shipment.",
 	},
-};
-
-const itemVariants = {
-	hidden: { opacity: 0, y: 24 },
-	visible: {
-		opacity: 1,
-		y: 0,
-		transition: { duration: 0.5, ease: "easeOut" },
+	{
+		value: "0",
+		suffix: null,
+		label: "Defect Tolerance",
+		description:
+			"Not a target, a methodology embedded in every stage of production.",
 	},
-};
+	{
+		value: "∞",
+		suffix: null,
+		label: "End-to-End Traceability",
+		description:
+			"From material batch to final calibration certificate, every gauge has a complete, auditable history.",
+	},
+];
 
 export default function QualityPage() {
 	return (
@@ -164,7 +177,7 @@ export default function QualityPage() {
 				<FaAward className="text-5xl opacity-90" aria-hidden />
 			</PageHero>
 
-			{/* ====== Quality Process, Bento Grid ====== */}
+			{/* ====== Quality Process, Numbered Timeline ====== */}
 			<section className="py-20 md:py-28 bg-surface-subtle relative">
 				<div
 					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
@@ -182,80 +195,81 @@ export default function QualityPage() {
 						</p>
 					</div>
 
-					{/* Bento grid: varied column spans for visual rhythm */}
-					<div className="max-w-6xl mx-auto">
-						<m.div
-							className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-							variants={containerVariants}
-							initial="hidden"
-							whileInView="visible"
-							viewport={{ once: true }}
-						>
+					{/* Connected vertical timeline */}
+					<div className="max-w-4xl mx-auto relative">
+						{/* Connecting rail */}
+						<div
+							className="absolute left-[27px] md:left-8 top-2 bottom-2 w-px bg-gradient-to-b from-primary via-accent/40 to-primary/10"
+							aria-hidden
+						/>
+
+						<div className="space-y-4">
 							{qualitySteps.map((step, index) => {
-							const isFeatured = index === 0 || index === 3;
-							const isGreen = index === 5;
+								const isLast = index === qualitySteps.length - 1;
 								const Icon = step.icon;
 
 								return (
 									<m.div
 										key={step.step}
-										variants={itemVariants}
-										className={`relative rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 ${
-											isGreen
-												? "lg:col-span-2 bg-primary border-primary/20 shadow-sm"
-												: isFeatured
-												? "lg:col-span-2 bg-white border-gray-200/80 shadow-sm"
-												: "bg-white border-gray-200/80 shadow-sm"
-										}`}
+										className="group relative flex gap-5 md:gap-8"
+										initial={{ opacity: 0, y: 24 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true, margin: "-30px" }}
+										transition={{ duration: 0.45, delay: index * 0.06 }}
 									>
-										{/* Accent gradient bar, top edge */}
-										{!isGreen && (
-											<div className="h-1 w-full bg-gradient-to-r from-primary to-accent" />
-										)}
-
-										<div className="p-6 md:p-8">
-											{/* Step number badge */}
+										{/* Large step number, sits on the rail */}
+										<div className="relative shrink-0 flex flex-col items-center">
 											<div
-												className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${
-													isGreen
-														? "bg-white/15 text-white"
-														: isFeatured
-														? "bg-primary text-white"
-														: "bg-primary/10 text-primary"
+												className={`relative z-10 w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center font-semibold text-xl md:text-2xl tabular-nums transition-all duration-300 group-hover:-translate-y-0.5 ${
+													isLast
+														? "bg-primary text-white shadow-md shadow-primary/20"
+														: "bg-white border border-gray-200/80 text-primary shadow-sm"
 												}`}
 											>
-												<span className="text-lg font-bold">
-													{String(step.step).padStart(2, "0")}
-												</span>
+												{String(step.step).padStart(2, "0")}
 											</div>
+										</div>
 
-											<Icon
-												className={`text-3xl mb-4 ${
-													isGreen ? "text-white" : "text-primary"
-												}`}
-												aria-hidden
-											/>
-
-											<h3
-												className={`text-xl font-semibold mb-2 ${
-													isGreen ? "text-white" : "text-gray-900"
-												}`}
-											>
-												{step.title}
-											</h3>
-
-											<p
-												className={`leading-relaxed ${
-													isGreen ? "text-white" : "text-gray-600"
-												}`}
-											>
-												{step.description}
-											</p>
+										{/* Content card */}
+										<div
+											className={`flex-1 min-w-0 rounded-2xl border overflow-hidden mb-4 transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-0.5 ${
+												isLast
+													? "bg-primary border-primary/20"
+													: "bg-white border-gray-200/80"
+											}`}
+										>
+											<div className="p-6 md:p-7 flex items-start gap-4">
+												<div
+													className={`hidden sm:flex w-11 h-11 shrink-0 rounded-xl items-center justify-center ${
+														isLast
+															? "bg-white/15 text-white"
+															: "bg-primary/10 text-primary"
+													}`}
+												>
+													<Icon className="text-xl" aria-hidden />
+												</div>
+												<div className="min-w-0">
+													<h3
+														className={`text-xl font-semibold mb-2 ${
+															isLast ? "text-white" : "text-gray-900"
+														}`}
+													>
+														{step.title}
+													</h3>
+													<p
+														className={`leading-relaxed ${
+															isLast ? "text-white/90" : "text-gray-600"
+														}`}
+													>
+														{step.description}
+													</p>
+												</div>
+											</div>
 										</div>
 									</m.div>
 								);
 							})}
-						</m.div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -279,48 +293,79 @@ export default function QualityPage() {
 						</p>
 					</div>
 
-					<m.div
-						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-						variants={containerVariants}
-						initial="hidden"
-						whileInView="visible"
-						viewport={{ once: true }}
-					>
-						{certifications.map((cert) => (
-							<m.div
+					<div className="grid md:grid-cols-2 gap-6 md:gap-7">
+						{/* Featured certificate, larger, spans both rows */}
+						<m.article
+							className="group relative bg-white rounded-2xl overflow-hidden border border-gray-200/80 hover:border-accent/20 hover:shadow-lg transition-all duration-300 md:row-span-3"
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-30px" }}
+							transition={{ duration: 0.45 }}
+						>
+							<div className="relative h-64 md:h-80 w-full bg-gray-100 overflow-hidden">
+								<Image
+									src={certFeatured.image}
+									alt={certFeatured.name}
+									fill
+									sizes="(max-width: 768px) 100vw, 50vw"
+									className="object-cover transition-transform duration-500 group-hover:scale-105"
+								/>
+								{/* Hover overlay */}
+								<div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+									<span className="text-white text-sm font-medium tracking-wide border border-white/30 px-4 py-2 rounded-full backdrop-blur-sm">
+										View Certificate
+									</span>
+								</div>
+							</div>
+							<div className="p-6 md:p-8">
+								<div className="flex items-start gap-3 mb-2">
+									<FaCertificate className="text-accent mt-0.5 shrink-0" aria-hidden />
+									<h3 className="text-xl font-semibold text-gray-900 leading-snug">
+										{certFeatured.name}
+									</h3>
+								</div>
+								<p className="text-sm text-gray-600 leading-relaxed pl-7">
+									{certFeatured.description}
+								</p>
+							</div>
+						</m.article>
+
+						{/* Remaining certificates, compact rows */}
+						{certRest.map((cert, index) => (
+							<m.article
 								key={cert.name}
-								className="group bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
-								variants={itemVariants}
+								className="group flex gap-5 items-start bg-white rounded-2xl border border-gray-200/80 hover:border-accent/20 hover:shadow-lg transition-all duration-300 p-6"
+								initial={{ opacity: 0, y: 24 }}
+								whileInView={{ opacity: 1, y: 0 }}
+								viewport={{ once: true, margin: "-30px" }}
+								transition={{ duration: 0.45, delay: (index + 1) * 0.08 }}
 							>
-								{/* Image with gradient overlay on hover */}
-								<div className="relative h-52 bg-gray-100 overflow-hidden">
+								<div className="relative shrink-0 h-24 w-20 rounded-lg overflow-hidden bg-gray-100">
 									<Image
 										src={cert.image}
 										alt={cert.name}
 										fill
-										sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-										className="object-cover transition-transform duration-500 group-hover:scale-110"
+										className="object-cover"
+										sizes="80px"
 									/>
-									{/* Hover overlay */}
-									<div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-										<span className="text-white text-sm font-medium tracking-wide border border-white/30 px-4 py-2 rounded-full backdrop-blur-sm">
-											View Certificate
-										</span>
-									</div>
 								</div>
-								{/* Content */}
-								<div className="p-5">
-									<div className="flex items-center gap-2 mb-2">
-										<FaCertificate className="text-primary flex-shrink-0" aria-hidden />
-										<h3 className="font-semibold text-gray-900">{cert.name}</h3>
+								<div className="min-w-0">
+									<div className="flex items-start gap-2 mb-1.5">
+										<FaCertificate
+											className="text-accent mt-0.5 shrink-0"
+											aria-hidden
+										/>
+										<h3 className="text-base font-semibold text-gray-900 leading-snug">
+											{cert.name}
+										</h3>
 									</div>
-									<p className="text-gray-600 text-sm leading-relaxed">
+									<p className="text-sm text-gray-600 leading-relaxed">
 										{cert.description}
 									</p>
 								</div>
-							</m.div>
+							</m.article>
 						))}
-					</m.div>
+					</div>
 				</div>
 			</section>
 
@@ -331,54 +376,87 @@ export default function QualityPage() {
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">
-					{/* Section header */}
-					<div className="text-center mb-16">
-						<h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-4">
-							Standards We Manufacture To
-						</h2>
-						<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-							Every gauge is produced in full compliance with the applicable national and
-							international standards, ensuring interchangeability, traceability, and audit
-							readiness for our customers.
-						</p>
-					</div>
+					<div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+						{/* Intro column */}
+						<m.div
+							className="lg:col-span-2 lg:sticky lg:top-28"
+							initial={{ opacity: 0, y: 24 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, margin: "-30px" }}
+							transition={{ duration: 0.45 }}
+						>
+							<span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-primary bg-surface-subtle border border-gray-200/80 rounded-full px-3 py-1">
+								Compliance
+							</span>
+							<h2 className="mt-5 text-3xl md:text-4xl font-semibold text-gray-900 text-balance leading-tight">
+								Standards We Manufacture To
+							</h2>
+							<p className="mt-4 text-lg text-gray-600 leading-relaxed">
+								Every gauge is produced in full compliance with the applicable
+								national and international standards, ensuring
+								interchangeability, traceability, and audit readiness for our
+								customers.
+							</p>
+						</m.div>
 
-					<m.div
-						className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
-						variants={containerVariants}
-						initial="hidden"
-						whileInView="visible"
-						viewport={{ once: true }}
-					>
-						{standards.map((group) => (
-							<m.div
-								key={group.category}
-								className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
-								variants={itemVariants}
-							>
-								{/* Colored accent bar */}
-								<div className="h-1 w-full bg-gradient-to-r from-primary to-accent" />
-								<div className="p-6">
-									<h3 className="text-lg font-semibold text-gray-900 mb-4">
-										{group.category}
-									</h3>
-									<ul className="space-y-2.5">
-										{group.standards.map((standard) => (
-											<li key={standard} className="flex items-start gap-2.5">
-												<FaCheck
-													className="text-accent mt-0.5 flex-shrink-0 text-xs"
-													aria-hidden
-												/>
-												<span className="text-sm text-gray-700 leading-relaxed">
-													{standard}
+						{/* Accordion list */}
+						<div className="lg:col-span-3 rounded-2xl border border-gray-200/80 bg-white divide-y divide-gray-200/80 overflow-hidden">
+							{standards.map((group, index) => (
+								<m.div
+									key={group.category}
+									initial={{ opacity: 0, y: 16 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true, margin: "-30px" }}
+									transition={{ duration: 0.4, delay: index * 0.06 }}
+								>
+									<Collapsible defaultOpen={index === 0}>
+										<CollapsibleTrigger className="group flex w-full items-center justify-between gap-4 p-6 md:p-7 text-left hover:bg-surface-subtle/60 transition-colors">
+											<div className="flex items-center gap-4 min-w-0">
+												<span className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-semibold tabular-nums">
+													{String(index + 1).padStart(2, "0")}
 												</span>
-											</li>
-										))}
-									</ul>
-								</div>
-							</m.div>
-						))}
-					</m.div>
+												<h3 className="text-lg font-semibold text-gray-900">
+													{group.category}
+												</h3>
+											</div>
+											<svg
+												className="w-4 h-4 shrink-0 text-gray-400 transition-transform duration-300 group-data-[state=open]:rotate-180"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												strokeWidth="2"
+												aria-hidden
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													d="M19 9l-7 7-7-7"
+												/>
+											</svg>
+										</CollapsibleTrigger>
+										<CollapsibleContent className="overflow-hidden">
+											<ul className="px-6 md:px-7 pb-6 md:pb-7 pl-[4.75rem] space-y-2.5">
+												{group.standards.map((standard) => (
+													<li
+														key={standard}
+														className="flex items-start gap-2.5"
+													>
+														<FaCheck
+															className="text-accent mt-0.5 flex-shrink-0 text-xs"
+															aria-hidden
+														/>
+														<span className="text-sm text-gray-700 leading-relaxed">
+															{standard}
+														</span>
+													</li>
+												))}
+											</ul>
+										</CollapsibleContent>
+									</Collapsible>
+								</m.div>
+							))}
+						</div>
+					</div>
 				</div>
 			</section>
 
@@ -450,53 +528,35 @@ export default function QualityPage() {
 							</p>
 						</div>
 
-						{/* Stats */}
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-							{/* 100% */}
-							<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
-								<div className="text-6xl md:text-7xl font-bold text-primary mb-3 leading-none">
-									100
-									<span className="text-3xl md:text-4xl text-accent">%</span>
-								</div>
-								<div className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
-								<p className="font-semibold text-gray-900 mb-1">
-									Inspection on Every Gauge
-								</p>
-								<p className="text-gray-500 text-sm leading-relaxed">
-									Every dimension, every feature, 100% verified before shipment.
-								</p>
-							</div>
-
-							{/* Zero */}
-							<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 relative">
-
-								<div
-									className="absolute -top-3 -right-3 w-16 h-16 rounded-full bg-gradient-to-br from-accent/10 to-accent/5 pointer-events-none"
-									aria-hidden
-								/>
-								<div className="text-6xl md:text-7xl font-bold text-primary mb-3 leading-none">
-									0
-								</div>
-								<div className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
-								<p className="font-semibold text-gray-900 mb-1">Defect Tolerance</p>
-								<p className="text-gray-500 text-sm leading-relaxed">
-									Not a target, a methodology embedded in every stage of production.
-								</p>
-							</div>
-
-							{/* Infinity */}
-							<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
-								<div className="text-6xl md:text-7xl font-bold text-primary mb-3 leading-none">
-									∞
-								</div>
-								<div className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
-								<p className="font-semibold text-gray-900 mb-1">
-									End-to-End Traceability
-								</p>
-								<p className="text-gray-500 text-sm leading-relaxed">
-									From material batch to final calibration certificate, every gauge has
-									a complete, auditable history.
-								</p>
+						{/* Continuous stat panel */}
+						<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+							<div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200/80">
+								{commitmentStats.map((stat, index) => (
+									<m.div
+										key={stat.label}
+										className="p-8 md:p-10 text-center transition-colors duration-300 hover:bg-surface-subtle/50"
+										initial={{ opacity: 0, y: 24 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true, margin: "-30px" }}
+										transition={{ duration: 0.45, delay: index * 0.06 }}
+									>
+										<div className="text-5xl md:text-6xl font-semibold tracking-tight text-primary mb-3 leading-none tabular-nums">
+											{stat.value}
+											{stat.suffix && (
+												<span className="text-3xl md:text-4xl text-accent">
+													{stat.suffix}
+												</span>
+											)}
+										</div>
+										<div className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
+										<p className="font-semibold text-gray-900 mb-1">
+											{stat.label}
+										</p>
+										<p className="text-gray-500 text-sm leading-relaxed">
+											{stat.description}
+										</p>
+									</m.div>
+								))}
 							</div>
 						</div>
 					</div>
