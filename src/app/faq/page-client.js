@@ -2,11 +2,11 @@
 
 import { AnimatePresence, m } from "framer-motion";
 import { useState } from "react";
-import { FaPlus, FaMinus, FaPhoneAlt } from "react-icons/fa";
+import { FaPlus, FaMinus } from "react-icons/fa";
+import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { faqCategories } from "@/content/faq";
 import { pageHeroes } from "@/content/page-heroes";
-import { LinkButton } from "@/components/ui/button";
 
 function faqTabSlug(name) {
 	return name
@@ -188,39 +188,14 @@ export default function FAQPage() {
 				})}
 			</script>
 
-			{/* Still Have Questions */}
-			<section className="py-16 md:py-20 bg-secondary border-y border-secondary-dark/25 relative">
-				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent"
-					aria-hidden
-				/>
-				<div className="container mx-auto px-4 text-center">
-					<h2 className="text-3xl md:text-4xl font-semibold mb-5 text-primary-dark text-balance">
-						Still Have Questions?
-					</h2>
-					<p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-primary/90 leading-relaxed">
-						Send your drawing, gauge list, or calibration requirement, we will connect you with the right engineer and respond within one business day.
-					</p>
-					<div className="flex flex-wrap justify-center gap-4">
-						<LinkButton
-							href="/contact"
-							variant="onDark"
-							className="font-bold focus-visible:ring-offset-secondary"
-						>
-							<FaPhoneAlt className="mr-2" />
-							Contact Our Team
-						</LinkButton>
-						<LinkButton
-							href="tel:+919363122005"
-							variant="outline"
-							className="font-bold border-primary/30 hover:border-primary/50 bg-white/70 hover:bg-white focus-visible:ring-offset-secondary"
-						>
-							<FaPhoneAlt className="mr-2" />
-							+91 93631 22005
-						</LinkButton>
-					</div>
-				</div>
-			</section>
+			<Cta10
+				heading="Still Have Questions?"
+				description="Send your drawing, gauge list, or calibration requirement, we will connect you with the right engineer and respond within one business day."
+				buttons={{
+					primary: { text: "Contact Our Team", url: "/contact" },
+					secondary: { text: "+91 93631 22005", url: "tel:+919363122005" },
+				}}
+			/>
 		</div>
 	);
 }
