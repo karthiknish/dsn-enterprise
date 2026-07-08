@@ -2,7 +2,12 @@
 
 import { m } from "framer-motion";
 import { FaIndustry } from "react-icons/fa";
-import { UilRuler, UilTruck, UilShield } from "@iconscout/react-unicons";
+import {
+	UilRuler,
+	UilRulerCombined,
+	UilTruck,
+	UilShield,
+} from "@iconscout/react-unicons";
 import PageSection from "@/components/layout/PageSection";
 import SectionHeader from "@/components/ui/SectionHeader";
 
@@ -67,9 +72,14 @@ export default function AboutStorySection() {
 						certification, no shortcuts.
 					</p>
 
-					{/* Pull-quote */}
-					<div className="border-l-4 border-accent pl-5 py-3 mb-6 bg-accent/[0.04] rounded-r-lg">
-						<p className="text-base font-medium text-gray-900 leading-relaxed">
+					{/* Pull-quote, with a large icon watermark standing in for a
+					    stock illustration */}
+					<div className="relative overflow-hidden border-l-4 border-accent pl-5 py-3 mb-6 bg-accent/[0.04] rounded-r-lg">
+						<UilRulerCombined
+							className="absolute -right-6 -bottom-8 w-44 h-44 text-accent/[0.08] pointer-events-none"
+							aria-hidden
+						/>
+						<p className="relative text-base font-medium text-gray-900 leading-relaxed">
 							Integrated manufacturing means fewer hand-offs between production,
 							inspection, and documentation, resulting in tighter tolerances and
 							shorter lead times.

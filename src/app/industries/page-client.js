@@ -319,6 +319,12 @@ export default function IndustriesPage() {
 											aria-hidden
 										/>
 
+										{/* Large industry icon watermark, standing in for a stock illustration */}
+										<industry.icon
+											className="absolute -bottom-8 -left-8 w-40 h-40 text-primary/[0.07] pointer-events-none"
+											aria-hidden
+										/>
+
 										{/* Product image */}
 										<div className="relative w-full max-w-[220px] aspect-square mb-8 z-10">
 											<Image
