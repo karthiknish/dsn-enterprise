@@ -20,8 +20,22 @@ export async function fetchBlogPosts() {
 	}));
 }
 
+const FETCH_TIMEOUT_MS = 12000;
+
+function withTimeout(promise, ms, message) {
+	let timer;
+	const timeout = new Promise((_, reject) => {
+		timer = setTimeout(() => reject(new Error(message)), ms);
+	});
+	return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
 export function loadEditBlogPost(postId) {
-	return fetchBlogPostById(postId)
+	return withTimeout(
+		fetchBlogPostById(postId),
+		FETCH_TIMEOUT_MS,
+		"Timed out loading this post. Check your connection and try again.",
+	)
 		.then((data) => {
 			if (!data) notFound();
 			return data;
@@ -37,7 +51,9 @@ export function loadEditBlogPost(postId) {
 			throw new Error(
 				error?.code === "permission-denied"
 					? "You don't have permission to view this post."
-					: "Could not load this post. Check your connection and try again.",
+					: error?.message?.startsWith("Timed out")
+						? error.message
+						: "Could not load this post. Check your connection and try again.",
 			);
 		});
 }
