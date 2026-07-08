@@ -1,12 +1,13 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import BlogPostBody from "@/components/blog/BlogPostBody";
 import BlogPostImage from "@/components/blog/BlogPostImage";
 import { db } from "@/lib/firebase";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
 
-async function getPostBySlug(slug) {
+const getPostBySlug = cache(async (slug) => {
 	try {
 		const postsRef = collection(db, "blogs");
 		const q = query(
@@ -34,30 +35,10 @@ async function getPostBySlug(slug) {
 		console.error("Error fetching post:", error);
 		return null;
 	}
-}
+});
 
-// Pre-render published blog slugs at build time; ISR revalidates hourly.
-// fallback: "blocking" ensures new posts render on first request instead of 404.
-export async function generateStaticParams() {
-	try {
-		const postsRef = collection(db, "blogs");
-		const q = query(
-			postsRef,
-			where("status", "==", "published"),
-			limit(100),
-		);
-		const snapshot = await getDocs(q);
-		return snapshot.docs.map((doc) => ({
-			slug: doc.data().slug,
-		}));
-	} catch (error) {
-		console.error("generateStaticParams: Unable to fetch blog slugs:", error);
-		return [];
-	}
-}
-
-// Revalidate ISR-cached pages every hour so new/updated posts surface.
-export const revalidate = 3600;
+// Render each post on demand so featured images and edits show up immediately.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }) {
 	const { slug } = await params;
@@ -93,7 +74,14 @@ export async function generateMetadata({ params }) {
 			authors: ["DSN Enterprises"],
 			images: post.featuredImage
 				? [{ url: post.featuredImage, alt: post.title }]
-				: [{ url: "/images/featured.png", width: 1200, height: 630, alt: post.title }],
+				: [
+						{
+							url: "/images/featured.png",
+							width: 1200,
+							height: 630,
+							alt: post.title,
+						},
+					],
 		},
 		twitter: {
 			card: "summary_large_image",
