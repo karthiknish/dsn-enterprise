@@ -2,6 +2,7 @@
 
 import { m, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import { useState, useCallback } from "react";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 const trustPoints = [
@@ -15,18 +16,37 @@ const trustPoints = [
 const Hero = () => {
 	const { trackCTAClick } = useGoogleAdsTracking();
 	const prefersReducedMotion = useReducedMotion();
+	const [videoLoaded, setVideoLoaded] = useState(false);
+
+	const handleVideoReady = useCallback(() => setVideoLoaded(true), []);
 
 	return (
 		<div className="relative text-white -mt-16 min-h-dvh flex items-center overflow-hidden">
+			{/* Loading overlay, shows until video can play */}
+			{!videoLoaded && (
+				<div className="absolute inset-0 z-[1] flex items-center justify-center bg-primary-dark">
+					<div className="flex flex-col items-center gap-3">
+						<div
+							className="h-8 w-8 animate-spin rounded-full border-2 border-white/30 border-t-white"
+							aria-hidden
+						/>
+						<span className="text-sm font-medium text-white/60">
+							Loading…
+						</span>
+					</div>
+				</div>
+			)}
 			<video
 				tabIndex={-1}
-				className="absolute inset-0 w-full h-full object-cover scale-105"
-				poster="/images/featured.png"
+				className={`absolute inset-0 w-full h-full object-cover scale-105 transition-opacity duration-700 ${
+					videoLoaded ? "opacity-100" : "opacity-0"
+				}`}
 				autoPlay={!prefersReducedMotion}
 				muted
 				loop
 				playsInline
 				aria-hidden
+				onCanPlay={handleVideoReady}
 			>
 				<source src="/hero-video.mp4" type="video/mp4" />
 			</video>
