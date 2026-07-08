@@ -40,16 +40,16 @@
 	); /* was #1f2937 slate, brand neutral */
 	--color-gray-900: #111827;
 
-	/* Accent Colors — calibration-tag orange (brand highlight, CTAs, links) */
-	--color-accent-50: #fdf3ec;
-	--color-accent-100: #fbe3d2;
-	--color-accent-200: #f5c7a5;
-	--color-accent-400: #e08a4c;
-	--color-accent-500: #d9691f;
-	--color-accent: #c4551b;
-	--color-accent-dark: #9c4315;
-	--color-accent-700: #9c4315;
-	--color-accent-800: #7a3410;
+	/* Accent Colors — brand green (brand highlight, CTAs, links) */
+	--color-accent-50: #f0fdf4;
+	--color-accent-100: #dcfce7;
+	--color-accent-200: #bbf7d0;
+	--color-accent-400: #4ade80;
+	--color-accent-500: #22c55e;
+	--color-accent: #16a34a;
+	--color-accent-dark: #15803d;
+	--color-accent-700: #15803d;
+	--color-accent-800: #166534;
 
 	/* Success Colors — genuine positive/confirmation states only
 	   (published badges, success banners, saved indicators). Kept
