@@ -1,20 +1,18 @@
 "use client";
 
-import {
-	doc,
-	serverTimestamp,
-	Timestamp,
-	updateDoc,
-} from "firebase/firestore";
+import { doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getEditDraftRestoreState } from "@/lib/blog-edit-init";
-import { applyEditPostSeoFields } from "@/lib/blog-seo";
 import { generateBlogSlug } from "@/lib/blog-form-utils";
-import { describeFirestoreError, describeStorageError } from "@/lib/firebase-errors";
-import { markdownToHtml } from "@/lib/markdown-to-html";
+import { applyEditPostSeoFields } from "@/lib/blog-seo";
 import { db, storage } from "@/lib/firebase";
+import {
+	describeFirestoreError,
+	describeStorageError,
+} from "@/lib/firebase-errors";
+import { markdownToHtml } from "@/lib/markdown-to-html";
 
 const EMPTY_FORM = {
 	title: "",
@@ -45,6 +43,7 @@ export function useEditBlogPost(postId, initialPostData) {
 	const [saving, setSaving] = useState(false);
 	const [uploading, setUploading] = useState(false);
 	const [showPexelsPicker, setShowPexelsPicker] = useState(false);
+	const [showUnsplashPicker, setShowUnsplashPicker] = useState(false);
 	const [imageTab, setImageTab] = useState("upload");
 	const [generatingTitle, setGeneratingTitle] = useState(false);
 	const [titleSuggestions, setTitleSuggestions] = useState([]);
@@ -110,22 +109,22 @@ export function useEditBlogPost(postId, initialPostData) {
 
 	const handleContentChange = (content) => {
 		setFormData((prev) =>
-			applyEditPostSeoFields(
-				{ ...prev, content },
-				originalDataRef.current,
-				{ title: prev.title, excerpt: prev.excerpt, content },
-			),
+			applyEditPostSeoFields({ ...prev, content }, originalDataRef.current, {
+				title: prev.title,
+				excerpt: prev.excerpt,
+				content,
+			}),
 		);
 	};
 
 	const handleExcerptChange = (e) => {
 		const excerpt = e.target.value;
 		setFormData((prev) =>
-			applyEditPostSeoFields(
-				{ ...prev, excerpt },
-				originalDataRef.current,
-				{ title: prev.title, excerpt, content: prev.content },
-			),
+			applyEditPostSeoFields({ ...prev, excerpt }, originalDataRef.current, {
+				title: prev.title,
+				excerpt,
+				content: prev.content,
+			}),
 		);
 	};
 
@@ -192,7 +191,10 @@ export function useEditBlogPost(postId, initialPostData) {
 			showNotification("Image uploaded successfully", "success");
 		} catch (error) {
 			console.error("Error uploading image:", error);
-			showNotification(describeStorageError(error, "Failed to upload image"), "error");
+			showNotification(
+				describeStorageError(error, "Failed to upload image"),
+				"error",
+			);
 		} finally {
 			setUploading(false);
 		}
@@ -210,6 +212,20 @@ export function useEditBlogPost(postId, initialPostData) {
 		}));
 		setShowPexelsPicker(false);
 		showNotification("Image selected from Pexels", "success");
+	};
+
+	const handleUnsplashSelect = (photo) => {
+		setFormData((prev) => ({
+			...prev,
+			featuredImage: photo.url,
+			imageAttribution: {
+				photographer: photo.photographer,
+				photographerUrl: photo.photographerUrl,
+				unsplashUrl: photo.unsplashUrl,
+			},
+		}));
+		setShowUnsplashPicker(false);
+		showNotification("Image selected from Unsplash", "success");
 	};
 
 	const handleSubmit = async (e) => {
@@ -244,7 +260,10 @@ export function useEditBlogPost(postId, initialPostData) {
 		} catch (error) {
 			console.error("Error updating post:", error);
 			showNotification(
-				describeFirestoreError(error, `Failed to update post. ${error.message}`),
+				describeFirestoreError(
+					error,
+					`Failed to update post. ${error.message}`,
+				),
 				"error",
 			);
 		} finally {
@@ -268,6 +287,8 @@ export function useEditBlogPost(postId, initialPostData) {
 		uploading,
 		showPexelsPicker,
 		setShowPexelsPicker,
+		showUnsplashPicker,
+		setShowUnsplashPicker,
 		imageTab,
 		setImageTab,
 		generatingTitle,
@@ -288,6 +309,7 @@ export function useEditBlogPost(postId, initialPostData) {
 		handleSelectTitle,
 		handleImageUpload,
 		handlePexelsSelect,
+		handleUnsplashSelect,
 		handleSubmit,
 		handleAIContentGenerated,
 		back,

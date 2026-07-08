@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ADMIN_NAV_ITEMS, LogoutIcon } from "./admin-nav-icons";
 import AdminSidebarTooltip from "./AdminSidebarTooltip";
+import { ADMIN_NAV_ITEMS, LogoutIcon } from "./admin-nav-icons";
 
 export default function AdminSidebar({
 	isCollapsed,
@@ -34,9 +34,9 @@ export default function AdminSidebar({
 						<Image
 							src="/images/logo.png"
 							alt="DSN Enterprises"
-							width={36}
-							height={36}
-							className="w-9 h-9 object-contain flex-shrink-0"
+							width={48}
+							height={48}
+							className="w-12 h-12 object-contain flex-shrink-0"
 						/>
 					</Link>
 				) : (
@@ -47,9 +47,9 @@ export default function AdminSidebar({
 						<Image
 							src="/images/logo.png"
 							alt="DSN Enterprises"
-							width={28}
-							height={28}
-							className="w-7 h-7 object-contain"
+							width={36}
+							height={36}
+							className="w-9 h-9 object-contain"
 						/>
 					</Link>
 				)}
@@ -169,9 +169,7 @@ export default function AdminSidebar({
 								<p className="text-sm font-medium text-gray-900 truncate">
 									{user?.email?.split("@")[0]}
 								</p>
-								<p className="text-xs text-gray-500 truncate">
-									Administrator
-								</p>
+								<p className="text-xs text-gray-500 truncate">Administrator</p>
 							</div>
 						</div>
 

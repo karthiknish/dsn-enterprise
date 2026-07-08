@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 import PexelsImagePicker from "@/components/admin/PexelsImagePicker";
+import UnsplashImagePicker from "@/components/admin/UnsplashImagePicker";
 
 function ImagePreviewPlaceholder() {
 	return (
@@ -82,10 +83,13 @@ export default function BlogFeaturedImagePanel({
 	uploading,
 	showPexelsPicker,
 	setShowPexelsPicker,
+	showUnsplashPicker,
+	setShowUnsplashPicker,
 	onImageUpload,
 	onFeaturedUrlChange,
 	onClearFeaturedImage,
 	onPexelsSelect,
+	onUnsplashSelect,
 }) {
 	const [imageError, setImageError] = useState(false);
 
@@ -136,6 +140,17 @@ export default function BlogFeaturedImagePanel({
 					}`}
 				>
 					Pexels
+				</button>
+				<button
+					type="button"
+					onClick={() => setImageTab("unsplash")}
+					className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+						imageTab === "unsplash"
+							? "border-accent text-accent"
+							: "border-transparent text-gray-500 hover:text-gray-700"
+					}`}
+				>
+					Unsplash
 				</button>
 			</div>
 
@@ -258,10 +273,29 @@ export default function BlogFeaturedImagePanel({
 				</div>
 			)}
 
+			{imageTab === "unsplash" && (
+				<div className="text-center py-4">
+					<button
+						type="button"
+						onClick={() => setShowUnsplashPicker(true)}
+						className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+					>
+						Search Unsplash Images
+					</button>
+				</div>
+			)}
+
 			{showPexelsPicker && (
 				<PexelsImagePicker
 					onSelect={onPexelsSelect}
 					onClose={() => setShowPexelsPicker(false)}
+				/>
+			)}
+
+			{showUnsplashPicker && (
+				<UnsplashImagePicker
+					onSelect={onUnsplashSelect}
+					onClose={() => setShowUnsplashPicker(false)}
 				/>
 			)}
 		</div>

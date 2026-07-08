@@ -69,6 +69,8 @@ export default function EditBlogPostView({ postId, initialPostData }) {
 							uploading={hook.uploading}
 							showPexelsPicker={hook.showPexelsPicker}
 							setShowPexelsPicker={hook.setShowPexelsPicker}
+							showUnsplashPicker={hook.showUnsplashPicker}
+							setShowUnsplashPicker={hook.setShowUnsplashPicker}
 							onImageUpload={hook.handleImageUpload}
 							onFeaturedUrlChange={(url) =>
 								hook.setFormData((prev) => ({
@@ -85,6 +87,7 @@ export default function EditBlogPostView({ postId, initialPostData }) {
 								}))
 							}
 							onPexelsSelect={hook.handlePexelsSelect}
+							onUnsplashSelect={hook.handleUnsplashSelect}
 						/>
 					</div>
 				</div>

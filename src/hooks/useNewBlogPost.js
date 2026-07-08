@@ -10,11 +10,14 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { loadNewBlogDraftRestore } from "@/lib/blog-draft";
-import { applyNewPostSeoFields } from "@/lib/blog-seo";
 import { generateBlogSlug } from "@/lib/blog-form-utils";
-import { describeFirestoreError, describeStorageError } from "@/lib/firebase-errors";
-import { markdownToHtml } from "@/lib/markdown-to-html";
+import { applyNewPostSeoFields } from "@/lib/blog-seo";
 import { db, storage } from "@/lib/firebase";
+import {
+	describeFirestoreError,
+	describeStorageError,
+} from "@/lib/firebase-errors";
+import { markdownToHtml } from "@/lib/markdown-to-html";
 
 const STORAGE_KEY = "blog-draft-new";
 
@@ -36,15 +39,18 @@ export function useNewBlogPost() {
 	const [saving, setSaving] = useState(false);
 	const [uploading, setUploading] = useState(false);
 	const [showPexelsPicker, setShowPexelsPicker] = useState(false);
+	const [showUnsplashPicker, setShowUnsplashPicker] = useState(false);
 	const [imageTab, setImageTab] = useState("upload");
 	const [generatingTitle, setGeneratingTitle] = useState(false);
 	const [generatingContent, setGeneratingContent] = useState(false);
 	const [titleSuggestions, setTitleSuggestions] = useState([]);
 	const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
 	const [notification, setNotification] = useState(null);
-	const [{ showRestoreDialog: initialShowRestore, savedDraft: initialSavedDraft }] =
-		useState(() => loadNewBlogDraftRestore());
-	const [showRestoreDialog, setShowRestoreDialog] = useState(initialShowRestore);
+	const [
+		{ showRestoreDialog: initialShowRestore, savedDraft: initialSavedDraft },
+	] = useState(() => loadNewBlogDraftRestore());
+	const [showRestoreDialog, setShowRestoreDialog] =
+		useState(initialShowRestore);
 	const [savedDraft, setSavedDraft] = useState(initialSavedDraft);
 	const [formData, setFormData] = useState(EMPTY_FORM);
 
@@ -205,10 +211,7 @@ export function useNewBlogPost() {
 		setUploading(true);
 		try {
 			const timestamp = Date.now();
-			const storageRef = ref(
-				storage,
-				`blog-images/${timestamp}-${file.name}`,
-			);
+			const storageRef = ref(storage, `blog-images/${timestamp}-${file.name}`);
 			await uploadBytes(storageRef, file);
 			const downloadURL = await getDownloadURL(storageRef);
 			setFormData((prev) => ({
@@ -219,7 +222,10 @@ export function useNewBlogPost() {
 			showNotification("Image uploaded successfully!", "success");
 		} catch (error) {
 			console.error("Error uploading image:", error);
-			showNotification(describeStorageError(error, "Failed to upload image"), "error");
+			showNotification(
+				describeStorageError(error, "Failed to upload image"),
+				"error",
+			);
 		} finally {
 			setUploading(false);
 		}
@@ -245,6 +251,20 @@ export function useNewBlogPost() {
 		}));
 		setShowPexelsPicker(false);
 		showNotification("Image selected from Pexels!", "success");
+	};
+
+	const handleUnsplashSelect = (photo) => {
+		setFormData((prev) => ({
+			...prev,
+			featuredImage: photo.url,
+			imageAttribution: {
+				photographer: photo.photographer,
+				photographerUrl: photo.photographerUrl,
+				unsplashUrl: photo.unsplashUrl,
+			},
+		}));
+		setShowUnsplashPicker(false);
+		showNotification("Image selected from Unsplash!", "success");
 	};
 
 	const handleSubmit = async (e) => {
@@ -273,7 +293,10 @@ export function useNewBlogPost() {
 		} catch (error) {
 			console.error("Error creating post:", error);
 			showNotification(
-				describeFirestoreError(error, `Failed to create post: ${error.message}`),
+				describeFirestoreError(
+					error,
+					`Failed to create post: ${error.message}`,
+				),
 				"error",
 			);
 		} finally {
@@ -299,6 +322,8 @@ export function useNewBlogPost() {
 		savedDraft,
 		showPexelsPicker,
 		setShowPexelsPicker,
+		showUnsplashPicker,
+		setShowUnsplashPicker,
 		back,
 		handleSubmit,
 		handleTitleChange,
@@ -312,6 +337,7 @@ export function useNewBlogPost() {
 		handleFeaturedUrlChange,
 		clearFeaturedImage,
 		handlePexelsSelect,
+		handleUnsplashSelect,
 		restoreDraft,
 		discardDraft,
 	};

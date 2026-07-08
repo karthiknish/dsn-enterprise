@@ -25,6 +25,8 @@ export default function NewBlogPostView({
 	uploading,
 	showPexelsPicker,
 	setShowPexelsPicker,
+	showUnsplashPicker,
+	setShowUnsplashPicker,
 	onSubmit,
 	onTitleChange,
 	onSlugChange,
@@ -38,6 +40,7 @@ export default function NewBlogPostView({
 	onFeaturedUrlChange,
 	onClearFeaturedImage,
 	onPexelsSelect,
+	onUnsplashSelect,
 	onRestoreDraft,
 	onDiscardDraft,
 	onCancel,
@@ -92,10 +95,13 @@ export default function NewBlogPostView({
 							uploading={uploading}
 							showPexelsPicker={showPexelsPicker}
 							setShowPexelsPicker={setShowPexelsPicker}
+							showUnsplashPicker={showUnsplashPicker}
+							setShowUnsplashPicker={setShowUnsplashPicker}
 							onImageUpload={onImageUpload}
 							onFeaturedUrlChange={onFeaturedUrlChange}
 							onClearFeaturedImage={onClearFeaturedImage}
 							onPexelsSelect={onPexelsSelect}
+							onUnsplashSelect={onUnsplashSelect}
 						/>
 					</div>
 				</div>
