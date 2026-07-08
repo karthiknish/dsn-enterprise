@@ -23,12 +23,24 @@ export const useAuth = () => use(AuthContext);
 export function AuthProvider({ children }) {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [authError, setAuthError] = useState(null);
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			setUser(user);
-			setLoading(false);
-		});
+		const unsubscribe = onAuthStateChanged(
+			auth,
+			(user) => {
+				setUser(user);
+				setAuthError(null);
+				setLoading(false);
+			},
+			(error) => {
+				// Without this, a listener error (e.g. auth/network-request-failed)
+				// would leave `loading` stuck true forever with no feedback.
+				console.error("Auth state listener error:", error);
+				setAuthError(error);
+				setLoading(false);
+			},
+		);
 
 		return () => unsubscribe();
 	}, []);
@@ -46,8 +58,8 @@ export function AuthProvider({ children }) {
 	}, []);
 
 	const value = useMemo(
-		() => ({ user, login, signup, logout, loading }),
-		[user, login, signup, logout, loading],
+		() => ({ user, login, signup, logout, loading, authError }),
+		[user, login, signup, logout, loading, authError],
 	);
 
 	return (

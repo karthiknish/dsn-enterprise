@@ -21,10 +21,22 @@ export async function fetchBlogPosts() {
 }
 
 export function loadEditBlogPost(postId) {
-	return fetchBlogPostById(postId).then((data) => {
-		if (!data) notFound();
-		return data;
-	});
+	return fetchBlogPostById(postId)
+		.then((data) => {
+			if (!data) notFound();
+			return data;
+		})
+		.catch((error) => {
+			// notFound() throws internally to trigger the not-found page; let
+			// that pass through instead of being treated as a fetch failure.
+			if (error?.digest === "NEXT_NOT_FOUND") throw error;
+			console.error("Error loading post for edit:", error);
+			throw new Error(
+				error?.code === "permission-denied"
+					? "You don't have permission to view this post."
+					: "Could not load this post. Check your connection and try again.",
+			);
+		});
 }
 
 export async function fetchBlogPostById(id) {

@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getEditDraftRestoreState } from "@/lib/blog-edit-init";
 import { applyEditPostSeoFields } from "@/lib/blog-seo";
 import { generateBlogSlug } from "@/lib/blog-form-utils";
+import { describeFirestoreError, describeStorageError } from "@/lib/firebase-errors";
 import { markdownToHtml } from "@/lib/markdown-to-html";
 import { db, storage } from "@/lib/firebase";
 
@@ -191,7 +192,7 @@ export function useEditBlogPost(postId, initialPostData) {
 			showNotification("Image uploaded successfully", "success");
 		} catch (error) {
 			console.error("Error uploading image:", error);
-			showNotification("Failed to upload image", "error");
+			showNotification(describeStorageError(error, "Failed to upload image"), "error");
 		} finally {
 			setUploading(false);
 		}
@@ -242,7 +243,10 @@ export function useEditBlogPost(postId, initialPostData) {
 			setTimeout(() => push("/admin/blog"), 1000);
 		} catch (error) {
 			console.error("Error updating post:", error);
-			showNotification(`Failed to update post. ${error.message}`, "error");
+			showNotification(
+				describeFirestoreError(error, `Failed to update post. ${error.message}`),
+				"error",
+			);
 		} finally {
 			setSaving(false);
 		}

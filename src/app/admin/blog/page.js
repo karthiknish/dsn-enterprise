@@ -15,6 +15,7 @@ import {
 } from "@/lib/blog-list-reducer";
 import { fetchBlogPosts } from "@/lib/admin-firestore";
 import { db } from "@/lib/firebase";
+import { describeFirestoreError } from "@/lib/firebase-errors";
 
 const postsResource = fetchBlogPosts()
 	.then((posts) => ({ ok: true, posts }))
@@ -78,7 +79,7 @@ function BlogListPageContent() {
 		} catch (error) {
 			console.error("Error deleting post:", error);
 			dispatch({ type: "DELETE_ERROR" });
-			showNotification("Failed to delete post", "error");
+			showNotification(describeFirestoreError(error, "Failed to delete post"), "error");
 		}
 	};
 

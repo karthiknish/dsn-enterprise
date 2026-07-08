@@ -2,10 +2,12 @@
 
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { Suspense, use, useState } from "react";
+import BlogNotificationToast from "@/components/admin/blog/BlogNotificationToast";
 import ContactDetailPanel from "@/components/admin/contacts/ContactDetailPanel";
 import ContactsList from "@/components/admin/contacts/ContactsList";
 import { fetchContacts } from "@/lib/admin-firestore";
 import { db } from "@/lib/firebase";
+import { describeFirestoreError } from "@/lib/firebase-errors";
 
 const contactsResource = fetchContacts()
 	.then((data) => ({ ok: true, data }))
@@ -24,6 +26,12 @@ function ContactsPageContent() {
 	);
 	const fetchError = result.ok ? null : result.error;
 	const [selectedContact, setSelectedContact] = useState(null);
+	const [notification, setNotification] = useState(null);
+
+	const showNotification = (message, type = "error") => {
+		setNotification({ message, type });
+		setTimeout(() => setNotification(null), 5000);
+	};
 
 	const handleMarkAsRead = async (contactId) => {
 		try {
@@ -33,6 +41,9 @@ function ContactsPageContent() {
 			);
 		} catch (error) {
 			console.error("Error marking as read:", error);
+			showNotification(
+				describeFirestoreError(error, "Failed to mark contact as read."),
+			);
 		}
 	};
 
@@ -47,11 +58,18 @@ function ContactsPageContent() {
 			}
 		} catch (error) {
 			console.error("Error deleting contact:", error);
+			showNotification(
+				describeFirestoreError(error, "Failed to delete contact."),
+			);
 		}
 	};
 
 	return (
 		<div>
+			<BlogNotificationToast
+				notification={notification}
+				onDismiss={() => setNotification(null)}
+			/>
 			<h1 className="sr-only">Contacts</h1>
 			<div className="mb-8">
 				<p className="text-gray-600">Manage contact form submissions</p>

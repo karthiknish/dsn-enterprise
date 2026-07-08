@@ -5,12 +5,24 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 
+const AUTH_ERROR_MESSAGES = {
+	"auth/invalid-credential": "Invalid email or password.",
+	"auth/user-not-found": "Invalid email or password.",
+	"auth/wrong-password": "Invalid email or password.",
+	"auth/user-disabled": "This account has been disabled.",
+	"auth/too-many-requests":
+		"Too many attempts. Please wait a few minutes and try again.",
+	"auth/network-request-failed":
+		"Network error. Check your connection and try again.",
+	"auth/invalid-email": "That doesn't look like a valid email address.",
+};
+
 export default function AdminLoginPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
-	const { login } = useAuth();
+	const { login, authError } = useAuth();
 	const { push } = useRouter();
 
 	const handleSubmit = async (e) => {
@@ -24,9 +36,8 @@ export default function AdminLoginPage() {
 		} catch (error) {
 			console.error("Login error:", error);
 			setError(
-				error.code === "auth/invalid-credential"
-					? "Invalid email or password"
-					: error.message,
+				AUTH_ERROR_MESSAGES[error.code] ||
+					"Something went wrong signing in. Please try again.",
 			);
 		} finally {
 			setLoading(false);
@@ -50,6 +61,14 @@ export default function AdminLoginPage() {
 
 				<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 sm:p-8">
 					<form className="space-y-5" onSubmit={handleSubmit}>
+						{authError && !error && (
+							<div
+								className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm"
+								role="alert"
+							>
+								Your session could not be verified. Please sign in again.
+							</div>
+						)}
 						{error && (
 							<div
 								className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm"

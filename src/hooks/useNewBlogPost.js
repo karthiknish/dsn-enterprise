@@ -12,6 +12,7 @@ import { useCallback, useEffect, useState } from "react";
 import { loadNewBlogDraftRestore } from "@/lib/blog-draft";
 import { applyNewPostSeoFields } from "@/lib/blog-seo";
 import { generateBlogSlug } from "@/lib/blog-form-utils";
+import { describeFirestoreError, describeStorageError } from "@/lib/firebase-errors";
 import { markdownToHtml } from "@/lib/markdown-to-html";
 import { db, storage } from "@/lib/firebase";
 
@@ -218,7 +219,7 @@ export function useNewBlogPost() {
 			showNotification("Image uploaded successfully!", "success");
 		} catch (error) {
 			console.error("Error uploading image:", error);
-			showNotification("Failed to upload image", "error");
+			showNotification(describeStorageError(error, "Failed to upload image"), "error");
 		} finally {
 			setUploading(false);
 		}
@@ -271,7 +272,10 @@ export function useNewBlogPost() {
 			setTimeout(() => push("/admin/blog"), 1000);
 		} catch (error) {
 			console.error("Error creating post:", error);
-			showNotification(`Failed to create post: ${error.message}`, "error");
+			showNotification(
+				describeFirestoreError(error, `Failed to create post: ${error.message}`),
+				"error",
+			);
 		} finally {
 			setSaving(false);
 		}
