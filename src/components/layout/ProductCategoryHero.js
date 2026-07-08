@@ -12,7 +12,6 @@ export default function ProductCategoryHero({
 }) {
 	return (
 		<PageHero
-			eyebrow="Products"
 			title={title}
 			description={description}
 			breadcrumbs={[

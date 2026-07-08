@@ -3,7 +3,6 @@
 import { m } from "framer-motion";
 
 export default function SectionHeader({
-	eyebrow,
 	title,
 	description,
 	align = "center",
@@ -20,11 +19,6 @@ export default function SectionHeader({
 			viewport={{ once: true, margin: "-40px" }}
 			transition={{ duration: 0.45 }}
 		>
-			{eyebrow && (
-				<p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-3">
-					{eyebrow}
-				</p>
-			)}
 			<h2 className="text-3xl md:text-4xl font-semibold text-gray-900 text-balance leading-tight">
 				{title}
 			</h2>

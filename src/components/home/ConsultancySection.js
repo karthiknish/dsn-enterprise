@@ -14,7 +14,7 @@ const offerings = [
 	{
 		title: "Drawing and tolerance review",
 		description:
-			"Review of component drawings, thread notes, and gauge schemes before you freeze tooling—limits, PD, and wear allowances aligned to how you inspect on the shop floor.",
+			"Review of component drawings, thread notes, and gauge schemes before you freeze tooling, limits, PD, and wear allowances aligned to how you inspect on the shop floor.",
 		icon: FaClipboardList,
 	},
 	{
@@ -32,7 +32,7 @@ const offerings = [
 	{
 		title: "Training and shop-floor practice",
 		description:
-			"Short sessions for inspectors and planners on handling, storage, and interpretation of results—tailored to your standards checklist.",
+			"Short sessions for inspectors and planners on handling, storage, and interpretation of results, tailored to your standards checklist.",
 		icon: FaChalkboardTeacher,
 	},
 ];
@@ -52,9 +52,6 @@ export default function ConsultancySection() {
 						viewport={{ once: true, margin: "-60px" }}
 						transition={{ duration: 0.5 }}
 					>
-						<p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-3">
-							Consultancy
-						</p>
 						<h2
 							id="consultancy-heading"
 							className="text-3xl md:text-4xl font-semibold mb-5 text-gray-900 text-balance leading-tight"

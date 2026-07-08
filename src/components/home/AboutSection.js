@@ -26,9 +26,6 @@ const AboutSection = () => {
 						transition={{ duration: 0.55 }}
 						className="order-2 lg:order-1"
 					>
-						<p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-3">
-							About us
-						</p>
 						<h2 className="text-3xl md:text-4xl font-semibold mb-6 text-gray-900 text-balance leading-tight">
 							About DSN Enterprises
 						</h2>

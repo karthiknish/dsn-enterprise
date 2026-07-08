@@ -7,7 +7,6 @@ import Link from "next/link";
  * @param {{ href: string, label: string }[]} [breadcrumbs]
  */
 export default function PageHero({
-	eyebrow,
 	title,
 	description,
 	breadcrumbs,
@@ -45,16 +44,6 @@ export default function PageHero({
 							</span>
 						))}
 					</nav>
-				)}
-				{eyebrow && (
-					<m.p
-						className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-200 mb-3"
-						initial={{ opacity: 0, y: 12 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.45 }}
-					>
-						{eyebrow}
-					</m.p>
 				)}
 				<m.h1
 					className="text-4xl md:text-5xl font-semibold mb-5 text-balance leading-tight"

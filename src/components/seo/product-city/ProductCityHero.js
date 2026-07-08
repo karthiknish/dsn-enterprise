@@ -27,9 +27,6 @@ export default function ProductCityHero({
 						<span className="mx-2">/</span>
 						<span className="text-white/80">{pageData.cityName}</span>
 					</nav>
-					<p className="text-accent-200 text-sm font-medium uppercase tracking-wide mb-2">
-						Precision gauges · Tamil Nadu
-					</p>
 					<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald leading-tight">
 						{pageData.productName} in {pageData.cityName}
 					</h1>
