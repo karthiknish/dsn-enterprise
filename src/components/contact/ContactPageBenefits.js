@@ -1,6 +1,6 @@
 export default function ContactPageBenefits() {
 	return (
-		<div className="bg-secondary-light p-8 rounded-lg h-full">
+		<div className="bg-secondary-light p-8 rounded-lg">
 			<h3 className="text-2xl font-semibold mb-6 text-gray-900">
 				Why Choose DSN Enterprises?
 			</h3>
