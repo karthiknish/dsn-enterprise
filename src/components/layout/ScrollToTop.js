@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaArrowUp } from "react-icons/fa";
+import { UilArrowUp } from "@iconscout/react-unicons";
 
 export default function ScrollToTop() {
 	const [visible, setVisible] = useState(false);
@@ -34,7 +34,7 @@ export default function ScrollToTop() {
 			aria-label="Scroll to top"
 			className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg transition-all duration-200 hover:bg-primary-dark hover:shadow-xl active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 		>
-			<FaArrowUp className="text-sm" aria-hidden />
+			<UilArrowUp className="w-4 h-4" aria-hidden />
 		</button>
 	);
 }

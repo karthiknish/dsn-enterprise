@@ -2,26 +2,21 @@
 
 import { m } from "framer-motion";
 import Link from "next/link";
-import {
-	FaArrowRight,
-	FaCertificate,
-	FaChalkboardTeacher,
-	FaClipboardList,
-	FaCogs,
-} from "react-icons/fa";
+import { FaCertificate, FaChalkboardTeacher } from "react-icons/fa";
+import { UilArrowRight, UilClipboardNotes, UilCog } from "@iconscout/react-unicons";
 
 const offerings = [
 	{
 		title: "Drawing and tolerance review",
 		description:
 			"Review of component drawings, thread notes, and gauge schemes before you freeze tooling, limits, PD, and wear allowances aligned to how you inspect on the shop floor.",
-		icon: FaClipboardList,
+		icon: UilClipboardNotes,
 	},
 	{
 		title: "Gauge selection and stack-up",
 		description:
 			"Help choosing plain, thread, or special gauges and interpreting ISO / IS gauging practice so go / no-go decisions match your process capability.",
-		icon: FaCogs,
+		icon: UilCog,
 	},
 	{
 		title: "Calibration and uncertainty advisory",
@@ -69,7 +64,7 @@ export default function ConsultancySection() {
 								className="inline-flex justify-center items-center gap-2 bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 							>
 								Discuss a brief
-								<FaArrowRight className="w-4 h-4" aria-hidden />
+								<UilArrowRight className="w-4 h-4" aria-hidden />
 							</Link>
 							<Link
 								href="/services"
@@ -96,7 +91,7 @@ export default function ConsultancySection() {
 										className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary"
 										aria-hidden
 									>
-										<Icon className="text-xl" aria-hidden />
+										<Icon className="w-6 h-6" aria-hidden />
 									</div>
 									<h3 className="text-lg font-semibold text-gray-900 mb-2 leading-snug">
 										{item.title}

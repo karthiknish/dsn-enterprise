@@ -3,7 +3,7 @@
 import { m } from "framer-motion";
 import Link from "next/link";
 import { useEffect } from "react";
-import { FaArrowLeft, FaCheckCircle } from "react-icons/fa";
+import { UilArrowLeft, UilCheckCircle } from "@iconscout/react-unicons";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
@@ -35,7 +35,7 @@ export default function ThankYouPage() {
 							transition={{ duration: 0.5 }}
 							className="flex justify-center mb-6"
 						>
-							<FaCheckCircle className="text-6xl text-accent" />
+							<UilCheckCircle className="w-16 h-16 text-accent" />
 						</m.div>
 
 						<m.h2
@@ -67,7 +67,7 @@ export default function ThankYouPage() {
 								href="/"
 								className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primary-dark transition duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
 							>
-								<FaArrowLeft className="mr-2" /> Back to Home
+								<UilArrowLeft className="mr-2 w-4 h-4" /> Back to Home
 							</Link>
 						</m.div>
 					</div>

@@ -2,16 +2,16 @@
 
 import { m } from "framer-motion";
 import Image from "next/image";
+import { FaCertificate } from "react-icons/fa";
 import {
-	FaAward,
-	FaCertificate,
-	FaCheck,
-	FaClipboardCheck,
-	FaCogs,
-	FaFlask,
-	FaMicroscope,
-	FaThermometerHalf,
-} from "react-icons/fa";
+	UilAward,
+	UilCheck,
+	UilClipboardNotes,
+	UilCog,
+	UilFlask,
+	UilMicroscope,
+	UilThermometer,
+} from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import {
@@ -27,42 +27,42 @@ const qualitySteps = [
 		title: "Material Selection",
 		description:
 			"Premium grade OHNS and Tungsten Carbide from certified suppliers, with complete material traceability documentation.",
-		icon: FaFlask,
+		icon: UilFlask,
 	},
 	{
 		step: 2,
 		title: "Precision Manufacturing",
 		description:
 			"CNC machining centres operating at tight tolerances, executed by craftsmen with decades of gauge-making experience.",
-		icon: FaCogs,
+		icon: UilCog,
 	},
 	{
 		step: 3,
 		title: "Heat Treatment",
 		description:
 			"Controlled hardening process achieving 60±2 HRC with sub-zero treatment at -80°C for dimensional stability.",
-		icon: FaThermometerHalf,
+		icon: UilThermometer,
 	},
 	{
 		step: 4,
 		title: "Precision Grinding",
 		description:
 			"High-precision cylindrical and surface grinding to achieve specified dimensions and surface finish, verified on every gauge.",
-		icon: FaCogs,
+		icon: UilCog,
 	},
 	{
 		step: 5,
 		title: "Inspection & Calibration",
 		description:
 			"Comprehensive dimensional inspection on calibrated CMMs, optical comparators, and air-gauging equipment traceable to national standards.",
-		icon: FaMicroscope,
+		icon: UilMicroscope,
 	},
 	{
 		step: 6,
 		title: "Final Verification",
 		description:
 			"100% final functional inspection with documented calibration certificates delivered with every order, nothing ships without a pass.",
-		icon: FaClipboardCheck,
+		icon: UilClipboardNotes,
 	},
 ];
 
@@ -174,7 +174,7 @@ export default function QualityPage() {
 				{ href: "/quality", label: "Quality" },
 			]}
 			>
-				<FaAward className="text-5xl opacity-90" aria-hidden />
+				<UilAward className="w-8 h-8 opacity-90" aria-hidden />
 			</PageHero>
 
 			{/* ====== Quality Process, Numbered Timeline ====== */}
@@ -246,7 +246,7 @@ export default function QualityPage() {
 															: "bg-primary/10 text-primary"
 													}`}
 												>
-													<Icon className="text-xl" aria-hidden />
+													<Icon className="w-5 h-5" aria-hidden />
 												</div>
 												<div className="min-w-0">
 													<h3
@@ -441,8 +441,8 @@ export default function QualityPage() {
 														key={standard}
 														className="flex items-start gap-2.5"
 													>
-														<FaCheck
-															className="text-accent mt-0.5 flex-shrink-0 text-xs"
+														<UilCheck
+															className="text-accent mt-0.5 flex-shrink-0 w-3.5 h-3.5"
 															aria-hidden
 														/>
 														<span className="text-sm text-gray-700 leading-relaxed">

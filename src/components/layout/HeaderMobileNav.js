@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { FaChevronDown, FaTimes } from "react-icons/fa";
+import { UilAngleDown, UilTimes } from "@iconscout/react-unicons";
 
 function isActive(pathname, href) {
 	if (href === "/") return pathname === "/";
@@ -82,7 +82,7 @@ export default function HeaderMobileNav({
 					onClick={onClose}
 					aria-label="Close menu"
 				>
-					<FaTimes className="text-primary" size={24} />
+					<UilTimes className="text-primary" size={24} />
 				</button>
 				<Link
 					href="/"
@@ -104,8 +104,8 @@ export default function HeaderMobileNav({
 						aria-expanded={mobileCompanyExpanded}
 					>
 						Company
-						<FaChevronDown
-							className={`text-sm transition-transform ${mobileCompanyExpanded ? "rotate-180" : ""}`}
+						<UilAngleDown
+							className={`w-4 h-4 transition-transform ${mobileCompanyExpanded ? "rotate-180" : ""}`}
 						/>
 					</button>
 					{mobileCompanyExpanded && (
@@ -138,8 +138,8 @@ export default function HeaderMobileNav({
 						aria-expanded={mobileProductExpanded}
 					>
 						Products
-						<FaChevronDown
-							className={`text-sm transition-transform ${mobileProductExpanded ? "rotate-180" : ""}`}
+						<UilAngleDown
+							className={`w-4 h-4 transition-transform ${mobileProductExpanded ? "rotate-180" : ""}`}
 						/>
 					</button>
 					{mobileProductExpanded && (

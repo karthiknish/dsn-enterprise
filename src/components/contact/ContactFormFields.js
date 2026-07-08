@@ -1,6 +1,6 @@
 "use client";
 
-import { FaExclamationTriangle } from "react-icons/fa";
+import { UilExclamationTriangle } from "@iconscout/react-unicons";
 
 const inputClass = (hasError) =>
 	`w-full px-4 py-2 border text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
@@ -39,7 +39,7 @@ export default function ContactFormFields({
 						id="name-error"
 						className="mt-1 text-sm text-red-600 flex items-center field-error"
 					>
-						<FaExclamationTriangle className="mr-1" />
+						<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 						{fieldErrors.name}
 					</p>
 				)}
@@ -76,7 +76,7 @@ export default function ContactFormFields({
 							id="email-error"
 							className="mt-1 text-sm text-red-600 flex items-center field-error"
 						>
-							<FaExclamationTriangle className="mr-1" />
+							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 							{fieldErrors.email}
 						</p>
 					)}
@@ -106,7 +106,7 @@ export default function ContactFormFields({
 							id="phone-error"
 							className="mt-1 text-sm text-red-600 flex items-center field-error"
 						>
-							<FaExclamationTriangle className="mr-1" />
+							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 							{fieldErrors.phone}
 						</p>
 					)}
@@ -138,7 +138,7 @@ export default function ContactFormFields({
 						id="company-error"
 						className="mt-1 text-sm text-red-600 flex items-center field-error"
 					>
-						<FaExclamationTriangle className="mr-1" />
+						<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 						{fieldErrors.company}
 					</p>
 				)}
@@ -219,7 +219,7 @@ export default function ContactFormFields({
 							id="message-error"
 							className="text-sm text-red-600 flex items-center field-error"
 						>
-							<FaExclamationTriangle className="mr-1" />
+							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 							{fieldErrors.message}
 						</p>
 					)}

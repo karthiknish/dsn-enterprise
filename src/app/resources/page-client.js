@@ -3,16 +3,15 @@
 import { m } from "framer-motion";
 import Link from "next/link";
 import {
-	FaBook,
-	FaCertificate,
-	FaClipboardList,
-	FaDownload,
-	FaFileExcel,
-	FaFilePdf,
-	FaIndustry,
-	FaRuler,
-	FaArrowRight,
-} from "react-icons/fa";
+	UilBookAlt,
+	UilAward,
+	UilClipboardAlt,
+	UilDownloadAlt,
+	UilBuilding,
+	UilRuler,
+	UilArrowRight,
+} from "@iconscout/react-unicons";
+import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
@@ -20,7 +19,7 @@ import { pageHeroes } from "@/content/page-heroes";
 const downloadCategories = [
 	{
 		title: "Product Catalogs",
-		icon: FaBook,
+		icon: UilBookAlt,
 		items: [
 			{
 				name: "Complete Product Catalog 2024",
@@ -50,7 +49,7 @@ const downloadCategories = [
 	},
 	{
 		title: "Technical Resources",
-		icon: FaRuler,
+		icon: UilRuler,
 		items: [
 			{
 				name: "Gauge Tolerance Charts",
@@ -80,7 +79,7 @@ const downloadCategories = [
 	},
 	{
 		title: "Quality & Compliance",
-		icon: FaCertificate,
+		icon: UilAward,
 		items: [
 			{
 				name: "ISO 9001:2015 Certificate",
@@ -110,7 +109,7 @@ const downloadCategories = [
 	},
 	{
 		title: "Forms & Templates",
-		icon: FaClipboardList,
+		icon: UilClipboardAlt,
 		items: [
 			{
 				name: "Quotation Request Form",
@@ -216,7 +215,7 @@ export default function ResourcesPage() {
 					{ href: "/resources", label: "Resources" },
 				]}
 			>
-				<FaDownload className="text-4xl opacity-90" aria-hidden />
+				<UilDownloadAlt className="w-8 h-8 opacity-90" aria-hidden />
 			</PageHero>
 
 			{/* Download Catalogues & Technical Resources */}
@@ -257,7 +256,7 @@ export default function ResourcesPage() {
 								{/* Category Header */}
 								<div className="flex items-center gap-4 mb-6">
 									<div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-										<category.icon className="text-xl text-primary" />
+										<category.icon className="w-6 h-6 text-primary" />
 									</div>
 									<div>
 										<h3 className="text-xl font-semibold text-primary-dark">
@@ -314,7 +313,7 @@ export default function ResourcesPage() {
 															className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors flex-shrink-0 group/link"
 														>
 															<span>Request</span>
-															<FaArrowRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
+															<UilArrowRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 													</div>
 												</div>
@@ -371,7 +370,7 @@ export default function ResourcesPage() {
 								>
 									<div className="flex items-start gap-5">
 										<div className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-accent/10 group-hover:text-accent transition-colors">
-											<FaBook className="text-lg" aria-hidden />
+											<UilBookAlt className="w-5 h-5" aria-hidden />
 										</div>
 										<div className="min-w-0 flex-1">
 											<h3 className="text-xl font-semibold text-primary-dark">
@@ -457,7 +456,7 @@ export default function ResourcesPage() {
 									transition={{ duration: 0.45, delay: index * 0.06 }}
 								>
 									<div className="w-14 h-14 shrink-0 rounded-2xl bg-accent-50 flex items-center justify-center group-hover:bg-accent-100 transition-colors duration-300">
-										<FaIndustry className="text-xl text-accent" aria-hidden />
+										<UilBuilding className="w-6 h-6 text-accent" aria-hidden />
 									</div>
 									<div className="min-w-0 flex-1">
 										<div className="flex items-baseline gap-2 flex-wrap">

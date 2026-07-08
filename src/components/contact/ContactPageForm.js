@@ -1,6 +1,6 @@
 "use client";
 
-import { FaExclamationTriangle } from "react-icons/fa";
+import { UilExclamationTriangle } from "@iconscout/react-unicons";
 import ContactFormActions from "./ContactFormActions";
 import ContactFormFields from "./ContactFormFields";
 
@@ -24,7 +24,7 @@ export default function ContactPageForm({
 					role="alert"
 					className="mb-6 flex items-start gap-2 rounded-md border border-red-400 bg-red-100 px-4 py-3 text-red-700"
 				>
-					<FaExclamationTriangle className="mt-0.5 shrink-0" aria-hidden />
+					<UilExclamationTriangle className="mt-0.5 shrink-0 w-5 h-5" aria-hidden />
 					<p>{errorMessage}</p>
 				</div>
 			)}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useReducer, useRef } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { UilBars, UilTimes } from "@iconscout/react-unicons";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 import {
 	createInitialHeaderNavState,
@@ -157,9 +157,9 @@ const Header = () => {
 					aria-label={nav.isOpen ? "Close menu" : "Open menu"}
 				>
 					{nav.isOpen ? (
-						<FaTimes className="text-primary" size={24} />
+						<UilTimes className="text-primary" size={24} />
 					) : (
-						<FaBars
+						<UilBars
 							className={`${nav.scrolled || !isHome ? "text-gray-900" : "text-white"}`}
 							size={24}
 						/>

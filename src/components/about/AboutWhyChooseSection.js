@@ -1,7 +1,8 @@
 "use client";
 
 import { m } from "framer-motion";
-import { FaIndustry, FaUsers, FaGlobeAsia, FaAward } from "react-icons/fa";
+import { FaIndustry } from "react-icons/fa";
+import { UilUsersAlt, UilGlobe, UilAward } from "@iconscout/react-unicons";
 import PageSection from "@/components/layout/PageSection";
 import SectionHeader from "@/components/ui/SectionHeader";
 
@@ -14,19 +15,19 @@ const featured = {
 
 const reasons = [
 	{
-		icon: FaUsers,
+		icon: UilUsersAlt,
 		title: "Metrology & Design Team",
 		description:
 			"Gauge designers and metrologists who review drawings, thread data, and feasibility before production starts. Your print is understood before steel is cut.",
 	},
 	{
-		icon: FaGlobeAsia,
+		icon: UilGlobe,
 		title: "Pan-India & Export Coverage",
 		description:
 			"Strong Tamil Nadu coverage from Coimbatore, with pan-India supply and export programmes for OCTG, automotive, and precision engineering sectors.",
 	},
 	{
-		icon: FaAward,
+		icon: UilAward,
 		title: "ISO, NABL & API Licensed",
 		description:
 			"ISO 9001:2015 quality management, NABL-accredited calibration, and API 5B / 7-2 licensing for licensed OCTG gauging where your programme requires it.",
@@ -63,7 +64,7 @@ export default function AboutWhyChooseSection() {
 
 					<div className="relative">
 						<div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-6">
-							<featured.icon className="text-2xl" />
+							<featured.icon className="w-6 h-6" />
 						</div>
 						<h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
 							{featured.title}
@@ -86,7 +87,7 @@ export default function AboutWhyChooseSection() {
 							transition={{ duration: 0.45, delay: (index + 1) * 0.06 }}
 						>
 							<div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
-								<reason.icon className="text-lg" />
+								<reason.icon className="w-5 h-5" />
 							</div>
 							<div>
 								<h3 className="text-base font-semibold text-gray-900 mb-1.5">

@@ -2,14 +2,15 @@
 
 import { m } from "framer-motion";
 import Image from "next/image";
-import { FaAward, FaCertificate, FaSearchPlus } from "react-icons/fa";
+import { FaCertificate } from "react-icons/fa";
+import { UilAward, UilSearchPlus } from "@iconscout/react-unicons";
 import PageSection from "@/components/layout/PageSection";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 const featured = {
 	image: "/images/certificates/API-5B-0039-2023_page-0001.jpg",
 	alt: "API 5B Certificate, licensed thread gauge manufacturing",
-	icon: FaAward,
+	icon: UilAward,
 	title: "API 5B Certificate",
 	description:
 		"Licensed manufacturing for API 5B thread gauging, used on casing, tubing, and line pipe connections across oil and gas supply chains.",
@@ -27,7 +28,7 @@ const certifications = [
 	{
 		image: "/images/certificates/api72.jpg",
 		alt: "API 7-2 Certificate, rotary shouldered connection gauges",
-		icon: FaAward,
+		icon: UilAward,
 		title: "API 7-2 Certificate",
 		description:
 			"API 7-2 licensing for rotary shouldered connection gauges, used on drill string and heavy-duty threading programmes.",
@@ -81,7 +82,7 @@ export default function AboutCertificationsSection() {
 							aria-hidden
 						>
 							<span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 text-gray-900 text-sm font-medium shadow-lg backdrop-blur-sm">
-								<FaSearchPlus className="text-xs" />
+								<UilSearchPlus className="w-3.5 h-3.5" />
 								View Certificate
 							</span>
 						</div>
@@ -89,7 +90,7 @@ export default function AboutCertificationsSection() {
 
 					<div className="p-8 md:p-10 flex flex-col justify-center">
 						<div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-5">
-							<featured.icon className="text-lg" />
+							<featured.icon className="w-5 h-5" />
 						</div>
 						<h3 className="text-2xl font-semibold text-gray-900 mb-3">
 							{featured.title}
@@ -123,7 +124,7 @@ export default function AboutCertificationsSection() {
 							<div className="p-5 flex-1 min-w-0">
 								<div className="flex items-center gap-3 mb-2">
 									<div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
-										<cert.icon className="text-sm" />
+										<cert.icon className="w-3.5 h-3.5" />
 									</div>
 									<h3 className="text-base font-semibold text-gray-900 leading-tight">
 										{cert.title}

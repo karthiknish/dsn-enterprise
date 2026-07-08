@@ -3,7 +3,7 @@
 import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { FaArrowRight, FaCheck } from "react-icons/fa";
+import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
 import { pageHeroes } from "@/content/page-heroes";
@@ -272,7 +272,7 @@ export default function ThreadGaugesPage() {
 														key={feature}
 														className="flex items-start text-sm"
 													>
-														<FaCheck className="text-primary mt-1 mr-2 flex-shrink-0" />
+														<UilCheck className="w-4 h-4 text-primary mt-1 mr-2 flex-shrink-0" />
 														<span className="text-gray-600">{feature}</span>
 													</li>
 												))}
@@ -300,7 +300,7 @@ export default function ThreadGaugesPage() {
 											className="inline-flex items-center text-primary hover:text-primary-dark font-medium"
 										>
 											Request Quote
-											<FaArrowRight className="ml-2" />
+											<UilArrowRight className="ml-2 w-4 h-4" />
 										</Link>
 									</div>
 								</div>

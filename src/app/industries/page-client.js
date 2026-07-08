@@ -3,21 +3,21 @@
 import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { FaOilCan } from "react-icons/fa";
 import {
-	FaArrowRight,
-	FaAward,
-	FaCar,
-	FaCheck,
-	FaClock,
-	FaCogs,
-	FaIndustry,
-	FaMicrochip,
-	FaOilCan,
-	FaPlane,
-	FaShip,
-	FaTrain,
-	FaUsers,
-} from "react-icons/fa";
+	UilArrowRight,
+	UilAward,
+	UilBuilding,
+	UilCar,
+	UilCheck,
+	UilCircuit,
+	UilClock,
+	UilCog,
+	UilPlane,
+	UilShip,
+	UilSubway,
+	UilUsersAlt,
+} from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
@@ -48,7 +48,7 @@ const industries = [
 	{
 		id: "automotive",
 		name: "Automotive",
-		icon: FaCar,
+		icon: UilCar,
 		description:
 			"Thread and plain gauges for engine, transmission, and chassis lines, supporting tier suppliers who need repeatable GO/NO-GO acceptance.",
 		applications: [
@@ -70,7 +70,7 @@ const industries = [
 	{
 		id: "aerospace",
 		name: "Aerospace & Defense",
-		icon: FaPlane,
+		icon: UilPlane,
 		description:
 			"Tight-tolerance thread and plain gauges for fasteners, landing gear, and avionics housings, documented for defence and aerospace QA.",
 		applications: [
@@ -92,7 +92,7 @@ const industries = [
 	{
 		id: "general-engineering",
 		name: "General Engineering",
-		icon: FaCogs,
+		icon: UilCog,
 		description:
 			"Everyday plug, ring, snap, and thread gauges for job shops and OEM tool rooms that need reliable inspection without delays.",
 		applications: [
@@ -114,7 +114,7 @@ const industries = [
 	{
 		id: "heavy-machinery",
 		name: "Heavy Machinery",
-		icon: FaIndustry,
+		icon: UilBuilding,
 		description:
 			"Large-diameter and heavy-thread gauges for hydraulics, bearings, and structural fasteners on construction and mining equipment.",
 		applications: [
@@ -136,7 +136,7 @@ const industries = [
 	{
 		id: "marine",
 		name: "Marine & Shipbuilding",
-		icon: FaShip,
+		icon: UilShip,
 		description:
 			"BSP, taper, and API gauging for propulsion, deck equipment, and offshore fabrication, with packaging suited to harsh environments.",
 		applications: [
@@ -158,7 +158,7 @@ const industries = [
 	{
 		id: "railways",
 		name: "Railways",
-		icon: FaTrain,
+		icon: UilSubway,
 		description:
 			"Gauges for axles, couplers, and brake components on rolling stock programmes that cannot compromise thread or bore integrity.",
 		applications: [
@@ -180,7 +180,7 @@ const industries = [
 	{
 		id: "electronics",
 		name: "Electronics & Precision",
-		icon: FaMicrochip,
+		icon: UilCircuit,
 		description:
 			"Fine-pitch and miniature thread and pin gauges for connectors, sensors, and precision assemblies.",
 		applications: [
@@ -258,7 +258,7 @@ export default function IndustriesPage() {
 										{/* Industry icon + name */}
 										<div className="flex items-center gap-4 mb-6">
 											<div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-												<industry.icon className="text-xl text-primary" />
+												<industry.icon className="w-5 h-5 text-primary" />
 											</div>
 											<h2 className="text-2xl lg:text-3xl font-semibold text-gray-900">
 												{industry.name}
@@ -278,7 +278,7 @@ export default function IndustriesPage() {
 											<ul className="space-y-2">
 												{industry.applications.map((app) => (
 													<li key={app} className="flex items-start gap-3">
-														<FaCheck className="mt-0.5 text-accent flex-shrink-0 text-sm" />
+														<UilCheck className="mt-0.5 text-accent flex-shrink-0 w-3.5 h-3.5" />
 														<span className="text-gray-700">{app}</span>
 													</li>
 												))}
@@ -337,7 +337,7 @@ export default function IndustriesPage() {
 											aria-label={`Request quote for ${industry.name} industry`}
 										>
 											Request Industry Quote
-											<FaArrowRight className="text-xs" />
+											<UilArrowRight className="w-3.5 h-3.5" />
 										</Link>
 									</div>
 								</div>
@@ -388,7 +388,7 @@ export default function IndustriesPage() {
 								viewport={{ once: true, margin: "-30px" }}
 								transition={{ duration: 0.45, delay: 0 }}
 							>
-								<FaClock className="text-xl text-primary/70 mb-4" />
+								<UilClock className="w-5 h-5 text-primary/70 mb-4" />
 								<div className="flex items-baseline gap-2">
 									<span className="text-6xl md:text-7xl font-semibold tracking-tight text-primary tabular-nums">
 										25+
@@ -412,7 +412,7 @@ export default function IndustriesPage() {
 								viewport={{ once: true, margin: "-30px" }}
 								transition={{ duration: 0.45, delay: 0.06 }}
 							>
-								<FaUsers className="text-lg text-primary/70 mb-4" />
+								<UilUsersAlt className="w-5 h-5 text-primary/70 mb-4" />
 								<span className="text-5xl font-semibold tracking-tight text-primary tabular-nums">
 									500+
 								</span>
@@ -434,7 +434,7 @@ export default function IndustriesPage() {
 								viewport={{ once: true, margin: "-30px" }}
 								transition={{ duration: 0.45, delay: 0.12 }}
 							>
-								<FaAward className="text-lg text-primary/70 mb-4" />
+								<UilAward className="w-5 h-5 text-primary/70 mb-4" />
 								<span className="text-5xl font-semibold tracking-tight text-primary tabular-nums">
 									API
 								</span>

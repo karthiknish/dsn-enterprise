@@ -2,15 +2,15 @@
 
 import { m } from "framer-motion";
 import Link from "next/link";
+import { FaCertificate } from "react-icons/fa";
 import {
-	FaCertificate,
-	FaCheck,
-	FaClipboardList,
-	FaClock,
-	FaPhoneAlt,
-	FaTools,
-	FaTruck,
-} from "react-icons/fa";
+	UilCheck,
+	UilClipboardNotes,
+	UilClock,
+	UilPhoneAlt,
+	UilTruck,
+	UilWrench,
+} from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
@@ -117,28 +117,28 @@ const benefits = [
 		featured: true,
 	},
 	{
-		icon: FaTools,
+		icon: UilWrench,
 		title: "Skilled Metrologists",
 		desc: "Years of hands-on experience with precision gauges across every major industry standard.",
 	},
 	{
-		icon: FaClipboardList,
+		icon: UilClipboardNotes,
 		title: "Complete Traceability",
 		desc: "Detailed calibration certificates with full measurement data and uncertainty analysis.",
 	},
 	{
-		icon: FaClock,
+		icon: UilClock,
 		title: "Rapid Turnaround",
 		desc: "Standard 3–5 days. Express 24–48 hours available. On-site service by appointment.",
 		wide: true,
 	},
 	{
-		icon: FaTruck,
+		icon: UilTruck,
 		title: "Door-to-Door Logistics",
 		desc: "We handle pickup and delivery so you focus on production, not shipping.",
 	},
 	{
-		icon: FaCheck,
+		icon: UilCheck,
 		title: "Transparent Pricing",
 		desc: "No hidden fees. Detailed quotes provided before any work begins.",
 	},
@@ -197,7 +197,7 @@ export default function CalibrationPage() {
 					href="/contact?service=Calibration"
 					className="inline-flex items-center bg-white text-primary font-semibold py-3 px-6 rounded-lg hover:bg-secondary-light transition-colors"
 				>
-					<FaPhoneAlt className="mr-2" aria-hidden />
+					<UilPhoneAlt className="mr-2 w-4 h-4" aria-hidden />
 					Request Calibration
 				</Link>
 			</PageHero>
@@ -252,7 +252,7 @@ export default function CalibrationPage() {
 											{service.title}
 										</h3>
 										<div className="flex items-center gap-1.5 text-accent text-sm font-medium whitespace-nowrap bg-accent-50 px-3 py-1 rounded-full">
-											<FaClock className="text-xs" aria-hidden />
+											<UilClock className="w-3.5 h-3.5" aria-hidden />
 											{service.turnaround}
 										</div>
 									</div>
@@ -263,8 +263,8 @@ export default function CalibrationPage() {
 										{service.features.map((feature) => (
 											<li key={feature} className="flex items-start text-sm">
 												<span className="flex-shrink-0 w-5 h-5 rounded-full bg-accent-50 flex items-center justify-center mr-3 mt-0.5">
-													<FaCheck
-														className="text-accent text-[10px]"
+													<UilCheck
+														className="text-accent w-3 h-3"
 														aria-hidden
 													/>
 												</span>
@@ -501,8 +501,8 @@ export default function CalibrationPage() {
 										<item.icon
 											className={
 												item.featured
-													? "text-2xl text-primary"
-													: "text-xl text-primary"
+													? "w-6 h-6 text-primary"
+													: "w-5 h-5 text-primary"
 											}
 											aria-hidden
 										/>

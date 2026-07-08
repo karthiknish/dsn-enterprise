@@ -1,7 +1,7 @@
 "use client";
 
 import { m } from "framer-motion";
-import { FaCertificate } from "react-icons/fa";
+import { UilAward } from "@iconscout/react-unicons";
 import { certifications } from "@/content/api-gauges-data";
 
 export default function ApiGaugesCertificationsSection() {
@@ -19,7 +19,7 @@ export default function ApiGaugesCertificationsSection() {
 								viewport={{ once: true }}
 								transition={{ duration: 0.5, delay: certIndex * 0.1 }}
 							>
-								<FaCertificate className="text-4xl text-primary mr-4 flex-shrink-0" />
+								<UilAward className="w-8 h-8 text-primary mr-4 flex-shrink-0" />
 								<div>
 									<h3 className="text-xl font-semibold text-gray-900">
 										{cert.name}

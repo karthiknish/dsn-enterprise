@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaLinkedin } from "react-icons/fa";
+import { UilLinkedin } from "@iconscout/react-unicons";
 
 const Footer = () => {
 	return (
@@ -21,7 +21,7 @@ const Footer = () => {
 								className="text-white hover:text-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
 								aria-label="DSN Enterprises on LinkedIn"
 							>
-								<FaLinkedin size={20} aria-hidden />
+								<UilLinkedin size={20} aria-hidden />
 							</a>
 						</div>
 					</div>

@@ -3,12 +3,12 @@
 import { m } from "framer-motion";
 import Link from "next/link";
 import {
-	FaArrowRight,
-	FaCertificate,
-	FaCheck,
-	FaRuler,
-	FaTools,
-} from "react-icons/fa";
+	UilArrowRight,
+	UilAward,
+	UilCheck,
+	UilRuler,
+	UilWrench,
+} from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
@@ -32,7 +32,7 @@ const services = [
 		name: "Calibration Services",
 		description:
 			"NABL-accredited calibration for plain, thread, API, and special gauges, delivered with traceable certificates and express turnaround when production cannot wait.",
-		icon: <FaRuler className="text-5xl text-primary mb-4" />,
+		icon: <UilRuler className="w-8 h-8 text-primary mb-4" />,
 		eyebrow: "Accredited Laboratory",
 		details: [
 			"Comprehensive calibration for plain, thread, API, and special gauges",
@@ -48,7 +48,7 @@ const services = [
 		name: "Custom Gauge Manufacturing",
 		description:
 			"Gauges built exactly to your engineering drawing, custom thread forms, progressive members, and material grades selected for your specific wear profile and tolerance requirements.",
-		icon: <FaTools className="text-5xl text-primary mb-4" />,
+		icon: <UilWrench className="w-8 h-8 text-primary mb-4" />,
 		eyebrow: "Built to Spec",
 		details: [
 			"Custom gauges manufactured per your engineering drawing",
@@ -64,7 +64,7 @@ const services = [
 		name: "Certification & Testing",
 		description:
 			"Full dimensional inspection, material verification, and compliance documentation aligned to IS, ISO, and API standards, audit-ready every time.",
-		icon: <FaCertificate className="text-5xl text-primary mb-4" />,
+		icon: <UilAward className="w-8 h-8 text-primary mb-4" />,
 		eyebrow: "Audit Ready",
 		details: [
 			"Certification per IS, ISO, and API standards",
@@ -171,7 +171,7 @@ const ServicesPage = () => {
 									className="inline-flex items-center text-sm font-medium text-accent hover:text-accent-dark transition-colors duration-200 gap-2 group-hover:gap-3"
 								>
 									<span>Explore Service</span>
-									<FaArrowRight className="text-xs transition-transform duration-200 group-hover:translate-x-0.5" />
+									<UilArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
 								</Link>
 							</div>
 						</m.div>
@@ -207,7 +207,7 @@ const ServicesPage = () => {
 										className="inline-flex items-center text-sm font-medium text-accent hover:text-accent-dark transition-colors duration-200 gap-2 group-hover:gap-3"
 									>
 										<span>Explore Service</span>
-										<FaArrowRight className="text-xs transition-transform duration-200 group-hover:translate-x-0.5" />
+										<UilArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
 									</Link>
 								</div>
 							</m.div>
@@ -252,7 +252,7 @@ const ServicesPage = () => {
 											key={`${service.id}-${detail}`}
 											className="flex items-start gap-3"
 										>
-											<FaCheck className="text-accent mt-1 flex-shrink-0 text-sm" />
+											<UilCheck className="w-3.5 h-3.5 text-accent mt-1 flex-shrink-0" />
 											<span className="text-gray-700 leading-relaxed">
 												{detail}
 											</span>
@@ -264,7 +264,7 @@ const ServicesPage = () => {
 									className="inline-flex items-center bg-primary hover:bg-primary-dark text-white font-medium py-3.5 px-7 rounded-xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary shadow-sm hover:shadow-md"
 								>
 									Request Service
-									<FaArrowRight className="ml-2.5 text-sm" />
+									<UilArrowRight className="ml-2.5 w-4 h-4" />
 								</Link>
 							</div>
 
@@ -324,7 +324,7 @@ const ServicesPage = () => {
 						<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10">
 							{/* Card Header */}
 							<div className="flex items-center gap-2.5 mb-6 pb-6 border-b border-gray-100">
-								<FaCertificate className="text-accent text-lg" />
+								<UilAward className="w-5 h-5 text-accent" />
 								<span className="text-sm font-semibold text-gray-500 uppercase tracking-[0.12em]">
 									Reference Standards
 								</span>
@@ -337,7 +337,7 @@ const ServicesPage = () => {
 										key={standard}
 										className="flex items-start gap-3"
 									>
-										<FaCheck className="text-accent mt-1 flex-shrink-0 text-sm" />
+										<UilCheck className="w-3.5 h-3.5 text-accent mt-1 flex-shrink-0" />
 										<span className="text-gray-700 leading-relaxed">
 											{standard}
 										</span>

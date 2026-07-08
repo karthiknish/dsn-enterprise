@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FaCheck } from "react-icons/fa";
+import { UilCheck } from "@iconscout/react-unicons";
 
 export default function ContactFormActions({
 	isSubmitting,
@@ -81,7 +81,7 @@ export default function ContactFormActions({
 
 			{lastSaved && (
 				<div className="mt-3 text-xs text-gray-500 flex items-center justify-center">
-					<FaCheck className="mr-1" aria-hidden />
+					<UilCheck className="mr-1 w-3.5 h-3.5" aria-hidden />
 					Draft saved at {lastSaved.toLocaleTimeString()}
 				</div>
 			)}

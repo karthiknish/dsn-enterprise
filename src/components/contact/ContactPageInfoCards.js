@@ -1,11 +1,11 @@
 "use client";
 
 import { m } from "framer-motion";
-import { FaClock, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
+import { UilClock, UilMapMarker, UilPhone } from "@iconscout/react-unicons";
 
 const items = [
 	{
-		icon: FaMapMarkerAlt,
+		icon: UilMapMarker,
 		title: "Our Location",
 		content: (
 			<>
@@ -17,12 +17,12 @@ const items = [
 		),
 	},
 	{
-		icon: FaPhone,
+		icon: UilPhone,
 		title: "Phone",
 		content: <a href="tel:+919363122005">+91 9363122005</a>,
 	},
 	{
-		icon: FaClock,
+		icon: UilClock,
 		title: "Business Hours",
 		content: (
 			<>
@@ -51,7 +51,7 @@ export default function ContactPageInfoCards() {
 							transition={{ duration: 0.45, delay: index * 0.06 }}
 						>
 							<div className="w-11 h-11 shrink-0 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-								<Icon className="text-lg" />
+								<Icon className="w-5 h-5" />
 							</div>
 							<div>
 								<h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-1.5">

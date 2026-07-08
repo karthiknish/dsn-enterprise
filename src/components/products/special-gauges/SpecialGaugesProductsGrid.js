@@ -2,7 +2,7 @@
 
 import { m } from "framer-motion";
 import Link from "next/link";
-import { FaArrowRight, FaCheck } from "react-icons/fa";
+import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { products } from "@/content/special-gauges-data";
 
 export default function SpecialGaugesProductsGrid() {
@@ -45,7 +45,7 @@ export default function SpecialGaugesProductsGrid() {
 									<ul className="grid grid-cols-2 gap-1">
 										{product.features.map((feature) => (
 											<li key={feature} className="flex items-start text-xs">
-												<FaCheck className="text-primary mt-0.5 mr-1 flex-shrink-0 text-xs" />
+												<UilCheck className="w-3 h-3 text-primary mt-0.5 mr-1 flex-shrink-0" />
 												<span className="text-gray-600">{feature}</span>
 											</li>
 										))}
@@ -68,7 +68,7 @@ export default function SpecialGaugesProductsGrid() {
 									className="inline-flex items-center text-primary hover:text-primary-dark font-medium text-sm"
 								>
 									Request Quote
-									<FaArrowRight className="ml-2" />
+									<UilArrowRight className="ml-2 w-4 h-4" />
 								</Link>
 							</div>
 						</m.div>

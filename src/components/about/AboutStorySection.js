@@ -1,13 +1,14 @@
 "use client";
 
 import { m } from "framer-motion";
-import { FaRuler, FaIndustry, FaTruck, FaShieldAlt } from "react-icons/fa";
+import { FaIndustry } from "react-icons/fa";
+import { UilRuler, UilTruck, UilShield } from "@iconscout/react-unicons";
 import PageSection from "@/components/layout/PageSection";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 const values = [
 	{
-		icon: FaRuler,
+		icon: UilRuler,
 		title: "Guaranteed Precision",
 		body: "Every gauge is made to agreed tolerances, inspected, and documented. What we ship matches what your line accepts, no variance.",
 	},
@@ -17,12 +18,12 @@ const values = [
 		body: "Continuous investment in tooling, process control, and application know-how for demanding thread forms and custom profiles.",
 	},
 	{
-		icon: FaTruck,
+		icon: UilTruck,
 		title: "Reliable Delivery",
 		body: "Clear lead times from enquiry to dispatch. Gauges that fit your quality plan and delivery schedule, not generic catalogue lead times.",
 	},
 	{
-		icon: FaShieldAlt,
+		icon: UilShield,
 		title: "Complete Transparency",
 		body: "We stand behind every measurement and certificate. If a gauge isn't fit for use, we flag it before it reaches your floor.",
 	},
@@ -104,7 +105,7 @@ export default function AboutStorySection() {
 							className="group bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
 						>
 							<div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors duration-300">
-								<value.icon className="text-accent text-lg" />
+								<value.icon className="text-accent w-5 h-5" />
 							</div>
 							<h3 className="text-lg font-semibold text-gray-900 mb-2">
 								{value.title}

@@ -1,4 +1,4 @@
-import { FaCheck } from "react-icons/fa";
+import { UilCheck } from "@iconscout/react-unicons";
 import { specifications } from "@/content/special-gauges-data";
 
 const capabilities = [
@@ -58,7 +58,7 @@ export default function SpecialGaugesSpecsSection() {
 							<ul className="space-y-3">
 								{capabilities.map((cap) => (
 									<li key={cap.title} className="flex items-start">
-										<FaCheck className="text-primary mt-1 mr-3" />
+										<UilCheck className="w-4 h-4 text-primary mt-1 mr-3" />
 										<div>
 											<span className="font-medium text-gray-900">
 												{cap.title}

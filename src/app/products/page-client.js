@@ -4,7 +4,7 @@ import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { FaArrowRight, FaChevronRight, FaSearch } from "react-icons/fa";
+import { UilArrowRight, UilAngleRight, UilSearch } from "@iconscout/react-unicons";
 import { CheckCircle2, Ruler, BadgeCheck, BookOpen } from "lucide-react";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
@@ -260,8 +260,8 @@ const ProductsPage = () => {
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
-					<FaSearch
-						className="absolute right-4 top-1/2 -translate-y-1/2 text-primary pointer-events-none"
+					<UilSearch
+						className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary pointer-events-none"
 						aria-hidden
 					/>
 				</div>
@@ -323,7 +323,7 @@ const ProductsPage = () => {
 											{categories[0].name}
 										</h3>
 										<span className="text-accent/60 group-hover:text-accent transition-colors duration-300 mt-1">
-											<FaArrowRight className="text-sm" />
+											<UilArrowRight className="w-4 h-4" />
 										</span>
 									</div>
 									<p className="text-text-body text-sm leading-relaxed mb-4 max-w-md">
@@ -341,7 +341,7 @@ const ProductsPage = () => {
 									</div>
 									<span className="inline-flex items-center text-sm font-medium text-accent group-hover:translate-x-1 transition-transform duration-300">
 										View Products
-										<FaChevronRight className="ml-1 text-[10px]" />
+										<UilAngleRight className="ml-1 w-3 h-3" />
 									</span>
 								</div>
 							</Link>
@@ -375,7 +375,7 @@ const ProductsPage = () => {
 												{category.name}
 											</h3>
 											<span className="text-accent/60 group-hover:text-accent transition-colors duration-300 shrink-0 mt-0.5">
-												<FaArrowRight className="text-xs" />
+												<UilArrowRight className="w-3.5 h-3.5" />
 											</span>
 										</div>
 										<p className="text-text-body text-xs leading-relaxed line-clamp-2">
@@ -432,7 +432,7 @@ const ProductsPage = () => {
 							className="text-center py-16 max-w-md mx-auto"
 						>
 							<div className="w-16 h-16 rounded-2xl bg-surface-muted flex items-center justify-center mx-auto mb-5">
-								<FaSearch className="text-2xl text-text-muted" aria-hidden />
+								<UilSearch className="w-6 h-6 text-text-muted" aria-hidden />
 							</div>
 							<h3 className="text-xl font-semibold text-gray-900 mb-2">
 								No products found for &quot;{searchTerm}&quot;
@@ -507,14 +507,14 @@ const ProductsPage = () => {
 														className="text-accent hover:text-accent-dark font-medium text-sm inline-flex items-center gap-1.5 group/link"
 													>
 														Request Quote
-														<FaArrowRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
+														<UilArrowRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
 													</Link>
 													<Link
 														href={`/products/${category.id}`}
 														className="text-text-muted hover:text-primary font-medium text-sm inline-flex items-center gap-1 group/link"
 													>
 														View All
-														<FaChevronRight className="text-[10px] group-hover/link:translate-x-0.5 transition-transform" />
+														<UilAngleRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
 													</Link>
 												</div>
 											</div>
@@ -560,14 +560,14 @@ const ProductsPage = () => {
 															className="text-accent hover:text-accent-dark font-medium text-xs inline-flex items-center gap-1 group/link"
 														>
 															Request Quote
-															<FaArrowRight className="text-[9px] group-hover/link:translate-x-0.5 transition-transform" />
+															<UilArrowRight className="w-2.5 h-2.5 group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 														<Link
 															href={`/products/${category.id}`}
 															className="text-text-muted hover:text-primary font-medium text-xs inline-flex items-center gap-1 group/link"
 														>
 															View All
-															<FaChevronRight className="text-[9px] group-hover/link:translate-x-0.5 transition-transform" />
+															<UilAngleRight className="w-2.5 h-2.5 group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 													</div>
 												</div>

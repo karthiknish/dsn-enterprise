@@ -1,6 +1,6 @@
 "use client";
 
-import { FaExclamationTriangle } from "react-icons/fa";
+import { UilExclamationTriangle } from "@iconscout/react-unicons";
 
 const fieldErrorClass = (hasError) =>
 	hasError ? "border-red-500 focus:ring-red-500/40 focus:border-red-500" : "";
@@ -69,7 +69,7 @@ export default function HomeContactForm({
 							id="name-error"
 							className="mt-1 text-sm text-red-600 flex items-center field-error"
 						>
-							<FaExclamationTriangle className="mr-1" aria-hidden />
+							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" aria-hidden />
 							{fieldErrors.name}
 						</p>
 					)}
@@ -102,7 +102,7 @@ export default function HomeContactForm({
 							id="email-error"
 							className="mt-1 text-sm text-red-600 flex items-center field-error"
 						>
-							<FaExclamationTriangle className="mr-1" aria-hidden />
+							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" aria-hidden />
 							{fieldErrors.email}
 						</p>
 					)}
@@ -134,7 +134,7 @@ export default function HomeContactForm({
 							id="phone-error"
 							className="mt-1 text-sm text-red-600 flex items-center field-error"
 						>
-							<FaExclamationTriangle className="mr-1" aria-hidden />
+							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" aria-hidden />
 							{fieldErrors.phone}
 						</p>
 					)}
@@ -229,7 +229,7 @@ export default function HomeContactForm({
 							id="message-error"
 							className="mt-1 text-sm text-red-600 flex items-center field-error"
 						>
-							<FaExclamationTriangle className="mr-1" aria-hidden />
+							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" aria-hidden />
 							{fieldErrors.message}
 						</p>
 					)}

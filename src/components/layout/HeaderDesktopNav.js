@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaChevronDown } from "react-icons/fa";
+import { UilAngleDown } from "@iconscout/react-unicons";
 
 function isActive(pathname, href) {
 	if (href === "/") return pathname === "/";
@@ -56,8 +56,8 @@ export default function HeaderDesktopNav({
 					aria-expanded={companyDropdown}
 				>
 					Company
-					<FaChevronDown
-						className={`text-xs transition-transform duration-200 ${companyDropdown ? "rotate-180" : ""}`}
+					<UilAngleDown
+						className={`w-3 h-3 transition-transform duration-200 ${companyDropdown ? "rotate-180" : ""}`}
 					/>
 				</button>
 				{companyDropdown && (
@@ -101,8 +101,8 @@ export default function HeaderDesktopNav({
 					aria-expanded={productDropdown}
 				>
 					Products
-					<FaChevronDown
-						className={`text-xs transition-transform duration-200 ${productDropdown ? "rotate-180" : ""}`}
+					<UilAngleDown
+						className={`w-3 h-3 transition-transform duration-200 ${productDropdown ? "rotate-180" : ""}`}
 					/>
 				</button>
 				{productDropdown && (

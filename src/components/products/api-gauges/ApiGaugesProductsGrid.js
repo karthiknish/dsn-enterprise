@@ -3,7 +3,7 @@
 import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { FaArrowRight, FaCheck } from "react-icons/fa";
+import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { products } from "@/content/api-gauges-data";
 
 export default function ApiGaugesProductsGrid() {
@@ -55,7 +55,7 @@ export default function ApiGaugesProductsGrid() {
 									<ul className="space-y-1">
 										{product.features.slice(0, 3).map((feature) => (
 											<li key={feature} className="flex items-start text-sm">
-												<FaCheck className="text-primary mt-1 mr-2 flex-shrink-0 text-xs" />
+												<UilCheck className="w-3.5 h-3.5 text-primary mt-1 mr-2 flex-shrink-0" />
 												<span className="text-gray-600">{feature}</span>
 											</li>
 										))}
@@ -78,7 +78,7 @@ export default function ApiGaugesProductsGrid() {
 									className="inline-flex items-center text-primary hover:text-primary-dark font-medium text-sm"
 								>
 									Request Quote
-									<FaArrowRight className="ml-2" />
+									<UilArrowRight className="ml-2 w-4 h-4" />
 								</Link>
 							</div>
 						</m.div>
