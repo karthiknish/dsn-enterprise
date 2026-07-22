@@ -100,9 +100,9 @@ const Hero = () => {
 						className="hidden lg:block"
 					>
 						<div className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-md p-8 shadow-2xl">
-							<h3 className="text-xl font-semibold mb-6 text-white">
-								Industry-Leading Quality
-							</h3>
+					<h2 className="text-xl font-semibold mb-6 text-white">
+							Industry-Leading Quality
+						</h2>
 							<ul className="space-y-3">
 								{trustPoints.map((point, i) => (
 									<m.li

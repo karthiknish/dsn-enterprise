@@ -13,6 +13,7 @@ import {
 } from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
+import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
 const services = [
@@ -534,6 +535,9 @@ export default function CalibrationPage() {
 					</div>
 				</div>
 			</section>
+
+			{/* Service Areas — Internal links to city pages */}
+			<CityLinks type="service" categorySlug="gauge-calibration" />
 
 			<Cta10
 				reference="Ref. DSN-CAL-01"

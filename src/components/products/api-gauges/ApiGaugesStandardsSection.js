@@ -45,9 +45,9 @@ export default function ApiGaugesStandardsSection() {
         <div className="mb-16 grid gap-9 lg:grid-cols-2">
           {/* Left: intro column */}
           <div className="flex flex-col gap-6">
-            <h1 className="text-4xl font-medium text-balance lg:text-5xl">
+            <h2 className="text-4xl font-medium text-balance lg:text-5xl">
               API Specifications 5B & 7-2
-            </h1>
+            </h2>
             <p className="text-lg text-muted-foreground">
               DSN Enterprises manufactures API gauges in full conformity with
               API Specification 5B and 7-2. Every gauge is certified,

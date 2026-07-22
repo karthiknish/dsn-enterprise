@@ -4,7 +4,7 @@ export const metadata = {
 	title:
 		"Plain Gauges Manufacturer | Plain Plug & Ring Gauges - DSN Enterprises",
 	description:
-		"Premium quality plain gauges including plain plug gauges, ring gauges, cylindrical setting masters, measuring pins, and snap gauges. Available in 1mm to 250mm range. OHNS and carbide materials. NABL certified calibration available.",
+		"Plain plug gauges, ring gauges, setting masters, measuring pins, and snap gauges. 1mm to 250mm range. OHNS and carbide. NABL certified.",
 	keywords: [
 		"plain gauges",
 		"plain plug gauges",

@@ -38,7 +38,7 @@ const getPostBySlug = cache(async (slug) => {
 });
 
 // Render each post on demand so featured images and edits show up immediately.
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
 	const { slug } = await params;
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }) {
 
 	if (!post) {
 		return {
-			title: "Post Not Found - DSN Enterprises",
+			title: "Post Not Found",
 			robots: {
 				index: false,
 				follow: false,
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }) {
 	const description = post.metaDescription || post.excerpt || post.title;
 
 	return {
-		title: post.metaTitle || `${post.title} - DSN Enterprises`,
+		title: post.metaTitle || post.title,
 		description,
 		alternates: {
 			canonical: `/blog/${post.slug}`,
@@ -165,9 +165,9 @@ export default async function BlogPostPage({ params }) {
 							</svg>
 							Back to Blog
 						</Link>
-						<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald">
-							{post.title}
-						</h1>
+					<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald">
+								{post.title}
+							</h1>
 						<div className="flex items-center text-accent-200">
 							<time>
 								{post.publishedDate || post.createdAt
@@ -211,9 +211,9 @@ export default async function BlogPostPage({ params }) {
 
 						{/* Share Section */}
 						<div className="mt-8 bg-white rounded-xl shadow-sm p-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4">
+							<h2 className="text-lg font-semibold text-gray-900 mb-4">
 								Share this article
-							</h3>
+							</h2>
 							<div className="flex gap-4">
 								<a
 									href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}`}

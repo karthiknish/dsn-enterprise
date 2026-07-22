@@ -6,6 +6,7 @@ import Link from "next/link";
 import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
+import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
 const products = [
@@ -407,6 +408,10 @@ export default function ThreadGaugesPage() {
 					</div>
 				</div>
 			</section>
+
+			{/* Service Areas — Internal links to city pages */}
+			<CityLinks type="product" categorySlug="thread-ring-gauges" />
+			<CityLinks type="product" categorySlug="thread-plug-gauges" />
 
 			{/* Related Categories */}
 			<section className="py-16 bg-secondary-light">

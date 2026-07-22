@@ -7,6 +7,7 @@ import SpecialGaugesIntroSection from "@/components/products/special-gauges/Spec
 import SpecialGaugesProductsGrid from "@/components/products/special-gauges/SpecialGaugesProductsGrid";
 import SpecialGaugesRelatedCategories from "@/components/products/special-gauges/SpecialGaugesRelatedCategories";
 import SpecialGaugesSpecsSection from "@/components/products/special-gauges/SpecialGaugesSpecsSection";
+import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
 export default function SpecialGaugesPage() {
@@ -22,6 +23,7 @@ export default function SpecialGaugesPage() {
 			<SpecialGaugesIntroSection />
 			<SpecialGaugesProductsGrid />
 			<SpecialGaugesSpecsSection />
+			<CityLinks type="service" categorySlug="custom-gauge-manufacturing" />
 			<SpecialGaugesRelatedCategories />
 
 			<Cta10

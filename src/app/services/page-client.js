@@ -11,6 +11,7 @@ import {
 } from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
+import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
 // ─── Motion Variants ───────────────────────────────────────────
@@ -348,6 +349,11 @@ const ServicesPage = () => {
 					</m.div>
 				</div>
 			</section>
+
+			{/* Service Areas — Internal links to city pages */}
+			<CityLinks type="service" categorySlug="gauge-calibration" />
+			<CityLinks type="service" categorySlug="custom-gauge-manufacturing" />
+			<CityLinks type="service" categorySlug="gauge-repair-and-reconditioning" />
 
 			<Cta10
 				reference="Ref. DSN-SVC-01"

@@ -62,9 +62,9 @@ export default function ContactPage({ prefillProduct = "" }) {
 						viewport={{ once: true }}
 				className="text-center max-w-3xl mx-auto mb-14 md:mb-16"
 				>
-					<h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-primary-dark tracking-tight mb-5">
-							Let&rsquo;s Talk Precision
-						</h2>
+					<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-primary-dark tracking-tight mb-5">
+								Let&rsquo;s Talk Precision
+							</h1>
 						<p className="text-lg text-gray-600 leading-relaxed">
 							Send us your gauge list, drawing, or calibration
 							requirement. Our engineers review every enquiry and

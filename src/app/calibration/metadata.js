@@ -4,7 +4,7 @@ export const metadata = {
 	title:
 		"Gauge Calibration Services | NABL Accredited Calibration - DSN Enterprises",
 	description:
-		"NABL accredited gauge calibration services for plain gauges, thread gauges, API gauges, and setting masters. Express calibration, gauge repair, refurbishment, and on-site calibration available with traceable certificates.",
+		"NABL accredited gauge calibration for plain, thread, and API gauges. Express calibration, repair, and on-site services with traceable certificates.",
 	keywords: [
 		"gauge calibration",
 		"NABL calibration",

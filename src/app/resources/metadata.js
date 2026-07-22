@@ -4,7 +4,7 @@ export const metadata = {
 	title:
 		"Resources & Downloads | Product Catalogs & Technical Resources - DSN Enterprises",
 	description:
-		"Access product catalogs, technical resources, gauge tolerance charts, thread data tables, API specifications, quality certificates, and forms. Download technical documentation for precision gauges.",
+		"Download product catalogs, gauge tolerance charts, thread data tables, API specifications, and quality certificates for precision gauges.",
 	keywords: [
 		"gauge catalogs",
 		"technical resources",

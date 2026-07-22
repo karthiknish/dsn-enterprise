@@ -36,7 +36,7 @@ export const metadata = {
 		template: "%s | DSN Enterprises",
 	},
 	description:
-		"DSN Enterprises is a leading manufacturer and supplier of high-precision gauges and measuring instruments for industrial applications.",
+		"Leading manufacturer of high-precision gauges and measuring instruments for industrial applications in India.",
 	icons: {
 		icon: "/favicon.ico",
 		apple: "/images/logo.png",

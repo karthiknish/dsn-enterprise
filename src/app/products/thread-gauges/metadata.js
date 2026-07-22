@@ -4,7 +4,7 @@ export const metadata = {
 	title:
 		"Thread Gauges Manufacturer | Thread Plug & Ring Gauges - DSN Enterprises",
 	description:
-		"Precision thread gauges including thread plug gauges, ring gauges, setting plugs, taper gauges, and all standard thread forms. Metric, Unified, BSW, BSP, NPT, and API threads available. NABL certified.",
+		"Thread plug gauges, ring gauges, setting plugs, and taper gauges. Metric, Unified, BSW, BSP, NPT, and API threads. NABL certified.",
 	keywords: [
 		"thread gauges",
 		"thread plug gauges",

@@ -18,9 +18,9 @@ export default function HomeContactForm({
 }) {
 	return (
 		<>
-			<h3 className="text-2xl font-semibold mb-6 text-gray-900">
+			<h2 className="text-2xl font-semibold mb-6 text-gray-900">
 				Send Us a Message
-			</h3>
+			</h2>
 
 			{submitSuccess && (
 				<div

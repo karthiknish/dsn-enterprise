@@ -45,3 +45,7 @@ next-env.d.ts
 # Firebase and Utility Scripts
 /scripts/
 service-account.json
+search-console-service-account-key.json
+
+# OpenCode MCP config (contains service tokens)
+.opencode/

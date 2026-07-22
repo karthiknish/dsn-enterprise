@@ -8,6 +8,7 @@ import ApiGaugesIntroSection from "@/components/products/api-gauges/ApiGaugesInt
 import ApiGaugesProductsGrid from "@/components/products/api-gauges/ApiGaugesProductsGrid";
 import ApiGaugesRelatedCategories from "@/components/products/api-gauges/ApiGaugesRelatedCategories";
 import ApiGaugesStandardsSection from "@/components/products/api-gauges/ApiGaugesStandardsSection";
+import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
 export default function APIGaugesPage() {
@@ -24,6 +25,7 @@ export default function APIGaugesPage() {
 			<ApiGaugesIntroSection />
 			<ApiGaugesProductsGrid />
 			<ApiGaugesStandardsSection />
+			<CityLinks type="product" categorySlug="api-master-gauges" />
 			<ApiGaugesRelatedCategories />
 
 			<Cta10

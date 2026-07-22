@@ -57,7 +57,7 @@ const Compliance1 = ({
               <span className="size-1.5 rounded-full bg-green-500" />
               {tagline}
             </Badge>
-            <h1 className="text-4xl font-medium text-balance lg:text-5xl">
+            <h2 className="text-4xl font-medium text-balance lg:text-5xl">
               {heading}
             </h1>
             <p className="text-lg text-muted-foreground">{description}</p>

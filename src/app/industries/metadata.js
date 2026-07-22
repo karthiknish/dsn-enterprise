@@ -4,7 +4,7 @@ export const metadata = {
 	title:
 		"Industries We Serve | Oil & Gas, Automotive, Aerospace - DSN Enterprises",
 	description:
-		"DSN Enterprises serves diverse industries including Oil & Gas, Automotive, Aerospace & Defense, General Engineering, Heavy Machinery, Marine, Railways, and Electronics with precision gauging solutions.",
+		"DSN Enterprises serves Oil & Gas, Automotive, Aerospace, Heavy Machinery, Marine, and Electronics with precision gauging solutions.",
 	keywords: [
 		"oil and gas gauges",
 		"automotive gauges",

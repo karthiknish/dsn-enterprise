@@ -4,7 +4,7 @@ export const metadata = {
 	title:
 		"API Gauges Manufacturer | API 5B & 7-2 Certified Gauges - DSN Enterprises",
 	description:
-		"API 5B & 7-2 licensed manufacturer of certified thread gauges for oil and gas industry. API casing, tubing, line pipe, and rotary shouldered gauges. Working and master gauges available.",
+		"API 5B & 7-2 licensed thread gauge manufacturer for oil and gas. Casing, tubing, line pipe, and rotary shouldered gauges.",
 	keywords: [
 		"API gauges",
 		"API 5B gauges",

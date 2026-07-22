@@ -6,6 +6,7 @@ import Link from "next/link";
 import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
+import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
 const products = [
@@ -328,6 +329,11 @@ export default function PlainGaugesPage() {
 					</div>
 				</div>
 			</section>
+
+			{/* Service Areas — Internal links to city pages */}
+			<CityLinks type="product" categorySlug="plain-plug-gauges" />
+			<CityLinks type="product" categorySlug="snap-gauges" />
+			<CityLinks type="product" categorySlug="air-gauges" />
 
 			{/* Related Categories */}
 			<section className="py-16 bg-secondary-light">

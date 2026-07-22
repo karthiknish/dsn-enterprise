@@ -3,7 +3,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
 	title: "FAQ - Frequently Asked Questions | DSN Enterprises",
 	description:
-		"Find answers to common questions about our precision gauges, calibration services, API gauges, custom manufacturing, ordering process, lead times, and quality certifications. Comprehensive FAQ for gauge buyers.",
+		"Answers on precision gauges, calibration services, API gauges, custom manufacturing, ordering, lead times, and quality certifications.",
 	keywords: [
 		"gauge FAQ",
 		"precision gauges questions",

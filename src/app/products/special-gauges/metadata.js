@@ -4,7 +4,7 @@ export const metadata = {
 	title:
 		"Special Gauges Manufacturer | Custom & Specialty Gauges - DSN Enterprises",
 	description:
-		"Custom and specialty gauges including ACME thread gauges, buttress thread gauges, trapezoidal gauges, spline gauges, taper gauges, form gauges, and limit gauges manufactured to your specifications.",
+		"Custom and specialty gauges: ACME, buttress, trapezoidal, spline, taper, form, and limit gauges built to your specifications.",
 	keywords: [
 		"special gauges",
 		"custom gauges",
