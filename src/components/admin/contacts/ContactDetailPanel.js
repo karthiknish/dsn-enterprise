@@ -81,7 +81,9 @@ export default function ContactDetailPanel({
 
 				{contact.phone && (
 					<div>
-						<p className="text-xs uppercase tracking-wide text-gray-500">Phone</p>
+						<p className="text-xs uppercase tracking-wide text-gray-500">
+							Phone
+						</p>
 						<p className="mt-1">
 							<a
 								href={`tel:${contact.phone}`}
@@ -95,7 +97,9 @@ export default function ContactDetailPanel({
 
 				{contact.company && (
 					<div>
-						<p className="text-xs uppercase tracking-wide text-gray-500">Company</p>
+						<p className="text-xs uppercase tracking-wide text-gray-500">
+							Company
+						</p>
 						<p className="text-sm text-gray-900 mt-1">{contact.company}</p>
 					</div>
 				)}
@@ -105,12 +109,16 @@ export default function ContactDetailPanel({
 						<p className="text-xs uppercase tracking-wide text-gray-500">
 							Product Interest
 						</p>
-						<p className="text-sm text-gray-900 mt-1">{contact.productInterest}</p>
+						<p className="text-sm text-gray-900 mt-1">
+							{contact.productInterest}
+						</p>
 					</div>
 				)}
 
 				<div>
-					<p className="text-xs uppercase tracking-wide text-gray-500">Message</p>
+					<p className="text-xs uppercase tracking-wide text-gray-500">
+						Message
+					</p>
 					<p className="text-sm text-gray-900 whitespace-pre-wrap mt-1">
 						{contact.message}
 					</p>
@@ -136,27 +144,52 @@ export default function ContactDetailPanel({
 				</div>
 
 				<div>
-					<p className="text-xs uppercase tracking-wide text-gray-500">Submitted</p>
+					<p className="text-xs uppercase tracking-wide text-gray-500">
+						Submitted
+					</p>
 					<p className="text-sm text-gray-900 mt-1">
 						{contact.createdAt?.toDate?.()?.toLocaleString() || "No date"}
 					</p>
 				</div>
 
-				<div className="pt-4 mt-2 border-t border-gray-100 flex gap-2">
-					<a
-						href={`mailto:${contact.email}?subject=Re: Your inquiry to DSN Enterprises`}
-						className="flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
-					>
-						Reply
-					</a>
-					<button
-						type="button"
-						onClick={() => onDelete(contact.id)}
-						className="px-4 py-2 text-sm font-medium border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
-						aria-label="Delete submission"
-					>
-						Delete
-					</button>
+				<div className="pt-4 mt-2 border-t border-gray-100 space-y-3">
+					<div className="flex items-center gap-2">
+						<label
+							htmlFor="contact-status-select"
+							className="text-xs uppercase tracking-wide text-gray-500 shrink-0"
+						>
+							Status
+						</label>
+						<select
+							id="contact-status-select"
+							value={contact.status || "new"}
+							onChange={(e) => onStatusChange(contact.id, e.target.value)}
+							className={`text-xs font-medium rounded-full px-2 py-1 border-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${getContactStatusColor(contact.status)}`}
+						>
+							{CONTACT_STATUSES.map((s) => (
+								<option key={s} value={s}>
+									{s.charAt(0).toUpperCase() + s.slice(1)}
+								</option>
+							))}
+						</select>
+					</div>
+
+					<div className="flex gap-2">
+						<a
+							href={`mailto:${contact.email}?subject=Re: Your inquiry to DSN Enterprises`}
+							className="flex-1 inline-flex items-center justify-center px-4 py-2 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+						>
+							Reply
+						</a>
+						<button
+							type="button"
+							onClick={() => onDelete(contact.id)}
+							className="px-4 py-2 text-sm font-medium border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+							aria-label="Delete submission"
+						>
+							Delete
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

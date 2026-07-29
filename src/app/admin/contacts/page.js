@@ -41,7 +41,9 @@ export default function ContactsPage() {
 				}
 			});
 
-		return () => { cancelled = true; };
+		return () => {
+			cancelled = true;
+		};
 	}, []);
 
 	const showNotification = (message, type = "error") => {
@@ -49,17 +51,28 @@ export default function ContactsPage() {
 		setTimeout(() => setNotification(null), 5000);
 	};
 
-	const handleMarkAsRead = async (contactId) => {
+	const handleStatusChange = async (contactId, newStatus) => {
 		try {
-			await updateDoc(doc(db, "contacts", contactId), { read: true });
+			await updateDoc(doc(db, "contacts", contactId), { status: newStatus });
 			setContacts((prev) =>
-				prev.map((c) => (c.id === contactId ? { ...c, read: true } : c)),
+				prev.map((c) => (c.id === contactId ? { ...c, status: newStatus } : c)),
+			);
+			setSelectedContact((prev) =>
+				prev?.id === contactId ? { ...prev, status: newStatus } : prev,
 			);
 		} catch (error) {
-			console.error("Error marking as read:", error);
+			console.error("Error updating contact status:", error);
 			showNotification(
-				describeFirestoreError(error, "Failed to mark contact as read."),
+				describeFirestoreError(error, "Failed to update status."),
 			);
+		}
+	};
+
+	const handleSelect = (contact) => {
+		setSelectedContact(contact);
+		// Auto-mark as read when opened for the first time.
+		if (contact.status === "new" || !contact.status) {
+			handleStatusChange(contact.id, "read");
 		}
 	};
 
@@ -119,18 +132,16 @@ export default function ContactsPage() {
 				<ContactsList
 					contacts={contacts}
 					selectedContact={selectedContact}
-					onSelect={setSelectedContact}
-					onMarkAsRead={handleMarkAsRead}
+					onSelect={handleSelect}
 					onDelete={handleDelete}
 				/>
 				<ContactDetailPanel
 					contact={selectedContact}
-					onMarkAsRead={handleMarkAsRead}
+					onClose={() => setSelectedContact(null)}
+					onStatusChange={handleStatusChange}
 					onDelete={handleDelete}
 				/>
 			</div>
 		</div>
 	);
 }
-
-
