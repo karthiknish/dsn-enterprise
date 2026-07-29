@@ -1,5 +1,6 @@
 "use client";
 
+import BlogAiStudio from "@/components/admin/blog-chat/BlogAiStudio";
 import { useEditBlogPost } from "@/hooks/useEditBlogPost";
 import BlogFeaturedImagePanel from "./BlogFeaturedImagePanel";
 import BlogNotificationToast from "./BlogNotificationToast";
@@ -24,6 +25,15 @@ export default function EditBlogPostView({ postId, initialPostData }) {
 			<form onSubmit={hook.handleSubmit}>
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 					<div className="lg:col-span-2 space-y-6">
+						<BlogAiStudio
+							postContext={{
+								title: hook.formData.title,
+								excerpt: hook.formData.excerpt,
+								content: hook.formData.content,
+							}}
+							onApplyDraft={hook.handleApplyAiDraft}
+						/>
+
 						<BlogPostDetailsSection
 							formData={hook.formData}
 							generatingTitle={hook.generatingTitle}
@@ -72,10 +82,10 @@ export default function EditBlogPostView({ postId, initialPostData }) {
 							showUnsplashPicker={hook.showUnsplashPicker}
 							setShowUnsplashPicker={hook.setShowUnsplashPicker}
 							onImageUpload={hook.handleImageUpload}
-							onFeaturedUrlChange={(url) =>
+							onFeaturedUrlChange={(event) =>
 								hook.setFormData((prev) => ({
 									...prev,
-									featuredImage: url,
+									featuredImage: event?.target?.value ?? "",
 									imageAttribution: null,
 								}))
 							}
@@ -88,6 +98,9 @@ export default function EditBlogPostView({ postId, initialPostData }) {
 							}
 							onPexelsSelect={hook.handlePexelsSelect}
 							onUnsplashSelect={hook.handleUnsplashSelect}
+							onGenerateAiImage={hook.handleGenerateAiImage}
+							generatingImage={hook.generatingImage}
+							aiImageResult={hook.aiImageResult}
 						/>
 					</div>
 				</div>

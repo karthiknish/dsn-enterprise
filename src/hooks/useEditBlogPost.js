@@ -4,6 +4,7 @@ import { doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { generateAndUploadFeaturedImage } from "@/lib/blog-ai-image";
 import { getEditDraftRestoreState } from "@/lib/blog-edit-init";
 import { generateBlogSlug } from "@/lib/blog-form-utils";
 import { applyEditPostSeoFields } from "@/lib/blog-seo";
@@ -46,6 +47,8 @@ export function useEditBlogPost(postId, initialPostData) {
 	const [showUnsplashPicker, setShowUnsplashPicker] = useState(false);
 	const [imageTab, setImageTab] = useState("upload");
 	const [generatingTitle, setGeneratingTitle] = useState(false);
+	const [generatingImage, setGeneratingImage] = useState(false);
+	const [aiImageResult, setAiImageResult] = useState(null);
 	const [titleSuggestions, setTitleSuggestions] = useState([]);
 	const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
 	const [notification, setNotification] = useState(null);
@@ -128,6 +131,28 @@ export function useEditBlogPost(postId, initialPostData) {
 		);
 	};
 
+	/**
+	 * Apply a researched draft from the blog studio. The editor is remounted
+	 * via editorKey so Tiptap picks up externally replaced content.
+	 */
+	const handleApplyAiDraft = (payload, draft) => {
+		setFormData((prev) => {
+			const next = { ...prev, ...payload };
+			if (payload.title) next.slug = generateBlogSlug(payload.title);
+			return applyEditPostSeoFields(next, originalDataRef.current, {
+				title: next.title,
+				excerpt: next.excerpt,
+				content: next.content,
+			});
+		});
+		if (payload.content) setEditorKey((k) => k + 1);
+		const sourceCount = draft?.sources?.length || 0;
+		showNotification(
+			sourceCount ? `Draft applied (${sourceCount} sources)` : "Draft applied",
+			"success",
+		);
+	};
+
 	const handleGenerateTitles = async () => {
 		const topic = formData.title || "precision gauges industrial metrology";
 		setGeneratingTitle(true);
@@ -197,6 +222,36 @@ export function useEditBlogPost(postId, initialPostData) {
 			);
 		} finally {
 			setUploading(false);
+		}
+	};
+
+	const handleGenerateAiImage = async (options) => {
+		if (!formData.title) {
+			showNotification("Please enter a title first", "error");
+			return;
+		}
+		setGeneratingImage(true);
+		try {
+			const result = await generateAndUploadFeaturedImage({
+				formData,
+				options,
+			});
+			setFormData((prev) => ({
+				...prev,
+				featuredImage: result.url,
+				imageAttribution: {
+					source: "gemini",
+					model: result.model,
+					generatedAt: new Date().toISOString(),
+				},
+			}));
+			setAiImageResult(result);
+			showNotification("Image generated with Gemini", "success");
+		} catch (error) {
+			console.error("Error generating image:", error);
+			showNotification(error.message || "Failed to generate image", "error");
+		} finally {
+			setGeneratingImage(false);
 		}
 	};
 
@@ -292,6 +347,8 @@ export function useEditBlogPost(postId, initialPostData) {
 		imageTab,
 		setImageTab,
 		generatingTitle,
+		generatingImage,
+		aiImageResult,
 		titleSuggestions,
 		showTitleSuggestions,
 		setShowTitleSuggestions,
@@ -307,7 +364,9 @@ export function useEditBlogPost(postId, initialPostData) {
 		handleExcerptChange,
 		handleGenerateTitles,
 		handleSelectTitle,
+		handleApplyAiDraft,
 		handleImageUpload,
+		handleGenerateAiImage,
 		handlePexelsSelect,
 		handleUnsplashSelect,
 		handleSubmit,

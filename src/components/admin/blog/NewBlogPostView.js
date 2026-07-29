@@ -1,5 +1,6 @@
 "use client";
 
+import BlogAiStudio from "@/components/admin/blog-chat/BlogAiStudio";
 import BlogFeaturedImagePanel from "./BlogFeaturedImagePanel";
 import BlogNotificationToast from "./BlogNotificationToast";
 import BlogPostContentSection from "./BlogPostContentSection";
@@ -14,6 +15,8 @@ export default function NewBlogPostView({
 	saving,
 	generatingTitle,
 	generatingContent,
+	generatingImage,
+	aiImageResult,
 	titleSuggestions,
 	showTitleSuggestions,
 	notification,
@@ -37,12 +40,14 @@ export default function NewBlogPostView({
 	onCloseTitleSuggestions,
 	onGenerateContent,
 	onImageUpload,
+	onGenerateAiImage,
 	onFeaturedUrlChange,
 	onClearFeaturedImage,
 	onPexelsSelect,
 	onUnsplashSelect,
 	onRestoreDraft,
 	onDiscardDraft,
+	onApplyAiDraft,
 	onCancel,
 }) {
 	return (
@@ -57,6 +62,15 @@ export default function NewBlogPostView({
 			<form onSubmit={onSubmit}>
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 					<div className="lg:col-span-2 space-y-6">
+						<BlogAiStudio
+							postContext={{
+								title: formData.title,
+								excerpt: formData.excerpt,
+								content: formData.content,
+							}}
+							onApplyDraft={onApplyAiDraft}
+						/>
+
 						<BlogPostDetailsSection
 							formData={formData}
 							generatingTitle={generatingTitle}
@@ -102,6 +116,9 @@ export default function NewBlogPostView({
 							onClearFeaturedImage={onClearFeaturedImage}
 							onPexelsSelect={onPexelsSelect}
 							onUnsplashSelect={onUnsplashSelect}
+							onGenerateAiImage={onGenerateAiImage}
+							generatingImage={generatingImage}
+							aiImageResult={aiImageResult}
 						/>
 					</div>
 				</div>
