@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import { getAnalyticsData } from "@/lib/analytics-data";
 import { getAdminDb } from "@/lib/firebase-admin";
 import { getCuratedPhotos } from "@/lib/pexels-server";
+import {
+	assessSitemap,
+	getSitemapStatus,
+	SEARCH_CONSOLE_SITE,
+} from "@/lib/search-console";
+import { getSiteUrl } from "@/lib/site";
 import { getPhotos } from "@/lib/unsplash-server";
 
 export const dynamic = "force-dynamic";
@@ -77,6 +83,30 @@ async function checkDeepSeek() {
 	return { ok: true };
 }
 
+async function checkSitemapAutomation() {
+	const envKey =
+		process.env.SEARCH_CONSOLE_SERVICE_ACCOUNT_BASE64 ||
+		process.env.GOOGLE_SERVICES_JSON_BASE64;
+	if (!envKey) {
+		throw new Error("SEARCH_CONSOLE_SERVICE_ACCOUNT_BASE64 is not configured");
+	}
+
+	const sitemapUrl = getSiteUrl("/sitemap.xml");
+	const status = await getSitemapStatus(sitemapUrl);
+	const health = assessSitemap(status);
+
+	if (!health.healthy) {
+		throw new Error(health.problems.join("; "));
+	}
+
+	return {
+		ok: true,
+		site: SEARCH_CONSOLE_SITE,
+		urls: status.urlCount,
+		lastDownloaded: status.lastDownloaded,
+	};
+}
+
 async function runCheck(name, checker) {
 	const start = Date.now();
 	try {
@@ -106,6 +136,7 @@ export async function GET() {
 		runCheck("Unsplash", checkUnsplash),
 		runCheck("Brevo (Email)", checkBrevo),
 		runCheck("DeepSeek (AI)", checkDeepSeek),
+		runCheck("Sitemap (Search Console)", checkSitemapAutomation),
 	]);
 
 	const healthy = checks.filter((c) => c.status === "healthy");
