@@ -1,7 +1,7 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "Thank You - DSN Enterprises",
+	title: "Thank You – Enquiry Received",
 	description:
 		"Thank you for contacting DSN Enterprises. We have received your message and will get back to you shortly. For immediate assistance, call us at +91 9363122005.",
 	keywords: ["thank you", "contact confirmation", "DSN Enterprises response"],

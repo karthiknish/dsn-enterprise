@@ -1,4 +1,5 @@
-import { SITE_URL, getSiteUrl } from "@/lib/site";
+import { alternatesFor } from "@/lib/i18n/config";
+import { getSiteUrl, SITE_URL } from "@/lib/site";
 import AboutSection from "../components/home/AboutSection";
 import CertificationsSection from "../components/home/CertificationsSection";
 import ConsultancySection from "../components/home/ConsultancySection";
@@ -8,9 +9,15 @@ import Hero from "../components/home/Hero";
 import ServicesSection from "../components/home/ServicesSection";
 
 export const metadata = {
-	title: "DSN Enterprises - Precision Gauge Manufacturers in Coimbatore, India",
+	// Homepage title is absolute so the root template does not append a second
+	// "| DSN Enterprises" on top of the brand name already in the title.
+	title: {
+		absolute: "DSN Enterprises | Precision Gauge Manufacturers, Coimbatore",
+	},
+	// Kept under ~158 chars; the previous 218-char description was truncated
+	// mid-sentence in the SERP.
 	description:
-		"Leading manufacturer of precision gauges including plain plug gauges, ring gauges, thread gauges, and custom gauges. ISO certified quality with NABL calibration services. Serving industries across Tamil Nadu and India.",
+		"Precision plain, thread, and API gauges made in Coimbatore. ISO 9001 manufacture with NABL-traceable calibration. Supplying industry across Tamil Nadu.",
 	keywords: [
 		"precision gauges",
 		"plain plug gauges",
@@ -38,9 +45,9 @@ export const metadata = {
 		telephone: false,
 	},
 	metadataBase: new URL(SITE_URL),
-	alternates: {
-		canonical: "/",
-	},
+	// hreflang is emitted only when the Hindi layer is live and this
+	// route actually has a translation. See src/lib/i18n/config.js.
+	alternates: alternatesFor("/", { hasHindi: true }),
 	openGraph: {
 		title:
 			"DSN Enterprises - Precision Gauge Manufacturers in Coimbatore, India",

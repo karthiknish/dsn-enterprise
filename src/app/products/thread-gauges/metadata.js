@@ -1,8 +1,8 @@
+import { alternatesFor } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title:
-		"Thread Gauges Manufacturer | Thread Plug & Ring Gauges - DSN Enterprises",
+	title: "Thread Gauges – Plug, Ring & Setting Plugs",
 	description:
 		"Thread plug gauges, ring gauges, setting plugs, and taper gauges. Metric, Unified, BSW, BSP, NPT, and API threads. NABL certified.",
 	keywords: [
@@ -26,9 +26,9 @@ export const metadata = {
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
 	metadataBase: new URL(SITE_URL),
-	alternates: {
-		canonical: "/products/thread-gauges",
-	},
+	// hreflang is emitted only when the Hindi layer is live and this
+	// route actually has a translation. See src/lib/i18n/config.js.
+	alternates: alternatesFor("/products/thread-gauges", { hasHindi: true }),
 	openGraph: {
 		title:
 			"Thread Gauges Manufacturer | Thread Plug & Ring Gauges - DSN Enterprises",

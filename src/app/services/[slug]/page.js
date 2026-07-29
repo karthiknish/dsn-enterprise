@@ -1,17 +1,26 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import ServiceCityLanding from "@/components/seo/ServiceCityLanding";
 import { parseLocationSlug } from "@/lib/parse-location-slug";
-import { CITIES, getServiceCityPage, SERVICES } from "@/lib/seo-pages.config";
+import { SERVICE_PROFILES } from "@/lib/seo-location-data";
+import {
+	generateServiceCityPages,
+	getServiceCityPage,
+	SERVICES,
+} from "@/lib/seo-pages.config";
 import { getSiteUrl } from "@/lib/site";
 
 export async function generateStaticParams() {
-	const routes = [];
-	for (const service of SERVICES) {
-		for (const city of CITIES) {
-			routes.push({ slug: `${service.slug}-${city.slug}` });
-		}
-	}
-	return routes;
+	// Relevance-gated and tier-limited; see src/lib/seo-pages.config.js.
+	return generateServiceCityPages().map((p) => ({
+		slug: `${p.service}-${p.city}`,
+	}));
+}
+
+/** Retired service x city URLs keep their signal via a 308 to the hub. */
+function redirectTargetFor(serviceSlug) {
+	if (!serviceSlug) return null;
+	if (!SERVICES.some((s) => s.slug === serviceSlug)) return null;
+	return SERVICE_PROFILES[serviceSlug]?.hubPath || "/services";
 }
 
 export async function generateMetadata({ params }) {
@@ -76,6 +85,8 @@ export default async function ServiceCityPage({ params }) {
 	const pageData = getServiceCityPage(serviceSlug, citySlug);
 
 	if (!pageData) {
+		const target = redirectTargetFor(serviceSlug);
+		if (target) permanentRedirect(target);
 		notFound();
 	}
 

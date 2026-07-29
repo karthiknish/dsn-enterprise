@@ -1,7 +1,8 @@
+import { alternatesFor } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "Contact Us - DSN Enterprises | Precision Gauge Manufacturers",
+	title: "Contact Us – Precision Gauge Makers",
 	description:
 		"Contact DSN Enterprises for precision gauges, calibration, and custom solutions. Call +91 9363122005. Coimbatore, Tamil Nadu, India.",
 	keywords: [
@@ -18,9 +19,9 @@ export const metadata = {
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
 	metadataBase: new URL(SITE_URL),
-	alternates: {
-		canonical: "/contact",
-	},
+	// hreflang is emitted only when the Hindi layer is live and this
+	// route actually has a translation. See src/lib/i18n/config.js.
+	alternates: alternatesFor("/contact", { hasHindi: true }),
 	openGraph: {
 		title: "Contact Us - DSN Enterprises | Precision Gauge Manufacturers",
 		description:

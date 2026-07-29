@@ -1,17 +1,27 @@
-import PageHero from "@/components/layout/PageHero";
-import { pageHeroes } from "@/content/page-heroes";
-
+/**
+ * Loading shell for the /blog segment.
+ *
+ * This must NOT render a real <h1>. Next.js streams this fallback into the
+ * initial HTML for every route under /blog, including /blog/[slug], so a
+ * PageHero here put a second "Our Blog" <h1> ahead of the article's own <h1>
+ * in the served markup of all 28 posts. Crawlers read the first <h1>, so every
+ * article looked like it was titled "Our Blog".
+ *
+ * Keep this a purely presentational skeleton with no headings.
+ */
 export default function BlogLoading() {
 	return (
 		<div className="min-h-screen bg-gray-50">
-			<PageHero
-				title="Our Blog"
-				description={pageHeroes.blog}
-				breadcrumbs={[
-					{ href: "/", label: "Home" },
-					{ href: "/blog", label: "Blog" },
-				]}
-			/>
+			{/* Hero skeleton — mirrors PageHero's dimensions, without the heading */}
+			<section className="bg-primary text-white py-16">
+				<div className="container mx-auto px-4">
+					<div className="max-w-4xl mx-auto text-center space-y-5">
+						<div className="h-4 bg-white/20 rounded w-40 mx-auto animate-pulse" />
+						<div className="h-12 bg-white/20 rounded w-2/3 mx-auto animate-pulse" />
+						<div className="h-5 bg-white/20 rounded w-full max-w-2xl mx-auto animate-pulse" />
+					</div>
+				</div>
+			</section>
 
 			{/* Search bar skeleton */}
 			<section className="bg-white border-b border-gray-200 py-4">

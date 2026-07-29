@@ -1,5 +1,7 @@
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { HI_TRANSLATED_PATHS } from "@/content/hi/pages";
 import { db } from "@/lib/firebase";
+import { HINDI_ENABLED, HREFLANG } from "@/lib/i18n/config";
 import {
 	generateProductCityPages,
 	generateServiceCityPages,
@@ -138,12 +140,15 @@ export default async function sitemap() {
 		priority: 0.6,
 	}));
 
-	// Product-City SEO pages
+	// Product-City SEO pages.
+	// Priority now comes from city tier and product rank instead of a flat 0.5,
+	// so the crawler is pointed at the pages most likely to rank rather than
+	// treating every location URL as equally important.
 	const productCityPages = generateProductCityPages().map((page) => ({
 		url: `${SITE_URL}/products/${page.product}-${page.city}`,
 		lastModified: NOW,
 		changeFrequency: "monthly",
-		priority: 0.5,
+		priority: page.priority ?? 0.5,
 	}));
 
 	// Service-City SEO pages
@@ -151,13 +156,59 @@ export default async function sitemap() {
 		url: `${SITE_URL}/services/${page.service}-${page.city}`,
 		lastModified: NOW,
 		changeFrequency: "monthly",
-		priority: 0.5,
+		priority: page.priority ?? 0.5,
 	}));
 
+	// Hindi layer. Only included once NEXT_PUBLIC_HINDI_ENABLED=true, because
+	// while gated the pages are noindex and listing them would send Google to
+	// URLs it is told not to index.
+	//
+	// Each entry declares its alternates both ways; hreflang requires reciprocal
+	// links or Google discards the cluster. The English side of the pair is
+	// annotated too, which is why this runs after staticPages is built.
+	const hindiPages = HINDI_ENABLED
+		? HI_TRANSLATED_PATHS.map((p) => {
+				const hiPath = p === "/" ? "/hi" : `/hi${p}`;
+				return {
+					url: `${SITE_URL}${hiPath}`,
+					lastModified: NOW,
+					changeFrequency: "monthly",
+					// Deliberately below the English equivalents: the English pages
+					// are the proven ones and should keep crawl priority.
+					priority: 0.5,
+					alternates: {
+						languages: {
+							[HREFLANG.en]: `${SITE_URL}${p === "/" ? "" : p}`,
+							[HREFLANG.hi]: `${SITE_URL}${hiPath}`,
+						},
+					},
+				};
+			})
+		: [];
+
+	// Annotate the English pages that have a Hindi counterpart so the hreflang
+	// pairing is reciprocal inside the sitemap itself.
+	const withAlternates = (entry) => {
+		if (!HINDI_ENABLED) return entry;
+		const path = entry.url.replace(SITE_URL, "") || "/";
+		if (!HI_TRANSLATED_PATHS.includes(path)) return entry;
+		const hiPath = path === "/" ? "/hi" : `/hi${path}`;
+		return {
+			...entry,
+			alternates: {
+				languages: {
+					[HREFLANG.en]: entry.url,
+					[HREFLANG.hi]: `${SITE_URL}${hiPath}`,
+				},
+			},
+		};
+	};
+
 	return [
-		...staticPages,
+		...staticPages.map(withAlternates),
 		...blogPages,
 		...productCityPages,
 		...serviceCityPages,
+		...hindiPages,
 	];
 }

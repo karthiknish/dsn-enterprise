@@ -1,7 +1,7 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "Quality Assurance | ISO 9001 & NABL Certified - DSN Enterprises",
+	title: "Quality – ISO 9001 & NABL Certified",
 	description:
 		"ISO 9001:2015 certified, NABL accredited, API 5B & 7-2 licensed. Rigorous quality control on every precision gauge we manufacture.",
 	keywords: [

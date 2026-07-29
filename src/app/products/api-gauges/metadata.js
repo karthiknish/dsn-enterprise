@@ -1,8 +1,7 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title:
-		"API Gauges Manufacturer | API 5B & 7-2 Certified Gauges - DSN Enterprises",
+	title: "API Gauges – API 5B & 7-2 Certified",
 	description:
 		"API 5B & 7-2 licensed thread gauge manufacturer for oil and gas. Casing, tubing, line pipe, and rotary shouldered gauges.",
 	keywords: [

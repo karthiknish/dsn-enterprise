@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "biome check src scripts",
     "lint:fix": "biome check --write src scripts",
-    "sync-blogs": "node scripts/sync-blogs.js"
+    "sync-blogs": "node scripts/sync-blogs.js",
+    "seo:audit": "node scripts/search-console-audit.mjs",
+    "seo:coverage": "node scripts/gsc-index-coverage.mjs",
+    "seo:opportunity": "node scripts/gsc-opportunity-report.mjs",
+    "seo:uniqueness": "node scripts/content-uniqueness-audit.mjs",
+    "seo:keywords": "node scripts/gsc-keyword-gaps.mjs"
   },
   "dependencies": {
     "@google-analytics/data": "^5.2.1",

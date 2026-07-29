@@ -1,8 +1,8 @@
+import { alternatesFor } from "@/lib/i18n/config";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title:
-		"Gauge Calibration Services | NABL Accredited Calibration - DSN Enterprises",
+	title: "Gauge Calibration – NABL Accredited",
 	description:
 		"NABL accredited gauge calibration for plain, thread, and API gauges. Express calibration, repair, and on-site services with traceable certificates.",
 	keywords: [
@@ -22,9 +22,9 @@ export const metadata = {
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
 	metadataBase: new URL(SITE_URL),
-	alternates: {
-		canonical: "/calibration",
-	},
+	// hreflang is emitted only when the Hindi layer is live and this
+	// route actually has a translation. See src/lib/i18n/config.js.
+	alternates: alternatesFor("/calibration", { hasHindi: true }),
 	openGraph: {
 		title:
 			"Gauge Calibration Services | NABL Accredited Calibration - DSN Enterprises",

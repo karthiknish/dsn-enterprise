@@ -1,5 +1,5 @@
 export const metadata = {
-	title: "Services - Calibration & Custom Gauge Manufacturing",
+	title: "Services – Calibration & Custom Gauges",
 	description:
 		"Explore DSN Enterprises services: gauge calibration, custom gauge manufacturing, certification and testing for precision gauging applications.",
 	alternates: {

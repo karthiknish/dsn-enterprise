@@ -5,6 +5,7 @@ import ProductCityOverview from "@/components/seo/product-city/ProductCityOvervi
 import ProductCityProductProfile from "@/components/seo/product-city/ProductCityProductProfile";
 import {
 	buildProductFaqs,
+	getCityProductNote,
 	getCityProfile,
 	getProductHub,
 	PRODUCT_PROFILES,
@@ -27,6 +28,7 @@ export default function ProductCityLanding({
 	const productProfile = PRODUCT_PROFILES[productSlug];
 	const hub = getProductHub(productSlug);
 	const faqs = buildProductFaqs(pageData, productSlug, citySlug);
+	const cityProductNote = getCityProductNote(productSlug, citySlug);
 	const path = `/products/${slug}`;
 
 	const schemas = [
@@ -53,6 +55,7 @@ export default function ProductCityLanding({
 							pageData={pageData}
 							product={product}
 							cityProfile={cityProfile}
+							cityProductNote={cityProductNote}
 						/>
 
 						<ProductCityProductProfile productProfile={productProfile} />

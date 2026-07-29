@@ -1,7 +1,7 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "FAQ - Frequently Asked Questions | DSN Enterprises",
+	title: "Gauge FAQ – Specs, Standards & Lead Times",
 	description:
 		"Answers on precision gauges, calibration services, API gauges, custom manufacturing, ordering, lead times, and quality certifications.",
 	keywords: [

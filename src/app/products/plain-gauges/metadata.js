@@ -1,8 +1,8 @@
+import { alternatesFor } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title:
-		"Plain Gauges Manufacturer | Plain Plug & Ring Gauges - DSN Enterprises",
+	title: "Plain Gauges – Plug, Ring & Snap Gauges",
 	description:
 		"Plain plug gauges, ring gauges, setting masters, measuring pins, and snap gauges. 1mm to 250mm range. OHNS and carbide. NABL certified.",
 	keywords: [
@@ -24,9 +24,9 @@ export const metadata = {
 	creator: "DSN Enterprises",
 	publisher: "DSN Enterprises",
 	metadataBase: new URL(SITE_URL),
-	alternates: {
-		canonical: "/products/plain-gauges",
-	},
+	// hreflang is emitted only when the Hindi layer is live and this
+	// route actually has a translation. See src/lib/i18n/config.js.
+	alternates: alternatesFor("/products/plain-gauges", { hasHindi: true }),
 	openGraph: {
 		title:
 			"Plain Gauges Manufacturer | Plain Plug & Ring Gauges - DSN Enterprises",

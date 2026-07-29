@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { CITIES, PRODUCTS, SERVICES } from "@/lib/seo-pages.config";
+import {
+	citiesForProduct,
+	citiesForService,
+	PRODUCTS,
+	SERVICES,
+} from "@/lib/seo-pages.config";
 
 export default function CityLinks({ type, categorySlug }) {
 	const items =
@@ -11,6 +16,16 @@ export default function CityLinks({ type, categorySlug }) {
 
 	const item = items[0];
 	const basePath = type === "product" ? "/products" : "/services";
+
+	// Hub pages are the strongest internal-link source we control. Only point
+	// them at city pages that exist, otherwise the hub leaks link equity into
+	// 404s and the city pages stay orphaned.
+	const cities =
+		type === "product"
+			? citiesForProduct(categorySlug)
+			: citiesForService(categorySlug);
+
+	if (cities.length === 0) return null;
 
 	return (
 		<section className="py-16 bg-white">
@@ -25,7 +40,7 @@ export default function CityLinks({ type, categorySlug }) {
 						city-specific pages for local information and logistics details.
 					</p>
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-						{CITIES.map((city) => (
+						{cities.map((city) => (
 							<Link
 								key={city.slug}
 								href={`${basePath}/${item.slug}-${city.slug}`}

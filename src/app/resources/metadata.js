@@ -1,8 +1,7 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title:
-		"Resources & Downloads | Product Catalogs & Technical Resources - DSN Enterprises",
+	title: "Resources – Catalogs & Technical Guides",
 	description:
 		"Download product catalogs, gauge tolerance charts, thread data tables, API specifications, and quality certificates for precision gauges.",
 	keywords: [

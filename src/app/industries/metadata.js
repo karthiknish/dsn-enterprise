@@ -1,8 +1,9 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title:
-		"Industries We Serve | Oil & Gas, Automotive, Aerospace - DSN Enterprises",
+	// Brand comes from the root title template; repeating it here produced
+	// "... - DSN Enterprises | DSN Enterprises" at 90 characters.
+	title: "Industries Served – Oil, Gas & Auto",
 	description:
 		"DSN Enterprises serves Oil & Gas, Automotive, Aerospace, Heavy Machinery, Marine, and Electronics with precision gauging solutions.",
 	keywords: [

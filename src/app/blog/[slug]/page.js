@@ -56,14 +56,27 @@ export async function generateMetadata({ params }) {
 
 	const description = post.metaDescription || post.excerpt || post.title;
 
+	// Several posts store a metaTitle that already ends in "| DSN Enterprises".
+	// The root layout's title template appends the brand again, producing
+	// "... | DSN Enterprises | DSN Enterprises" at 72+ chars, which Google
+	// truncates. Strip any trailing brand, then re-add it only if it still fits
+	// inside the ~60 char budget; otherwise keep the keyword-bearing part.
+	const rawTitle = post.metaTitle || post.title || "";
+	const baseTitle = rawTitle
+		.replace(/\s*[|\-–—]\s*DSN Enterprises\s*$/i, "")
+		.trim();
+	const branded = `${baseTitle} | DSN Enterprises`;
+	const pageTitle = branded.length <= 60 ? branded : baseTitle;
+
 	return {
-		title: post.metaTitle || post.title,
+		// Absolute so the root template cannot append a duplicate brand.
+		title: { absolute: pageTitle },
 		description,
 		alternates: {
 			canonical: `/blog/${post.slug}`,
 		},
 		openGraph: {
-			title: post.metaTitle || post.title,
+			title: pageTitle,
 			description,
 			url: `/blog/${post.slug}`,
 			type: "article",
@@ -85,7 +98,7 @@ export async function generateMetadata({ params }) {
 		},
 		twitter: {
 			card: "summary_large_image",
-			title: post.metaTitle || post.title,
+			title: pageTitle,
 			description,
 			images: post.featuredImage
 				? [post.featuredImage]
@@ -165,9 +178,9 @@ export default async function BlogPostPage({ params }) {
 							</svg>
 							Back to Blog
 						</Link>
-					<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald">
-								{post.title}
-							</h1>
+						<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald">
+							{post.title}
+						</h1>
 						<div className="flex items-center text-accent-200">
 							<time>
 								{post.publishedDate || post.createdAt

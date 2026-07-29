@@ -1,8 +1,7 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title:
-		"Special Gauges Manufacturer | Custom & Specialty Gauges - DSN Enterprises",
+	title: "Special Gauges – Custom & Specialty",
 	description:
 		"Custom and specialty gauges: ACME, buttress, trapezoidal, spline, taper, form, and limit gauges built to your specifications.",
 	keywords: [

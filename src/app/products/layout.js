@@ -1,10 +1,11 @@
+import { alternatesFor } from "@/lib/i18n/config";
 export const metadata = {
-	title: "Products - Precision Gauges & Measuring Instruments",
+	title: "Products – Precision Gauges",
 	description:
 		"Browse DSN Enterprises product range: plain gauges, thread gauges, API gauges, and special/custom gauges for industrial inspection.",
-	alternates: {
-		canonical: "/products",
-	},
+	// hreflang is emitted only when the Hindi layer is live and this
+	// route actually has a translation. See src/lib/i18n/config.js.
+	alternates: alternatesFor("/products", { hasHindi: true }),
 	openGraph: {
 		title: "Products - DSN Enterprises",
 		description:

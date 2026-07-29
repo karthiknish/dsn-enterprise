@@ -21,12 +21,14 @@ export async function generateMetadata({ searchParams }) {
 	// out of the index while still following links to individual posts.
 	const isFiltered = Boolean(searchQuery || (page && page !== "1"));
 
+	// The root title template already appends "| DSN Enterprises"; including
+	// the brand here as well produced "Blog - DSN Enterprises | DSN Enterprises".
 	const title = searchQuery
-		? `Search results for "${searchQuery}" - Blog - DSN Enterprises`
-		: "Blog - DSN Enterprises";
+		? `Search results for "${searchQuery}"`
+		: "Gauge & Metrology Articles";
 
 	const description =
-		"Read our latest articles about precision gauges, measuring instruments, and industrial applications.";
+		"Practical articles on gauge selection, calibration intervals, Indian and ISO standards, and shop-floor inspection from the DSN engineering team.";
 
 	return {
 		title,

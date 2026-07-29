@@ -4,6 +4,7 @@ export default function ProductCityOverview({
 	pageData,
 	product,
 	cityProfile,
+	cityProductNote,
 }) {
 	return (
 		<>
@@ -16,7 +17,7 @@ export default function ProductCityOverview({
 				</p>
 				<p className="text-gray-700 mb-6 leading-relaxed">
 					We manufacture {pageData.productName.toLowerCase()} at our Coimbatore
-					works for plants in {pageData.cityName},with drawing-based specs,{" "}
+					works for plants in {pageData.cityName}, with drawing-based specs,{" "}
 					{product?.description || "precision gauging"}, and certificates your
 					QA team can file without rework.
 				</p>
@@ -35,6 +36,35 @@ export default function ProductCityOverview({
 					{cityProfile.logistics}
 				</p>
 			</div>
+
+			{/* The single most page-specific block: what actually goes wrong with
+			    this product in this city. This is what differentiates siblings. */}
+			{cityProductNote ? (
+				<div className="bg-white rounded-xl shadow-sm p-8 border-l-4 border-l-accent border border-gray-100">
+					<h2 className="text-2xl font-semibold text-primary mb-4">
+						{pageData.productName} in {pageData.cityName}: what to watch for
+					</h2>
+					<p className="text-gray-700 leading-relaxed">{cityProductNote}</p>
+				</div>
+			) : null}
+
+			{cityProfile.nearbyTowns?.length ? (
+				<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
+					<h2 className="text-xl font-semibold text-primary mb-3">
+						Delivery around {pageData.cityName}
+					</h2>
+					<p className="text-gray-700 leading-relaxed mb-4">
+						{cityProfile.distanceKm === 0
+							? `Our works is in ${pageData.cityName}, so collection, factory visits, and fit trials on your actual part are all practical the same day.`
+							: `${pageData.cityName} is roughly ${cityProfile.distanceKm} km from our Coimbatore works via ${cityProfile.corridor}. Normal transit is ${cityProfile.transit}.`}{" "}
+						{cityProfile.buyingPattern}
+					</p>
+					<p className="text-sm text-gray-600">
+						<strong className="text-gray-900">Also covered:</strong>{" "}
+						{cityProfile.nearbyTowns.join(", ")}
+					</p>
+				</div>
+			) : null}
 
 			<div className="grid md:grid-cols-2 gap-8">
 				<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">

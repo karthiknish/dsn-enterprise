@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CITIES } from "@/lib/seo-pages.config";
+import { citiesForProduct } from "@/lib/seo-pages.config";
 
 const processSteps = [
 	["Design", "Tolerance and thread review against your drawing before cutting"],
@@ -15,6 +15,10 @@ export default function ProductCityBottomSections({
 	hub,
 	faqs,
 }) {
+	const otherCities = citiesForProduct(productSlug).filter(
+		(c) => c.slug !== citySlug,
+	);
+
 	return (
 		<>
 			<div className="bg-gradient-to-br from-primary to-primary-dark rounded-xl p-8 text-white">
@@ -109,26 +113,27 @@ export default function ProductCityBottomSections({
 				</div>
 			</div>
 
-			<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
-				<h2 className="text-xl font-semibold text-primary mb-4">
-					{pageData.productName} in other cities
-				</h2>
-				<div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-					{CITIES.flatMap((c) =>
-						c.slug !== citySlug
-							? [
-									<Link
-										key={c.slug}
-										href={`/products/${productSlug}-${c.slug}`}
-										className="text-accent hover:text-accent-700 hover:underline"
-									>
-										{c.name}
-									</Link>,
-								]
-							: [],
-					)}
+			{/* Only link cities that actually have a page for this product.
+			    Linking to non-existent combinations previously produced dead
+			    internal links and wasted crawl paths. */}
+			{otherCities.length > 0 ? (
+				<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
+					<h2 className="text-xl font-semibold text-primary mb-4">
+						{pageData.productName} in other cities
+					</h2>
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+						{otherCities.map((c) => (
+							<Link
+								key={c.slug}
+								href={`/products/${productSlug}-${c.slug}`}
+								className="text-accent hover:text-accent-700 hover:underline"
+							>
+								{pageData.productName} in {c.name}
+							</Link>
+						))}
+					</div>
 				</div>
-			</div>
+			) : null}
 		</>
 	);
 }

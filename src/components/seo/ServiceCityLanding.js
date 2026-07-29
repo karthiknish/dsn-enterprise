@@ -3,9 +3,10 @@ import JsonLdScripts from "@/components/seo/JsonLdScripts";
 import {
 	buildServiceFaqs,
 	getCityProfile,
+	getCityServiceNote,
 	SERVICE_PROFILES,
 } from "@/lib/seo-location-data";
-import { CITIES, SERVICES } from "@/lib/seo-pages.config";
+import { citiesForService, SERVICES } from "@/lib/seo-pages.config";
 import {
 	buildBreadcrumbJsonLd,
 	buildFaqJsonLd,
@@ -39,6 +40,10 @@ export default function ServiceCityLanding({
 	const cityProfile = getCityProfile(citySlug);
 	const serviceProfile = SERVICE_PROFILES[serviceSlug];
 	const faqs = buildServiceFaqs(pageData, serviceSlug, citySlug);
+	const cityServiceNote = getCityServiceNote(serviceSlug, citySlug);
+	const otherCities = citiesForService(serviceSlug).filter(
+		(c) => c.slug !== citySlug,
+	);
 	const path = `/services/${slug}`;
 	const hubPath = serviceProfile?.hubPath || "/services";
 	const hubLabel = serviceProfile?.hubLabel || "Services";
@@ -133,6 +138,39 @@ export default function ServiceCityLanding({
 							</p>
 						</div>
 
+						{/* The most page-specific block on a service page: how this
+						    service actually plays out in this city. */}
+						{cityServiceNote ? (
+							<div className="bg-white rounded-xl shadow-sm p-8 border-l-4 border-l-accent border border-gray-100">
+								<h2 className="text-2xl font-semibold text-primary mb-4">
+									What {pageData.cityName} customers should know
+								</h2>
+								<p className="text-gray-700 leading-relaxed">
+									{cityServiceNote}
+								</p>
+							</div>
+						) : null}
+
+						{cityProfile.nearbyTowns?.length ? (
+							<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
+								<h2 className="text-xl font-semibold text-primary mb-3">
+									Collection and return around {pageData.cityName}
+								</h2>
+								<p className="text-gray-700 leading-relaxed mb-4">
+									{cityProfile.distanceKm === 0
+										? `Our lab is in ${pageData.cityName}, so gauges can be dropped off and collected within the same week without freight.`
+										: `${pageData.cityName} is roughly ${cityProfile.distanceKm} km from our Coimbatore lab via ${cityProfile.corridor}, with ${cityProfile.transit} transit each way.`}{" "}
+									{cityProfile.buyingPattern}
+								</p>
+								<p className="text-sm text-gray-600">
+									<strong className="text-gray-900">
+										Also collected from:
+									</strong>{" "}
+									{cityProfile.nearbyTowns.join(", ")}
+								</p>
+							</div>
+						) : null}
+
 						{serviceProfile && (
 							<div className="bg-accent/10 rounded-xl p-8 border border-accent/20">
 								<h2 className="text-xl font-semibold text-primary mb-4">
@@ -184,7 +222,9 @@ export default function ServiceCityLanding({
 						</div>
 
 						<div className="bg-gradient-to-br from-primary to-primary-dark rounded-xl p-8 text-white">
-							<h2 className="text-xl font-semibold mb-6">Why DSN Enterprises</h2>
+							<h2 className="text-xl font-semibold mb-6">
+								Why DSN Enterprises
+							</h2>
 							<div className="grid md:grid-cols-2 gap-6">
 								{[
 									[
@@ -251,26 +291,25 @@ export default function ServiceCityLanding({
 							</div>
 						</div>
 
-						<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
-							<h2 className="text-xl font-semibold text-primary mb-4">
-								Other service locations
-							</h2>
-							<div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-								{CITIES.flatMap((c) =>
-									c.slug !== citySlug
-										? [
-												<Link
-													key={c.slug}
-													href={`/services/${serviceSlug}-${c.slug}`}
-													className="text-accent hover:text-accent-700 hover:underline"
-												>
-													{c.name}
-												</Link>,
-											]
-										: [],
-								)}
+						{/* Only cities that actually have a page for this service. */}
+						{otherCities.length > 0 ? (
+							<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
+								<h2 className="text-xl font-semibold text-primary mb-4">
+									Other service locations
+								</h2>
+								<div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+									{otherCities.map((c) => (
+										<Link
+											key={c.slug}
+											href={`/services/${serviceSlug}-${c.slug}`}
+											className="text-accent hover:text-accent-700 hover:underline"
+										>
+											{pageData.serviceName} in {c.name}
+										</Link>
+									))}
+								</div>
 							</div>
-						</div>
+						) : null}
 					</div>
 				</div>
 			</section>
