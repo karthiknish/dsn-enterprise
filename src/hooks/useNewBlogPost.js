@@ -352,10 +352,9 @@ export function useNewBlogPost() {
 		} catch (error) {
 			console.error("Error creating post:", error);
 			showNotification(
-				describeFirestoreError(
-					error,
-					`Failed to create post: ${error.message}`,
-				),
+				// Never interpolate the raw error: Firestore messages carry the full
+				// document path, which is noise to an editor and internals to leak.
+				describeFirestoreError(error, "Failed to create post. Try again."),
 				"error",
 			);
 		} finally {

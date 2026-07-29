@@ -45,11 +45,13 @@ export default function BlogListPage() {
 				console.error("Error fetching posts:", error);
 				dispatch({
 					type: "LOAD_ERROR",
+					// Our own timeout message is useful; a raw Firestore message is not,
+					// and it carries the document path.
 					error: describeFirestoreError(
 						error,
-						error instanceof Error
+						error?.message?.startsWith("Timed out")
 							? error.message
-							: "Failed to load blog posts",
+							: "Failed to load blog posts. Try again.",
 					),
 				});
 			});

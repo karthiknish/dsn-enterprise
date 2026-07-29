@@ -1,6 +1,13 @@
 "use client";
 
-import { doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
+import {
+	addDoc,
+	collection,
+	doc,
+	serverTimestamp,
+	Timestamp,
+	updateDoc,
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -47,6 +54,7 @@ export function useEditBlogPost(postId, initialPostData) {
 	const [showUnsplashPicker, setShowUnsplashPicker] = useState(false);
 	const [imageTab, setImageTab] = useState("upload");
 	const [generatingTitle, setGeneratingTitle] = useState(false);
+	const [postMissing, setPostMissing] = useState(false);
 	const [generatingImage, setGeneratingImage] = useState(false);
 	const [aiImageResult, setAiImageResult] = useState(null);
 	const [titleSuggestions, setTitleSuggestions] = useState([]);
@@ -310,15 +318,63 @@ export function useEditBlogPost(postId, initialPostData) {
 
 			await updateDoc(docRef, updateData);
 			clearDraft();
+			setPostMissing(false);
 			showNotification("Post updated successfully", "success");
 			setTimeout(() => push("/admin/blog"), 1000);
 		} catch (error) {
 			console.error("Error updating post:", error);
+
+			// The document was deleted while this tab had it open. The editor's
+			// work is still in formData, so offer to keep it rather than just
+			// reporting a failure.
+			if (error?.code === "not-found") {
+				setPostMissing(true);
+			}
+
 			showNotification(
-				describeFirestoreError(
-					error,
-					`Failed to update post. ${error.message}`,
-				),
+				describeFirestoreError(error, "Failed to update post. Try again."),
+				"error",
+			);
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	/**
+	 * Recovery for a post that was deleted underneath the editor: write the
+	 * current form as a new document instead of discarding the work.
+	 */
+	const saveAsNewPost = async () => {
+		setSaving(true);
+		try {
+			const postData = {
+				title: formData.title,
+				slug: formData.slug || generateBlogSlug(formData.title),
+				excerpt: formData.excerpt,
+				content: formData.content,
+				featuredImage: formData.featuredImage,
+				imageAttribution: formData.imageAttribution,
+				status: formData.status,
+				metaTitle: formData.metaTitle,
+				metaDescription: formData.metaDescription,
+				createdAt: serverTimestamp(),
+				updatedAt: serverTimestamp(),
+			};
+			if (formData.publishedDate) {
+				postData.publishedDate = Timestamp.fromDate(
+					new Date(formData.publishedDate),
+				);
+			}
+
+			await addDoc(collection(db, "blogs"), postData);
+			clearDraft();
+			setPostMissing(false);
+			showNotification("Saved as a new post", "success");
+			setTimeout(() => push("/admin/blog"), 1000);
+		} catch (error) {
+			console.error("Error saving as new post:", error);
+			showNotification(
+				describeFirestoreError(error, "Could not save as a new post."),
 				"error",
 			);
 		} finally {
@@ -347,6 +403,8 @@ export function useEditBlogPost(postId, initialPostData) {
 		imageTab,
 		setImageTab,
 		generatingTitle,
+		postMissing,
+		saveAsNewPost,
 		generatingImage,
 		aiImageResult,
 		titleSuggestions,
