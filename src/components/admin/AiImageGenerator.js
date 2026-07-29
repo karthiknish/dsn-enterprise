@@ -39,9 +39,18 @@ export default function AiImageGenerator({
 	const [aspectRatio, setAspectRatio] = useState("16:9");
 	const [instructions, setInstructions] = useState("");
 	const [showPrompt, setShowPrompt] = useState(false);
+	// Each post gets a stable look; bumping the variant asks for another take
+	// with a different camera, light, palette and setting.
+	const [variant, setVariant] = useState(0);
 
 	const handleClick = () => {
-		onGenerate({ style, imageSize, aspectRatio, instructions });
+		onGenerate({ style, imageSize, aspectRatio, instructions, variant });
+	};
+
+	const handleAnotherTake = () => {
+		const next = variant + 1;
+		setVariant(next);
+		onGenerate({ style, imageSize, aspectRatio, instructions, variant: next });
 	};
 
 	return (
@@ -148,6 +157,17 @@ export default function AiImageGenerator({
 				)}
 			</button>
 
+			{lastResult && !generating && (
+				<button
+					type="button"
+					onClick={handleAnotherTake}
+					disabled={disabled}
+					className="w-full px-4 py-2 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+				>
+					Different take (new camera, light and setting)
+				</button>
+			)}
+
 			<p className="text-xs text-gray-500">
 				Uses the post title, excerpt and body to art-direct a grounded,
 				photo-real image. 2K / 16:9 is sized for the blog hero.
@@ -171,9 +191,26 @@ export default function AiImageGenerator({
 						{lastResult.model ? ` · ${lastResult.model}` : ""}
 					</button>
 					{showPrompt && (
-						<p className="mt-2 text-xs text-gray-600 whitespace-pre-wrap leading-relaxed">
-							{lastResult.brief}
-						</p>
+						<>
+							{lastResult.variation && (
+								<dl className="mt-2 text-xs text-gray-600 space-y-0.5">
+									{[
+										["Camera", lastResult.variation.shot],
+										["Light", lastResult.variation.light],
+										["Palette", lastResult.variation.palette],
+										["Setting", lastResult.variation.setting],
+									].map(([label, value]) => (
+										<div key={label} className="flex gap-2">
+											<dt className="font-medium shrink-0 w-14">{label}</dt>
+											<dd className="text-gray-500">{value}</dd>
+										</div>
+									))}
+								</dl>
+							)}
+							<p className="mt-2 text-xs text-gray-600 whitespace-pre-wrap leading-relaxed">
+								{lastResult.brief}
+							</p>
+						</>
 					)}
 				</div>
 			)}

@@ -83,6 +83,10 @@ export async function generateAndUploadFeaturedImage({
 			instructions: options.instructions,
 			aspectRatio: options.aspectRatio,
 			imageSize: options.imageSize,
+			// Slug keeps the look stable for a post across regenerations; variant
+			// is how the editor asks for a different take on the same post.
+			seed: formData.slug || formData.title,
+			variant: options.variant || 0,
 		}),
 	});
 
@@ -106,6 +110,7 @@ export async function generateAndUploadFeaturedImage({
 		prompt: data.prompt,
 		brief: data.brief,
 		model: data.model,
+		variation: data.variation,
 		aspectRatio: data.aspectRatio,
 		imageSize: data.imageSize,
 	};

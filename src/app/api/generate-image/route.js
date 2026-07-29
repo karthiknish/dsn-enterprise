@@ -43,6 +43,9 @@ export async function POST(request) {
 			instructions,
 			aspectRatio,
 			imageSize,
+			seed,
+			variant,
+			avoid,
 		} = body || {};
 
 		if (!title) {
@@ -60,6 +63,9 @@ export async function POST(request) {
 			instructions: instructions || "",
 			aspectRatio,
 			imageSize,
+			seed,
+			variant: Number(variant) || 0,
+			avoid: Array.isArray(avoid) ? avoid.slice(0, 8) : [],
 		});
 
 		return NextResponse.json({ success: true, ...result });

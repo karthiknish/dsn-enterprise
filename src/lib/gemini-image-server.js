@@ -80,17 +80,114 @@ const ALLOWED_IMAGE_SIZES = new Set(["512", "1K", "2K", "4K"]);
 /**
  * Rules that kill the usual generative-AI tells. Applied to every prompt.
  */
+/**
+ * Prohibitions only. These are the things that must never appear, and they are
+ * genuinely constant. Anything describing *how* to compose a shot belongs in
+ * VARIATION_AXES instead — a fixed composition rule applied to every post is
+ * what makes a set of images look like one image rendered nine times.
+ */
 const ANTI_SLOP_RULES = [
-	"Photographic realism with real-world physics: correct optics, correct reflections, correct shadow direction from one dominant light source.",
+	"Photographic realism with real-world physics: correct optics, correct reflections, physically consistent shadows.",
 	"Absolutely no text, lettering, numerals, captions, watermarks, logos, UI chrome, or brand marks anywhere in the frame.",
+	"Any paper, notebook, label, tag or document in shot must be blank, blurred beyond legibility, or turned away from camera. No handwriting, no printed forms, no dial faces with readable numerals.",
 	"No holograms, no glowing blue neon, no floating translucent dashboards, no circuit-board motifs, no digital-particle swirls, no 'futuristic AI' iconography.",
 	"No lens flare, no bloom, no HDR halos, no heavy vignette, no over-sharpened micro-contrast, no plastic over-smoothed surfaces.",
-	"No perfect symmetry and no dead-centre subject: compose off-centre with intentional negative space in the upper-left third so a headline can be overlaid.",
-	"Restrained, believable colour grading — muted industrial neutrals with at most one accent colour. Avoid teal-and-orange, avoid oversaturated gradients.",
+	"No perfect symmetry and no dead-centre subject.",
+	"Avoid teal-and-orange grading and oversaturated gradients.",
 	"Include honest material imperfection: fine scratches, dust, tool marks, uneven wear, slightly imperfect alignment.",
 	"If people appear, show hands or partial figures at work rather than posed faces looking at camera; real workwear, no stock-photo smiling.",
 	"Single clear subject. Do not collage multiple concepts into one frame.",
 ];
+
+/**
+ * Deliberate variation. One option is drawn per axis from a seed derived from
+ * the post, so two different articles get visibly different photographs while
+ * the same article stays stable across regenerations.
+ */
+const VARIATION_AXES = {
+	shot: [
+		"overhead flat-lay looking straight down at the bench surface",
+		"low three-quarter view at bench height, subject close to the lens",
+		"eye-level view straight across the bench, background falling away",
+		"tight detail crop filling most of the frame",
+		"wide environmental shot with the subject small in a working space",
+		"over-the-shoulder view past an operator's hands",
+		"raking low angle along a surface, almost grazing it",
+		"half-open drawer or case viewed from above and slightly to one side",
+	],
+	lens: [
+		"24mm wide, deep focus, everything sharp",
+		"35mm, moderate depth of field",
+		"50mm at f/2.8, background softly out of focus",
+		"85mm at f/4, compressed perspective",
+		"100mm macro at f/8, focus stacked",
+		"28mm close to the subject, mild foreshortening",
+	],
+	light: [
+		"soft north-facing window light from the left, no fill",
+		"hard raking sidelight from the right, long shadows across the surface",
+		"flat overhead fluorescent shop light, honest and unglamorous",
+		"single task lamp close in, pooled light falling off fast into shade",
+		"overcast daylight through a dirty roof light, low contrast",
+		"late afternoon sun through a shutter, banded light across the scene",
+		"diffuse light from a large open doorway, cool and even",
+	],
+	palette: [
+		"cool grey granite, bare steel, a little black rubber",
+		"warm oiled steel, brass, and worn wooden bench top",
+		"machine-tool green paint, grey cast iron, pale concrete floor",
+		"black anti-fatigue matting, chrome, and white paper",
+		"kraft paper and card, dull steel, faint rust",
+		"blue-grey enamel, galvanised surfaces, one worn red handle",
+		"near-monochrome: white bench, silver metal, deep shadow",
+	],
+	setting: [
+		"on a granite surface plate in an inspection room",
+		"beside a lathe bed with swarf nearby",
+		"on a cluttered but organised inspection bench",
+		"in an open tool trolley drawer",
+		"in a gauge storage cabinet with foam inserts",
+		"on a dispatch table with packing materials",
+		"at a QC desk with paperwork just out of frame",
+		"next to a machine spindle, guard open",
+		"on a calibration bench with instruments around it",
+	],
+	negativeSpace: [
+		"upper left",
+		"upper right",
+		"lower left",
+		"the right third",
+		"the left third",
+		"a band across the top",
+	],
+};
+
+/** FNV-1a: small, stable, and good enough to decorrelate the axes. */
+function hashSeed(seed = "") {
+	let hash = 0x811c9dc5;
+	for (let i = 0; i < seed.length; i += 1) {
+		hash ^= seed.charCodeAt(i);
+		hash = Math.imul(hash, 0x01000193) >>> 0;
+	}
+	return hash;
+}
+
+/**
+ * Draw one option per axis. Each axis uses a different mix of the hash so a
+ * small change in the seed moves several axes at once.
+ *
+ * @param {string} seed Usually the post title plus a variant number.
+ */
+export function pickVariation(seed) {
+	const picked = {};
+	for (const [axis, options] of Object.entries(VARIATION_AXES)) {
+		// Hash the axis name into the seed rather than shifting one shared hash.
+		// Bit-shifting a single hash leaves the low bits correlated between axes,
+		// which cost half the shot options: 8 entries, only 4 ever selected.
+		picked[axis] = options[hashSeed(`${axis}|${seed}`) % options.length];
+	}
+	return picked;
+}
 
 function stripHtml(html = "") {
 	return html
@@ -253,10 +350,19 @@ export async function generateArtDirection({
 	style,
 	instructions,
 	deadlineAt,
+	variation,
+	avoid = [],
 }) {
 	const styleKey = resolveStyle(style);
 	const styleDirection = IMAGE_STYLES[styleKey].direction;
+	const avoidLine = avoid.length
+		? `\nDO NOT USE these subjects, they have been used recently: ${avoid.join("; ")}.\n`
+		: "";
 
+	// No worked example here on purpose. An example in the prompt gets copied:
+	// an earlier version illustrated "be concrete" with a plug gauge on a
+	// granite surface plate, and the model then produced that same scene for
+	// unrelated articles. The assigned shot recipe does that job instead.
 	const prompt = `You are an art director commissioning the hero image for a B2B industrial blog post about precision gauges and metrology.
 
 BLOG TITLE: ${title}
@@ -264,15 +370,24 @@ BLOG EXCERPT: ${stripHtml(excerpt || "")}
 BLOG BODY (truncated): ${summariseContent(content, 2500)}
 
 TARGET LOOK: ${styleDirection}
-${instructions ? `EDITOR NOTES (must be respected): ${instructions}` : ""}
 
-Write a single-paragraph image brief (90-140 words) describing ONE specific, literal, physically real scene that illustrates this article. Requirements:
-- Name the actual objects, materials, and setting. Be concrete ("a hardened steel plug gauge resting on a granite surface plate beside a dial indicator"), never conceptual ("innovation", "technology", "the future").
-- Specify camera position, focal length, aperture, and the direction and quality of the light.
-- Specify the palette in plain material terms.
-- Describe where the empty space sits in the frame.
-- Do not mention text, signage, logos, or screens.
-Return only the paragraph, no preamble, no quotes, no markdown.`;
+ASSIGNED SHOT (use all of these, do not substitute):
+- Camera: ${variation.shot}
+- Lens: ${variation.lens}
+- Light: ${variation.light}
+- Palette: ${variation.palette}
+- Location: ${variation.setting}
+- Leave the empty space at: ${variation.negativeSpace}
+${avoidLine}${instructions ? `\nEDITOR NOTES (must be respected): ${instructions}` : ""}
+
+Write a single-paragraph image brief (90-140 words) describing ONE specific, literal, physically real scene that illustrates this article, shot exactly as assigned above. Requirements:
+- The subject is the specific equipment this article is about, named exactly. The assigned location is only where that subject sits; do not let the location become the subject, and do not fill the frame with unrelated tools.
+- Name the real objects and materials, never concepts like "innovation" or "precision".
+- Work the assigned camera, lens, light, palette and location into the description in your own words.
+- Say where the empty space sits.
+- Do not mention text, signage, logos, screens, or anything with writing on it. Any paper in the scene is blank.
+
+Output format: ONE continuous paragraph of prose. No bullet points, no asterisks, no headings, no labels like "Composition:", no markdown of any kind.`;
 
 	const data = await geminiFetch(
 		TEXT_MODEL,
@@ -283,24 +398,40 @@ Return only the paragraph, no preamble, no quotes, no markdown.`;
 		{ deadlineAt },
 	);
 
-	const brief = (data?.candidates?.[0]?.content?.parts || [])
+	const raw = (data?.candidates?.[0]?.content?.parts || [])
 		.map((part) => part.text || "")
 		.join(" ")
 		.trim();
 
-	if (!brief) throw new Error("Empty art direction response");
+	if (!raw) throw new Error("Empty art direction response");
+
+	// The model sometimes ignores the format rule and returns a bulleted spec
+	// sheet. Fed straight to the image model that reads as layout instructions
+	// and the subject drifts, so flatten it back to prose before use.
+	const brief = raw
+		.replace(/^#+\s*/gm, "")
+		.replace(/^[\s*\-•]+/gm, "")
+		.replace(/\*\*?([^*]+)\*\*?/g, "$1")
+		.replace(/^[A-Z][A-Za-z &]{2,24}:\s*/gm, "")
+		.replace(/\s*\n+\s*/g, " ")
+		.replace(/\s{2,}/g, " ")
+		.trim();
+
 	return brief;
 }
 
 /**
  * Assemble the final image prompt from a brief + style + anti-slop rules.
  */
-export function composeImagePrompt({ brief, style, instructions }) {
+export function composeImagePrompt({ brief, style, instructions, variation }) {
 	const styleKey = resolveStyle(style);
 	return [
 		brief,
 		"",
 		`Rendering style: ${IMAGE_STYLES[styleKey].direction}`,
+		variation
+			? `Camera and light: ${variation.shot}, ${variation.lens}, ${variation.light}. Palette: ${variation.palette}. Keep the empty space at ${variation.negativeSpace}.`
+			: null,
 		instructions ? `Additional direction: ${instructions}` : null,
 		"",
 		"Hard constraints:",
@@ -389,8 +520,15 @@ export async function generateFeaturedImage({
 	instructions = "",
 	aspectRatio = DEFAULT_ASPECT_RATIO,
 	imageSize = DEFAULT_IMAGE_SIZE,
+	seed,
+	variant = 0,
+	avoid = [],
 }) {
 	if (!title) throw new Error("Title is required");
+
+	// Same article, same look on a re-run; different article, different look.
+	// Bumping `variant` gives the editor another take on the same post.
+	const variation = pickVariation(`${seed || title}#${variant}`);
 
 	// Leave headroom under the 60s function limit so a retry backoff cannot
 	// run past it; better to fail with a clear message than be killed.
@@ -413,6 +551,8 @@ export async function generateFeaturedImage({
 			style,
 			instructions,
 			deadlineAt,
+			variation,
+			avoid,
 		});
 	} catch (error) {
 		// The image call shares this quota, so a rate limit here means the whole
@@ -423,7 +563,7 @@ export async function generateFeaturedImage({
 		artDirected = false;
 	}
 
-	const prompt = composeImagePrompt({ brief, style, instructions });
+	const prompt = composeImagePrompt({ brief, style, instructions, variation });
 
 	let image = null;
 	let usedModel = IMAGE_MODEL;
@@ -475,5 +615,6 @@ export async function generateFeaturedImage({
 		aspectRatio: ratio,
 		imageSize: size,
 		artDirected,
+		variation,
 	};
 }
