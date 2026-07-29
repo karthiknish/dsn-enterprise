@@ -91,6 +91,14 @@ export default function ChatTimelineEntry({ entry }) {
 		return <ToolEntry entry={entry} />;
 	}
 
+	if (entry.kind === "notice") {
+		return (
+			<div className="text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
+				{entry.message}
+			</div>
+		);
+	}
+
 	if (entry.kind === "revision") {
 		return (
 			<div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">

@@ -53,6 +53,13 @@ HOW YOU WORK
 
 Keep chat replies short and useful — an editor's colleague, not an assistant performing enthusiasm. Do not paste the whole article into chat; that is what save_draft is for.`;
 
+/**
+ * Sent when the turn's time budget is nearly spent and nothing is written yet.
+ */
+export const FORCE_DRAFT_INSTRUCTION = `Stop researching and call save_draft now with the article, using only what you have already read.
+
+Write the strongest piece the current research supports. Where the research did not settle something, leave it out rather than guessing — a shorter, fully grounded article is the correct outcome here. Do not ask the editor a question and do not run another search.`;
+
 export function reviseInstruction(reportText) {
 	return `Automated slop check on your draft:
 

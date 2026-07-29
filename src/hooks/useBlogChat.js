@@ -16,9 +16,13 @@ const EVENT_TO_ACTION = {
 	tool_error: (e) => ({ type: "TOOL_ERROR", id: e.id, error: e.error }),
 	draft: (e) => ({ type: "DRAFT", draft: e.draft, report: e.report }),
 	revision: (e) => ({ type: "REVISION", attempt: e.attempt, report: e.report }),
-	done: (e) => ({ type: "DONE", sources: e.sources }),
+	notice: (e) => ({ type: "NOTICE", message: e.message }),
+	done: (e) => ({ type: "DONE", sources: e.sources, note: e.note }),
 	error: (e) => ({ type: "ERROR", error: e.error }),
 };
+
+// Safety net for the client-driven loop; the server enforces its own step cap.
+const MAX_CLIENT_STEPS = 16;
 
 /**
  * Drives the researched-blog chat: streams NDJSON agent events and exposes
@@ -45,26 +49,29 @@ export function useBlogChat({ postContext, onApplyDraft } = {}) {
 			const controller = new AbortController();
 			abortRef.current = controller;
 
-			try {
+			/**
+			 * Runs one agent step and returns the run state to resume from, or null
+			 * when the turn is over. Each request is short enough to stay well
+			 * inside the serverless time limit.
+			 */
+			const runStep = async (payload) => {
 				const response = await fetch("/api/blog-chat", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ messages: history, postContext }),
+					body: JSON.stringify(payload),
 					signal: controller.signal,
 				});
 
 				if (!response.ok || !response.body) {
 					const data = await response.json().catch(() => ({}));
-					dispatch({
-						type: "ERROR",
-						error: data.error || `Request failed (${response.status})`,
-					});
-					return;
+					throw new Error(data.error || `Request failed (${response.status})`);
 				}
 
 				const reader = response.body.getReader();
 				const decoder = new TextDecoder();
 				let buffer = "";
+				let nextRun = null;
+				let failed = false;
 
 				while (true) {
 					const { done, value } = await reader.read();
@@ -82,12 +89,33 @@ export function useBlogChat({ postContext, onApplyDraft } = {}) {
 						} catch {
 							continue;
 						}
+
+						// State is plumbing, not something the editor should see.
+						if (event.type === "state") {
+							nextRun = event.run;
+							continue;
+						}
+						if (event.type === "error") failed = true;
+
 						const toAction = EVENT_TO_ACTION[event.type];
 						if (toAction) dispatch(toAction(event));
 					}
 				}
 
-				dispatch({ type: "DONE", sources: state.sources });
+				if (failed || !nextRun || nextRun.done) return null;
+				return nextRun;
+			};
+
+			try {
+				let run = await runStep({ messages: history, postContext });
+				let steps = 1;
+
+				while (run && steps < MAX_CLIENT_STEPS) {
+					run = await runStep({ run });
+					steps += 1;
+				}
+
+				dispatch({ type: "DONE", sources: [] });
 			} catch (error) {
 				if (error.name === "AbortError") {
 					dispatch({ type: "DONE", sources: [] });
@@ -98,7 +126,7 @@ export function useBlogChat({ postContext, onApplyDraft } = {}) {
 				abortRef.current = null;
 			}
 		},
-		[postContext, state.running, state.timeline, state.sources],
+		[postContext, state.running, state.timeline],
 	);
 
 	const stop = useCallback(() => {

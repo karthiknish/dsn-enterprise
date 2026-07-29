@@ -103,6 +103,15 @@ export function blogChatReducer(state, action) {
 				],
 			};
 
+		case "NOTICE":
+			return {
+				...state,
+				timeline: [
+					...state.timeline,
+					{ id: nextId(), kind: "notice", message: action.message },
+				],
+			};
+
 		case "REVISION":
 			return {
 				...state,
@@ -122,6 +131,12 @@ export function blogChatReducer(state, action) {
 				...state,
 				running: false,
 				sources: action.sources?.length ? action.sources : state.sources,
+				timeline: action.note
+					? [
+							...state.timeline,
+							{ id: nextId(), kind: "notice", message: action.note },
+						]
+					: state.timeline,
 			};
 
 		case "ERROR":

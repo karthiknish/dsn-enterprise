@@ -7,7 +7,11 @@
  * for a minute.
  */
 
-import { reviseInstruction, SYSTEM_PROMPT } from "@/lib/blog-agent-prompt";
+import {
+	FORCE_DRAFT_INSTRUCTION,
+	reviseInstruction,
+	SYSTEM_PROMPT,
+} from "@/lib/blog-agent-prompt";
 import { executeTool, TOOL_SCHEMAS } from "@/lib/blog-agent-tools";
 import { checkSlop, formatSlopReport } from "@/lib/slop-check";
 
@@ -18,7 +22,24 @@ const MAX_STEPS = 12;
 const MAX_REVISIONS = 2;
 const ACCEPTABLE_SCORE = 85;
 
-async function callDeepSeek(messages, { tools = TOOL_SCHEMAS } = {}) {
+/**
+ * Wall-clock budget for the whole turn, across every step.
+ *
+ * This is not the serverless limit — the caller runs one step per request, so
+ * no single request comes close to maxDuration. This budget exists so a turn
+ * cannot research forever while an editor waits; when it runs low the model is
+ * made to write with what it has rather than being cut off empty-handed.
+ */
+const BUDGET_MS = Number(process.env.BLOG_AGENT_BUDGET_MS || 240_000);
+// Writing a full article is the single most expensive call in the loop.
+const WRITE_RESERVE_MS = Number(
+	process.env.BLOG_AGENT_WRITE_RESERVE_MS || 45_000,
+);
+
+async function callDeepSeek(
+	messages,
+	{ tools = TOOL_SCHEMAS, toolChoice = "auto" } = {},
+) {
 	const response = await fetch(DEEPSEEK_API_URL, {
 		method: "POST",
 		headers: {
@@ -29,7 +50,7 @@ async function callDeepSeek(messages, { tools = TOOL_SCHEMAS } = {}) {
 			model: MODEL,
 			messages,
 			tools,
-			tool_choice: "auto",
+			tool_choice: toolChoice,
 			temperature: 0.6,
 			max_tokens: 8000,
 		}),
@@ -76,35 +97,90 @@ function summariseToolResult(name, result) {
 }
 
 /**
- * @param {object} params
- * @param {Array<{role:string, content:string}>} params.messages  Editor/assistant chat history
- * @param {object} [params.postContext]  Current form state, so the agent can work with an existing draft
- * @yields {{type:string, ...}} stream events
+ * Build the opening conversation for a new turn.
  */
-export async function* runBlogAgent({ messages, postContext }) {
+export function startRun({ messages, postContext }) {
+	const contextNote = postContext?.title
+		? `\n\nCURRENT POST IN THE EDITOR\nTitle: ${postContext.title}\nExcerpt: ${postContext.excerpt || "(empty)"}\nBody length: ${(postContext.content || "").length} characters.`
+		: "";
+
+	return {
+		conversation: [
+			{ role: "system", content: SYSTEM_PROMPT + contextNote },
+			...messages.map((m) => ({ role: m.role, content: m.content })),
+		],
+		draft: null,
+		report: null,
+		revisions: 0,
+		sources: [],
+		step: 0,
+		elapsedMs: 0,
+		forcedWrite: false,
+		done: false,
+	};
+}
+
+/**
+ * Run exactly one agent step: one model call plus any tools it asks for.
+ *
+ * The loop is driven a step at a time by the caller so that no single HTTP
+ * request approaches a serverless time limit (60s on Vercel Hobby), while the
+ * run as a whole can take as long as it needs. `run` is plain JSON, so the
+ * caller can hold it in memory, persist it, or send it back over the wire.
+ *
+ * @param {object} run  State from startRun(), or the run returned by the previous step
+ * @yields {{type:string, ...}} stream events; the final event is always `state`
+ */
+export async function* runAgentStep(run) {
 	if (!process.env.DEEPSEEK_API_KEY) {
 		yield { type: "error", error: "DeepSeek API key not configured" };
 		return;
 	}
 
-	const contextNote = postContext?.title
-		? `\n\nCURRENT POST IN THE EDITOR\nTitle: ${postContext.title}\nExcerpt: ${postContext.excerpt || "(empty)"}\nBody length: ${(postContext.content || "").length} characters.`
-		: "";
+	const stepStartedAt = Date.now();
+	const conversation = [...run.conversation];
+	const sourcesSeen = new Map((run.sources || []).map((s) => [s.url, s]));
 
-	const conversation = [
-		{ role: "system", content: SYSTEM_PROMPT + contextNote },
-		...messages.map((m) => ({ role: m.role, content: m.content })),
-	];
+	let { draft, report, revisions, forcedWrite } = run;
+	let done = false;
+	let note = null;
 
-	let draft = null;
-	let report = null;
-	let revisions = 0;
-	const sourcesSeen = new Map();
+	// Total time spent across every step of this turn, not just this request.
+	const totalElapsed = () => run.elapsedMs + (Date.now() - stepStartedAt);
 
-	for (let step = 0; step < MAX_STEPS; step += 1) {
+	const finish = (finalNote) => {
+		done = true;
+		note = finalNote;
+	};
+
+	if (run.step >= MAX_STEPS) {
+		finish("Reached the step limit.");
+	} else if (run.elapsedMs > BUDGET_MS && draft) {
+		finish("Stopped at the time limit.");
+	}
+
+	if (!done) {
+		// Out of research time with nothing written: make this call be the
+		// article rather than another search.
+		let toolChoice = "auto";
+		if (
+			!draft &&
+			!forcedWrite &&
+			run.elapsedMs > BUDGET_MS - WRITE_RESERVE_MS
+		) {
+			forcedWrite = true;
+			toolChoice = { type: "function", function: { name: "save_draft" } };
+			conversation.push({ role: "user", content: FORCE_DRAFT_INSTRUCTION });
+			yield {
+				type: "notice",
+				message:
+					"Research time is up — writing the draft now from what has been gathered.",
+			};
+		}
+
 		let message;
 		try {
-			message = await callDeepSeek(conversation);
+			message = await callDeepSeek(conversation, { toolChoice });
 		} catch (error) {
 			yield { type: "error", error: error.message };
 			return;
@@ -118,8 +194,8 @@ export async function* runBlogAgent({ messages, postContext }) {
 
 		const toolCalls = message.tool_calls || [];
 		if (!toolCalls.length) {
-			yield { type: "done", draft, report, sources: [...sourcesSeen.values()] };
-			return;
+			// No tool call means the model is talking to the editor: turn is over.
+			finish(null);
 		}
 
 		for (const call of toolCalls) {
@@ -136,18 +212,14 @@ export async function* runBlogAgent({ messages, postContext }) {
 				yield { type: "tool_error", id: call.id, name, error: error.message };
 			}
 
-			for (const source of summariseToolResult(name, execution.result) || []) {
+			const summary = summariseToolResult(name, execution.result);
+			for (const source of summary || []) {
 				if (source.url && !sourcesSeen.has(source.url)) {
 					sourcesSeen.set(source.url, source);
 				}
 			}
 
-			yield {
-				type: "tool_result",
-				id: call.id,
-				name,
-				summary: summariseToolResult(name, execution.result),
-			};
+			yield { type: "tool_result", id: call.id, name, summary };
 
 			conversation.push({
 				role: "tool",
@@ -162,8 +234,12 @@ export async function* runBlogAgent({ messages, postContext }) {
 			report = checkSlop(draft.contentMarkdown, { sources: draft.sources });
 			yield { type: "draft", draft, report };
 
+			// A revision costs another full write; only start one if there is room.
 			const needsWork =
-				report.score < ACCEPTABLE_SCORE && revisions < MAX_REVISIONS;
+				report.score < ACCEPTABLE_SCORE &&
+				revisions < MAX_REVISIONS &&
+				totalElapsed() < BUDGET_MS - WRITE_RESERVE_MS;
+
 			if (needsWork) {
 				revisions += 1;
 				yield { type: "revision", attempt: revisions, report };
@@ -175,11 +251,28 @@ export async function* runBlogAgent({ messages, postContext }) {
 		}
 	}
 
-	yield {
-		type: "done",
+	const next = {
+		conversation,
 		draft,
 		report,
+		revisions,
 		sources: [...sourcesSeen.values()],
-		note: "Reached the step limit.",
+		step: run.step + 1,
+		elapsedMs: totalElapsed(),
+		forcedWrite,
+		done,
 	};
+
+	if (done) {
+		yield {
+			type: "done",
+			draft,
+			report,
+			sources: next.sources,
+			note,
+		};
+	}
+
+	// Always last: lets the caller resume the run on the next request.
+	yield { type: "state", run: next };
 }

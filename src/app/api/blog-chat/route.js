@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { runBlogAgent } from "@/lib/blog-agent";
+import { runAgentStep, startRun } from "@/lib/blog-agent";
 
 export const runtime = "nodejs";
-export const maxDuration = 300;
+// One request runs a single agent step (one model call plus its tools), which
+// measures 5-25s. The client drives the loop, so the run as a whole is not
+// bounded by this — and it stays inside the 60s Hobby cap on Vercel.
+// Must be a literal: Next statically analyses segment config exports.
+export const maxDuration = 60;
 
-/**
- * Streams agent steps as newline-delimited JSON so the studio can show
- * research happening instead of a one-minute spinner.
- */
 export async function POST(request) {
 	if (!process.env.DEEPSEEK_API_KEY) {
 		return NextResponse.json(
@@ -23,18 +23,24 @@ export async function POST(request) {
 	}
 
 	const body = await request.json().catch(() => ({}));
-	const { messages, postContext } = body;
+	const { messages, postContext, run: previousRun } = body;
 
-	if (!Array.isArray(messages) || messages.length === 0) {
+	// Either resume a run the client is holding, or open a new one.
+	let run;
+	if (previousRun?.conversation?.length) {
+		run = previousRun;
+	} else if (Array.isArray(messages) && messages.length > 0) {
+		run = startRun({ messages, postContext });
+	} else {
 		return NextResponse.json(
-			{ success: false, error: "messages are required" },
+			{ success: false, error: "messages or run is required" },
 			{ status: 400 },
 		);
 	}
 
 	const encoder = new TextEncoder();
 	// `start` must stay synchronous: Next awaits it before sending headers, so
-	// an async body here would buffer the entire run instead of streaming it.
+	// an async body here would buffer the entire step instead of streaming it.
 	const stream = new ReadableStream({
 		start(controller) {
 			const send = (event) => {
@@ -42,14 +48,14 @@ export async function POST(request) {
 			};
 
 			// Node holds queued chunks until the event loop gets an I/O turn, so
-			// without this yield the whole run lands on the client at once.
+			// without this yield the whole step lands on the client at once.
 			const flush = () => new Promise((resolve) => setImmediate(resolve));
 
 			send({ type: "start", at: Date.now() });
 
 			(async () => {
 				try {
-					for await (const event of runBlogAgent({ messages, postContext })) {
+					for await (const event of runAgentStep(run)) {
 						send(event);
 						await flush();
 					}

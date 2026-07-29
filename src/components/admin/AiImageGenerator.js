@@ -13,7 +13,7 @@ const STYLE_OPTIONS = [
 const SIZE_OPTIONS = [
 	{ id: "1K", label: "1K — fast" },
 	{ id: "2K", label: "2K — recommended" },
-	{ id: "4K", label: "4K — slow, print grade" },
+	{ id: "4K", label: "4K — print grade, may time out" },
 ];
 
 const RATIO_OPTIONS = [

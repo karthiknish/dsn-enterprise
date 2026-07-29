@@ -6,8 +6,10 @@ import {
 } from "@/lib/gemini-image-server";
 
 export const runtime = "nodejs";
-// 2K generation with a thinking pass can take a while.
-export const maxDuration = 120;
+// Vercel caps this at 60s on Hobby. 2K generation measures ~25s including the
+// art-direction pass; 4K is close to the limit and may time out there.
+// Must be a literal: Next statically analyses segment config exports.
+export const maxDuration = 60;
 
 export async function GET() {
 	return NextResponse.json({
