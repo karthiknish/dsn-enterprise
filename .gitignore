@@ -9,7 +9,9 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+.omo
+.playwright-mcp
+.devin
 # testing
 /coverage
 
@@ -49,3 +51,4 @@ search-console-service-account-key.json
 
 # OpenCode MCP config (contains service tokens)
 .opencode/
+.vercel-env-values.txt
