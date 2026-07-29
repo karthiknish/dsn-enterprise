@@ -1,17 +1,9 @@
-import {
-	collection,
-	getCountFromServer,
-	getDocs,
-	limit,
-	orderBy,
-	query,
-	where,
-} from "firebase/firestore";
 import Link from "next/link";
-import BlogPostImage from "@/components/blog/BlogPostImage";
+import { Suspense } from "react";
+import BlogPostsSection from "@/components/blog/BlogPostsSection";
+import BlogPostsSkeleton from "@/components/blog/BlogPostsSkeleton";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
-import { db } from "@/lib/firebase";
 
 export async function generateMetadata({ searchParams }) {
 	const params = await searchParams;
@@ -39,15 +31,8 @@ export async function generateMetadata({ searchParams }) {
 		openGraph: {
 			title,
 			description,
+			url: "https://www.dsnenterprises.in/blog",
 			type: "website",
-			url: "/blog",
-			images: ["/images/featured.png"],
-		},
-		twitter: {
-			card: "summary_large_image",
-			title,
-			description,
-			images: ["/images/featured.png"],
 		},
 		robots: isFiltered
 			? { index: false, follow: true }
@@ -55,104 +40,20 @@ export async function generateMetadata({ searchParams }) {
 	};
 }
 
-function mapPostDoc(docSnap) {
-	const data = docSnap.data();
-	return {
-		id: docSnap.id,
-		...data,
-		publishedDate: data.publishedDate?.toDate?.()?.toISOString() || null,
-		createdAt: data.createdAt?.toDate?.()?.toISOString() || null,
-	};
-}
-
-async function getPublishedPostsCount() {
-	try {
-		const postsRef = collection(db, "blogs");
-		const q = query(postsRef, where("status", "==", "published"));
-		const countSnapshot = await getCountFromServer(q);
-		return { count: countSnapshot.data().count, error: false };
-	} catch (error) {
-		console.error("Error counting posts:", error);
-		return { count: 0, error: true };
-	}
-}
-
-async function getPublishedPostsPage(page, postsPerPage) {
-	try {
-		const postsRef = collection(db, "blogs");
-		const q = query(
-			postsRef,
-			where("status", "==", "published"),
-			orderBy("createdAt", "desc"),
-			limit(page * postsPerPage),
-		);
-		const snapshot = await getDocs(q);
-		const posts = snapshot.docs.map(mapPostDoc);
-		const start = (page - 1) * postsPerPage;
-		return { posts: posts.slice(start, start + postsPerPage), error: false };
-	} catch (error) {
-		console.error("Error fetching posts:", error);
-		return { posts: [], error: true };
-	}
-}
-
-async function getAllPublishedPosts() {
-	try {
-		const postsRef = collection(db, "blogs");
-		const q = query(
-			postsRef,
-			where("status", "==", "published"),
-			orderBy("createdAt", "desc"),
-		);
-		const snapshot = await getDocs(q);
-		const posts = snapshot.docs.map(mapPostDoc);
-		return { posts, error: false };
-	} catch (error) {
-		console.error("Error fetching posts:", error);
-		return { posts: [], error: true };
-	}
-}
-
+/**
+ * The page shell renders immediately — hero, search bar, layout — because none
+ * of it depends on Firestore. Only BlogPostsSection suspends, so the reader
+ * sees the static chrome instantly and a skeleton only where posts will land.
+ *
+ * Previously this file was an async component that awaited Firestore before
+ * returning any JSX, and loading.js wrapped the whole segment. The result:
+ * 107 animate-pulse elements appeared at offset 11k in the byte stream while
+ * the real hero didn't arrive until offset 41k.
+ */
 export default async function BlogPage({ searchParams }) {
 	const params = await searchParams;
 	const requestedPage = parseInt(params?.page, 10) || 1;
 	const searchQuery = params?.q || "";
-	const postsPerPage = 9;
-
-	let posts = [];
-	let totalPosts = 0;
-	let fetchError = false;
-	let currentPage = requestedPage;
-
-	if (searchQuery) {
-		const { posts: allPosts, error } = await getAllPublishedPosts();
-		fetchError = error;
-		const filtered = allPosts.filter(
-			(post) =>
-				post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				post.content?.toLowerCase().includes(searchQuery.toLowerCase()),
-		);
-		totalPosts = filtered.length;
-		const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
-		currentPage = Math.max(1, Math.min(requestedPage, totalPages));
-		const start = (currentPage - 1) * postsPerPage;
-		posts = filtered.slice(start, start + postsPerPage);
-	} else {
-		const { count, error: countError } = await getPublishedPostsCount();
-		fetchError = countError;
-		totalPosts = count;
-		const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
-		currentPage = Math.max(1, Math.min(requestedPage, totalPages));
-		const { posts: pagePosts, error: pageError } = await getPublishedPostsPage(
-			currentPage,
-			postsPerPage,
-		);
-		if (pageError) fetchError = true;
-		posts = pagePosts;
-	}
-
-	const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
 
 	return (
 		<div className="min-h-screen bg-gray-50">
@@ -166,7 +67,7 @@ export default async function BlogPage({ searchParams }) {
 				]}
 			/>
 
-			{/* Search and Filters Bar */}
+			{/* Search bar — static, renders immediately */}
 			<section className="bg-white border-b border-gray-200 py-4 sticky top-16 z-10 shadow-sm">
 				<div className="container mx-auto px-4">
 					<div className="max-w-2xl mx-auto">
@@ -233,226 +134,15 @@ export default async function BlogPage({ searchParams }) {
 				</div>
 			</section>
 
-			{/* Blog Posts */}
+			{/* Posts — only this suspends */}
 			<section className="py-16">
 				<div className="container mx-auto px-4">
-					{searchQuery && (
-						<div className="mb-8 max-w-7xl mx-auto">
-							<h2 className="text-2xl font-semibold text-gray-900">
-								{totalPosts > 0
-									? `Search results for "${searchQuery}" (${totalPosts})`
-									: `No results found for "${searchQuery}"`}
-							</h2>
-							{totalPosts === 0 && (
-								<button
-									type="button"
-									onClick={() => (window.location.href = "/blog")}
-									className="mt-4 text-accent hover:text-accent-700 font-medium flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-								>
-									<svg
-										aria-hidden="true"
-										className="w-4 h-4"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={2}
-											d="M10 19l-7-7m0 0l7-7m-7 7h18"
-										/>
-									</svg>
-									Clear search and show all posts
-								</button>
-							)}
-						</div>
-					)}
-
-					{fetchError && !searchQuery ? (
-						<div className="text-center py-16" role="alert">
-							<svg
-								aria-hidden="true"
-								className="w-16 h-16 mx-auto text-gray-400 mb-4"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-								/>
-							</svg>
-							<h2 className="text-2xl font-semibold text-gray-900 mb-2">
-								Couldn&apos;t load blog posts
-							</h2>
-							<p className="text-gray-600 mb-6 max-w-md mx-auto">
-								We&apos;re having trouble connecting to our blog. Please try
-								again in a moment.
-							</p>
-							<a
-								href="/blog"
-								className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-2.5 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-							>
-								Try again
-							</a>
-						</div>
-					) : posts.length === 0 && !searchQuery ? (
-						<div className="text-center py-16">
-							<svg
-								aria-hidden="true"
-								className="w-16 h-16 mx-auto text-gray-400 mb-4"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-								/>
-							</svg>
-							<h2 className="text-2xl font-semibold text-gray-900 mb-2">
-								No posts yet
-							</h2>
-							<p className="text-gray-600">
-								Check back soon for new articles and updates.
-							</p>
-						</div>
-					) : (
-						<>
-							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-								{posts.map((post) => {
-									const displayDate = post.publishedDate || post.createdAt;
-									return (
-										<article
-											key={post.id}
-											className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
-										>
-											<Link href={`/blog/${post.slug}`}>
-												{post.featuredImage ? (
-													<BlogPostImage
-														src={post.featuredImage}
-														alt={post.title}
-														width={600}
-														height={192}
-														className="w-full h-48"
-														imageClassName="w-full h-48 object-cover"
-													/>
-												) : (
-													<div className="w-full h-48 bg-gray-50 border-b border-gray-100 flex flex-col items-center justify-center text-gray-400">
-														<svg
-															aria-hidden="true"
-															className="w-10 h-10 mb-1"
-															fill="none"
-															stroke="currentColor"
-															viewBox="0 0 24 24"
-														>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={1.5}
-																d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-															/>
-														</svg>
-														<span className="text-xs">No featured image</span>
-													</div>
-												)}
-											</Link>
-											<div className="p-6 flex flex-col flex-1">
-												<div className="text-sm text-gray-500 mb-2">
-													{displayDate
-														? new Date(displayDate).toLocaleDateString(
-																"en-US",
-																{
-																	year: "numeric",
-																	month: "long",
-																	day: "numeric",
-																},
-															)
-														: "No date"}
-												</div>
-												<Link href={`/blog/${post.slug}`}>
-													<h2 className="text-xl font-semibold text-gray-900 mb-2 hover:text-accent transition-colors">
-														{post.title}
-													</h2>
-												</Link>
-												{post.excerpt && (
-													<p className="text-gray-600 mb-4 line-clamp-3">
-														{post.excerpt}
-													</p>
-												)}
-												<div className="mt-auto">
-													<Link
-														href={`/blog/${post.slug}`}
-														className="inline-flex items-center text-accent hover:text-accent-700 font-medium"
-													>
-														Read more
-														<svg
-															aria-hidden="true"
-															className="w-4 h-4 ml-1"
-															fill="none"
-															stroke="currentColor"
-															viewBox="0 0 24 24"
-														>
-															<path
-																strokeLinecap="round"
-																strokeLinejoin="round"
-																strokeWidth={2}
-																d="M9 5l7 7-7 7"
-															/>
-														</svg>
-													</Link>
-												</div>
-											</div>
-										</article>
-									);
-								})}
-							</div>
-
-							{/* Pagination */}
-							{totalPages > 1 && (
-								<div className="mt-12 flex justify-center gap-2">
-									{currentPage > 1 && (
-										<Link
-											href={`/blog?page=${currentPage - 1}${searchQuery ? `&q=${searchQuery}` : ""}`}
-											className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-accent transition-all font-medium"
-										>
-											Previous
-										</Link>
-									)}
-
-									{Array.from({ length: totalPages }, (_, i) => i + 1).map(
-										(pageNum) => (
-											<Link
-												key={pageNum}
-												href={`/blog?page=${pageNum}${searchQuery ? `&q=${searchQuery}` : ""}`}
-												className={`w-10 h-10 flex items-center justify-center rounded-lg font-medium transition-all ${
-													currentPage === pageNum
-														? "bg-accent text-white"
-														: "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-accent"
-												}`}
-											>
-												{pageNum}
-											</Link>
-										),
-									)}
-
-									{currentPage < totalPages && (
-										<Link
-											href={`/blog?page=${currentPage + 1}${searchQuery ? `&q=${searchQuery}` : ""}`}
-											className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 hover:border-accent transition-all font-medium"
-										>
-											Next
-										</Link>
-									)}
-								</div>
-							)}
-						</>
-					)}
+					<Suspense fallback={<BlogPostsSkeleton />}>
+						<BlogPostsSection
+							searchQuery={searchQuery}
+							requestedPage={requestedPage}
+						/>
+					</Suspense>
 				</div>
 			</section>
 		</div>
