@@ -65,6 +65,32 @@ export async function POST(request) {
 		return NextResponse.json({ success: true, ...result });
 	} catch (error) {
 		console.error("Generate Image API Error:", error);
+
+		// Quota is per-minute and per-project, so this clears by itself. Say that,
+		// rather than handing the editor a raw RESOURCE_EXHAUSTED dump.
+		if (error?.rateLimited) {
+			return NextResponse.json(
+				{
+					success: false,
+					rateLimited: true,
+					error:
+						"Gemini's per-minute image quota is used up. Wait about a minute and generate again — nothing else needs changing.",
+				},
+				{ status: 429, headers: { "Retry-After": "60" } },
+			);
+		}
+
+		if (error?.status === 401 || error?.status === 403) {
+			return NextResponse.json(
+				{
+					success: false,
+					error:
+						"Gemini rejected the API key. Check GEMINI_API_KEY and that the Generative Language API is enabled for the project.",
+				},
+				{ status: 502 },
+			);
+		}
+
 		return NextResponse.json(
 			{
 				success: false,

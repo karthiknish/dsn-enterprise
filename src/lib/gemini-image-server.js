@@ -53,6 +53,12 @@ export const IMAGE_STYLES = {
 export const DEFAULT_STYLE = "editorial";
 
 // Blog hero: 16:9 at 2K reads sharply on retina and downscales cleanly.
+// Total wall-clock allowance for one generation, retries included. Sits under
+// the route's 60s maxDuration.
+const GENERATION_BUDGET_MS = Number(
+	process.env.GEMINI_IMAGE_BUDGET_MS || 45_000,
+);
+
 const DEFAULT_ASPECT_RATIO = "16:9";
 const DEFAULT_IMAGE_SIZE = "2K";
 
@@ -116,27 +122,110 @@ function getApiKey() {
 	return key;
 }
 
-async function geminiFetch(model, body) {
-	const response = await fetch(`${API_BASE}/models/${model}:generateContent`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			"x-goog-api-key": getApiKey(),
-		},
-		body: JSON.stringify(body),
-		cache: "no-store",
-	});
+// Transient conditions worth waiting out. 429 is the per-minute regional
+// quota, which clears on its own; 5xx are Google-side blips.
+const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
+const MAX_RETRIES = 3;
+const BASE_BACKOFF_MS = 2000;
 
-	if (!response.ok) {
-		const detail = await response.text().catch(() => "");
-		const error = new Error(
-			`Gemini API error (${model}): ${response.status} ${detail.slice(0, 400)}`,
-		);
-		error.status = response.status;
-		throw error;
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Pull the useful parts out of a Google API error body: the human message,
+ * the machine reason (RATE_LIMIT_EXCEEDED etc), and the server's own advice on
+ * how long to wait.
+ */
+function parseGeminiError(bodyText) {
+	const result = {
+		message: bodyText.slice(0, 300),
+		reason: null,
+		retryAfterMs: null,
+	};
+	try {
+		const parsed = JSON.parse(bodyText);
+		result.message = parsed?.error?.message || result.message;
+		for (const detail of parsed?.error?.details || []) {
+			const type = detail["@type"] || "";
+			if (type.includes("ErrorInfo") && detail.reason) {
+				result.reason = detail.reason;
+			}
+			if (type.includes("RetryInfo") && detail.retryDelay) {
+				const seconds = Number.parseFloat(String(detail.retryDelay));
+				if (Number.isFinite(seconds)) {
+					result.retryAfterMs = Math.ceil(seconds * 1000);
+				}
+			}
+		}
+	} catch {
+		// Non-JSON body; the raw text is the best message available.
 	}
+	return result;
+}
 
-	return response.json();
+/**
+ * @param {string} model
+ * @param {object} body
+ * @param {{deadlineAt?: number}} [options] Wall-clock limit for retries, so a
+ *   backoff never runs past the serverless request budget.
+ */
+async function geminiFetch(
+	model,
+	body,
+	{ deadlineAt = Number.POSITIVE_INFINITY } = {},
+) {
+	for (let attempt = 0; ; attempt += 1) {
+		const response = await fetch(
+			`${API_BASE}/models/${model}:generateContent`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"x-goog-api-key": getApiKey(),
+				},
+				body: JSON.stringify(body),
+				cache: "no-store",
+			},
+		);
+
+		if (response.ok) return response.json();
+
+		const detail = await response.text().catch(() => "");
+		const { message, reason, retryAfterMs } = parseGeminiError(detail);
+
+		const error = new Error(`Gemini ${model} (${response.status}): ${message}`);
+		error.status = response.status;
+		error.reason = reason;
+		error.model = model;
+		error.rateLimited = response.status === 429;
+
+		const canRetry =
+			RETRYABLE_STATUSES.has(response.status) && attempt < MAX_RETRIES;
+		if (!canRetry) throw error;
+
+		// Respect the server's RetryInfo when it gives one, else back off.
+		const waitMs = retryAfterMs ?? BASE_BACKOFF_MS * 2 ** attempt;
+		if (Date.now() + waitMs > deadlineAt) {
+			error.deadlineExceeded = true;
+			throw error;
+		}
+
+		console.warn(
+			`${model}: ${response.status} ${reason || ""} — retrying in ${waitMs}ms (attempt ${attempt + 1}/${MAX_RETRIES})`,
+		);
+		await sleep(waitMs);
+	}
+}
+
+/**
+ * A different model is only worth trying when this one is unavailable to us.
+ * Rate limits are counted per project, so retrying a 429 on the pricier Pro
+ * model just burns the same quota and costs more.
+ */
+function shouldTryFallbackModel(error) {
+	if (!error) return true;
+	if (error.rateLimited) return false;
+	if (error.status === 401 || error.status === 403) return false;
+	return true;
 }
 
 /**
@@ -163,6 +252,7 @@ export async function generateArtDirection({
 	content,
 	style,
 	instructions,
+	deadlineAt,
 }) {
 	const styleKey = resolveStyle(style);
 	const styleDirection = IMAGE_STYLES[styleKey].direction;
@@ -184,10 +274,14 @@ Write a single-paragraph image brief (90-140 words) describing ONE specific, lit
 - Do not mention text, signage, logos, or screens.
 Return only the paragraph, no preamble, no quotes, no markdown.`;
 
-	const data = await geminiFetch(TEXT_MODEL, {
-		contents: [{ parts: [{ text: prompt }] }],
-		generationConfig: { temperature: 0.9, maxOutputTokens: 600 },
-	});
+	const data = await geminiFetch(
+		TEXT_MODEL,
+		{
+			contents: [{ parts: [{ text: prompt }] }],
+			generationConfig: { temperature: 0.9, maxOutputTokens: 600 },
+		},
+		{ deadlineAt },
+	);
 
 	const brief = (data?.candidates?.[0]?.content?.parts || [])
 		.map((part) => part.text || "")
@@ -248,13 +342,27 @@ function imageBody(prompt, imageConfig) {
  * high-res request first, then degrade to aspect-ratio-only so the feature
  * keeps working (and upgrades itself automatically once 2K/4K is available).
  */
-async function requestImage({ model, prompt, aspectRatio, imageSize }) {
+async function requestImage({
+	model,
+	prompt,
+	aspectRatio,
+	imageSize,
+	deadlineAt,
+}) {
 	if (imageSize) {
 		try {
 			return extractInlineImage(
-				await geminiFetch(model, imageBody(prompt, { aspectRatio, imageSize })),
+				await geminiFetch(
+					model,
+					imageBody(prompt, { aspectRatio, imageSize }),
+					{
+						deadlineAt,
+					},
+				),
 			);
 		} catch (error) {
+			// A rate limit says nothing about imageSize; do not burn another call.
+			if (error.rateLimited || error.deadlineExceeded) throw error;
 			console.warn(
 				`${model}: imageSize=${imageSize} rejected (${error.message}), retrying at default resolution`,
 			);
@@ -262,7 +370,9 @@ async function requestImage({ model, prompt, aspectRatio, imageSize }) {
 	}
 
 	return extractInlineImage(
-		await geminiFetch(model, imageBody(prompt, { aspectRatio })),
+		await geminiFetch(model, imageBody(prompt, { aspectRatio }), {
+			deadlineAt,
+		}),
 	);
 }
 
@@ -282,6 +392,10 @@ export async function generateFeaturedImage({
 }) {
 	if (!title) throw new Error("Title is required");
 
+	// Leave headroom under the 60s function limit so a retry backoff cannot
+	// run past it; better to fail with a clear message than be killed.
+	const deadlineAt = Date.now() + GENERATION_BUDGET_MS;
+
 	const ratio = ALLOWED_ASPECT_RATIOS.has(aspectRatio)
 		? aspectRatio
 		: DEFAULT_ASPECT_RATIO;
@@ -298,8 +412,12 @@ export async function generateFeaturedImage({
 			content,
 			style,
 			instructions,
+			deadlineAt,
 		});
 	} catch (error) {
+		// The image call shares this quota, so a rate limit here means the whole
+		// attempt is doomed. Surface it instead of spending the call to confirm.
+		if (error.rateLimited) throw error;
 		console.warn("Art direction pass failed, using fallback brief:", error);
 		brief = buildFallbackBrief({ title, excerpt, content });
 		artDirected = false;
@@ -309,28 +427,44 @@ export async function generateFeaturedImage({
 
 	let image = null;
 	let usedModel = IMAGE_MODEL;
+	let primaryError = null;
 	try {
 		image = await requestImage({
 			model: IMAGE_MODEL,
 			prompt,
 			aspectRatio: ratio,
 			imageSize: size,
+			deadlineAt,
 		});
 	} catch (error) {
-		console.warn(`${IMAGE_MODEL} failed, falling back:`, error.message);
+		primaryError = error;
+		console.warn(`${IMAGE_MODEL} failed:`, error.message);
 	}
 
-	if (!image && IMAGE_MODEL_FALLBACK && IMAGE_MODEL_FALLBACK !== IMAGE_MODEL) {
-		usedModel = IMAGE_MODEL_FALLBACK;
-		image = await requestImage({
-			model: IMAGE_MODEL_FALLBACK,
-			prompt,
-			aspectRatio: ratio,
-			imageSize: size,
-		});
+	const fallbackWorthTrying =
+		!image &&
+		IMAGE_MODEL_FALLBACK &&
+		IMAGE_MODEL_FALLBACK !== IMAGE_MODEL &&
+		shouldTryFallbackModel(primaryError) &&
+		Date.now() < deadlineAt;
+
+	if (fallbackWorthTrying) {
+		try {
+			image = await requestImage({
+				model: IMAGE_MODEL_FALLBACK,
+				prompt,
+				aspectRatio: ratio,
+				imageSize: size,
+				deadlineAt,
+			});
+			usedModel = IMAGE_MODEL_FALLBACK;
+		} catch (error) {
+			// Report whichever failure the operator can actually act on.
+			throw primaryError || error;
+		}
 	}
 
-	if (!image) throw new Error("Gemini returned no image data");
+	if (!image) throw primaryError || new Error("Gemini returned no image data");
 
 	return {
 		dataUrl: `data:${image.mimeType};base64,${image.base64}`,
