@@ -1,30 +1,33 @@
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
-import { metadata as routeMetadata } from './metadata';
+import { metadata as routeMetadata } from "./metadata";
 
 export const metadata = routeMetadata;
-import PageClient from './page-client';
+
+import { jsonLdProps, ORG_ID, WEBSITE_ID } from "@/lib/seo-schema";
+import PageClient from "./page-client";
 
 // LocalBusiness schema strengthens local SEO for Coimbatore searches.
-const localBusinessSchema = {
+/**
+ * ContactPage that points at the canonical organisation node.
+ *
+ * This previously declared a second, standalone LocalBusiness for the same
+ * company. Two unlinked nodes describing one business is worse than one: a
+ * consumer cannot tell whether they are the same entity, and the duplicate
+ * carried a slightly different phone format and description. Referencing
+ * ORG_ID keeps a single source of truth in src/lib/seo-schema.js.
+ */
+const contactPageSchema = {
 	"@context": "https://schema.org",
-	"@type": "LocalBusiness",
-	name: "DSN Enterprises",
-	image: getSiteUrl("/images/featured.png"),
-	url: SITE_URL,
-	telephone: "+91-9363122005",
-	address: {
-		"@type": "PostalAddress",
-		addressLocality: "Coimbatore",
-		addressRegion: "Tamil Nadu",
-		addressCountry: "IN",
-	},
-	areaServed: {
-		"@type": "State",
-		name: "Tamil Nadu",
-	},
+	"@type": "ContactPage",
+	"@id": `${SITE_URL}/contact#contactpage`,
+	url: getSiteUrl("/contact"),
+	name: "Contact DSN Enterprises",
 	description:
-		"Manufacturer and supplier of precision gauges and measuring instruments with NABL-aligned calibration services.",
+		"Contact details and enquiry form for precision gauges, calibration, and custom gauge manufacture.",
+	isPartOf: { "@id": WEBSITE_ID },
+	about: { "@id": ORG_ID },
+	mainEntity: { "@id": ORG_ID },
 };
 
 export default function ContactPage({ searchParams }) {
@@ -38,9 +41,7 @@ export default function ContactPage({ searchParams }) {
 					{ name: "Contact", url: "/contact" },
 				]}
 			/>
-			<script type="application/ld+json">
-				{JSON.stringify(localBusinessSchema)}
-			</script>
+			<script {...jsonLdProps(contactPageSchema)} />
 			<PageClient prefillProduct={prefillProduct} />
 		</>
 	);

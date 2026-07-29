@@ -2,10 +2,15 @@ import { Analytics } from "@vercel/analytics/react";
 import { Geist, Geist_Mono, Oswald } from "next/font/google";
 import GoogleAnalytics from "@/components/Analytics";
 import MotionProvider from "@/components/MotionProvider";
-import { getSiteUrl, SITE_URL } from "@/lib/site";
+import {
+	buildOrganizationSchema,
+	buildWebSiteSchema,
+	jsonLdProps,
+} from "@/lib/seo-schema";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
-import SiteChrome from "../components/layout/SiteChrome";
 import AgentationWrapper from "@/components/AgentationWrapper";
+import SiteChrome from "../components/layout/SiteChrome";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -71,49 +76,19 @@ export const metadata = {
 	},
 };
 
-const organizationSchema = {
-	"@context": "https://schema.org",
-	"@type": "Organization",
-	name: "DSN Enterprises",
-	url: SITE_URL,
-	logo: getSiteUrl("/images/logo.png"),
-	description:
-		"Leading manufacturer and supplier of high-precision gauges and measuring instruments.",
-	address: {
-		"@type": "PostalAddress",
-		addressLocality: "Coimbatore",
-		addressRegion: "Tamil Nadu",
-		addressCountry: "India",
-	},
-	contactPoint: {
-		"@type": "ContactPoint",
-		telephone: "+91-9363122005",
-		contactType: "customer service",
-	},
-};
-
-const websiteSchema = {
-	"@context": "https://schema.org",
-	"@type": "WebSite",
-	name: "DSN Enterprises",
-	url: SITE_URL,
-	potentialAction: {
-		"@type": "SearchAction",
-		target: getSiteUrl("/blog?q={search_term_string}"),
-		"query-input": "required name=search_term_string",
-	},
-};
+// Canonical entity nodes, defined once in src/lib/seo-schema.js so product,
+// service, and article schemas across the site can reference them by @id.
+const organizationSchema = buildOrganizationSchema();
+const websiteSchema = buildWebSiteSchema();
 
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
 			<head>
-				<script type="application/ld+json">
-					{JSON.stringify(organizationSchema)}
-				</script>
-				<script type="application/ld+json">
-					{JSON.stringify(websiteSchema)}
-				</script>
+				{/* dangerouslySetInnerHTML via jsonLdProps: React escapes text
+				    children, which would put &amp; inside the JSON payload. */}
+				<script {...jsonLdProps(organizationSchema)} />
+				<script {...jsonLdProps(websiteSchema)} />
 			</head>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} antialiased`}

@@ -5,6 +5,7 @@ import { cache } from "react";
 import BlogPostBody from "@/components/blog/BlogPostBody";
 import BlogPostImage from "@/components/blog/BlogPostImage";
 import { db } from "@/lib/firebase";
+import { jsonLdProps } from "@/lib/seo-schema";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
 
 const getPostBySlug = cache(async (slug) => {
@@ -150,9 +151,7 @@ export default async function BlogPostPage({ params }) {
 	return (
 		<div className="min-h-screen bg-gray-50">
 			{/* JSON-LD Structured Data */}
-			<script type="application/ld+json">
-				{JSON.stringify(blogPostSchema)}
-			</script>
+			<script {...jsonLdProps(blogPostSchema)} />
 
 			{/* Hero Section */}
 			<section className="bg-primary text-white py-16">

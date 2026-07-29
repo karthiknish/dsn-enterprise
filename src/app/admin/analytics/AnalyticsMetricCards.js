@@ -14,35 +14,51 @@ const metricIcons = {
 	warning: TrendingDown,
 };
 
-function buildStats(metrics) {
-	const getMetricValue = (index) => metrics?.[index]?.value || "0";
+const PLACEHOLDER = "—";
+
+/**
+ * Resolve metrics by GA4 metric name, falling back to array position only if
+ * the API response carried no metricHeaders. Positional access alone meant
+ * reordering the request in analytics-data.js would silently relabel every
+ * card — bounce rate could render page views without anything looking wrong.
+ */
+function buildStats(metrics, metricsByName) {
+	const byName = metricsByName || {};
+	const hasNamed = Object.keys(byName).length > 0;
+
+	const read = (name, index) => {
+		const raw = hasNamed ? byName[name] : metrics?.[index]?.value;
+		return raw === null || raw === undefined || raw === "" ? null : raw;
+	};
+
+	const count = (name, index) => {
+		const v = read(name, index);
+		if (v === null) return PLACEHOLDER;
+		const n = Number(v);
+		return Number.isFinite(n) ? n.toLocaleString("en-IN") : PLACEHOLDER;
+	};
+
+	const bounce = () => {
+		const v = read("bounceRate", 3);
+		if (v === null) return PLACEHOLDER;
+		const n = parseFloat(v);
+		return Number.isFinite(n) ? `${(n * 100).toFixed(1)}%` : PLACEHOLDER;
+	};
 
 	return [
-		{
-			name: "Active Users",
-			value: getMetricValue(0),
-			tone: "accent",
-		},
-		{
-			name: "Sessions",
-			value: getMetricValue(1),
-			tone: "sessions",
-		},
+		{ name: "Active Users", value: count("activeUsers", 0), tone: "accent" },
+		{ name: "Sessions", value: count("sessions", 1), tone: "sessions" },
 		{
 			name: "Page Views",
-			value: getMetricValue(2),
+			value: count("screenPageViews", 2),
 			tone: "secondary",
 		},
-		{
-			name: "Bounce Rate",
-			value: `${(parseFloat(getMetricValue(3)) * 100).toFixed(1)}%`,
-			tone: "warning",
-		},
+		{ name: "Bounce Rate", value: bounce(), tone: "warning" },
 	];
 }
 
-export default function AnalyticsMetricCards({ metrics }) {
-	const stats = buildStats(metrics);
+export default function AnalyticsMetricCards({ metrics, metricsByName }) {
+	const stats = buildStats(metrics, metricsByName);
 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

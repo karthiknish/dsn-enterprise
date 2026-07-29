@@ -1,4 +1,5 @@
 import { alternatesFor } from "@/lib/i18n/config";
+import { jsonLdProps } from "@/lib/seo-schema";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
 import AboutSection from "../components/home/AboutSection";
 import CertificationsSection from "../components/home/CertificationsSection";
@@ -125,9 +126,7 @@ export default function Home() {
 
 	return (
 		<div>
-			<script type="application/ld+json">
-				{JSON.stringify(itemListSchema)}
-			</script>
+			<script {...jsonLdProps(itemListSchema)} />
 			<Hero />
 			<FeaturedProducts />
 			<AboutSection />

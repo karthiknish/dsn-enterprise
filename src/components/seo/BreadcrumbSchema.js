@@ -1,4 +1,4 @@
-import { buildBreadcrumbJsonLd } from "@/lib/seo-schema";
+import { buildBreadcrumbJsonLd, jsonLdProps } from "@/lib/seo-schema";
 
 /**
  * Server component that renders BreadcrumbList JSON-LD structured data.
@@ -6,9 +6,5 @@ import { buildBreadcrumbJsonLd } from "@/lib/seo-schema";
  */
 export default function BreadcrumbSchema({ items }) {
 	const schema = buildBreadcrumbJsonLd(items);
-	return (
-		<script type="application/ld+json">
-			{JSON.stringify(schema)}
-		</script>
-	);
+	return <script {...jsonLdProps(schema)} />;
 }

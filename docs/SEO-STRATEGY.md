@@ -350,6 +350,100 @@ indexed English URLs for 6 pages.
 
 ---
 
+## 2C. AEO (answer engine optimization)
+
+Aimed at being **cited inside AI answers** (ChatGPT, Perplexity, Claude, Google AI
+Overviews), not just ranked as a blue link.
+
+### What was implemented, and why each item earns its place
+
+**1. Explicit AI crawler policy in `robots.txt`.** Permissive, explicit bot
+access is the highest-impact technical AEO lever — an answer engine cannot cite
+a page it was never allowed to fetch. `src/app/robots.js` now names three
+crawler classes separately, because they do different jobs:
+
+| Class | Agents | Effect of blocking |
+|---|---|---|
+| Search / index | `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot`, `Amazonbot` | **Removed from AI answers** |
+| User fetch | `ChatGPT-User`, `Claude-User`, `Perplexity-User`, `MistralAI-User` | "Summarise this page" breaks |
+| Training | `GPTBot`, `ClaudeBot`, `Google-Extended`, `Applebot-Extended`, `Meta-ExternalAgent`, `CCBot`, `cohere-ai` | No citation impact; only future model knowledge |
+
+All three are currently allowed. To stop model training while staying citable,
+move `TRAINING_CRAWLERS` to the disallow branch. **Do not block the search or
+user-fetch agents** unless the intent is to disappear from AI answers.
+
+**2. `/llms.txt`** — generated at `src/app/llms.txt/route.js` from the same
+config that drives the sitemap, so it cannot drift when the location tier limit
+changes. Verified against the llmstxt.org spec: H1, single blockquote summary,
+free-form sections without headings, then H2 file-list sections (5 sections,
+54 link items, no H3+).
+
+> Set expectations honestly: **there is no published evidence that llms.txt
+> improves citation rates.** It is worth having because Google's Lighthouse
+> agentic-readiness audit checks for it, agents have been observed fetching it
+> for technical queries, and it gives them a reliable entry point. It is agent
+> documentation, not a marketing surface — padding it with sales copy is the
+> documented failure mode.
+
+**3. Structured data: one entity graph instead of scattered copies.**
+Stable `@id` nodes (`#organization`, `#website`) are defined once in
+`src/lib/seo-schema.js`. Product `manufacturer`, Service `provider`, FAQPage
+`about`, and ContactPage `mainEntity` now all reference `ORG_ID` rather than
+redeclaring anonymous duplicates. The contact page previously declared a
+*second* standalone `LocalBusiness` for the same company with a different phone
+format — that is now a `ContactPage` pointing at the canonical node.
+
+The Organization node also carries `knowsAbout` (the standards and gauge types
+this business is authoritative on) and `hasCredential` (ISO 9001:2015, NABL /
+ISO-IEC 17025, API 5B and 7-2). Every claim is sourced from `src/content/faq.js`
+— the site's own copy. **Do not add certifications, founding dates, or figures
+that are not already stated on the site.**
+
+> Also set expectations here: evidence suggests LLMs read structured data as
+> plain text rather than as a special ranking signal. It is implemented because
+> traditional search still benefits measurably — not because schema is an AI
+> breakthrough.
+
+**4. JSON-LD emission bug fixed.** Blocks were rendered as
+`<script>{JSON.stringify(x)}</script>`. React escapes text children, so an `&`
+in a title became `&amp;` *inside the JSON string value* — the block still
+parsed, but the machine-readable payload carried HTML entities into the one
+audience that cannot decode them. All blocks now use `jsonLdProps()`, which
+uses `dangerouslySetInnerHTML` and escapes `<` to prevent `</script>` breakout.
+
+### Verified
+
+| Check | Result |
+|---|---|
+| JSON-LD blocks across 58 public pages | **240**, all parse |
+| Blocks containing HTML entities | **0** |
+| Dangling `@id` references | **none** |
+| Duplicate business entities | resolved (was 2, now 1) |
+| llms.txt spec violations | **0** |
+
+`@type` coverage: `Organization+LocalBusiness` 59, `WebSite` 59,
+`BreadcrumbList` 47, `FAQPage` 37, `Product` 24, `Service` 12, `ContactPage` 1,
+`ItemList` 1.
+
+### Deliberately NOT done
+
+**Markdown mirrors of pages** (`/page.md` for bots). The evidence runs against
+it: Profound's markdown-vs-HTML test found marginally more bot traffic but no
+improvement in citation rate or accuracy, and Google's John Mueller called
+bots-only markdown "a stupid idea". HTML carries context that markdown strips.
+The narrow exception is very long single-purpose documentation at risk of token
+truncation, which does not apply here.
+
+### How to measure this
+
+AI crawlers **do not execute JavaScript**, so GA4 will never show them. Their
+traffic only appears in server or CDN logs. On Vercel, check the log drain or
+firewall/bot dashboards for the user agents listed above. Do not expect the
+admin analytics dashboard to report AI crawler activity — it structurally
+cannot.
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value. Items 1 and 2 are worth more than everything

@@ -7,6 +7,8 @@ import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { faqCategories } from "@/content/faq";
 import { pageHeroes } from "@/content/page-heroes";
+import { jsonLdProps, ORG_ID, WEBSITE_ID } from "@/lib/seo-schema";
+import { SITE_URL } from "@/lib/site";
 
 function faqTabSlug(name) {
 	return name
@@ -26,9 +28,7 @@ function FAQItem({ faq, isOpen, onClick, itemId }) {
 				aria-expanded={!!isOpen}
 				aria-controls={panelId}
 				className={`group w-full py-5 px-6 flex items-center justify-between text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary ${
-					isOpen
-						? "bg-primary/[0.03]"
-						: "hover:bg-gray-50/80"
+					isOpen ? "bg-primary/[0.03]" : "hover:bg-gray-50/80"
 				}`}
 				onClick={onClick}
 			>
@@ -94,10 +94,10 @@ export default function FAQPage() {
 				eyebrow="Support"
 				title="Frequently Asked Questions"
 				description={pageHeroes.faq}
-			breadcrumbs={[
-				{ href: "/", label: "Home" },
-				{ href: "/faq", label: "FAQ" },
-			]}
+				breadcrumbs={[
+					{ href: "/", label: "Home" },
+					{ href: "/faq", label: "FAQ" },
+				]}
 			/>
 
 			<section className="py-16 md:py-20 bg-white">
@@ -109,7 +109,9 @@ export default function FAQPage() {
 								Everything You Need to Know
 							</h2>
 							<p className="text-gray-500 max-w-2xl mx-auto leading-relaxed">
-								Find answers about our precision gauges, calibration services, API compliance, and ordering process. If you do not see your question here, our team is ready to help.
+								Find answers about our precision gauges, calibration services,
+								API compliance, and ordering process. If you do not see your
+								question here, our team is ready to help.
 							</p>
 						</div>
 
@@ -170,11 +172,18 @@ export default function FAQPage() {
 				</div>
 			</section>
 
-			{/* All FAQs Structured Data */}
-			<script type="application/ld+json">
-				{JSON.stringify({
+			{/* All FAQs Structured Data.
+			    This is the highest-value schema block on the site for answer
+			    engines, so it is emitted via jsonLdProps rather than as a React
+			    text child — text children get HTML-escaped, which would push
+			    entities into the JSON payload as the answers grow. */}
+			<script
+				{...jsonLdProps({
 					"@context": "https://schema.org",
 					"@type": "FAQPage",
+					"@id": `${SITE_URL}/faq#faq`,
+					isPartOf: { "@id": WEBSITE_ID },
+					about: { "@id": ORG_ID },
 					mainEntity: faqCategories.flatMap((category) =>
 						category.faqs.map((faq) => ({
 							"@type": "Question",
@@ -186,7 +195,7 @@ export default function FAQPage() {
 						})),
 					),
 				})}
-			</script>
+			/>
 
 			<Cta10
 				reference="Ref. DSN-FAQ-01"

@@ -4,7 +4,14 @@
  */
 
 // Google Tag IDs
-const GA_TRACKING_ID = "GT-TQKJ52Q3";
+//
+// GA4_MEASUREMENT_ID is the property the admin dashboard reads
+// (GA_PROPERTY_ID=514574483, stream 13066196898). GOOGLE_TAG_ID resolves to
+// Google Ads only and carries no GA4 destination, which is why GA4 has to be
+// configured explicitly rather than relying on the container.
+const GA4_MEASUREMENT_ID =
+	process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-GR3VEG2ZX0";
+const GOOGLE_TAG_ID = "GT-TQKJ52Q3";
 const GOOGLE_ADS_ID = "AW-17769294111";
 
 /**
@@ -13,7 +20,10 @@ const GOOGLE_ADS_ID = "AW-17769294111";
  */
 const pageview = (url) => {
 	if (typeof window !== "undefined" && window.gtag) {
-		window.gtag("config", GA_TRACKING_ID, {
+		window.gtag("config", GA4_MEASUREMENT_ID, {
+			page_path: url,
+		});
+		window.gtag("config", GOOGLE_TAG_ID, {
 			page_path: url,
 		});
 		window.gtag("config", GOOGLE_ADS_ID, {

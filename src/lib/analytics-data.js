@@ -1,4 +1,5 @@
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
+import { getServiceAccountCredentials } from "@/lib/google-credentials";
 
 const dateRangeMap = {
 	"7d": "7daysAgo",
@@ -6,36 +7,36 @@ const dateRangeMap = {
 	"90d": "90daysAgo",
 };
 
+/** Allowlist check so the API route can reject junk before doing any work. */
+export function isValidPeriod(period) {
+	return Object.hasOwn(dateRangeMap, period);
+}
+
+// The client performs a JWT exchange on construction. Building a new one per
+// request added an avoidable round trip to every dashboard load, so it is
+// created once per process and reused.
+let cachedClient = null;
+
+function getClient() {
+	if (cachedClient) return cachedClient;
+	const { clientEmail, privateKey, projectId } = getServiceAccountCredentials();
+	cachedClient = new BetaAnalyticsDataClient({
+		credentials: { client_email: clientEmail, private_key: privateKey },
+		projectId,
+	});
+	return cachedClient;
+}
+
 export async function getAnalyticsData(period = "30d") {
 	const propertyId = process.env.GA_PROPERTY_ID;
-	const credentialsBase64 = process.env.GOOGLE_SERVICES_JSON_BASE64;
 	const startDate = dateRangeMap[period] || "30daysAgo";
 
 	if (!propertyId) {
 		throw new Error("GA_PROPERTY_ID is not configured");
 	}
 
-	if (!credentialsBase64) {
-		throw new Error("GOOGLE_SERVICES_JSON_BASE64 is not configured");
-	}
-
-	const cleanBase64 = credentialsBase64.trim().replace(/^"|"$/g, "");
-	const credentials = JSON.parse(
-		Buffer.from(cleanBase64, "base64").toString("utf8"),
-	);
-
-	let privateKey = credentials.private_key;
-	if (privateKey && typeof privateKey === "string") {
-		privateKey = privateKey.replace(/\\n/g, "\n");
-	}
-
-	const client = new BetaAnalyticsDataClient({
-		credentials: {
-			client_email: credentials.client_email,
-			private_key: privateKey,
-		},
-		projectId: credentials.project_id,
-	});
+	// Throws a sanitised message if the credential is missing or malformed.
+	const client = getClient();
 
 	const property = `properties/${propertyId.replace("properties/", "")}`;
 	const dateRanges = [{ startDate, endDate: "today" }];
@@ -80,10 +81,27 @@ export async function getAnalyticsData(period = "30d") {
 		}),
 	]);
 
+	// `hasData` lets the UI distinguish "GA returned nothing" from "the site
+	// genuinely had zero users". Without it an empty response rendered as a
+	// confident row of zeros, which is how a completely disconnected GA4
+	// property went unnoticed.
+	const metricRow = totalResponse.rows?.[0]?.metricValues || [];
+
 	return {
-		metrics: totalResponse.rows?.[0]?.metricValues || [],
+		metrics: metricRow,
+		// Map by header name rather than array position. Positional access meant
+		// reordering the metrics in the request above would silently relabel the
+		// dashboard cards (bounce rate showing page views, etc).
+		metricsByName: Object.fromEntries(
+			(totalResponse.metricHeaders || []).map((h, i) => [
+				h.name,
+				metricRow[i]?.value ?? null,
+			]),
+		),
 		trends: trendResponse.rows || [],
 		topPages: topPagesResponse.rows || [],
 		referrers: referrersResponse.rows || [],
+		hasData: (totalResponse.rows?.length || 0) > 0,
+		period,
 	};
 }

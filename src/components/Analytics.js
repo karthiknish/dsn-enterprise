@@ -5,7 +5,23 @@ import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { Suspense, useEffect } from "react";
 
-const GA_MEASUREMENT_ID = "GT-TQKJ52Q3";
+/**
+ * GA4 measurement ID for property 514574483 ("dsn-enterprises", GA account
+ * 162473368), stream 13066196898. Confirmed via the Firebase Management API:
+ *   projects/dsn-enterprises/analyticsDetails -> streamMappings
+ *
+ * This is what the admin dashboard reads through GA_PROPERTY_ID=514574483.
+ * Before this was added the site only loaded GT-TQKJ52Q3, whose gtag payload
+ * resolves to AW-17769294111 (Google Ads) and contains NO GA4 destination, so
+ * property 514574483 had zero rows for every date range back to 2020 and the
+ * admin analytics page could only ever render zeros.
+ */
+const GA4_MEASUREMENT_ID =
+	process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-GR3VEG2ZX0";
+
+/** Google tag container. Kept so any existing tag/GTM config keeps working. */
+const GOOGLE_TAG_ID = "GT-TQKJ52Q3";
+const GOOGLE_ADS_ID = "AW-17769294111";
 const FB_PIXEL_ID = "1391622058130598";
 
 function AnalyticsContent() {
@@ -13,7 +29,11 @@ function AnalyticsContent() {
 
 	useEffect(() => {
 		if (pathname && window.gtag) {
-			window.gtag("config", GA_MEASUREMENT_ID, {
+			// GA4 first — this is the one that populates the admin dashboard.
+			window.gtag("config", GA4_MEASUREMENT_ID, {
+				page_path: pathname,
+			});
+			window.gtag("config", GOOGLE_TAG_ID, {
 				page_path: pathname,
 			});
 		}
@@ -33,7 +53,7 @@ export default function GoogleAnalytics() {
 		<>
 			{/* Google tag (gtag.js) */}
 			<Script
-				src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+				src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
 				strategy="afterInteractive"
 			/>
 			<Script id="google-analytics" strategy="afterInteractive">
@@ -41,13 +61,19 @@ export default function GoogleAnalytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          
-          gtag('config', '${GA_MEASUREMENT_ID}', {
+
+          // GA4 - property 514574483, read by /admin/analytics
+          gtag('config', '${GA4_MEASUREMENT_ID}', {
             page_path: window.location.pathname,
           });
-          
+
+          // Google tag container (kept for existing tag/GTM configuration)
+          gtag('config', '${GOOGLE_TAG_ID}', {
+            page_path: window.location.pathname,
+          });
+
           // Google Ads configuration
-          gtag('config', 'AW-17769294111', {
+          gtag('config', '${GOOGLE_ADS_ID}', {
             allow_enhanced_conversions: true,
           });
           
