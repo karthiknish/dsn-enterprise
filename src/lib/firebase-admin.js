@@ -12,6 +12,7 @@
 
 import { cert, getApp, getApps, initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
 import { getServiceAccountCredentials } from "@/lib/google-credentials";
 
 const APP_NAME = "dsn-admin";
@@ -40,6 +41,15 @@ function getAdminApp() {
 
 export function getAdminAuth() {
 	return getAuth(getAdminApp());
+}
+
+/**
+ * Admin Firestore instance. Bypasses security rules entirely, which is correct
+ * for server-side operations that should not depend on rule semantics: health
+ * checks, cron jobs, admin mutations. Never expose this to client code.
+ */
+export function getAdminDb() {
+	return getFirestore(getAdminApp());
 }
 
 /**

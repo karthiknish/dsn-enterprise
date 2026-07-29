@@ -1,12 +1,6 @@
-import {
-	collection,
-	getCountFromServer,
-	limit,
-	query,
-} from "firebase/firestore";
 import { NextResponse } from "next/server";
 import { getAnalyticsData } from "@/lib/analytics-data";
-import { db } from "@/lib/firebase";
+import { getAdminDb } from "@/lib/firebase-admin";
 import { getCuratedPhotos } from "@/lib/pexels-server";
 import { getPhotos } from "@/lib/unsplash-server";
 
@@ -24,8 +18,11 @@ function withTimeout(promise, ms, message = "Operation timed out") {
 }
 
 async function checkFirestore() {
-	const q = query(collection(db, "blogs"), limit(1));
-	const snapshot = await getCountFromServer(q);
+	// Admin SDK: bypasses security rules, which is correct for a health check.
+	// The client SDK was getting PERMISSION_DENIED because the query had no
+	// status filter and the rules require one for unauthenticated reads.
+	const adminDb = getAdminDb();
+	const snapshot = await adminDb.collection("blogs").limit(1).count().get();
 	return { ok: true, count: snapshot.data().count };
 }
 
