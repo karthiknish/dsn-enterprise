@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import AiImageGenerator from "@/components/admin/AiImageGenerator";
 import PexelsImagePicker from "@/components/admin/PexelsImagePicker";
 import UnsplashImagePicker from "@/components/admin/UnsplashImagePicker";
 
@@ -90,16 +91,24 @@ export default function BlogFeaturedImagePanel({
 	onClearFeaturedImage,
 	onPexelsSelect,
 	onUnsplashSelect,
+	onGenerateAiImage,
+	generatingImage,
+	aiImageResult,
 }) {
-	const [imageError, setImageError] = useState(false);
+	// Track the src that failed rather than a boolean, so a new image (uploaded,
+	// picked or AI-generated) is retried instead of inheriting the old error.
+	const [erroredSrc, setErroredSrc] = useState(null);
+	const imageError = Boolean(
+		formData.featuredImage && erroredSrc === formData.featuredImage,
+	);
 
 	const handleUrlChange = (e) => {
-		setImageError(false);
+		setErroredSrc(null);
 		onFeaturedUrlChange(e);
 	};
 
 	const handleClearImage = () => {
-		setImageError(false);
+		setErroredSrc(null);
 		onClearFeaturedImage();
 	};
 
@@ -130,6 +139,19 @@ export default function BlogFeaturedImagePanel({
 				>
 					URL
 				</button>
+				{onGenerateAiImage && (
+					<button
+						type="button"
+						onClick={() => setImageTab("ai")}
+						className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+							imageTab === "ai"
+								? "border-accent text-accent"
+								: "border-transparent text-gray-500 hover:text-gray-700"
+						}`}
+					>
+						AI
+					</button>
+				)}
 				<button
 					type="button"
 					onClick={() => setImageTab("pexels")}
@@ -154,6 +176,13 @@ export default function BlogFeaturedImagePanel({
 				</button>
 			</div>
 
+			{generatingImage && (
+				<div className="mb-4 rounded-lg border border-accent/30 bg-accent/5 p-3 text-xs text-gray-600 flex items-center gap-2">
+					<span className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-accent" />
+					Generating image with Gemini — this can take up to a minute at 2K.
+				</div>
+			)}
+
 			{formData.featuredImage && !imageError ? (
 				<div className="mb-4 relative rounded-lg overflow-hidden border border-gray-200">
 					<Image
@@ -162,7 +191,7 @@ export default function BlogFeaturedImagePanel({
 						width={400}
 						height={225}
 						unoptimized
-						onError={() => setImageError(true)}
+						onError={() => setErroredSrc(formData.featuredImage)}
 						className="w-full h-48 object-cover"
 					/>
 					<button
@@ -259,6 +288,15 @@ export default function BlogFeaturedImagePanel({
 						Paste a direct link to an image
 					</p>
 				</div>
+			)}
+
+			{imageTab === "ai" && onGenerateAiImage && (
+				<AiImageGenerator
+					disabled={!formData.title}
+					generating={generatingImage}
+					lastResult={aiImageResult}
+					onGenerate={onGenerateAiImage}
+				/>
 			)}
 
 			{imageTab === "pexels" && (
