@@ -13,6 +13,9 @@ const BREVO_API_KEY = process.env.BREVO_API_KEY;
  * @param {string} options.subject - Email subject
  * @param {string} options.htmlContent - HTML content of the email
  * @param {string} options.textContent - Plain text content of the email
+ * @param {{email: string, name?: string}} [options.replyTo] - Reply-To address,
+ *   so replying to a notification reaches the enquirer directly rather than the
+ *   unmonitored noreply sender.
  * @returns {Promise<Object>} - Response from Brevo API
  */
 export async function sendEmail({
@@ -21,6 +24,7 @@ export async function sendEmail({
 	subject,
 	htmlContent,
 	textContent,
+	replyTo,
 }) {
 	if (!BREVO_API_KEY) {
 		throw new Error("Brevo API key is not configured");
@@ -43,6 +47,10 @@ export async function sendEmail({
 		htmlContent: htmlContent,
 		textContent: textContent || "",
 	};
+
+	if (replyTo?.email) {
+		payload.replyTo = { email: replyTo.email, name: replyTo.name || undefined };
+	}
 
 	try {
 		const response = await fetch(url, {

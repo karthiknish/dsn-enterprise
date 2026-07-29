@@ -1,9 +1,12 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/lib/brevo";
+import {
+	renderAdminNotificationEmail,
+	renderContactAutoReplyEmail,
+} from "@/lib/email-templates";
 import { db } from "@/lib/firebase";
 import { rateLimit } from "@/lib/rateLimit";
-import { emailColors } from "@/theme/emailColors";
 
 // Force dynamic rendering to prevent build-time execution
 export const dynamic = "force-dynamic";
@@ -15,107 +18,6 @@ const securityHeaders = {
 	"X-Frame-Options": "DENY",
 	"X-XSS-Protection": "1; mode=block",
 	"Referrer-Policy": "strict-origin-when-cross-origin",
-};
-
-// Enhanced email template with better branding
-const generateEmailTemplate = (contactData) => {
-	const timestamp = new Date().toLocaleString("en-US", {
-		timeZone: "Asia/Kolkata",
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-		hour: "2-digit",
-		minute: "2-digit",
-	});
-
-	return {
-		html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>New Contact Form Submission</title>
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: ${emailColors.textBody}; max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: ${emailColors.primary}; color: ${emailColors.onPrimary}; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
-          .content { background: ${emailColors.gray50}; padding: 30px; border-radius: 0 0 8px 8px; }
-          .field { margin-bottom: 20px; }
-          .field-label { font-weight: bold; color: ${emailColors.accent}; margin-bottom: 5px; }
-          .field-value { background: ${emailColors.white}; padding: 10px; border-left: 4px solid ${emailColors.accent}; border-radius: 4px; }
-          .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid ${emailColors.border}; color: ${emailColors.gray500}; font-size: 14px; }
-          .timestamp { background: ${emailColors.accent100}; padding: 10px; border-radius: 4px; text-align: center; margin-bottom: 20px; color: ${emailColors.accent800}; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>New Contact Form Submission</h1>
-          <p>DSN Enterprises - Precision Gauges & Tools</p>
-        </div>
-        <div class="content">
-          <div class="timestamp">
-            <strong>Submitted on:</strong> ${timestamp}
-          </div>
-          
-          <div class="field">
-            <div class="field-label">Name:</div>
-            <div class="field-value">${contactData.name}</div>
-          </div>
-          
-          <div class="field">
-            <div class="field-label">Email:</div>
-            <div class="field-value">
-              <a href="mailto:${contactData.email}" style="color: ${emailColors.accent};">${contactData.email}</a>
-            </div>
-          </div>
-          
-          <div class="field">
-            <div class="field-label">Phone:</div>
-            <div class="field-value">${contactData.phone || "Not provided"}</div>
-          </div>
-          
-          <div class="field">
-            <div class="field-label">Company:</div>
-            <div class="field-value">${contactData.company || "Not provided"}</div>
-          </div>
-          
-          <div class="field">
-            <div class="field-label">Product Interest:</div>
-            <div class="field-value">${contactData.productInterest || "Not specified"}</div>
-          </div>
-          
-          <div class="field">
-            <div class="field-label">Message:</div>
-            <div class="field-value" style="white-space: pre-line;">${contactData.message}</div>
-          </div>
-        </div>
-        <div class="footer">
-          <p><em>This email was sent from the DSN Enterprises contact form</em></p>
-          <p>DSN Enterprises | Precision Gauge Manufacturers | Coimbatore, India</p>
-        </div>
-      </body>
-      </html>
-    `,
-		text: `
-NEW CONTACT FORM SUBMISSION - DSN ENTERPRISES
-================================================
-
-Submitted: ${timestamp}
-
-Name: ${contactData.name}
-Email: ${contactData.email}
-Phone: ${contactData.phone || "Not provided"}
-Company: ${contactData.company || "Not provided"}
-Product Interest: ${contactData.productInterest || "Not specified"}
-
-Message:
-${contactData.message}
-
----
-DSN Enterprises | Precision Gauge Manufacturers
-Coimbatore, India
-    `,
-	};
 };
 
 export async function POST(request) {
@@ -268,34 +170,47 @@ export async function POST(request) {
 
 		console.log("Successfully saved contact to Firebase with ID:", docRef.id);
 
-		// Generate email content
-		const emailContent = generateEmailTemplate(contactData);
+		// Internal notification + auto-reply to the sender. Neither is allowed to
+		// fail the request: the enquiry is already saved in Firestore.
+		const adminNotification = renderAdminNotificationEmail(contactData);
+		const autoReply = renderContactAutoReplyEmail(contactData);
 
-		// Send notification emails to admins
 		const adminEmails = [
 			{ email: "microfin2001@gmail.com", name: "DSN Enterprises Admin" },
 		];
 
-		const emailPromises = adminEmails.map((admin) =>
+		const emailPromises = [
+			...adminEmails.map((admin) =>
+				sendEmail({
+					to: admin.email,
+					toName: admin.name,
+					subject: adminNotification.subject,
+					htmlContent: adminNotification.html,
+					textContent: adminNotification.text,
+					replyTo: { email: contactData.email, name: contactData.name },
+				}).catch((emailError) => {
+					console.error(`Failed to notify ${admin.email}:`, emailError);
+					return null;
+				}),
+			),
 			sendEmail({
-				to: admin.email,
-				toName: admin.name,
-				subject: `New Contact: ${contactData.name} - DSN Enterprises`,
-				htmlContent: emailContent.html,
-				textContent: emailContent.text,
+				to: contactData.email,
+				toName: contactData.name,
+				subject: autoReply.subject,
+				htmlContent: autoReply.html,
+				textContent: autoReply.text,
+				replyTo: { email: "info@dsnenterprises.com", name: "DSN Enterprises" },
 			}).catch((emailError) => {
-				console.error(`Failed to send email to ${admin.email}:`, emailError);
-				// Don't throw - continue with other emails
+				console.error("Failed to send auto-reply:", emailError);
 				return null;
 			}),
-		);
+		];
 
 		try {
 			await Promise.allSettled(emailPromises);
-			console.log("Email notifications processed");
+			console.log("Contact emails processed");
 		} catch (emailError) {
-			console.error("Error processing email notifications:", emailError);
-			// Continue even if email fails - the contact is saved
+			console.error("Error processing contact emails:", emailError);
 		}
 
 		// Return success response
