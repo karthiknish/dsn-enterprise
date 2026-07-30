@@ -1,90 +1,202 @@
-import { Eye, MousePointerClick, TrendingDown, Users } from "lucide-react";
-
-const metricToneClasses = {
-	accent: "bg-accent-50 text-accent-700",
-	sessions: "bg-accent-100 text-accent-800",
-	secondary: "bg-secondary-light text-primary",
-	warning: "bg-yellow-50 text-yellow-700",
-};
-
-const metricIcons = {
-	accent: Users,
-	sessions: MousePointerClick,
-	secondary: Eye,
-	warning: TrendingDown,
-};
-
-const PLACEHOLDER = "—";
+import {
+	Activity,
+	Clock,
+	Eye,
+	Layers,
+	MousePointerClick,
+	TrendingDown,
+	TrendingUp,
+	UserPlus,
+	Users,
+} from "lucide-react";
+import {
+	formatChange,
+	formatCount,
+	formatDecimal,
+	formatDuration,
+	formatRate,
+	PLACEHOLDER,
+} from "@/lib/analytics-format";
 
 /**
- * Resolve metrics by GA4 metric name, falling back to array position only if
- * the API response carried no metricHeaders. Positional access alone meant
- * reordering the request in analytics-data.js would silently relabel every
- * card — bounce rate could render page views without anything looking wrong.
+ * Card definitions.
+ *
+ * `goodWhenUp` exists because a rising bounce rate is bad while a rising user
+ * count is good — colouring every delta green-on-up would actively mislead.
  */
-function buildStats(metrics, metricsByName) {
-	const byName = metricsByName || {};
-	const hasNamed = Object.keys(byName).length > 0;
+const PRIMARY = [
+	{
+		key: "activeUsers",
+		name: "Active Users",
+		icon: Users,
+		tone: "bg-accent-50 text-accent-700",
+		format: formatCount,
+		goodWhenUp: true,
+	},
+	{
+		key: "sessions",
+		name: "Sessions",
+		icon: MousePointerClick,
+		tone: "bg-accent-100 text-accent-800",
+		format: formatCount,
+		goodWhenUp: true,
+	},
+	{
+		key: "screenPageViews",
+		name: "Page Views",
+		icon: Eye,
+		tone: "bg-secondary-light text-primary",
+		format: formatCount,
+		goodWhenUp: true,
+	},
+	{
+		key: "bounceRate",
+		name: "Bounce Rate",
+		icon: TrendingDown,
+		tone: "bg-yellow-50 text-yellow-700",
+		format: formatRate,
+		goodWhenUp: false,
+	},
+];
 
-	const read = (name, index) => {
-		const raw = hasNamed ? byName[name] : metrics?.[index]?.value;
-		return raw === null || raw === undefined || raw === "" ? null : raw;
-	};
+const SECONDARY = [
+	{
+		key: "newUsers",
+		name: "New Users",
+		icon: UserPlus,
+		format: formatCount,
+		goodWhenUp: true,
+	},
+	{
+		key: "engagementRate",
+		name: "Engagement Rate",
+		icon: Activity,
+		format: formatRate,
+		goodWhenUp: true,
+	},
+	{
+		key: "averageSessionDuration",
+		name: "Avg. Session",
+		icon: Clock,
+		format: formatDuration,
+		goodWhenUp: true,
+	},
+	{
+		key: "screenPageViewsPerSession",
+		name: "Views / Session",
+		icon: Layers,
+		format: (v) => formatDecimal(v, 2),
+		goodWhenUp: true,
+	},
+];
 
-	const count = (name, index) => {
-		const v = read(name, index);
-		if (v === null) return PLACEHOLDER;
-		const n = Number(v);
-		return Number.isFinite(n) ? n.toLocaleString("en-IN") : PLACEHOLDER;
-	};
+function DeltaBadge({ change, goodWhenUp, comparisonLabel }) {
+	const label = formatChange(change);
+	if (label === null) {
+		return (
+			<span className="text-xs font-medium text-gray-400">
+				No comparison data
+			</span>
+		);
+	}
 
-	const bounce = () => {
-		const v = read("bounceRate", 3);
-		if (v === null) return PLACEHOLDER;
-		const n = parseFloat(v);
-		return Number.isFinite(n) ? `${(n * 100).toFixed(1)}%` : PLACEHOLDER;
-	};
+	const flat = Math.abs(change) < 0.05;
+	const up = change > 0;
+	const positive = flat ? null : up === goodWhenUp;
+	const Icon = up ? TrendingUp : TrendingDown;
 
-	return [
-		{ name: "Active Users", value: count("activeUsers", 0), tone: "accent" },
-		{ name: "Sessions", value: count("sessions", 1), tone: "sessions" },
-		{
-			name: "Page Views",
-			value: count("screenPageViews", 2),
-			tone: "secondary",
-		},
-		{ name: "Bounce Rate", value: bounce(), tone: "warning" },
-	];
-}
-
-export default function AnalyticsMetricCards({ metrics, metricsByName }) {
-	const stats = buildStats(metrics, metricsByName);
+	const classes = flat
+		? "bg-gray-100 text-gray-600"
+		: positive
+			? "bg-green-50 text-green-600"
+			: "bg-red-50 text-red-600";
 
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-			{stats.map((stat) => {
-				const Icon = metricIcons[stat.tone];
-				return (
-					<div
-						key={stat.name}
-						className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-md transition-shadow"
-					>
-						<div className="flex items-center justify-between mb-4">
-							<span
-								className={`flex items-center justify-center w-10 h-10 rounded-lg ${metricToneClasses[stat.tone]}`}
-							>
-								<Icon className="w-5 h-5" aria-hidden />
-							</span>
+		<span className="flex items-center gap-1.5 text-xs">
+			<span
+				className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-semibold tabular-nums ${classes}`}
+			>
+				{!flat && <Icon className="h-3 w-3" aria-hidden />}
+				{flat ? "0%" : label}
+			</span>
+			<span className="text-gray-400">{comparisonLabel}</span>
+		</span>
+	);
+}
+
+export default function AnalyticsMetricCards({ metrics, days }) {
+	const read = (key) => metrics?.[key] || {};
+	const comparisonLabel = `vs prev ${days || ""}d`.trim();
+
+	return (
+		<div className="space-y-4">
+			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+				{PRIMARY.map((card) => {
+					const metric = read(card.key);
+					const Icon = card.icon;
+					return (
+						<div
+							key={card.key}
+							className="rounded-2xl border border-gray-200/80 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+						>
+							<div className="mb-4 flex items-center justify-between">
+								<span
+									className={`flex h-10 w-10 items-center justify-center rounded-lg ${card.tone}`}
+								>
+									<Icon className="h-5 w-5" aria-hidden />
+								</span>
+							</div>
+							<p className="text-2xl font-semibold tabular-nums text-gray-900">
+								{metric.value === null || metric.value === undefined
+									? PLACEHOLDER
+									: card.format(metric.value)}
+							</p>
+							<p className="mt-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+								{card.name}
+							</p>
+							<div className="mt-3">
+								<DeltaBadge
+									change={metric.change}
+									goodWhenUp={card.goodWhenUp}
+									comparisonLabel={comparisonLabel}
+								/>
+							</div>
 						</div>
-						<p className="text-2xl font-semibold text-gray-900 tabular-nums">
-							{stat.value}
-						</p>
-						<p className="mt-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
-							{stat.name}
-						</p>
-					</div>
-				);
-			})}
+					);
+				})}
+			</div>
+
+			<div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+				{SECONDARY.map((card) => {
+					const metric = read(card.key);
+					const Icon = card.icon;
+					return (
+						<div
+							key={card.key}
+							className="rounded-xl border border-gray-200/80 bg-white px-4 py-3 shadow-sm"
+						>
+							<div className="flex items-center gap-2 text-gray-500">
+								<Icon className="h-3.5 w-3.5" aria-hidden />
+								<span className="text-[11px] font-semibold uppercase tracking-wide">
+									{card.name}
+								</span>
+							</div>
+							<p className="mt-1.5 text-lg font-semibold tabular-nums text-gray-900">
+								{metric.value === null || metric.value === undefined
+									? PLACEHOLDER
+									: card.format(metric.value)}
+							</p>
+							<div className="mt-1">
+								<DeltaBadge
+									change={metric.change}
+									goodWhenUp={card.goodWhenUp}
+									comparisonLabel=""
+								/>
+							</div>
+						</div>
+					);
+				})}
+			</div>
 		</div>
 	);
 }

@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { getAnalyticsData, isValidPeriod } from "@/lib/analytics-data";
+import {
+	ANALYTICS_PERIODS,
+	getAnalyticsData,
+	isValidPeriod,
+} from "@/lib/analytics-data";
 import { requireAdmin } from "@/lib/api-auth";
 
 /**
@@ -24,7 +28,9 @@ export async function GET(request) {
 
 	if (!isValidPeriod(period)) {
 		return NextResponse.json(
-			{ error: "Invalid period. Expected one of: 7d, 30d, 90d" },
+			{
+				error: `Invalid period. Expected one of: ${ANALYTICS_PERIODS.join(", ")}`,
+			},
 			{ status: 400 },
 		);
 	}
