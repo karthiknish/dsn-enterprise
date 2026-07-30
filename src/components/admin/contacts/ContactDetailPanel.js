@@ -1,5 +1,7 @@
 "use client";
 
+import { CONTACT_STATUSES, getContactStatusColor } from "@/lib/contact-status";
+
 export default function ContactDetailPanel({
 	contact,
 	onClose,
