@@ -57,7 +57,15 @@ const TRAINING_CRAWLERS = [
 // Applies to every group. /api/ is disallowed because it is now authenticated
 // and returns 401 to crawlers anyway; the query-string paths are duplicate
 // views of content already reachable at a clean URL.
-const DISALLOW = ["/admin/", "/api/", "/contact?", "/blog?page=", "/blog?q="];
+//
+// /blog?page= and /blog?q= used to be listed here. They were removed: the
+// blog lists 9 posts per page, so pages 2-5 were the only crawlable link
+// path to ~36 posts. Blocking them left those posts "discovered - currently
+// not indexed" in Search Console, sitemap-known but never fetched. Duplicate
+// content is not a reason to block crawling — the paginated views already
+// self-canonicalise and search views already carry noindex,follow, which
+// requires Google to be able to fetch them to see either directive.
+const DISALLOW = ["/admin/", "/api/", "/contact?"];
 
 export default function robots() {
 	const aiAgents = [

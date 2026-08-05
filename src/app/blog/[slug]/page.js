@@ -1,9 +1,10 @@
 import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { cache } from "react";
+import { cache, Suspense } from "react";
 import BlogPostBody from "@/components/blog/BlogPostBody";
 import BlogPostImage from "@/components/blog/BlogPostImage";
+import RelatedPosts from "@/components/blog/RelatedPosts";
 import { db } from "@/lib/firebase";
 import { jsonLdProps } from "@/lib/seo-schema";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
@@ -277,6 +278,15 @@ export default async function BlogPostPage({ params }) {
 								</a>
 							</div>
 						</div>
+
+						{/*
+						  Related posts: the crawl path from one post to the next.
+						  Suspended so the article itself is never held behind a
+						  second Firestore query.
+						*/}
+						<Suspense fallback={null}>
+							<RelatedPosts slug={post.slug} />
+						</Suspense>
 
 						{/* Back to Blog */}
 						<div className="mt-8 text-center">

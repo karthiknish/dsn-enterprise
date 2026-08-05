@@ -4,20 +4,29 @@ import BlogPostsSection from "@/components/blog/BlogPostsSection";
 import BlogPostsSkeleton from "@/components/blog/BlogPostsSkeleton";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
+import { SITE_URL } from "@/lib/site";
 
 export async function generateMetadata({ searchParams }) {
 	const params = await searchParams;
 	const searchQuery = params?.q || "";
-	const page = params?.page;
-	// Search results and paginated views are duplicate content, keep them
-	// out of the index while still following links to individual posts.
-	const isFiltered = Boolean(searchQuery || (page && page !== "1"));
+	const pageNumber = parseInt(params?.page, 10) || 1;
+	// Search results are a user-generated view of content that already exists
+	// at clean URLs, so they stay out of the index. Paginated views do NOT:
+	// pages 2+ are the only link path to older posts, so they must be indexable
+	// and self-canonical. Pointing them at /blog told Google they were
+	// duplicates of page 1 and threw away the link equity to every post only
+	// reachable from them.
+	const isSearch = Boolean(searchQuery);
 
 	// The root title template already appends "| DSN Enterprises"; including
 	// the brand here as well produced "Blog - DSN Enterprises | DSN Enterprises".
+	// Pages 2+ get their own title so self-canonicalised pagination does not
+	// ship five identical <title>s.
 	const title = searchQuery
 		? `Search results for "${searchQuery}"`
-		: "Gauge & Metrology Articles";
+		: pageNumber > 1
+			? `Gauge & Metrology Articles - Page ${pageNumber}`
+			: "Gauge & Metrology Articles";
 
 	const description =
 		"Practical articles on gauge selection, calibration intervals, Indian and ISO standards, and shop-floor inspection from the DSN engineering team.";
@@ -26,15 +35,18 @@ export async function generateMetadata({ searchParams }) {
 		title,
 		description,
 		alternates: {
-			canonical: "/blog",
+			canonical: pageNumber > 1 ? `/blog?page=${pageNumber}` : "/blog",
 		},
 		openGraph: {
 			title,
 			description,
-			url: "https://www.dsnenterprises.in/blog",
+			url:
+				pageNumber > 1
+					? `${SITE_URL}/blog?page=${pageNumber}`
+					: `${SITE_URL}/blog`,
 			type: "website",
 		},
-		robots: isFiltered
+		robots: isSearch
 			? { index: false, follow: true }
 			: { index: true, follow: true },
 	};

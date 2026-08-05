@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import LatestPostsSection from "@/components/home/LatestPostsSection";
 import { alternatesFor } from "@/lib/i18n/config";
 import { jsonLdProps } from "@/lib/seo-schema";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
@@ -133,6 +135,13 @@ export default function Home() {
 			<ConsultancySection />
 			<ServicesSection />
 			<CertificationsSection />
+			{/*
+			  Suspended so a Firestore round trip never delays the static
+			  homepage above it; the section renders nothing if the query fails.
+			*/}
+			<Suspense fallback={null}>
+				<LatestPostsSection />
+			</Suspense>
 			<ContactSection />
 		</div>
 	);
