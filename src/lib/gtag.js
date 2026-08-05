@@ -15,16 +15,17 @@ const GOOGLE_TAG_ID = "GT-TQKJ52Q3";
 
 // Google Ads conversion tracking.
 //
-// AW-17769294111 belongs to Ads CID 177-692-9411, NOT the DSN account
-// (CID 326-732-8717 -> AW-3267328717). Conversions sent to the old ID were
-// reported to a foreign account and never appeared in DSN Ads.
+// AW-17769294111 is the account's real Google tag (v2 config, enhanced
+// conversions, cross-domain rules) and it OWNS the five conversion actions.
+// AW-3267328717 is only the legacy CID-derived tag: no conversion actions live
+// behind it, so "AW-3267328717/<label>" matches nothing and Ads counts zero.
+// The tag ID and the labels must come from the same account.
 //
 // Ads conversions ONLY count when send_to carries a conversion label
-// ("AW-3267328717/<label>"). Labels come from the conversion actions created
-// in the DSN Ads account and are injected via env so the code needs no redeploy
-// when they change.
+// ("AW-17769294111/<label>"). Labels are injected via env so they can change
+// without a code edit.
 export const GOOGLE_ADS_ID =
-	process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || "AW-3267328717";
+	process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || "AW-17769294111";
 
 export const ADS_CONVERSION_LABELS = {
 	contactForm: process.env.NEXT_PUBLIC_ADS_CONTACT_FORM_LABEL || "",

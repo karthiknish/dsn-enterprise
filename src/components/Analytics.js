@@ -23,13 +23,12 @@ const GA4_MEASUREMENT_ID =
 const GOOGLE_TAG_ID = "GT-TQKJ52Q3";
 
 /**
- * Google Ads account DSN Enterprises (CID 326-732-8717).
- *
- * The old AW-17769294111 belongs to a different Ads account (CID 177-692-9411),
- * so every conversion the site sent was reported there instead of DSN — which
- * is why DSN Ads showed "No recent conversions" for every action.
+ * Google Ads tag that owns the conversion actions. This must stay in sync with
+ * GOOGLE_ADS_ID in src/lib/gtag.js: a conversion label only resolves against
+ * the tag it was created under. The CID-derived AW-3267328717 has no conversion
+ * actions behind it and silently counts nothing.
  */
-const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || "AW-3267328717";
+const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || "AW-17769294111";
 const FB_PIXEL_ID = "1391622058130598";
 
 function AnalyticsContent() {
