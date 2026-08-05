@@ -21,7 +21,15 @@ const GA4_MEASUREMENT_ID =
 
 /** Google tag container. Kept so any existing tag/GTM config keeps working. */
 const GOOGLE_TAG_ID = "GT-TQKJ52Q3";
-const GOOGLE_ADS_ID = "AW-17769294111";
+
+/**
+ * Google Ads account DSN Enterprises (CID 326-732-8717).
+ *
+ * The old AW-17769294111 belongs to a different Ads account (CID 177-692-9411),
+ * so every conversion the site sent was reported there instead of DSN — which
+ * is why DSN Ads showed "No recent conversions" for every action.
+ */
+const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || "AW-3267328717";
 const FB_PIXEL_ID = "1391622058130598";
 
 function AnalyticsContent() {

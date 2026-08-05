@@ -12,7 +12,27 @@
 const GA4_MEASUREMENT_ID =
 	process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-GR3VEG2ZX0";
 const GOOGLE_TAG_ID = "GT-TQKJ52Q3";
-const GOOGLE_ADS_ID = "AW-17769294111";
+
+// Google Ads conversion tracking.
+//
+// AW-17769294111 belongs to Ads CID 177-692-9411, NOT the DSN account
+// (CID 326-732-8717 -> AW-3267328717). Conversions sent to the old ID were
+// reported to a foreign account and never appeared in DSN Ads.
+//
+// Ads conversions ONLY count when send_to carries a conversion label
+// ("AW-3267328717/<label>"). Labels come from the conversion actions created
+// in the DSN Ads account and are injected via env so the code needs no redeploy
+// when they change.
+export const GOOGLE_ADS_ID =
+	process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || "AW-3267328717";
+
+export const ADS_CONVERSION_LABELS = {
+	contactForm: process.env.NEXT_PUBLIC_ADS_CONTACT_FORM_LABEL || "",
+	phoneCall: process.env.NEXT_PUBLIC_ADS_PHONE_CALL_LABEL || "",
+	whatsapp: process.env.NEXT_PUBLIC_ADS_WHATSAPP_LABEL || "",
+	quoteRequest: process.env.NEXT_PUBLIC_ADS_QUOTE_REQUEST_LABEL || "",
+	thankYou: process.env.NEXT_PUBLIC_ADS_THANK_YOU_LABEL || "",
+};
 
 /**
  * Track page views
@@ -48,13 +68,25 @@ export const event = (action, params = {}) => {
  * @param {string} conversionLabel - The conversion label from Google Ads
  * @param {object} params - Additional parameters
  */
-const trackConversion = (conversionLabel, params = {}) => {
-	if (typeof window !== "undefined" && window.gtag) {
-		window.gtag("event", "conversion", {
-			send_to: `${GOOGLE_ADS_ID}/${conversionLabel}`,
-			...params,
-		});
+export const trackConversion = (conversionLabel, params = {}) => {
+	if (typeof window === "undefined" || !window.gtag) return;
+
+	// A label-less conversion hit is silently discarded by Ads. Skip it instead
+	// of shipping noise, and make the misconfiguration visible in dev.
+	if (!conversionLabel) {
+		if (process.env.NODE_ENV !== "production") {
+			console.warn(
+				"[gtag] Ads conversion skipped: missing conversion label. " +
+					"Set the NEXT_PUBLIC_ADS_*_LABEL env var for this action.",
+			);
+		}
+		return;
 	}
+
+	window.gtag("event", "conversion", {
+		send_to: `${GOOGLE_ADS_ID}/${conversionLabel}`,
+		...params,
+	});
 };
 
 /**
@@ -64,8 +96,7 @@ const trackConversion = (conversionLabel, params = {}) => {
 export const trackContactFormSubmission = (formData = {}) => {
 	if (typeof window !== "undefined" && window.gtag) {
 		// Track as Google Ads conversion
-		window.gtag("event", "conversion", {
-			send_to: GOOGLE_ADS_ID,
+		trackConversion(ADS_CONVERSION_LABELS.contactForm, {
 			value: 100, // Assign a value to leads
 			currency: "INR",
 		});
@@ -97,8 +128,7 @@ export const trackContactFormSubmission = (formData = {}) => {
 export const trackPhoneClick = (phoneNumber) => {
 	if (typeof window !== "undefined" && window.gtag) {
 		// Track as conversion
-		window.gtag("event", "conversion", {
-			send_to: GOOGLE_ADS_ID,
+		trackConversion(ADS_CONVERSION_LABELS.phoneCall, {
 			value: 50,
 			currency: "INR",
 		});
@@ -133,8 +163,7 @@ export const trackEmailClick = (email) => {
 export const trackWhatsAppClick = (source = "unknown") => {
 	if (typeof window !== "undefined" && window.gtag) {
 		// Track as conversion
-		window.gtag("event", "conversion", {
-			send_to: GOOGLE_ADS_ID,
+		trackConversion(ADS_CONVERSION_LABELS.whatsapp, {
 			value: 50,
 			currency: "INR",
 		});
@@ -189,8 +218,7 @@ export const trackProductView = (productName, category = "gauge") => {
 export const trackQuoteRequest = (quoteData = {}) => {
 	if (typeof window !== "undefined" && window.gtag) {
 		// Track as high-value conversion
-		window.gtag("event", "conversion", {
-			send_to: GOOGLE_ADS_ID,
+		trackConversion(ADS_CONVERSION_LABELS.quoteRequest, {
 			value: 200,
 			currency: "INR",
 		});
@@ -240,8 +268,7 @@ export const trackTimeOnPage = (seconds, page) => {
 export const trackThankYouPageView = () => {
 	if (typeof window !== "undefined" && window.gtag) {
 		// This confirms the conversion
-		window.gtag("event", "conversion", {
-			send_to: GOOGLE_ADS_ID,
+		trackConversion(ADS_CONVERSION_LABELS.thankYou, {
 			value: 100,
 			currency: "INR",
 		});
