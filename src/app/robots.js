@@ -90,6 +90,10 @@ export default function robots() {
 				disallow: DISALLOW,
 			},
 		],
-		sitemap: `${SITE_URL}/sitemap.xml`,
+		// The index, not the flat file: it points at sitemap-main.xml and
+		// sitemap-cities.xml, which is what gives Search Console per-segment
+		// coverage numbers instead of one undiagnosable "not indexed" total.
+		// /sitemap.xml still resolves for anything that already knows it.
+		sitemap: `${SITE_URL}/sitemap-index.xml`,
 	};
 }
