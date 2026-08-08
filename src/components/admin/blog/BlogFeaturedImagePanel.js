@@ -178,7 +178,7 @@ export default function BlogFeaturedImagePanel({
 
 			{generatingImage && (
 				<div className="mb-4 rounded-lg border border-accent/30 bg-accent/5 p-3 text-xs text-gray-600 flex items-center gap-2">
-					<span className="animate-spin rounded-full h-3 w-3 border-t-2 border-b-2 border-accent" />
+					<span className="animate-spin rounded-full h-3 w-3 border border-gray-200 border-t-accent" />
 					Generating image with Gemini — this can take up to a minute at 2K.
 				</div>
 			)}
@@ -227,7 +227,7 @@ export default function BlogFeaturedImagePanel({
 					<div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-accent transition-colors">
 						{uploading ? (
 							<div className="flex flex-col items-center">
-								<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent mb-2" />
+								<div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-accent mb-2" />
 								<p className="text-sm text-gray-600">Uploading…</p>
 							</div>
 						) : (

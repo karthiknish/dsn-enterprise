@@ -154,7 +154,7 @@ function messageBlock(label, message) {
             <p style="margin:0 0 8px 0; font-family:${FONT}; font-size:13px; line-height:20px; color:${COLORS.muted};">${escapeHtml(label)}</p>
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <td style="padding:14px 16px; background-color:${COLORS.panel}; border-left:2px solid ${COLORS.accent}; border-radius:0 4px 4px 0;">
+                <td style="padding:14px 16px; background-color:${COLORS.panel}; border:1px solid ${COLORS.border}; border-radius:4px;">
                   <p style="margin:0; font-family:${FONT}; font-size:14px; line-height:22px; color:${COLORS.text}; white-space:pre-line;">${escapeHtml(message)}</p>
                 </td>
               </tr>

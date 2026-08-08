@@ -118,7 +118,7 @@ export default function BlogListPage() {
 			>
 				<span className="sr-only">Loading blog posts</span>
 				<div
-					className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"
+					className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-accent"
 					aria-hidden
 				/>
 			</output>

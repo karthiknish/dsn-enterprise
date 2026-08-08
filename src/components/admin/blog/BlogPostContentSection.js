@@ -5,7 +5,7 @@ const TiptapEditor = dynamic(() => import("@/components/admin/TiptapEditor"), {
 	ssr: false,
 	loading: () => (
 		<div className="border border-gray-300 rounded-lg p-4 bg-gray-50 min-h-[300px] flex items-center justify-center">
-			<div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-accent" />
+			<div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-accent" />
 		</div>
 	),
 });

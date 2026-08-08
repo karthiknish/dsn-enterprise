@@ -41,7 +41,9 @@ export default function AdminDashboardPage() {
 				}
 			});
 
-		return () => { cancelled = true; };
+		return () => {
+			cancelled = true;
+		};
 	}, []);
 
 	if (loading) {
@@ -52,7 +54,7 @@ export default function AdminDashboardPage() {
 			>
 				<span className="sr-only">Loading dashboard</span>
 				<div
-					className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"
+					className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-primary"
 					aria-hidden
 				/>
 			</output>

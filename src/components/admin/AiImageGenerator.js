@@ -149,7 +149,7 @@ export default function AiImageGenerator({
 			>
 				{generating ? (
 					<>
-						<span className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white" />
+						<span className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white" />
 						Generating…
 					</>
 				) : (

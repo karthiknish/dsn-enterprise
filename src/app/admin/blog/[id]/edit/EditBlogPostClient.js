@@ -17,7 +17,7 @@ function EditBlogLoading() {
 		>
 			<span className="sr-only">Loading post</span>
 			<div
-				className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-accent"
+				className="animate-spin rounded-full h-12 w-12 border-2 border-gray-200 border-t-accent"
 				aria-hidden
 			/>
 		</output>
@@ -95,7 +95,5 @@ export default function EditBlogPostClient({ postId }) {
 		);
 	}
 
-	return (
-		<EditBlogPostView postId={postId} initialPostData={state.data} />
-	);
+	return <EditBlogPostView postId={postId} initialPostData={state.data} />;
 }
