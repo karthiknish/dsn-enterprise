@@ -88,10 +88,7 @@ export default function ContactPage({ prefillProduct = "" }) {
 								<ContactPageBenefits />
 							</div>
 
-							{/* Info Cards */}
-							<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10">
-								<ContactPageInfoCards />
-							</div>
+							<ContactPageInfoCards />
 
 							{/* Visual anchor so the info column is not a wall of text */}
 							<div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-gray-200/80 bg-white">
