@@ -94,6 +94,10 @@ export default function FAQPage() {
 				eyebrow="Support"
 				title="Frequently Asked Questions"
 				description={pageHeroes.faq}
+				image={{
+					src: "/images/thread-plug-gauge.png",
+					alt: "Thread plug gauge from the DSN Enterprises range",
+				}}
 				breadcrumbs={[
 					{ href: "/", label: "Home" },
 					{ href: "/faq", label: "FAQ" },

@@ -9,11 +9,13 @@ export default function ProductCategoryHero({
 	description,
 	quoteProduct,
 	badgeSlot: BadgeSlot,
+	image,
 }) {
 	return (
 		<PageHero
 			title={title}
 			description={description}
+			image={image}
 			breadcrumbs={[
 				{ href: "/", label: "Home" },
 				{ href: "/products", label: "Products" },

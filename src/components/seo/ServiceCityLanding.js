@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import JsonLdScripts from "@/components/seo/JsonLdScripts";
+import { getServiceLandingImage } from "@/lib/seo-landing-images";
 import {
 	buildServiceFaqs,
 	getCityProfile,
@@ -47,6 +49,7 @@ export default function ServiceCityLanding({
 	const path = `/services/${slug}`;
 	const hubPath = serviceProfile?.hubPath || "/services";
 	const hubLabel = serviceProfile?.hubLabel || "Services";
+	const heroImage = getServiceLandingImage(serviceSlug);
 
 	const schemas = [
 		buildBreadcrumbJsonLd([
@@ -65,42 +68,57 @@ export default function ServiceCityLanding({
 
 			<section className="bg-primary text-white py-16 md:py-20">
 				<div className="container mx-auto px-4">
-					<div className="max-w-4xl mx-auto">
-						<nav
-							aria-label="Breadcrumb"
-							className="text-sm mb-4 text-accent-100"
-						>
-							<Link href="/" className="hover:text-white">
-								Home
-							</Link>
-							<span className="mx-2">/</span>
-							<Link href="/services" className="hover:text-white">
-								Services
-							</Link>
-							<span className="mx-2">/</span>
-							<span className="text-white/80">{pageData.cityName}</span>
-						</nav>
-						<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald leading-tight">
-							{pageData.serviceName} in {pageData.cityName}
-						</h1>
-						<p className="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl">
-							{service?.description || "Professional gauge services"} for{" "}
-							{pageData.cityName} plants,run from our Coimbatore facility with
-							audit-ready documentation.
-						</p>
-						<div className="flex flex-wrap gap-3">
-							<Link
-								href="/contact"
-								className="inline-flex items-center bg-accent text-white px-6 py-3 rounded-lg font-medium hover:bg-accent-700 transition-colors"
+					<div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+						<div className="lg:col-span-7">
+							<nav
+								aria-label="Breadcrumb"
+								className="text-sm mb-4 text-accent-100"
 							>
-								Get a Quote
-							</Link>
-							<a
-								href="tel:+919363122005"
-								className="inline-flex items-center bg-white/10 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/20 border border-white/30"
-							>
-								+91 93631 22005
-							</a>
+								<Link href="/" className="hover:text-white">
+									Home
+								</Link>
+								<span className="mx-2">/</span>
+								<Link href="/services" className="hover:text-white">
+									Services
+								</Link>
+								<span className="mx-2">/</span>
+								<span className="text-white/80">{pageData.cityName}</span>
+							</nav>
+							<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 font-oswald leading-tight">
+								{pageData.serviceName} in {pageData.cityName}
+							</h1>
+							<p className="text-lg md:text-xl text-gray-200 mb-8 max-w-3xl">
+								{service?.description || "Professional gauge services"} for{" "}
+								{pageData.cityName} plants,run from our Coimbatore facility with
+								audit-ready documentation.
+							</p>
+							<div className="flex flex-wrap gap-3">
+								<Link
+									href="/contact"
+									className="inline-flex items-center bg-accent text-white px-6 py-3 rounded-lg font-medium hover:bg-accent-700 transition-colors"
+								>
+									Get a Quote
+								</Link>
+								<a
+									href="tel:+919363122005"
+									className="inline-flex items-center bg-white/10 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/20 border border-white/30"
+								>
+									+91 93631 22005
+								</a>
+							</div>
+						</div>
+
+						<div className="lg:col-span-5">
+							<div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-white/10 border border-white/15 backdrop-blur-sm">
+								<Image
+									src={heroImage.src}
+									alt={`${heroImage.alt} – ${pageData.serviceName} for ${pageData.cityName}`}
+									fill
+									priority
+									className="object-contain p-6"
+									sizes="(max-width: 1024px) 100vw, 40vw"
+								/>
+							</div>
 						</div>
 					</div>
 				</div>

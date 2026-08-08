@@ -17,6 +17,10 @@ export default function SpecialGaugesPage() {
 				title="Special Gauges"
 				quoteProduct="Special Gauges"
 				description={pageHeroes.productCategoryHeroes.specialGauges}
+				image={{
+					src: "/images/thread-setting-plug-gauge.png",
+					alt: "Custom thread setting plug gauge manufactured to customer drawing",
+				}}
 			/>
 
 			<SpecialGaugesCapabilitiesSection />
@@ -31,7 +35,10 @@ export default function SpecialGaugesPage() {
 				heading="Have a Custom Gauge Requirement?"
 				description="Send us your drawings or specifications and our engineering team will provide a detailed quote. We specialize in solving complex measurement challenges."
 				buttons={{
-					primary: { text: "Get a Quote", url: "/contact?product=Custom%20Gauge" },
+					primary: {
+						text: "Get a Quote",
+						url: "/contact?product=Custom%20Gauge",
+					},
 					secondary: { text: "Contact Engineering", url: "/contact" },
 				}}
 			/>

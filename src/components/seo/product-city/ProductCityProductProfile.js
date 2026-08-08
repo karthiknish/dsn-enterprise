@@ -6,7 +6,9 @@ export default function ProductCityProductProfile({ productProfile }) {
 	return (
 		<>
 			<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
-				<h2 className="text-2xl font-semibold text-primary mb-4">Applications</h2>
+				<h2 className="text-2xl font-semibold text-primary mb-4">
+					Applications
+				</h2>
 				<ul className="grid sm:grid-cols-2 gap-3">
 					{productProfile.applications.map((app) => (
 						<li key={app} className="flex items-start text-gray-700">

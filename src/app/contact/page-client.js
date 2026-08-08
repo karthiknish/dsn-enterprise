@@ -1,6 +1,7 @@
 "use client";
 
 import { m } from "framer-motion";
+import Image from "next/image";
 import ContactPageBenefits from "@/components/contact/ContactPageBenefits";
 import ContactPageForm from "@/components/contact/ContactPageForm";
 import ContactPageInfoCards from "@/components/contact/ContactPageInfoCards";
@@ -60,16 +61,15 @@ export default function ContactPage({ prefillProduct = "" }) {
 						initial="hidden"
 						whileInView="visible"
 						viewport={{ once: true }}
-				className="text-center max-w-3xl mx-auto mb-14 md:mb-16"
-				>
-					<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-primary-dark tracking-tight mb-5">
-								Let&rsquo;s Talk Precision
-							</h1>
+						className="text-center max-w-3xl mx-auto mb-14 md:mb-16"
+					>
+						<h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-primary-dark tracking-tight mb-5">
+							Let&rsquo;s Talk Precision
+						</h1>
 						<p className="text-lg text-gray-600 leading-relaxed">
-							Send us your gauge list, drawing, or calibration
-							requirement. Our engineers review every enquiry and
-							respond with scope, lead time, and pricing&mdash;usually
-							within one business day.
+							Send us your gauge list, drawing, or calibration requirement. Our
+							engineers review every enquiry and respond with scope, lead time,
+							and pricing&mdash;usually within one business day.
 						</p>
 					</m.div>
 
@@ -91,6 +91,17 @@ export default function ContactPage({ prefillProduct = "" }) {
 							{/* Info Cards */}
 							<div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 md:p-10">
 								<ContactPageInfoCards />
+							</div>
+
+							{/* Visual anchor so the info column is not a wall of text */}
+							<div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-gray-200/80 bg-white">
+								<Image
+									src="/images/featured.png"
+									alt="Range of precision gauges manufactured by DSN Enterprises, Coimbatore"
+									fill
+									className="object-contain p-6"
+									sizes="(max-width: 1024px) 100vw, 50vw"
+								/>
 							</div>
 						</m.div>
 

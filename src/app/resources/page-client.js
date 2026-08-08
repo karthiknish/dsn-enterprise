@@ -1,16 +1,16 @@
 "use client";
 
-import { m } from "framer-motion";
-import Link from "next/link";
 import {
-	UilBookAlt,
+	UilArrowRight,
 	UilAward,
+	UilBookAlt,
+	UilBuilding,
 	UilClipboardAlt,
 	UilDownloadAlt,
-	UilBuilding,
 	UilRuler,
-	UilArrowRight,
 } from "@iconscout/react-unicons";
+import { m } from "framer-motion";
+import Link from "next/link";
 import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
@@ -210,6 +210,10 @@ export default function ResourcesPage() {
 				eyebrow="Resources"
 				title="Resources & Downloads"
 				description={pageHeroes.resources}
+				image={{
+					src: "/images/featured.png",
+					alt: "Precision gauge range covered by DSN Enterprises catalogues and datasheets",
+				}}
 				breadcrumbs={[
 					{ href: "/", label: "Home" },
 					{ href: "/resources", label: "Resources" },
@@ -220,7 +224,10 @@ export default function ResourcesPage() {
 
 			{/* Download Catalogues & Technical Resources */}
 			<section className="py-20 md:py-28 bg-white relative">
-				<div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" aria-hidden />
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+					aria-hidden
+				/>
 				<div className="container mx-auto px-4">
 					<div className="max-w-6xl mx-auto">
 						{/* Section Header */}
@@ -236,11 +243,15 @@ export default function ResourcesPage() {
 								Product Catalogues &amp; Technical Documentation
 							</h2>
 							<p className="text-lg text-text-body max-w-3xl mx-auto leading-relaxed">
-								Access our complete library of product catalogues, tolerance charts, quality certificates, and
-								standard forms. Every resource is engineered to help you specify, order, and inspect precision
+								Access our complete library of product catalogues, tolerance
+								charts, quality certificates, and standard forms. Every resource
+								is engineered to help you specify, order, and inspect precision
 								gauges with confidence.
 							</p>
-							<div className="mt-6 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent max-w-xs mx-auto" aria-hidden />
+							<div
+								className="mt-6 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent max-w-xs mx-auto"
+								aria-hidden
+							/>
 						</m.div>
 
 						{downloadCategories.map((category, catIndex) => (
@@ -263,7 +274,8 @@ export default function ResourcesPage() {
 											{category.title}
 										</h3>
 										<p className="text-sm text-text-muted">
-											{category.items.length} document{category.items.length !== 1 ? "s" : ""} available
+											{category.items.length} document
+											{category.items.length !== 1 ? "s" : ""} available
 										</p>
 									</div>
 								</div>
@@ -279,9 +291,7 @@ export default function ResourcesPage() {
 											variants={cardVariants}
 											custom={itemIndex}
 										>
-											<div
-												className="group relative bg-white rounded-2xl border border-gray-200/80 p-5 flex items-start gap-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
-											>
+											<div className="group relative bg-white rounded-2xl border border-gray-200/80 p-5 flex items-start gap-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
 												<FileIcon type={item.type} />
 												<div className="flex-1 min-w-0">
 													<h4 className="font-semibold text-primary-dark mb-1 truncate">
@@ -306,7 +316,9 @@ export default function ResourcesPage() {
 																)}
 																{item.type}
 															</span>
-															<span className="text-xs text-text-muted">{item.size}</span>
+															<span className="text-xs text-text-muted">
+																{item.size}
+															</span>
 														</div>
 														<Link
 															href="/contact?request=download"
@@ -329,7 +341,10 @@ export default function ResourcesPage() {
 
 			{/* Standards Reference */}
 			<section className="py-20 md:py-28 bg-secondary-light relative">
-				<div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" aria-hidden />
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+					aria-hidden
+				/>
 				<div className="container mx-auto px-4">
 					<div className="max-w-6xl mx-auto grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
 						{/* Intro column */}
@@ -347,9 +362,9 @@ export default function ResourcesPage() {
 								Standards Reference
 							</h2>
 							<p className="mt-4 text-lg text-text-body leading-relaxed">
-								Every gauge we manufacture is designed, inspected, and certified against
-								national and international standards. Browse the key specifications that
-								govern our production processes.
+								Every gauge we manufacture is designed, inspected, and certified
+								against national and international standards. Browse the key
+								specifications that govern our production processes.
 							</p>
 						</m.div>
 
@@ -395,7 +410,10 @@ export default function ResourcesPage() {
 
 			{/* Industry Resources */}
 			<section className="py-20 md:py-28 bg-white relative">
-				<div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" aria-hidden />
+				<div
+					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+					aria-hidden
+				/>
 				<div className="container mx-auto px-4">
 					<div className="max-w-6xl mx-auto grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
 						{/* Intro column */}
@@ -413,9 +431,9 @@ export default function ResourcesPage() {
 								Industry Organisations &amp; Standards Bodies
 							</h2>
 							<p className="mt-4 text-lg text-text-body leading-relaxed">
-								We work within the frameworks defined by the world&rsquo;s most respected
-								standards organisations, ensuring every gauge meets or exceeds regulatory
-								requirements.
+								We work within the frameworks defined by the world&rsquo;s most
+								respected standards organisations, ensuring every gauge meets or
+								exceeds regulatory requirements.
 							</p>
 						</m.div>
 

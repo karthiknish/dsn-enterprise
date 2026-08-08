@@ -1,8 +1,5 @@
 "use client";
 
-import { m } from "framer-motion";
-import Link from "next/link";
-import { FaCertificate } from "react-icons/fa";
 import {
 	UilCheck,
 	UilClipboardNotes,
@@ -11,6 +8,9 @@ import {
 	UilTruck,
 	UilWrench,
 } from "@iconscout/react-unicons";
+import { m } from "framer-motion";
+import Link from "next/link";
+import { FaCertificate } from "react-icons/fa";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import CityLinks from "@/components/seo/CityLinks";
@@ -185,10 +185,14 @@ export default function CalibrationPage() {
 				eyebrow="Calibration"
 				title="Calibration Services"
 				description={pageHeroes.calibration}
-			breadcrumbs={[
-				{ href: "/", label: "Home" },
-				{ href: "/calibration", label: "Calibration" },
-			]}
+				image={{
+					src: "/images/plain-plug-gauge.png",
+					alt: "Plain plug gauge undergoing NABL-accredited calibration",
+				}}
+				breadcrumbs={[
+					{ href: "/", label: "Home" },
+					{ href: "/calibration", label: "Calibration" },
+				]}
 			>
 				<span className="inline-flex items-center bg-white/15 border border-white/20 px-4 py-2 rounded-full text-sm">
 					<FaCertificate className="mr-2" aria-hidden />
@@ -544,7 +548,10 @@ export default function CalibrationPage() {
 				heading="Ready to Calibrate Your Gauges?"
 				description="Contact us today for a calibration quote. We offer competitive pricing and quick turnaround times."
 				buttons={{
-					primary: { text: "Request Calibration", url: "/contact?service=Calibration" },
+					primary: {
+						text: "Request Calibration",
+						url: "/contact?service=Calibration",
+					},
 					secondary: { text: "View Services", url: "/services" },
 				}}
 			/>

@@ -1,7 +1,5 @@
 "use client";
 
-import { m } from "framer-motion";
-import Link from "next/link";
 import {
 	UilArrowRight,
 	UilAward,
@@ -9,6 +7,8 @@ import {
 	UilRuler,
 	UilWrench,
 } from "@iconscout/react-unicons";
+import { m } from "framer-motion";
+import Link from "next/link";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import CityLinks from "@/components/seo/CityLinks";
@@ -104,6 +104,10 @@ const ServicesPage = () => {
 			<PageHero
 				title="Our Services"
 				description={pageHeroes.services}
+				image={{
+					src: "/images/cylinder-maters.png",
+					alt: "Cylindrical setting masters in the DSN Enterprises calibration lab",
+				}}
 				breadcrumbs={[
 					{ href: "/", label: "Home" },
 					{ href: "/services", label: "Services" },
@@ -126,10 +130,9 @@ const ServicesPage = () => {
 							Precision Services for Critical Measurement
 						</h2>
 						<p className="text-lg text-gray-600 leading-relaxed">
-							From NABL-accredited calibration to custom gauge
-							manufacturing and full certification support, every
-							service is built to keep your quality programme
-							audit-ready and your production line moving.
+							From NABL-accredited calibration to custom gauge manufacturing and
+							full certification support, every service is built to keep your
+							quality programme audit-ready and your production line moving.
 						</p>
 					</m.div>
 
@@ -314,9 +317,8 @@ const ServicesPage = () => {
 								Standards We Calibrate &amp; Manufacture To
 							</h2>
 							<p className="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
-								Every gauge we calibrate, manufacture, or
-								certify complies with these Indian and
-								international standards, ensuring full
+								Every gauge we calibrate, manufacture, or certify complies with
+								these Indian and international standards, ensuring full
 								traceability and audit readiness.
 							</p>
 						</div>
@@ -334,10 +336,7 @@ const ServicesPage = () => {
 							{/* Standards List */}
 							<ul className="space-y-3">
 								{standards.map((standard) => (
-									<li
-										key={standard}
-										className="flex items-start gap-3"
-									>
+									<li key={standard} className="flex items-start gap-3">
 										<UilCheck className="w-3.5 h-3.5 text-accent mt-1 flex-shrink-0" />
 										<span className="text-gray-700 leading-relaxed">
 											{standard}
@@ -353,7 +352,10 @@ const ServicesPage = () => {
 			{/* Service Areas — Internal links to city pages */}
 			<CityLinks type="service" categorySlug="gauge-calibration" />
 			<CityLinks type="service" categorySlug="custom-gauge-manufacturing" />
-			<CityLinks type="service" categorySlug="gauge-repair-and-reconditioning" />
+			<CityLinks
+				type="service"
+				categorySlug="gauge-repair-and-reconditioning"
+			/>
 
 			<Cta10
 				reference="Ref. DSN-SVC-01"

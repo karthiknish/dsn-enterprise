@@ -46,7 +46,12 @@ export default function ProductCityLanding({
 		<div className="min-h-screen bg-gray-50">
 			<JsonLdScripts schemas={schemas} />
 
-			<ProductCityHero pageData={pageData} product={product} hub={hub} />
+			<ProductCityHero
+				pageData={pageData}
+				product={product}
+				hub={hub}
+				productSlug={productSlug}
+			/>
 
 			<section className="py-16">
 				<div className="container mx-auto px-4">
