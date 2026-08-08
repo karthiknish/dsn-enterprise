@@ -1,7 +1,6 @@
 "use client";
 
 import { m } from "framer-motion";
-import Image from "next/image";
 import ContactPageBenefits from "@/components/contact/ContactPageBenefits";
 import ContactPageForm from "@/components/contact/ContactPageForm";
 import ContactPageInfoCards from "@/components/contact/ContactPageInfoCards";
@@ -89,17 +88,6 @@ export default function ContactPage({ prefillProduct = "" }) {
 							</div>
 
 							<ContactPageInfoCards />
-
-							{/* Visual anchor so the info column is not a wall of text */}
-							<div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-gray-200/80 bg-white">
-								<Image
-									src="/images/featured.png"
-									alt="Range of precision gauges manufactured by DSN Enterprises, Coimbatore"
-									fill
-									className="object-contain p-6"
-									sizes="(max-width: 1024px) 100vw, 50vw"
-								/>
-							</div>
 						</m.div>
 
 						{/* Right Column, Form */}

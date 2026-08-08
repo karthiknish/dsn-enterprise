@@ -30,9 +30,10 @@ const contactPageSchema = {
 	mainEntity: { "@id": ORG_ID },
 };
 
-export default function ContactPage({ searchParams }) {
+export default async function ContactPage({ searchParams }) {
+	const params = await searchParams;
 	const prefillProduct =
-		typeof searchParams?.product === "string" ? searchParams.product : "";
+		typeof params?.product === "string" ? params.product : "";
 	return (
 		<>
 			<BreadcrumbSchema
