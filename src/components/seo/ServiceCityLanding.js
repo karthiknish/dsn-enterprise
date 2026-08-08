@@ -159,7 +159,7 @@ export default function ServiceCityLanding({
 						{/* The most page-specific block on a service page: how this
 						    service actually plays out in this city. */}
 						{cityServiceNote ? (
-							<div className="bg-white rounded-xl shadow-sm p-8 border-l-4 border-l-accent border border-gray-100">
+							<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
 								<h2 className="text-2xl font-semibold text-primary mb-4">
 									What {pageData.cityName} customers should know
 								</h2>

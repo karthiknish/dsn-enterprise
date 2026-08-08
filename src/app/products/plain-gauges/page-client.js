@@ -1,9 +1,9 @@
 "use client";
 
+import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
 import CityLinks from "@/components/seo/CityLinks";
@@ -165,25 +165,25 @@ export default function PlainGaugesPage() {
 							and longevity.
 						</p>
 						<div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
-							<div className="text-center p-5 bg-gray-50 rounded-xl border border-gray-100 border-l-4 border-l-accent">
+							<div className="text-center p-5 bg-white rounded-xl border border-gray-200/80 shadow-sm">
 								<div className="text-3xl font-bold text-primary mb-2">
 									1-250mm
 								</div>
 								<div className="text-gray-600">Size Range</div>
 							</div>
-							<div className="text-center p-5 bg-gray-50 rounded-xl border border-gray-100 border-l-4 border-l-accent">
+							<div className="text-center p-5 bg-white rounded-xl border border-gray-200/80 shadow-sm">
 								<div className="text-3xl font-bold text-primary mb-2">
 									60 HRC
 								</div>
 								<div className="text-gray-600">Hardness</div>
 							</div>
-							<div className="text-center p-5 bg-gray-50 rounded-xl border border-gray-100 border-l-4 border-l-accent">
+							<div className="text-center p-5 bg-white rounded-xl border border-gray-200/80 shadow-sm">
 								<div className="text-3xl font-bold text-primary mb-2">
 									-80°C
 								</div>
 								<div className="text-gray-600">Sub-Zero Treated</div>
 							</div>
-							<div className="text-center p-5 bg-gray-50 rounded-xl border border-gray-100 border-l-4 border-l-accent">
+							<div className="text-center p-5 bg-white rounded-xl border border-gray-200/80 shadow-sm">
 								<div className="text-3xl font-bold text-primary mb-2">NABL</div>
 								<div className="text-gray-600">Certified</div>
 							</div>
@@ -221,7 +221,7 @@ export default function PlainGaugesPage() {
 											src={product.image}
 											alt={product.name}
 											fill
-							sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+											sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
 											className="object-contain p-8"
 										/>
 									</div>
@@ -385,7 +385,10 @@ export default function PlainGaugesPage() {
 				heading="Need Plain Gauges?"
 				description="Contact our team for custom sizes, bulk orders, or technical assistance. We offer competitive pricing and fast delivery."
 				buttons={{
-					primary: { text: "Get a Quote", url: "/contact?product=Plain%20Gauges" },
+					primary: {
+						text: "Get a Quote",
+						url: "/contact?product=Plain%20Gauges",
+					},
 					secondary: { text: "View Products", url: "/products/plain-gauges" },
 				}}
 			/>

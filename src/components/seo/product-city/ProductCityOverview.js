@@ -40,7 +40,7 @@ export default function ProductCityOverview({
 			{/* The single most page-specific block: what actually goes wrong with
 			    this product in this city. This is what differentiates siblings. */}
 			{cityProductNote ? (
-				<div className="bg-white rounded-xl shadow-sm p-8 border-l-4 border-l-accent border border-gray-100">
+				<div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
 					<h2 className="text-2xl font-semibold text-primary mb-4">
 						{pageData.productName} in {pageData.cityName}: what to watch for
 					</h2>
