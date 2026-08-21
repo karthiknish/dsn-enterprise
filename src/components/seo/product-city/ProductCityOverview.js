@@ -74,7 +74,7 @@ export default function ProductCityOverview({
 					<ul className="space-y-3">
 						{[
 							"ISO 9001:2015 manufacture with documented inspection",
-							`Scheduled dispatch into ${pageData.cityName} and Tamil Nadu`,
+							`Scheduled dispatch into ${pageData.cityName}${pageData.state ? ` (${pageData.state})` : ""}`,
 							"Custom members and progressive designs from drawing",
 							"NABL-traceable calibration when your programme requires it",
 							"Direct access to gauge engineers,not a call centre",

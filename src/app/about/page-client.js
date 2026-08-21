@@ -13,7 +13,7 @@ const AboutPage = () => {
 		<div>
 			<PageHero
 				eyebrow="About"
-				title="About DSN Enterprises"
+				title="The Coimbatore works"
 				description={pageHeroes.about}
 			breadcrumbs={[
 				{ href: "/", label: "Home" },

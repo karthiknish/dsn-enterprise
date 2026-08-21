@@ -39,7 +39,7 @@ const services = [
 			"Comprehensive calibration for plain, thread, API, and special gauges",
 			"NABL certificate with full measurement traceability",
 			"Express turnaround, typically 3–5 working days",
-			"On-site calibration available across Tamil Nadu",
+			"On-site calibration by appointment in South India",
 			"Detailed reports with measurement uncertainty",
 			"Gauge repair and re-calibration in a single workflow",
 		],

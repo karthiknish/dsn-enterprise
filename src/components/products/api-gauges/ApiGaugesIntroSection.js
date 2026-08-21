@@ -11,11 +11,11 @@ export default function ApiGaugesIntroSection() {
 						What are API Gauges?
 					</h2>
 					<p className="text-lg text-gray-700 mb-6">
-						API (American Petroleum Institute) gauges are specialized thread
-						gauges designed for the oil and gas industry. They are used to
-						inspect thread connections on casing, tubing, drill pipe, and other
-						oilfield equipment to ensure safe and reliable connections under
-						extreme downhole conditions.
+						API gauges in this catalogue are API <em>thread</em> gauges — not
+						pressure gauges, tank gauges, or leak testers. They inspect thread
+						connections on casing, tubing, drill pipe, and other oilfield
+						equipment so those joints stay within API 5B and API 7-2 geometry
+						under downhole load.
 					</p>
 					<p className="text-lg text-gray-700 mb-6">
 						DSN Enterprises is a licensed API manufacturer (API 5B-0039 and API

@@ -2,9 +2,9 @@ import { alternatesFor } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "Plain Gauges – Plug, Ring & Snap Gauges",
+	title: "Plain Gauge Maker – Plug, Ring & Snap",
 	description:
-		"Plain plug gauges, ring gauges, setting masters, measuring pins, and snap gauges. 1mm to 250mm range. OHNS and carbide. NABL certified.",
+		"Plain gauge manufacturer in Coimbatore: plug, ring, snap, pins, and setting masters. 1–250 mm, OHNS or carbide, NABL-traceable certificates."
 	keywords: [
 		"plain gauges",
 		"plain plug gauges",

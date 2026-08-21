@@ -15,7 +15,7 @@ export default function APIGaugesPage() {
 	return (
 		<div>
 			<ProductCategoryHero
-				title="API Gauges"
+				title="API Thread Gauges"
 				quoteProduct="API Gauges"
 				description={pageHeroes.productCategoryHeroes.apiGauges}
 				badgeSlot={ApiGaugeHeroBadges}

@@ -94,9 +94,9 @@ export default function AboutStorySection() {
 					</p>
 
 					<p className="text-lg text-gray-700 leading-relaxed">
-						We supply plants across Tamil Nadu, national OEM and job-shop
-						networks, and export customers who demand the same rigour on every
-						shipment.
+						We supply plants across Tamil Nadu, Bangalore, and Hyderabad,
+						national OEM and job-shop networks, and export customers who demand
+						the same rigour on every shipment.
 					</p>
 				</m.div>
 

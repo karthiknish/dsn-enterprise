@@ -3,9 +3,9 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
 	// Brand comes from the root title template; repeating it here produced
 	// "... - DSN Enterprises | DSN Enterprises" at 90 characters.
-	title: "Industries Served – Oil, Gas & Auto",
+	title: "Industries – Auto, Aero, Oil & Gas",
 	description:
-		"DSN Enterprises serves Oil & Gas, Automotive, Aerospace, Heavy Machinery, Marine, and Electronics with precision gauging solutions.",
+		"Precision gauges for automotive, aerospace, oil and gas, and engineering plants in Tamil Nadu, Bangalore, and Hyderabad.",
 	keywords: [
 		"oil and gas gauges",
 		"automotive gauges",

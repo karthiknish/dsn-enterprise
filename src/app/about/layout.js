@@ -2,25 +2,25 @@ export const metadata = {
 	// Brand is appended by the root title template.
 	// No founding year is claimed here — nothing in the site content supports
 	// a specific date, so do not add one without confirming it with the client.
-	title: "About Us – Precision Gauge Makers",
+	title: "Gauge Manufacturing in Coimbatore",
 	description:
-		"Learn about DSN Enterprises, a manufacturer of precision gauges and measuring instruments, committed to quality, innovation, and customer satisfaction.",
+		"How the Coimbatore works makes plain, thread, and API gauges: plant, process, ISO 9001, NABL calibration, and API 5B / 7-2 licences.",
 	alternates: {
 		canonical: "/about",
 	},
 	openGraph: {
-		title: "About DSN Enterprises",
+		title: "Gauge Manufacturing in Coimbatore",
 		description:
-			"Learn about DSN Enterprises, a manufacturer of precision gauges and measuring instruments, committed to quality, innovation, and customer satisfaction.",
+			"Plant, process, and people at the Coimbatore works — ISO 9001 manufacture with NABL calibration and API 5B / 7-2 licences.",
 		type: "website",
 		url: "/about",
 		images: ["/images/featured.png"],
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "About DSN Enterprises",
+		title: "Gauge Manufacturing in Coimbatore",
 		description:
-			"Learn about DSN Enterprises, a manufacturer of precision gauges and measuring instruments, committed to quality, innovation, and customer satisfaction.",
+			"The Coimbatore plant behind the gauges: manufacture, heat treatment, and NABL-traceable calibration.",
 		images: ["/images/featured.png"],
 	},
 };

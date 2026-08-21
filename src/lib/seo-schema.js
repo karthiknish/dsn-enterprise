@@ -101,6 +101,11 @@ export function buildOrganizationSchema() {
 		],
 		areaServed: [
 			{ "@type": "State", name: "Tamil Nadu" },
+			{ "@type": "State", name: "Karnataka" },
+			{ "@type": "State", name: "Telangana" },
+			{ "@type": "City", name: "Coimbatore" },
+			{ "@type": "City", name: "Bengaluru" },
+			{ "@type": "City", name: "Hyderabad" },
 			{ "@type": "Country", name: "India" },
 		],
 	};
@@ -177,7 +182,10 @@ export function buildProductLocationJsonLd({
 			areaServed: {
 				"@type": "City",
 				name: pageData.cityName,
-				containedInPlace: { "@type": "State", name: "Tamil Nadu" },
+				containedInPlace: {
+					"@type": "State",
+					name: pageData.state || "Tamil Nadu",
+				},
 			},
 		},
 		category: productSlug,
@@ -194,7 +202,10 @@ export function buildServiceLocationJsonLd({ pageData, path }) {
 		areaServed: {
 			"@type": "City",
 			name: pageData.cityName,
-			containedInPlace: { "@type": "State", name: "Tamil Nadu" },
+			containedInPlace: {
+				"@type": "State",
+				name: pageData.state || "Tamil Nadu",
+			},
 		},
 		url: getSiteUrl(path),
 	};

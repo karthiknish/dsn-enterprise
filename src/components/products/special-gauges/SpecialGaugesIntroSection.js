@@ -14,11 +14,11 @@ export default function SpecialGaugesIntroSection() {
 						Specialty & Custom Gauge Solutions
 					</h2>
 					<p className="text-lg text-gray-700 mb-6">
-						Not all measurement challenges can be solved with standard gauges. DSN
-						Enterprises specializes in manufacturing specialty gauges for unique
-						thread forms, complex profiles, and custom applications. Our
-						engineering team works closely with customers to develop precision
-						gauging solutions for their specific requirements.
+						DSN Enterprises is a custom gauges manufacturer in Coimbatore. When
+						a catalogue plug, ring, or thread gauge cannot inspect the feature —
+						a non-standard form, a spline, an ACME or buttress thread, or a
+						restricted-access combination — we design and make the gauge to your
+						drawing.
 					</p>
 					<p className="text-lg text-gray-700 mb-6">
 						Whether you need ACME thread gauges for power transmission, buttress

@@ -1,9 +1,9 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "Special Gauges – Custom & Specialty",
+	title: "Custom Gauge Manufacturer",
 	description:
-		"Custom and specialty gauges: ACME, buttress, trapezoidal, spline, taper, form, and limit gauges built to your specifications.",
+		"Custom gauges manufacturer in Coimbatore: ACME, buttress, spline, taper, form, and drawing-based gauges when a catalogue tool cannot inspect the feature."
 	keywords: [
 		"special gauges",
 		"custom gauges",

@@ -27,17 +27,23 @@ export default function CityLinks({ type, categorySlug }) {
 
 	if (cities.length === 0) return null;
 
+	const states = [...new Set(cities.map((city) => city.state).filter(Boolean))];
+	const regionBlurb =
+		states.length > 1
+			? "plants across Tamil Nadu, Bangalore, and Hyderabad"
+			: "plants across Tamil Nadu";
+
 	return (
 		<section className="py-16 bg-white">
 			<div className="container mx-auto px-4">
 				<div className="max-w-5xl mx-auto">
 					<h2 className="text-2xl md:text-3xl font-semibold mb-4 text-gray-900 text-center">
-						{item.name} Across Tamil Nadu
+						Where we supply {item.name}
 					</h2>
 					<p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
-						We manufacture and supply {item.name.toLowerCase()} to industrial
-						centres across Tamil Nadu from our Coimbatore facility. Explore
-						city-specific pages for local information and logistics details.
+						We manufacture {item.name.toLowerCase()} in Coimbatore and supply{" "}
+						{regionBlurb}. City pages cover local logistics and the gauging
+						problem that actually dominates there.
 					</p>
 					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 						{cities.map((city) => (

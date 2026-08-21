@@ -189,11 +189,11 @@ export default function ThreadGaugesPage() {
 							threaded holes.
 						</p>
 						<p className="text-lg text-gray-700 mb-6">
-							DSN Enterprises manufactures a comprehensive range of thread
-							gauges including plug gauges for internal threads, ring gauges for
-							external threads, and setting plugs for gauge calibration. Our
-							gauges are manufactured to international standards and are
-							available for all major thread forms used worldwide.
+							DSN Enterprises manufactures thread gauges in Coimbatore, including
+							NPT and NPTF pipe thread gauges, BSP/BSPT, Metric, Unified
+							(UNC/UNF), and BSW. Plug gauges inspect internal threads, ring
+							gauges inspect external threads, and setting plugs keep working
+							rings in tolerance.
 						</p>
 
 						{/* Thread Forms Grid */}

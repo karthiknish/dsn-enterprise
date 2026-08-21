@@ -12,7 +12,12 @@ export const faqCategories = [
 			{
 				question: "Where is DSN Enterprises located?",
 				answer:
-					"Our manufacturing and calibration facility is in Coimbatore, Tamil Nadu. From here we serve customers across Tamil Nadu (Chennai, Madurai, Salem, Trichy, Erode, Tiruppur, Thoothukudi), pan-India, and export markets. Technical support is available by phone at +91 93631 22005, email at info@dsnenterprises.com, and scheduled plant visits for drawing reviews and first-article discussions.",
+					"Our manufacturing and calibration facility is in Coimbatore, Tamil Nadu. From here we supply plants across Tamil Nadu (Chennai, Madurai, Salem, Trichy, Erode, Tiruppur, Thoothukudi), Bangalore (Peenya, Bidadi, Jigani, Hosur corridor), Hyderabad (Jeedimetla, Adibatla, Medchal), pan-India, and export markets. Technical support is available by phone at +91 93631 22005, email at info@dsnenterprises.com, and scheduled plant visits for drawing reviews and first-article discussions.",
+			},
+			{
+				question: "Do you supply gauges to Bangalore and Hyderabad?",
+				answer:
+					"Yes. Gauges are made in Coimbatore and dispatched by road: Bangalore in 1–2 working days via NH44 (Salem–Hosur), Hyderabad in 2–3 working days via NH44 (Bengaluru–Kurnool). We cover Peenya, Jigani, Bidadi, and the Hosur corridor in Karnataka, and Jeedimetla, Adibatla, Medchal, and Patancheru in Telangana. Calibration lots can be couriered overnight from Bangalore; Hyderabad plants usually consolidate a recall into one dispatch. Send the drawing and the industrial area with your enquiry so we can confirm transit and certificate requirements.",
 			},
 			{
 				question: "What industries do you serve?",
@@ -34,6 +39,41 @@ export const faqCategories = [
 				question: "Can you supply gauges to our drawing specifications?",
 				answer:
 					"Yes, custom gauge manufacturing from customer drawings is a core capability. Send your drawing with tolerance, material, thread specification, and any required standards (IS, ISO, DIN, API, ASTM). Our engineers review manufacturability, suggest practical tolerances if needed, and quote with a clear lead time before production. We can also reverse-engineer gauges from samples when drawings are unavailable.",
+			},
+		],
+	},
+	{
+		name: "Standards",
+		faqs: [
+			{
+				question: "What is the latest edition of IS 3455?",
+				answer:
+					"The current edition is still IS 3455:1971 (First Revision). BIS has not issued a later revision. It was reaffirmed in 2020, so 2020 is the reaffirmation year, not a new edition. There is no IS 3455:2020. IS 3455 (Part 1):1985 is a separate part covering indicating instruments rather than fixed limit gauges; both parts are current. The clause-level walkthrough is in the IS 3455 article on our blog.",
+			},
+			{
+				question: "Where can I download the IS 3455 PDF?",
+				answer:
+					"We do not host, and cannot email, the IS 3455 or IS 919 PDF. Those files are BIS copyright. Buy IS 3455:1971 and IS 919 (Part 2):2014 from the BIS e-Sale portal. Free copies circulating as IS 3455 standard PDF are unofficial and often incomplete. If you would rather not work through the tables, send us the drawing and we will apply the gauge tolerances for your sizes.",
+			},
+			{
+				question: "What is the difference between IS 3455 and IS 919?",
+				answer:
+					"IS 919 defines the limits and fits system — the tolerance grades and deviations that decide what size a hole or shaft may be. IS 3455 defines gauging practice — how you verify that workpiece with limit gauges, and what tolerance and wear allowance the gauge itself may carry. One sets the target; the other governs the instrument. IS 919 (Part 1):2014 is identical to ISO 286-1:2010; IS 3455 has no ISO equivalent.",
+			},
+			{
+				question: "Is IS 3455 the same as ISO 3455?",
+				answer:
+					"No. ISO 3455:2021 is a hydrometry standard for calibrating current-meters in open tanks. It has nothing to do with plain gauges. The ISO document that pairs with IS 919 is ISO 286. Searches for ISO 3455 standards that land on our IS 3455 article are looking at the wrong family of documents.",
+			},
+			{
+				question: "What does 6H mean on a metric thread callout?",
+				answer:
+					"6H is a tolerance class for an internal (tapped hole or nut) ISO metric thread: grade 6, position H, no allowance. It is inspected with a thread plug gauge. The matching external thread is usually 6g and needs a thread ring gauge. A callout such as M20×1.5-6H is incomplete without pitch and the internal/external letter; we will query a drawing that omits them rather than guess.",
+			},
+			{
+				question: "Do you manufacture NPT and NPTF thread gauges?",
+				answer:
+					"Yes. NPT and NPTF pipe thread gauges are part of the taper-thread range, alongside BSPT. We supply plug and ring gauges for pipe threads used in oil, gas, hydraulic, and pneumatic fittings, with NABL-traceable certificates. Share the designation, L1/L3 requirement if any, and whether the gauge is for a fitting or a pipe.",
 			},
 		],
 	},

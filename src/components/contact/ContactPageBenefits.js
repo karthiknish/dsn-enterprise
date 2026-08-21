@@ -40,8 +40,8 @@ export default function ContactPageBenefits() {
 					<div>
 						<h4 className="font-semibold text-gray-900">Prompt Delivery</h4>
 						<p className="text-gray-700">
-							Scheduled dispatch across Tamil Nadu; express calibration and
-							manufacturing when your line is down.
+							Scheduled dispatch across Tamil Nadu, Bangalore, and Hyderabad;
+							express calibration and manufacturing when your line is down.
 						</p>
 					</div>
 				</li>

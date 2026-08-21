@@ -213,7 +213,7 @@ export default function ServiceCityLanding({
 									{[
 										"Quick turnaround from Coimbatore lab",
 										"NABL-aligned calibration processes",
-										"Pickup and delivery across Tamil Nadu",
+										`Pickup and return for ${pageData.cityName}`,
 										"Detailed certificates with results",
 										"Engineering advice on gauge life",
 									].map((item) => (
@@ -247,7 +247,7 @@ export default function ServiceCityLanding({
 								{[
 									[
 										"30+ years in gauge making",
-										"Serving Tamil Nadu since 1990",
+										`Dispatch into ${pageData.cityName} from Coimbatore`,
 									],
 									["5000+ customers", "Automotive, textile, and engineering"],
 									[

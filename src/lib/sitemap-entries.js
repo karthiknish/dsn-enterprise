@@ -37,7 +37,7 @@ import { getSiteUrl, SITE_URL } from "@/lib/site";
  * Google that all 36 city pages changed every hour. They had not. Bump this
  * constant by hand when city page templates or copy actually change.
  */
-export const CITY_PAGES_LASTMOD = new Date("2026-02-01T00:00:00.000Z");
+export const CITY_PAGES_LASTMOD = new Date("2026-08-21T00:00:00.000Z");
 
 const NOW = () => new Date();
 

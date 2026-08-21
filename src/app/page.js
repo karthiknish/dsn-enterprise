@@ -20,7 +20,7 @@ export const metadata = {
 	// Kept under ~158 chars; the previous 218-char description was truncated
 	// mid-sentence in the SERP.
 	description:
-		"Precision plain, thread, and API gauges made in Coimbatore. ISO 9001 manufacture with NABL-traceable calibration. Supplying industry across Tamil Nadu.",
+		"Precision plain, thread, and API gauges made in Coimbatore. ISO 9001 manufacture with NABL-traceable calibration. Supplying plants in Tamil Nadu, Bangalore, and Hyderabad.",
 	keywords: [
 		"precision gauges",
 		"plain plug gauges",
@@ -31,6 +31,9 @@ export const metadata = {
 		"gauge manufacturers",
 		"Coimbatore",
 		"Tamil Nadu",
+		"Bangalore",
+		"Bengaluru",
+		"Hyderabad",
 		"India",
 		"API gauges",
 		"custom gauges",
@@ -55,7 +58,7 @@ export const metadata = {
 		title:
 			"DSN Enterprises - Precision Gauge Manufacturers in Coimbatore, India",
 		description:
-			"Leading manufacturer of precision gauges including plain plug gauges, ring gauges, thread gauges, and custom gauges. ISO certified quality with NABL calibration services.",
+			"Plain, thread, and custom gauges made in Coimbatore for plants in Tamil Nadu, Bangalore, and Hyderabad. ISO 9001 manufacture with NABL-traceable calibration.",
 		url: SITE_URL,
 		siteName: "DSN Enterprises",
 		type: "website",

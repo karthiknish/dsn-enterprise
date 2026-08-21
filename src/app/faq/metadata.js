@@ -1,11 +1,17 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "Gauge FAQ – Specs, Standards & Lead Times",
+	title: "IS 3455, Calibration & Gauge FAQ",
 	description:
-		"Answers on precision gauges, calibration services, API gauges, custom manufacturing, ordering, lead times, and quality certifications.",
+		"IS 3455 latest edition and PDF, IS 919 vs IS 3455, 6H thread callouts, NPT gauges, NABL calibration frequency, and lead times from Coimbatore."
 	keywords: [
 		"gauge FAQ",
+		"IS 3455",
+		"IS 919",
+		"IS 3455 latest edition",
+		"IS 3455 PDF",
+		"6H thread callout",
+		"NPT thread gauges",
 		"precision gauges questions",
 		"calibration services FAQ",
 		"API gauges FAQ",

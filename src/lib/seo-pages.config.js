@@ -27,48 +27,70 @@ export const CITIES = [
 		slug: "coimbatore",
 		description: "Manchester of South India",
 		tier: 1,
+		state: "Tamil Nadu",
 	},
 	{
 		name: "Chennai",
 		slug: "chennai",
 		description: "industrial hub of Tamil Nadu",
 		tier: 1,
+		state: "Tamil Nadu",
 	},
 	{
 		name: "Tiruppur",
 		slug: "tiruppur",
 		description: "knitwear capital of India",
 		tier: 2,
+		state: "Tamil Nadu",
 	},
 	{
 		name: "Erode",
 		slug: "erode",
 		description: "turmeric city and trading hub",
 		tier: 2,
+		state: "Tamil Nadu",
 	},
 	{
 		name: "Salem",
 		slug: "salem",
 		description: "major industrial city in western Tamil Nadu",
 		tier: 2,
+		state: "Tamil Nadu",
 	},
 	{
 		name: "Tiruchirappalli",
 		slug: "tiruchirappalli",
 		description: "industrial center in central Tamil Nadu",
 		tier: 2,
+		state: "Tamil Nadu",
+	},
+	{
+		name: "Bangalore",
+		slug: "bangalore",
+		description: "aerospace, auto, and machine-tool hub of Karnataka",
+		tier: 2,
+		state: "Karnataka",
+	},
+	{
+		name: "Hyderabad",
+		slug: "hyderabad",
+		description: "defence, aerospace, and energy hub of Telangana",
+		tier: 2,
+		state: "Telangana",
 	},
 	{
 		name: "Madurai",
 		slug: "madurai",
 		description: "cultural capital and industrial center",
 		tier: 3,
+		state: "Tamil Nadu",
 	},
 	{
 		name: "Thoothukudi",
 		slug: "thoothukudi",
 		description: "port city and industrial center",
 		tier: 3,
+		state: "Tamil Nadu",
 	},
 ];
 
@@ -104,6 +126,21 @@ export const PRODUCT_CITY_RELEVANCE = {
 	],
 	madurai: ["plain-plug-gauges", "snap-gauges"],
 	thoothukudi: ["api-master-gauges"],
+	bangalore: [
+		"plain-plug-gauges",
+		"thread-plug-gauges",
+		"thread-ring-gauges",
+		"snap-gauges",
+		"air-gauges",
+		"calibration-services",
+	],
+	hyderabad: [
+		"plain-plug-gauges",
+		"thread-plug-gauges",
+		"thread-ring-gauges",
+		"snap-gauges",
+		"calibration-services",
+	],
 };
 
 /** Which services are worth a dedicated city page. */
@@ -120,6 +157,12 @@ export const SERVICE_CITY_RELEVANCE = {
 	tiruchirappalli: ["gauge-calibration", "custom-gauge-manufacturing"],
 	madurai: ["gauge-calibration"],
 	thoothukudi: ["gauge-calibration"],
+	bangalore: [
+		"gauge-calibration",
+		"custom-gauge-manufacturing",
+		"gauge-repair-and-reconditioning",
+	],
+	hyderabad: ["gauge-calibration", "custom-gauge-manufacturing"],
 };
 
 // ---------------------------------------------------------------------------
@@ -382,6 +425,7 @@ export function generateProductCityPages() {
 				productName: product.name,
 				cityName: city.name,
 				tier: city.tier,
+				state: city.state,
 				priority,
 				title: buildProductTitle(product.name, city.name),
 				description: buildProductDescription(product, city),
@@ -391,7 +435,9 @@ export function generateProductCityPages() {
 					`${product.name} manufacturer ${city.name}`,
 					`${product.name} supplier ${city.name}`,
 					"DSN Enterprises",
-					"Tamil Nadu",
+					city.state,
+					...(city.slug === "bangalore" ? ["Bengaluru", "Bangalore gauges"] : []),
+					...(city.slug === "hyderabad" ? ["Hyderabad gauges"] : []),
 				],
 			});
 		}
@@ -417,6 +463,7 @@ export function generateServiceCityPages() {
 				serviceName: service.name,
 				cityName: city.name,
 				tier: city.tier,
+				state: city.state,
 				priority,
 				title: buildServiceTitle(service.name, city.name),
 				description: buildServiceDescription(service, city),
@@ -424,8 +471,9 @@ export function generateServiceCityPages() {
 					...service.keywords,
 					`${service.name} ${city.name}`,
 					`gauge calibration ${city.name}`,
-					"gauge services Tamil Nadu",
+					`gauge services ${city.state}`,
 					"DSN Enterprises Coimbatore",
+					...(city.slug === "bangalore" ? ["Bengaluru"] : []),
 				],
 			});
 		}

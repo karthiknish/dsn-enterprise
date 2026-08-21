@@ -4,8 +4,9 @@ This document records what the Search Console data actually said, what was
 changed in response, and what to do next. It exists so the next person does not
 re-derive the same conclusions or undo the changes by accident.
 
-All figures below come from the Search Console API for the 90 days ending
-2026-07-29. Reproduce them with `npm run seo:audit` and `npm run seo:opportunity`.
+All figures in section 1 come from the Search Console API for the 90 days ending
+2026-07-29. Section 2D is the 90 days ending 2026-08-21. Reproduce with
+`npm run seo:audit` and `npm run seo:opportunity`.
 
 ---
 
@@ -444,66 +445,138 @@ cannot.
 
 ---
 
+## 2D. Round three — 21 Aug 2026 Search Console pass
+
+Figures below are the Search Console API for the 90 days ending 2026-08-21,
+compared with the 29 Jul 2026 baseline in section 1.
+
+### What changed since round two
+
+| Metric | 29 Jul (90d) | 21 Aug (90d) |
+|---|---|---|
+| Clicks | 27 | **92** |
+| Impressions | 1,349 | **4,007** |
+| CTR | 2.00% | 2.30% |
+| Last 28d clicks | 7 (then falling) | **69** |
+| Last 28d vs prior 28d | impr +34%, clicks −56% | impr **+492%**, clicks **+667%** |
+
+The IS 3455 / IS 919 rewrite in 2A is the cause. That URL went from 105
+impressions / 0 clicks / pos 9.3 to **825 / 29 / pos 6.6**. "is 3455 standard"
+now clicks at 11.7% from position 5.6. City-intent demand is still 1 impression.
+
+Non-branded share of impressions rose from ~16% standards-only to **46% of all
+demand** (805 of 1,737 classified queries). Branded is no longer 78% of the pie.
+
+### What this pass actually changed
+
+Aimed at remaining zero-CTR queries on pages that already rank, plus
+query→page mismatches. No new URLs. No location pages. `leakgall` (118
+impressions, 0 clicks on the API blog) was ignored — it is adult-content
+navigational noise, not a metrology term.
+
+| Page | Evidence | Change |
+|---|---|---|
+| IS 3455 blog | "is 919" 79 impr @ 7.9, **1.3% CTR**; "is 3455 latest edition" 14 @ 5.6, 0 clicks; "iso 3455 standards" 14 @ 9.3, 0 clicks; PDF queries ~26 impr | Title now leads with **IS 3455:1971 latest edition and IS 919:2014**. New H2s: latest edition, IS vs ISO 3455 (ISO 3455:2021 is hydrometry), where to get the PDF. We still do not host the BIS file. |
+| `/products/plain-gauges` | "plain gauge" **pos 3.4, 12 impr, 0 clicks** | Title/desc/body now say manufacturer and name snap gauges. Position 3 with zero CTR is a snippet problem, not a ranking problem. |
+| `/products/api-gauges` vs API blog | "api gauges" split: blog pos 9.3 / product pos 26.4; "api pressure gauges" 9 impr @ 19.3 (wrong intent) | Product H1/title is now **API Thread Gauges**. Blog title no longer leads with generic "API Gauges". Both pages state these are thread gauges, not pressure gauges. |
+| Custom-gauges blog | "custom gauges manufacturer" pos **4.8**, 8 impr, 0 clicks. `/products/special-gauges` still has **0 impressions**. | Blog title/desc now say manufacturer. Special-gauges H1/title do too, so the hub can inherit the query once Google indexes it. |
+| `/products/thread-gauges` | Ranking for NPT/pipe-thread terms at pos 22–37 | Title leads with NPT, BSP, Metric. Body names NPT/NPTF as manufactured products. |
+| `/blog/...thread-callout...` | "metric tapped hole callout" 11 impr @ 27.9 | Title/desc name tapped holes; 6H section now says a capital letter is the tapped-hole class. |
+| `/about` | 677 impr, **0.4% CTR**, ranking for "dsn enterprises" @ 6.7 — cannibalising the homepage | Title/H1 no longer "About DSN Enterprises". Snippet is plant/process, so branded queries should return to `/`. |
+| `/faq` | Was 210 words and only ranked for the brand | New Standards category: latest edition, PDF, IS 3455 vs IS 919, IS vs ISO 3455, 6H, NPT. |
+
+### Deliberately not done
+
+**Do not add a competing `/resources/is-3455-…` URL.** Section 3.2 previously
+recommended a reference page. That URL would split the 29 clicks the blog post
+is now earning. Keep one ranking URL; point FAQ and product pages at it.
+
+**Do not reproduce BIS tolerance tables.** Still copyright. The PDF section
+sends readers to BIS e-Sale.
+
+**Do not raise `LOCATION_TIER_LIMIT`.** City queries remain ~0% of demand.
+
+### Re-measure
+
+After this deploy, wait 4–6 weeks and compare:
+
+- IS 919 CTR (was 1.3%) and "is 3455 latest edition" clicks
+- `/products/plain-gauges` CTR on "plain gauge" (was 0% at pos 3.4)
+- `/about` impressions for "dsn enterprises" (should fall; `/` should rise)
+- whether `/products/special-gauges` has any impressions at all
+
+---
+
+## 2E. Bangalore and Hyderabad (21 Aug 2026)
+
+Search Console still shows ~0 city-intent queries for the Tamil Nadu
+location pages. That is why Madurai/Thoothukudi stay at tier 3, and why
+this is **not** a return to the 80-URL product × city matrix.
+
+Bangalore and Hyderabad were added anyway, as a deliberate bid for two
+metros that actually have aerospace, automotive, defence, and machine-tool
+demand. They are **tier 2** (they emit under the current
+`LOCATION_TIER_LIMIT` of 2) with relevance gates, not a full catalogue dump.
+
+| City | Products | Services | Why these, not others |
+|---|---|---|---|
+| Bangalore | plain plug, thread plug, thread ring, snap, air, calibration | calibration, custom, repair | Peenya machine tools, Bidadi–Hosur auto, Jigani electronics, Devanahalli aerospace. No API — there is no OCTG cluster. |
+| Hyderabad | plain plug, thread plug, thread ring, snap, calibration | calibration, custom | Adibatla/HAL defence-aerospace, Jeedimetla engineering, BHEL Ramachandrapuram energy. No air gauges (thin-wall electronics is a Bengaluru problem). No API. |
+
+Each city has a full `CITY_PROFILES` entry (estates, corridor, distance,
+tolerance focus, local proof, buying pattern) plus handwritten
+`CITY_PRODUCT_NOTES` / `CITY_SERVICE_NOTES`. URL slug is `bangalore` (the
+query people type); body copy also says Bengaluru.
+
+Hub pages that Google already crawls — `/`, `/about`, `/faq`, `/industries`,
+`/products`, `/calibration`, `/contact` — now name both cities. That is the
+higher-probability index path. The new location URLs are the cluster-specific
+landing pages, internally linked from those hubs via `CityLinks`.
+
+**Do not** add Pune, Ahmedabad, or a second wave of cities until
+`npm run seo:coverage` shows the Bangalore/Hyderabad URLs are actually
+crawled. **Do not** add API gauge pages for these two cities.
+
+---
+
 ## 3. Open items — not yet done
 
-These are ranked by expected value. Items 1 and 2 are worth more than everything
-in section 2 combined, because they address demand that already exists.
+These are ranked by expected value.
 
 ### 1. Fix the multi-host duplication (infrastructure, not code)
 
-Three hosts currently serve indexed content:
+Still live as of 21 Aug 2026:
 
 ```
-https://www.dsnenterprises.in   30 urls   1,615 impr   28 clicks
-http://dsnenterprises.in         1 url       95 impr    0 clicks
-https://dsnenterprises.in        1 url       10 impr    0 clicks
+https://www.dsnenterprises.in   (canonical)
+http://dsnenterprises.in        74 impr, 0 clicks, pos 5.5
+https://dsnenterprises.in       65 impr, 0 clicks, pos 9.5
 ```
 
-105 impressions and their link equity are stranded on hosts that should redirect.
-Fix at the DNS/hosting layer: `http://` and apex non-www must both 301 to
-`https://www.`. This cannot be fixed in Next.js config alone.
+~139 impressions and their link equity are stranded on hosts that should
+redirect. Fix at the DNS/hosting layer: `http://` and apex non-www must both
+301 to `https://www.`. This cannot be fixed in Next.js config alone.
 
-### 2. Convert the standards traffic that already ranks
+### 2. Convert remaining standards CTR (in progress, see 2D)
 
-`/blog/using-is-919-and-is-3455-to-make-better-plain-gauges` earns 131
-impressions at position 9.0 with a **0% CTR**. Related queries:
+The 29 Jul zero-CTR problem is no longer zero — the IS 3455 post now earns 29
+clicks. Remaining gaps on that URL are IS 919 CTR, "latest edition", ISO-vs-IS
+confusion, and PDF intent. Those are the 2D title/body changes. **Do not
+create a second standards URL.**
 
-| Query | Impressions | Position | Clicks |
-|---|---|---|---|
-| is 3455 | 40 | 9.7 | 0 |
-| is3455 | 31 | 8.0 | 0 |
-| is 3455 standard | 20 | 10.0 | 0 |
-| is 919 | 11 | 10.4 | 0 |
+### 3. `/products` and `/products/special-gauges` indexing
 
-This is proven, non-branded, commercially-adjacent demand that the site already
-ranks for and converts at zero. Two actions:
+`/products/special-gauges` still had **zero** Search Console impressions on
+21 Aug. The hub copy and title now match "custom gauges manufacturer", which
+the custom-gauges *blog* already ranks for at position 4.8. Worth a coverage
+check with `npm run seo:coverage` after this deploy; do not add more custom-
+gauge URLs until this one is indexed.
 
-- Rewrite that post's title and meta description for click appeal — someone
-  searching "is 3455" wants the tolerance tables, so say that in the title.
-- Build a proper `/resources/is-3455-plain-gauge-tolerances` reference page with
-  the actual tolerance tables. A reference page will out-rank a blog post for a
-  standards lookup, and it can link directly to the plain-gauge product pages.
+### 4. FAQ was thin — addressed in 2D
 
-**Standards content out-earns location content 114 impressions to 0.** Weight
-future effort accordingly.
-
-### 3. Thin core pages
-
-Rendered word counts: `/faq` 210, `/contact` 284, `/thank-you` 175.
-`/faq` is the one that matters — it should absorb the standards and lead-time
-questions people actually search for.
-
-### 4. `/products` and `/products/special-gauges` are not indexed
-
-Both return "Discovered/Crawled – currently not indexed" despite being hub
-pages. They are the strongest internal-link sources on the site. Worth
-investigating separately once the location-page churn has settled.
-
-### 5. Trend warning
-
-Last 28 days vs prior 28 days: impressions +34%, **clicks −56%** (16 → 7).
-Rising impressions with falling clicks is a CTR problem, which is consistent
-with the metadata truncation fixed in 2.4. Re-measure after this deploys.
+The Standards category is the content that searchers were already asking the
+IS 3455 post for. `/contact` and `/thank-you` word counts are not a ranking
+problem.
 
 ---
 
@@ -549,7 +622,9 @@ setting up a new environment needs a copy out of band — it is not in the repo.
    get crawled, and the reason was content quality. Adding cities back without
    adding genuinely city-specific content will reproduce the same outcome.
 2. **Raise `LOCATION_TIER_LIMIT` only on evidence.** Run `npm run seo:coverage`
-   and confirm the current tier is actually indexed first.
+   and confirm the current tier is actually indexed first. Bangalore and
+   Hyderabad were added at tier 2 with full profiles (section 2E); that is not
+   a licence to turn the tier-3 Tamil Nadu cities on, or to add more metros.
 3. **A new city needs a full `CITY_PROFILES` entry** — distance, corridor, nearby
    towns, tolerance focus, local proof, buying pattern — plus at least one
    `CITY_PRODUCT_NOTES` entry. A city added with only a name and a description
@@ -560,3 +635,6 @@ setting up a new environment needs a copy out of band — it is not in the repo.
    certifications, client names, accreditation numbers. An earlier draft of the
    `/about` title claimed "Since 1998"; nothing in the codebase supported it and
    it was removed. Confirm with the client before making claims of that kind.
+6. **Do not add a second IS 3455 / IS 919 URL.** The blog post is now the ranking
+   page (29 clicks). A `/resources/` duplicate would split that. Point FAQ and
+   product pages at the existing slug. Do not host BIS PDFs.

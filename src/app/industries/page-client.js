@@ -50,7 +50,7 @@ const industries = [
 		name: "Automotive",
 		icon: UilCar,
 		description:
-			"Thread and plain gauges for engine, transmission, and chassis lines, supporting tier suppliers who need repeatable GO/NO-GO acceptance.",
+			"Thread and plain gauges for engine, transmission, and chassis lines, including the Bangalore–Hosur corridor and Hyderabad auto ancillaries, for tier suppliers who need repeatable GO/NO-GO acceptance.",
 		applications: [
 			"Engine component inspection",
 			"Transmission shaft verification",
@@ -72,7 +72,7 @@ const industries = [
 		name: "Aerospace & Defense",
 		icon: UilPlane,
 		description:
-			"Tight-tolerance thread and plain gauges for fasteners, landing gear, and avionics housings, documented for defence and aerospace QA.",
+			"Tight-tolerance thread and plain gauges for fasteners, housings, and defence work around Bengaluru and Hyderabad (Adibatla), documented for aerospace and defence QA.",
 		applications: [
 			"Aircraft fastener inspection",
 			"Landing gear component verification",
@@ -213,6 +213,51 @@ export default function IndustriesPage() {
 					{ href: "/industries", label: "Industries" },
 				]}
 			/>
+
+			<section className="py-12 md:py-16 bg-white border-b border-gray-200/80">
+				<div className="container mx-auto px-4">
+					<div className="max-w-5xl mx-auto">
+						<h2 className="text-2xl md:text-3xl font-semibold text-gray-900 text-center mb-3">
+							Where we supply
+						</h2>
+						<p className="text-gray-600 text-center max-w-2xl mx-auto mb-10 leading-relaxed">
+							Gauges are made in Coimbatore and dispatched to the plants that
+							actually buy them — not a map of every city in South India.
+						</p>
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+							{[
+								{
+									region: "Tamil Nadu",
+									detail:
+										"Coimbatore works plus Chennai, Tiruppur, Erode, Salem, and Trichy. Same-day to two-day road freight.",
+								},
+								{
+									region: "Bangalore",
+									detail:
+										"Peenya, Jigani, Bidadi, Electronic City, and the Hosur corridor. 1–2 working days on NH44. Aerospace, auto, and machine tools.",
+								},
+								{
+									region: "Hyderabad",
+									detail:
+										"Jeedimetla, Adibatla, Medchal, Patancheru. 2–3 working days on NH44. Defence, aerospace, and energy fabrication.",
+								},
+							].map((item) => (
+								<div
+									key={item.region}
+									className="bg-surface-subtle rounded-2xl border border-gray-200/80 p-6"
+								>
+									<h3 className="text-lg font-semibold text-gray-900 mb-2">
+										{item.region}
+									</h3>
+									<p className="text-gray-600 text-sm leading-relaxed">
+										{item.detail}
+									</p>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+			</section>
 
 			{/* Industry Cards */}
 			<section className="py-16 md:py-20 bg-surface-subtle">

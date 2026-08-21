@@ -2,9 +2,9 @@ import { alternatesFor } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "Thread Gauges – Plug, Ring & Setting Plugs",
+	title: "NPT, BSP & Metric Thread Gauges",
 	description:
-		"Thread plug gauges, ring gauges, setting plugs, and taper gauges. Metric, Unified, BSW, BSP, NPT, and API threads. NABL certified.",
+		"NPT and NPTF pipe thread gauge manufacturer, plus BSP, Metric, Unified, and BSW. Plug, ring, and setting plugs with NABL-traceable certificates."
 	keywords: [
 		"thread gauges",
 		"thread plug gauges",

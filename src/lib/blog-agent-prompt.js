@@ -7,7 +7,7 @@
  *   2. "Non-slop" is defined as concrete, checkable rules, not as a vibe.
  */
 
-export const COMPANY_CONTEXT = `DSN Enterprises manufactures precision gauges in Coimbatore, India: plain plug and ring gauges, thread plug and ring gauges, API thread gauges, snap gauges, taper gauges and custom/special gauges, plus calibration, gauge repair and reconditioning services. Readers are quality engineers, CNC shop owners, calibration lab technicians and purchase engineers in automotive, aerospace, oil & gas and general engineering — mostly Indian manufacturers, some export. They know what a gauge is. They do not need the basics explained; they need judgement, numbers and procedure.`;
+export const COMPANY_CONTEXT = `DSN Enterprises manufactures precision gauges in Coimbatore, India: plain plug and ring gauges, thread plug and ring gauges, API thread gauges, snap gauges, taper gauges and custom/special gauges, plus calibration, gauge repair and reconditioning services. Readers are quality engineers, CNC shop owners, calibration lab technicians and purchase engineers in automotive, aerospace, oil & gas and general engineering — mostly Indian manufacturers in Tamil Nadu, Bangalore, and Hyderabad, some export. They know what a gauge is. They do not need the basics explained; they need judgement, numbers and procedure.`;
 
 export const EDITORIAL_RULES = `WRITING STANDARD (non-negotiable):
 

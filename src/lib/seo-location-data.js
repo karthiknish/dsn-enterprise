@@ -263,6 +263,83 @@ export const CITY_PROFILES = {
 		buyingPattern:
 			"Port-side contractors here buy against API programme requirements, so the certificate has to name the applicable API spec and revision, not just the measured size.",
 	},
+	bangalore: {
+		industrialAreas: [
+			"Peenya Industrial Area",
+			"Jigani–Bommasandra",
+			"Bidadi",
+			"Electronic City",
+			"KIADB Aerospace Park, Devanahalli",
+		],
+		keyIndustries: [
+			"Aerospace and defence suppliers",
+			"Automotive OEM and tier-1 plants (Bidadi–Hosur corridor)",
+			"Machine tools and precision job shops (Peenya)",
+			"Electronics and avionics housings",
+		],
+		logistics:
+			"Bangalore consignments leave Coimbatore by road on NH44 via Salem and Hosur. Overnight trucking is the normal pattern; air freight to BLR is used when a line is stopped.",
+		localContext:
+			"Bangalore (Bengaluru) is the aerospace, automotive, and machine-tool centre of Karnataka. Plants in Peenya, Jigani, Bidadi, and the Devanahalli aerospace park need GO/NO-GO and air gauging that will survive a customer source inspection, not just a local goods-in check.",
+		distanceKm: 370,
+		transit: "1–2 working days",
+		corridor: "NH44 via Salem and Hosur",
+		sector: "aerospace, automotive, and machine tools",
+		transitPhrase: "Delivered in 1–2 working days",
+		nearbyTowns: [
+			"Hosur",
+			"Bidadi",
+			"Nelamangala",
+			"Doddaballapur",
+			"Tumakuru",
+			"Jigani",
+		],
+		toleranceFocus:
+			"source inspection and PPAP/AS9100 audits, where the customer's gauge is brought to the line and compared with yours",
+		localProof:
+			"Peenya and Bidadi plants typically keep a matched GO/NO-GO pair on the line and a reference set in the quality room, so we supply working and setting members together rather than as one-offs.",
+		buyingPattern:
+			"Bangalore buyers usually need the calibration certificate number on the invoice and the governing spec (IS, ISO, or an aerospace standard) named on the certificate so incoming QA can clear the lot.",
+	},
+	hyderabad: {
+		industrialAreas: [
+			"Jeedimetla",
+			"Balanagar",
+			"Medchal",
+			"Adibatla Aerospace SEZ",
+			"Patancheru",
+			"Hardware Park, Shamshabad",
+		],
+		keyIndustries: [
+			"Defence and aerospace (Adibatla, HAL Hyderabad suppliers)",
+			"Energy and heavy fabrication (BHEL Ramachandrapuram belt)",
+			"Auto ancillaries and general engineering (Jeedimetla)",
+			"Pharma and process equipment",
+		],
+		logistics:
+			"Hyderabad is a two- to three-day road freight from Coimbatore on NH44 via Salem, Bengaluru, and Kurnool. Urgent lots go by air to HYD; routine recall lots consolidate into one dispatch.",
+		localContext:
+			"Hyderabad’s defence, aerospace, and energy-fabrication clusters need traceable thread and plain gauges. Adibatla and Jeedimetla plants in particular write NABL into the purchase order, so the certificate wording matters as much as the size.",
+		distanceKm: 890,
+		transit: "2–3 working days",
+		corridor: "NH44 via Salem, Bengaluru, and Kurnool",
+		sector: "defence, aerospace, and energy fabrication",
+		transitPhrase: "Delivered in 2–3 working days",
+		nearbyTowns: [
+			"Secunderabad",
+			"Medchal",
+			"Patancheru",
+			"Adibatla",
+			"Shamshabad",
+			"Sangareddy",
+		],
+		toleranceFocus:
+			"defence and energy first-article inspection, where the purchase order names NABL and a governing spec, and a certificate that only lists a size will be rejected",
+		localProof:
+			"Jeedimetla and Adibatla quality rooms typically hold the working gauge on the line and the master in a locked cabinet; we ship them as a documented pair so the next audit can show the chain.",
+		buyingPattern:
+			"Hyderabad POs often consolidate several sizes into one dispatch to keep freight down, and they want accredited certificates by default rather than as an optional line item.",
+	},
 };
 
 export const PRODUCT_PROFILES = {
@@ -393,7 +470,7 @@ export const PRODUCT_PROFILES = {
 			{ label: "Scope", value: "Plain, thread, snap, and special gauges" },
 			{ label: "Traceability", value: "NABL-aligned processes where required" },
 			{ label: "Turnaround", value: "Standard 3–5 days; express available" },
-			{ label: "Pickup", value: "Collection from major TN industrial cities" },
+			{ label: "Pickup", value: "Collection from South Indian industrial cities" },
 			{ label: "Documentation", value: "Detailed certificates with results" },
 			{ label: "Advice", value: "Fit-for-use and replacement guidance" },
 		],
@@ -485,6 +562,10 @@ export const CITY_PRODUCT_NOTES = {
 			"Boiler and pressure-part assemblies put the tapped hole deep inside a welded structure. Standard plug lengths bottom out before reaching full engagement, so extended-reach members are the norm for BHEL-linked suppliers in Thuvakudi.",
 		tiruppur:
 			"Knitting machine rebuilds involve small threads in aluminium housings that strip easily. A NO-GO member that is forced in will damage the thread it is meant to judge, so operator training matters here as much as gauge specification.",
+		bangalore:
+			"Aerospace and auto plants around Peenya, Bidadi, and Devanahalli tap UNJ and metric holes that a customer source inspector will re-check with their own plug. The usual failure is a worn GO member that still looks clean and starts passing threads the auditor then rejects. Matched GO/NO-GO pairs on a recall tied to the audit calendar prevent that.",
+		hyderabad:
+			"Defence and aerospace housings around Adibatla strip if a NO-GO is forced into aluminium or titanium. On BHEL Ramachandrapuram pressure-part work the tapped hole sits inside a welded assembly, so extended-reach members are the norm rather than a catalogue-length plug.",
 	},
 	"plain-plug-gauges": {
 		chennai:
@@ -497,6 +578,10 @@ export const CITY_PRODUCT_NOTES = {
 			"Wet-processing and dyeing equipment means gauges live in a humid, chemically active atmosphere. Corrosion pits the measuring face before mechanical wear matters, so storage discipline drives gauge life more than material choice.",
 		madurai:
 			"Rubber and moulding tooling is checked cold but runs hot. Specifying the gauge against the working condition rather than the ambient drawing dimension avoids parts that pass inspection and fail in service.",
+		bangalore:
+			"Peenya machine-tool and auto-component shops run small-to-medium bores at high volume. Progressive GO/NO-GO speeds the check, but separate members recertify cheaper when only the GO end wears — the usual pattern on abrasive cast-iron work in that estate.",
+		hyderabad:
+			"Jeedimetla and Medchal engineering shops bore pump, valve, and fabrication parts. Dust from fabrication floors loads the GO member with grit, so carbide-faced plugs last longer here than a tool-steel member ever will in a clean machine shop.",
 	},
 	"thread-ring-gauges": {
 		chennai:
@@ -505,6 +590,10 @@ export const CITY_PRODUCT_NOTES = {
 			"Threaded bar stock in the steel cluster arrives with scale and inconsistent lead. Adjustable ring gauges let inspection re-set to the reference standard rather than scrapping the gauge when it drifts.",
 		tiruchirappalli:
 			"Large-diameter threads on pressure parts often exceed standard ring sizes. These are drawing-based builds with a setting plug supplied alongside so the ring can be verified locally.",
+		bangalore:
+			"Bidadi and Hosur automotive shafts are checked with rings matched to the plugs used at the tap. Supplying them as a set keeps the acceptance envelope the same when the part moves from a Peenya job shop onto a tier-1 line.",
+		hyderabad:
+			"Studs and shafts feeding Hyderabad defence and energy assembly need rings matched to the plugs used upstream. Large-diameter rings for Ramachandrapuram work are drawing-based, with a setting plug so the ring can be verified in the plant.",
 	},
 	"api-master-gauges": {
 		thoothukudi:
@@ -523,12 +612,18 @@ export const CITY_PRODUCT_NOTES = {
 			"High-throughput bar sorting needs hardened anvils. Standard tool-steel contacts flatten quickly against scaled stock, so we specify wear-resistant faces for this cluster by default.",
 		madurai:
 			"Rubber-covered rollers and moulded shafts are checked with snap gauges because a plug or ring would deform the surface being measured.",
+		bangalore:
+			"Turned shafts in Peenya are checked at the machine, not in a metrology room. A fixed snap gauge survives that handling; an adjustable one drifts after a few weeks of being knocked against the bench.",
+		hyderabad:
+			"Turned OD on Jeedimetla auto and general-engineering lines is checked at the machine. Fixed snaps with hardened anvils get used; micrometers that live in the office do not.",
 	},
 	"air-gauges": {
 		coimbatore:
 			"Thin-wall pump components distort under contact measurement. Pneumatic comparative gauging reads the bore without touching it, which is why local pump manufacturers use air tooling for final inspection even when a plug gauge would be cheaper.",
 		chennai:
 			"Automated inspection cells on automotive lines need a measurement that outputs a value rather than a pass/fail. Air gauging integrates into fixtures and feeds SPC directly.",
+		bangalore:
+			"Electronic and avionics housings around Jigani and Electronic City are thin-wall and distort under a contact plug. Air tooling reads the bore without touching it, which is why this cluster uses pneumatic comparative gauging for final inspection even when a steel plug would be cheaper.",
 	},
 	"calibration-services": {
 		coimbatore:
@@ -539,6 +634,10 @@ export const CITY_PRODUCT_NOTES = {
 			"Proximity supports a rolling pickup: gauges go out on one trip and come back on the next, which suits shops that cannot spare a gauge for a week.",
 		tiruchirappalli:
 			"Tenders in the Trichy cluster commonly require NABL-traceable certification by name, so accredited documentation is issued by default rather than on request.",
+		bangalore:
+			"Aerospace and automotive programmes around Bengaluru name NABL on the purchase order. Couriers from Peenya, Jigani, and Bidadi typically land overnight; we hold slots against audit dates rather than first-come, because a missed recall is an AS9100 or IATF finding, not just a late gauge.",
+		hyderabad:
+			"Defence POs from the Hyderabad belt commonly name NABL-traceable certification. Road freight is 2–3 working days, so plants consolidate a recall lot rather than sending gauges one at a time. Accredited documentation is issued by default for this cluster.",
 	},
 };
 
@@ -565,6 +664,10 @@ export const CITY_SERVICE_NOTES = {
 			"Rubber and moulding work means gauges are often specified against a working temperature rather than the ambient drawing dimension. We record the reference condition on the certificate so the result is interpretable later.",
 		thoothukudi:
 			"API gauges returning from dockside inspection arrive with salt-air exposure. Cleaning and stabilisation matter more here than anywhere else in the state, and the certificate notes surface condition on receipt so field crews can see whether storage or usage caused the change.",
+		bangalore:
+			"AS9100 and IATF recall dates in the Bengaluru belt are fixed months ahead. We reserve lab capacity against those dates for Peenya, Bidadi, and Jigani lots rather than working purely first-come. Courier overnight from Bangalore is the usual inbound; the certificate has to name NABL because that is what the auditor will look for.",
+		hyderabad:
+			"Defence and energy POs from Jeedimetla and Adibatla name NABL by default. Transit is 2–3 working days each way, so consolidating a recall lot is cheaper than sending gauges one at a time. Accredited documentation is issued as standard for this cluster, not as an optional extra.",
 	},
 	"custom-gauge-manufacturing": {
 		coimbatore:
@@ -573,6 +676,10 @@ export const CITY_SERVICE_NOTES = {
 			"Custom work for the Chennai automotive belt usually has to satisfy a customer-specified inspection standard, not just the drawing. We confirm which standard governs before quoting, because it changes the gauge tolerance class and therefore the price and lead time.",
 		tiruchirappalli:
 			"Boiler and pressure-part work drives most custom requests here: extended-reach members, oversized rings, and setting masters for threads that sit deep inside welded assemblies. These are drawing-based builds where reach and access matter as much as the thread form itself.",
+		bangalore:
+			"UNJ, MS/AN, and drawing-based aerospace threads are the usual custom request from the Bengaluru belt. We confirm which standard governs (ISO 5855 / AS8879 versus a company spec) before quoting, because it changes the gauge tolerance class and the certificate wording the auditor will look for.",
+		hyderabad:
+			"Custom work here splits two ways: aerospace and defence threads to a named spec (Adibatla, HAL Hyderabad suppliers), and long-reach or oversized members for energy fabrication at Ramachandrapuram. Confirm the governing spec and the access constraint before we quote — they change both the design and the lead time.",
 	},
 	"gauge-repair-and-reconditioning": {
 		coimbatore:
@@ -581,6 +688,8 @@ export const CITY_SERVICE_NOTES = {
 			"High handling frequency on knitting machine gauges means damage is usually mechanical — dropped members, dinged faces — rather than gradual wear. Those are often economically repairable, which matters when the same gauge is checked between every shift.",
 		salem:
 			"Abrasive wear in the steel cluster takes material off evenly rather than locally, so reconditioning here is about deciding whether enough stock remains to regrind to a valid limit. We report remaining service life alongside the repair so replacement can be planned rather than forced.",
+		bangalore:
+			"Peenya job shops handle gauges every shift, so damage is usually mechanical — dinged faces, dropped members — rather than slow wear. Those are often economically repairable, which matters when the same plug is the only one on a cell and a replacement would stop the line.",
 	},
 };
 

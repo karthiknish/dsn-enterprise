@@ -4,7 +4,7 @@ import { getSiteUrl, SITE_URL } from "@/lib/site";
 export const metadata = {
 	title: "Gauge Calibration – NABL Accredited",
 	description:
-		"NABL accredited gauge calibration for plain, thread, and API gauges. Express calibration, repair, and on-site services with traceable certificates.",
+		"NABL accredited gauge calibration for plain, thread, and API gauges. Express turnaround, repair, and pickup from Tamil Nadu, Bangalore, and Hyderabad.",
 	keywords: [
 		"gauge calibration",
 		"NABL calibration",

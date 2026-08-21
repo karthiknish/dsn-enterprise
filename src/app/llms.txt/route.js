@@ -50,7 +50,7 @@ export async function GET() {
 
 	// Free-form context. No headings here, per the spec.
 	push(
-		"Contact: +91 93631 22005, info@dsnenterprises.com. Manufacturing and calibration facility in Coimbatore; supplies across Tamil Nadu, pan-India, and export markets.",
+		"Contact: +91 93631 22005, info@dsnenterprises.com. Manufacturing and calibration facility in Coimbatore; supplies Tamil Nadu, Bangalore, Hyderabad, pan-India, and export markets.",
 	);
 	push();
 	push(
@@ -122,7 +122,7 @@ export async function GET() {
 		push("## Location pages");
 		push();
 		push(
-			`These cover supply and service for specific Tamil Nadu industrial clusters. Each carries city-specific logistics, the dominant gauging problem in that cluster, and local industry context. ${productCity.length} product-city and ${serviceCity.length} service-city pages are currently published.`,
+			`These cover supply and service for specific industrial clusters in Tamil Nadu, Bangalore, and Hyderabad. Each carries city-specific logistics, the dominant gauging problem in that cluster, and local industry context. ${productCity.length} product-city and ${serviceCity.length} service-city pages are currently published.`,
 		);
 		push();
 		for (const p of productCity) {

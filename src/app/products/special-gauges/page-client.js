@@ -14,8 +14,8 @@ export default function SpecialGaugesPage() {
 	return (
 		<div>
 			<ProductCategoryHero
-				title="Special Gauges"
-				quoteProduct="Special Gauges"
+				title="Custom & Special Gauges"
+				quoteProduct="Custom Gauges"
 				description={pageHeroes.productCategoryHeroes.specialGauges}
 				image={{
 					src: "/images/thread-setting-plug-gauge.png",

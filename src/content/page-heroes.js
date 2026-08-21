@@ -2,20 +2,20 @@
 
 export const pageHeroes = {
 	about:
-		"Coimbatore-based manufacturer of precision plain, thread, and API gauges, with ISO systems, NABL calibration, and engineering support from drawing to dispatch.",
+		"The Coimbatore works: how plain, thread, and API gauges are made, heat-treated, and calibrated, with ISO 9001, NABL, and API 5B / 7-2 licences.",
 	services:
 		"Calibration, custom gauge manufacturing, and certification from one Coimbatore facility, so your measurement programme stays traceable, on-spec, and audit-ready.",
 	products:
-		"Plain, thread, API, and special gauges built to drawing, with heat-treated gauge steel, documented calibration, and supply across Tamil Nadu and export markets.",
+		"Plain, thread, API, and special gauges built to drawing, with heat-treated gauge steel, documented calibration, and supply across Tamil Nadu, Bangalore, and Hyderabad.",
 	contact:
 		"Share your drawing, gauge list, or calibration requirement. Our engineers respond with lead time, scope, and pricing, usually within one business day.",
-	faq: "Clear answers on products, API gauges, calibration, lead times, and ordering, written for quality engineers and procurement teams.",
+	faq: "IS 3455 and IS 919, 6H thread callouts, NPT gauges, NABL calibration frequency, lead times, and ordering — written for quality engineers.",
 	calibration:
-		"NABL-accredited calibration for plain, thread, and API gauges, with repair, express turnaround, and pickup across Tamil Nadu from our Coimbatore laboratory.",
+		"NABL-accredited calibration for plain, thread, and API gauges, with repair, express turnaround, and pickup from Tamil Nadu, Bangalore, and Hyderabad.",
 	quality:
 		"Quality is built into every stage, from material certification and SUB-ZERO treatment to final inspection and traceable calibration certificates.",
 	industries:
-		"Precision gauging for the sectors that depend on thread integrity and dimensional control, from OCTG and automotive to aerospace, marine, and heavy engineering.",
+		"Precision gauging for automotive, aerospace, oil and gas, and engineering plants in Tamil Nadu, Bangalore, and Hyderabad.",
 	resources:
 		"Catalogues, technical references, certificates, and forms to specify, order, and maintain your gauge programme.",
 	blog: "Practical guidance on gauging, calibration, standards, and shop-floor quality, from the DSN engineering team.",
@@ -23,12 +23,12 @@ export const pageHeroes = {
 		"Your enquiry is with our team. We will review the details and respond shortly.",
 	productCategoryHeroes: {
 		plainGauges:
-			"GO/NO-GO plain plug, ring, snap, and setting masters from 1 mm to 250 mm, manufactured in OHNS (W) or carbide with certificates aligned to your tolerance band.",
+			"Plain gauge manufacturer in Coimbatore: GO/NO-GO plug, ring, snap, and setting masters from 1 mm to 250 mm, in OHNS (W) or carbide, with certificates aligned to your tolerance band.",
 		threadGauges:
-			"Thread plug, ring, and setting gauges for Metric, Unified, BSP, NPT, and special forms, matched pairs and progressive designs for production and incoming inspection.",
+			"NPT and NPTF pipe thread gauges, plus BSP, Metric, Unified, and BSW. Plug, ring, and setting gauges as matched pairs for production and incoming inspection.",
 		apiGauges:
-			"API 5B and API 7-2 licensed gauges for casing, tubing, line pipe, and rotary shouldered connections, with field-ready packaging and traceable calibration.",
+			"API thread gauges — not pressure gauges — licensed to API 5B and API 7-2 for casing, tubing, line pipe, and rotary shouldered connections, with field-ready packaging and traceable calibration.",
 		specialGauges:
-			"ACME, buttress, spline, and fully custom profiles manufactured to your drawing, with feasibility review before we cut metal.",
+			"Custom gauges manufacturer for ACME, buttress, spline, and fully drawing-based profiles, with a feasibility review before we cut metal.",
 	},
 };

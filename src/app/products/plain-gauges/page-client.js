@@ -151,18 +151,18 @@ export default function PlainGaugesPage() {
 							What are Plain Gauges?
 						</h2>
 						<p className="text-lg text-gray-700 mb-6">
-							Plain gauges are precision measuring instruments used to verify
-							the dimensional accuracy of cylindrical features such as holes,
-							shafts, and bores. They are essential tools in manufacturing
-							quality control, providing quick and reliable pass/fail inspection
-							without the need for complex measuring equipment.
+							A plain gauge is a GO/NO-GO limit gauge for a cylindrical hole or
+							shaft — plug, ring, or snap — that gives a pass/fail result without
+							a measured reading. Shops use them for production acceptance and
+							incoming inspection when a comparator would be slower than the
+							line.
 						</p>
 						<p className="text-lg text-gray-700 mb-6">
-							At DSN Enterprises, we manufacture a comprehensive range of plain
-							gauges including plug gauges, ring gauges, setting masters, and
-							snap gauges. All our gauges are manufactured using premium grade
-							materials and undergo rigorous quality checks to ensure accuracy
-							and longevity.
+							DSN Enterprises is a plain gauge manufacturer in Coimbatore. We
+							make plug gauges, ring gauges, snap gauges, measuring pins, and
+							setting masters from 1 mm to 250 mm in OHNS or carbide, with
+							NABL-traceable certificates aligned to the tolerance band on your
+							drawing.
 						</p>
 						<div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
 							<div className="text-center p-5 bg-white rounded-xl border border-gray-200/80 shadow-sm">

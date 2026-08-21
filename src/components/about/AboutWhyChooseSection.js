@@ -24,7 +24,7 @@ const reasons = [
 		icon: UilGlobe,
 		title: "Pan-India & Export Coverage",
 		description:
-			"Strong Tamil Nadu coverage from Coimbatore, with pan-India supply and export programmes for OCTG, automotive, and precision engineering sectors.",
+			"Strong coverage of Tamil Nadu from Coimbatore, plus scheduled dispatch into Bangalore and Hyderabad, with pan-India supply and export programmes for OCTG, automotive, aerospace, and precision engineering.",
 	},
 	{
 		icon: UilAward,
