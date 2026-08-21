@@ -6,9 +6,9 @@ export const revalidate = 3600; // Revalidate every hour
  * Legacy single-file sitemap.
  *
  * Superseded by /sitemap-index.xml + the two segments, but kept alive because
- * this URL is already submitted in Search Console and linked from external
- * references. Removing it would turn a known-good sitemap into a 404, which
- * Search Console reports as a fetch error rather than quietly forgetting.
+ * this URL is still linked from external references. Search Console now
+ * tracks /sitemap-index.xml instead; submitting both would duplicate every
+ * URL. Removing this file would 404 those old references.
  *
  * It composes the same builders as the segments, so the three files can never
  * disagree about which URLs exist.

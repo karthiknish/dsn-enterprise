@@ -81,8 +81,10 @@ function describeApiError(error, action) {
 		);
 	}
 	if (status === 404) {
+		const detail =
+			error?.errors?.[0]?.message || error?.message || "not found";
 		return new Error(
-			`Search Console has no property matching ${SEARCH_CONSOLE_SITE}, or the sitemap has never been submitted.`,
+			`Search Console 404 while trying to ${action} on ${SEARCH_CONSOLE_SITE}: ${detail}`,
 		);
 	}
 	const detail =

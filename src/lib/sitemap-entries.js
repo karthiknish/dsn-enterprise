@@ -226,3 +226,21 @@ export const SITEMAP_SEGMENTS = [
 		submit: process.env.SITEMAP_SUBMIT_CITIES === "true",
 	},
 ];
+
+/**
+ * Sitemaps the cron submits and the health check reads.
+ *
+ * Index first, then every segment marked `submit`. Cities stay off this list
+ * until SITEMAP_SUBMIT_CITIES=true, so a health check cannot 404 on a file
+ * Google was never asked to know about. The legacy /sitemap.xml is still
+ * served, but it is not submitted — submitting both the index and the flat
+ * file would duplicate every URL.
+ */
+export function getSubmittedSitemapUrls() {
+	return [
+		getSiteUrl("/sitemap-index.xml"),
+		...SITEMAP_SEGMENTS.filter((segment) => segment.submit).map(
+			(segment) => segment.url,
+		),
+	];
+}

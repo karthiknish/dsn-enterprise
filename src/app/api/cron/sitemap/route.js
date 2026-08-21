@@ -5,8 +5,7 @@ import {
 	SEARCH_CONSOLE_SITE,
 	submitSitemap,
 } from "@/lib/search-console";
-import { getSiteUrl } from "@/lib/site";
-import { SITEMAP_SEGMENTS } from "@/lib/sitemap-entries";
+import { getSubmittedSitemapUrls } from "@/lib/sitemap-entries";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,12 +17,7 @@ export const maxDuration = 60;
  * crawl budget Google allocates from the sitemap goes to pages that can
  * index today; submitting them is an env flag, not a deploy.
  */
-const SITEMAP_URLS = [
-	getSiteUrl("/sitemap-index.xml"),
-	...SITEMAP_SEGMENTS.filter((segment) => segment.submit).map(
-		(segment) => segment.url,
-	),
-];
+const SITEMAP_URLS = getSubmittedSitemapUrls();
 
 /**
  * Vercel sends `Authorization: Bearer $CRON_SECRET` on scheduled invocations.

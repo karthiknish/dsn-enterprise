@@ -7,7 +7,7 @@ import {
 	getSitemapStatus,
 	SEARCH_CONSOLE_SITE,
 } from "@/lib/search-console";
-import { getSiteUrl } from "@/lib/site";
+import { getSubmittedSitemapUrls } from "@/lib/sitemap-entries";
 import { getPhotos } from "@/lib/unsplash-server";
 
 export const dynamic = "force-dynamic";
@@ -91,19 +91,33 @@ async function checkSitemapAutomation() {
 		throw new Error("SEARCH_CONSOLE_SERVICE_ACCOUNT_BASE64 is not configured");
 	}
 
-	const sitemapUrl = getSiteUrl("/sitemap.xml");
-	const status = await getSitemapStatus(sitemapUrl);
-	const health = assessSitemap(status);
+	const sitemapUrls = getSubmittedSitemapUrls();
+	const results = await Promise.all(
+		sitemapUrls.map(async (sitemapUrl) => {
+			const status = await getSitemapStatus(sitemapUrl);
+			return { sitemapUrl, status, health: assessSitemap(status) };
+		}),
+	);
 
-	if (!health.healthy) {
-		throw new Error(health.problems.join("; "));
+	const problems = results.flatMap((result) =>
+		result.health.problems.map((problem) => `${result.sitemapUrl}: ${problem}`),
+	);
+	if (problems.length > 0) {
+		throw new Error(problems.join("; "));
 	}
+
+	const lastDownloaded = results
+		.map((result) => result.status.lastDownloaded)
+		.filter(Boolean)
+		.sort()
+		.at(-1);
 
 	return {
 		ok: true,
 		site: SEARCH_CONSOLE_SITE,
-		urls: status.urlCount,
-		lastDownloaded: status.lastDownloaded,
+		sitemaps: sitemapUrls,
+		urls: results.reduce((sum, result) => sum + result.status.urlCount, 0),
+		lastDownloaded,
 	};
 }
 
