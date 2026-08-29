@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ERROR_CODES, jsonError } from "@/lib/http-error";
 import {
 	assessSitemap,
 	getSitemapStatus,
@@ -74,10 +75,12 @@ async function run() {
 
 export async function GET(request) {
 	if (!isAuthorised(request)) {
-		return NextResponse.json(
-			{ success: false, error: "Unauthorised" },
-			{ status: 401 },
-		);
+		return jsonError({
+			code: ERROR_CODES.unauthorized,
+			message: "Unauthorised",
+			status: 401,
+			extra: { success: false },
+		});
 	}
 
 	try {
@@ -87,9 +90,11 @@ export async function GET(request) {
 		return NextResponse.json(result);
 	} catch (error) {
 		console.error("Sitemap cron failed:", error);
-		return NextResponse.json(
-			{ success: false, error: error.message },
-			{ status: 500 },
-		);
+		return jsonError({
+			code: ERROR_CODES.internalError,
+			message: error.message || "Sitemap cron failed",
+			status: 500,
+			extra: { success: false },
+		});
 	}
 }

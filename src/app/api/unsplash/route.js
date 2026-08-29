@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ERROR_CODES, jsonError } from "@/lib/http-error";
 import { getPhoto, getPhotos, searchPhotos } from "@/lib/unsplash-server";
 
 export const dynamic = "force-dynamic";
@@ -19,10 +20,11 @@ export async function GET(request) {
 			case "search": {
 				const query = searchParams.get("query")?.trim();
 				if (!query) {
-					return NextResponse.json(
-						{ error: "Search query is required" },
-						{ status: 400 },
-					);
+					return jsonError({
+						code: ERROR_CODES.validationError,
+						message: "Search query is required",
+						status: 400,
+					});
 				}
 				result = await searchPhotos(query, perPage, page);
 				break;
@@ -30,10 +32,11 @@ export async function GET(request) {
 			case "photo": {
 				const id = searchParams.get("id");
 				if (!id) {
-					return NextResponse.json(
-						{ error: "Photo id is required" },
-						{ status: 400 },
-					);
+					return jsonError({
+						code: ERROR_CODES.validationError,
+						message: "Photo id is required",
+						status: 400,
+					});
 				}
 				result = await getPhoto(id);
 				break;
@@ -42,10 +45,11 @@ export async function GET(request) {
 				result = await getPhotos(perPage, page);
 				break;
 			default:
-				return NextResponse.json(
-					{ error: "Invalid type. Use search, photos, or photo." },
-					{ status: 400 },
-				);
+				return jsonError({
+					code: ERROR_CODES.badRequest,
+					message: "Invalid type. Use search, photos, or photo.",
+					status: 400,
+				});
 		}
 
 		return NextResponse.json(result);
@@ -53,6 +57,13 @@ export async function GET(request) {
 		console.error("Unsplash API route error:", error);
 		const message = error.message || "Failed to fetch photos";
 		const status = message.includes("not configured") ? 503 : 502;
-		return NextResponse.json({ error: message }, { status });
+		return jsonError({
+			code:
+				status === 503
+					? ERROR_CODES.serviceUnavailable
+					: ERROR_CODES.badGateway,
+			message,
+			status,
+		});
 	}
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/api-auth";
+import { ERROR_CODES, jsonError } from "@/lib/http-error";
 import {
 	fetchAuthorityMetrics,
 	fetchKeywordIdeas,
@@ -51,28 +52,32 @@ export async function POST(request) {
 	if (!auth.ok) return auth.response;
 
 	if (!isTregConfigured()) {
-		return NextResponse.json(
-			{
-				error:
-					"treg is not configured. Set TREG_TOKEN (and TREG_ORG) in the environment.",
-			},
-			{ status: 503 },
-		);
+		return jsonError({
+			code: ERROR_CODES.serviceUnavailable,
+			message:
+				"treg is not configured. Set TREG_TOKEN (and TREG_ORG) in the environment.",
+			status: 503,
+		});
 	}
 
 	let body;
 	try {
 		body = await request.json();
 	} catch {
-		return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+		return jsonError({
+			code: ERROR_CODES.badRequest,
+			message: "Invalid JSON body",
+			status: 400,
+		});
 	}
 
 	const { task } = body || {};
 	if (!SEO_TASKS.includes(task)) {
-		return NextResponse.json(
-			{ error: `Invalid task. Expected one of: ${SEO_TASKS.join(", ")}` },
-			{ status: 400 },
-		);
+		return jsonError({
+			code: ERROR_CODES.badRequest,
+			message: `Invalid task. Expected one of: ${SEO_TASKS.join(", ")}`,
+			status: 400,
+		});
 	}
 
 	try {
@@ -85,20 +90,28 @@ export async function POST(request) {
 			// 402 is the one status worth surfacing verbatim: it means the
 			// balance ran out, and the fix is a top-up, not a retry.
 			const status = error.status === 402 ? 402 : error.status || 502;
-			return NextResponse.json(
-				{
-					error:
-						status === 402
-							? "treg balance exhausted. Top up at treg.superdesign.dev (Team → Billing)."
-							: error.message,
-					detail: error.detail || null,
-				},
-				{ status },
-			);
+			return jsonError({
+				code:
+					status === 402
+						? ERROR_CODES.serviceUnavailable
+						: status === 400
+							? ERROR_CODES.badRequest
+							: ERROR_CODES.badGateway,
+				message:
+					status === 402
+						? "treg balance exhausted. Top up at treg.superdesign.dev (Team → Billing)."
+						: error.message,
+				status,
+				extra: { detail: error.detail || null },
+			});
 		}
 
 		console.error("SEO task failed:", error);
-		return NextResponse.json({ error: "SEO lookup failed" }, { status: 502 });
+		return jsonError({
+			code: ERROR_CODES.badGateway,
+			message: "SEO lookup failed",
+			status: 502,
+		});
 	}
 }
 

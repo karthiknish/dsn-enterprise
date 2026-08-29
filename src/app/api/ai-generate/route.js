@@ -7,14 +7,17 @@ import {
 	generateTitle,
 	improveContent,
 } from "@/lib/deepseek";
+import { ERROR_CODES, jsonError } from "@/lib/http-error";
 
 export async function POST(request) {
 	try {
 		if (!process.env.DEEPSEEK_API_KEY) {
-			return NextResponse.json(
-				{ success: false, error: "DeepSeek API key not configured" },
-				{ status: 500 },
-			);
+			return jsonError({
+				code: ERROR_CODES.serviceUnavailable,
+				message: "DeepSeek API key not configured",
+				status: 500,
+				extra: { success: false },
+			});
 		}
 
 		const body = await request.json();
@@ -25,20 +28,24 @@ export async function POST(request) {
 		switch (action) {
 			case "generate":
 				if (!topic) {
-					return NextResponse.json(
-						{ success: false, error: "Topic is required" },
-						{ status: 400 },
-					);
+					return jsonError({
+						code: ERROR_CODES.validationError,
+						message: "Topic is required",
+						status: 400,
+						extra: { success: false },
+					});
 				}
 				result = await generateBlogContent(topic, keywords || []);
 				break;
 
 			case "metadata":
 				if (!topic || !content) {
-					return NextResponse.json(
-						{ success: false, error: "Topic and content are required" },
-						{ status: 400 },
-					);
+					return jsonError({
+						code: ERROR_CODES.validationError,
+						message: "Topic and content are required",
+						status: 400,
+						extra: { success: false },
+					});
 				}
 				result = await generateBlogMetadata(topic, content);
 				break;
@@ -49,47 +56,57 @@ export async function POST(request) {
 
 			case "improve":
 				if (!content || !instruction) {
-					return NextResponse.json(
-						{ success: false, error: "Content and instruction are required" },
-						{ status: 400 },
-					);
+					return jsonError({
+						code: ERROR_CODES.validationError,
+						message: "Content and instruction are required",
+						status: 400,
+						extra: { success: false },
+					});
 				}
 				result = await improveContent(content, instruction);
 				break;
 
 			case "title":
 				if (!topic) {
-					return NextResponse.json(
-						{ success: false, error: "Topic is required" },
-						{ status: 400 },
-					);
+					return jsonError({
+						code: ERROR_CODES.validationError,
+						message: "Topic is required",
+						status: 400,
+						extra: { success: false },
+					});
 				}
 				result = await generateTitle(topic);
 				break;
 
 			case "excerpt":
 				if (!topic) {
-					return NextResponse.json(
-						{ success: false, error: "Title is required" },
-						{ status: 400 },
-					);
+					return jsonError({
+						code: ERROR_CODES.validationError,
+						message: "Title is required",
+						status: 400,
+						extra: { success: false },
+					});
 				}
 				result = await generateExcerpt(topic, content || "");
 				break;
 
 			default:
-				return NextResponse.json(
-					{ success: false, error: "Invalid action" },
-					{ status: 400 },
-				);
+				return jsonError({
+					code: ERROR_CODES.badRequest,
+					message: "Invalid action",
+					status: 400,
+					extra: { success: false },
+				});
 		}
 
 		return NextResponse.json(result);
 	} catch (error) {
 		console.error("AI Generate API Error:", error);
-		return NextResponse.json(
-			{ success: false, error: "Internal server error" },
-			{ status: 500 },
-		);
+		return jsonError({
+			code: ERROR_CODES.internalError,
+			message: "Internal server error",
+			status: 500,
+			extra: { success: false },
+		});
 	}
 }

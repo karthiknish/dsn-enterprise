@@ -5,6 +5,7 @@ import {
 	isValidPeriod,
 } from "@/lib/analytics-data";
 import { requireAdmin } from "@/lib/api-auth";
+import { ERROR_CODES, jsonError } from "@/lib/http-error";
 
 /**
  * GA4 analytics for the admin dashboard.
@@ -27,12 +28,11 @@ export async function GET(request) {
 	const period = searchParams.get("period") || "30d";
 
 	if (!isValidPeriod(period)) {
-		return NextResponse.json(
-			{
-				error: `Invalid period. Expected one of: ${ANALYTICS_PERIODS.join(", ")}`,
-			},
-			{ status: 400 },
-		);
+		return jsonError({
+			code: ERROR_CODES.badRequest,
+			message: `Invalid period. Expected one of: ${ANALYTICS_PERIODS.join(", ")}`,
+			status: 400,
+		});
 	}
 
 	try {
@@ -47,9 +47,10 @@ export async function GET(request) {
 		// Log the real error server-side, return a generic message. GA API
 		// errors embed the service-account email, GCP project, and property ID.
 		console.error("GA Data API error:", error);
-		return NextResponse.json(
-			{ error: "Failed to fetch analytics data" },
-			{ status: 502 },
-		);
+		return jsonError({
+			code: ERROR_CODES.badGateway,
+			message: "Failed to fetch analytics data",
+			status: 502,
+		});
 	}
 }

@@ -3,7 +3,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
 	title: "IS 3455, Calibration & Gauge FAQ",
 	description:
-		"IS 3455 latest edition and PDF, IS 919 vs IS 3455, 6H thread callouts, NPT gauges, NABL calibration frequency, and lead times from Coimbatore."
+		"IS 3455 latest edition and PDF, IS 919 vs IS 3455, 6H thread callouts, NPT gauges, NABL calibration frequency, and lead times from Coimbatore.",
 	keywords: [
 		"gauge FAQ",
 		"IS 3455",

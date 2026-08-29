@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { LinkButton } from "@/components/ui/button";
+import { getSiteUrl } from "@/lib/site";
 
 export const metadata = {
 	title: "Page not found",
+	robots: { index: false, follow: false },
 };
 
 const popularLinks = [
@@ -15,6 +17,12 @@ const popularLinks = [
 	{ href: "/resources", label: "Resources" },
 	{ href: "/blog", label: "Blog" },
 	{ href: "/faq", label: "FAQ" },
+];
+
+const agentLinks = [
+	{ href: "/llms.txt", label: "llms.txt" },
+	{ href: "/sitemap.xml", label: "Sitemap" },
+	{ href: "/products", label: "Products" },
 ];
 
 export default function NotFound() {
@@ -63,6 +71,31 @@ export default function NotFound() {
 						))}
 					</div>
 				</div>
+				<aside className="mt-16 w-full max-w-2xl text-left rounded-lg border border-gray-200 bg-gray-50 px-5 py-4">
+					<p className="text-sm font-semibold text-gray-900 mb-2">
+						Looking up this site from an agent?
+					</p>
+					<p className="text-sm text-gray-700 leading-relaxed mb-3">
+						This is an HTTP 404. The path you requested is not published. Start
+						from the agent index or the sitemap:
+					</p>
+					<ul className="text-sm text-gray-800 space-y-1">
+						{agentLinks.map((link) => (
+							<li key={link.href}>
+								<a
+									href={getSiteUrl(link.href)}
+									className="text-primary underline underline-offset-2 hover:text-primary/80"
+								>
+									{link.label}
+								</a>
+								<span className="text-gray-500">
+									{" "}
+									— {getSiteUrl(link.href)}
+								</span>
+							</li>
+						))}
+					</ul>
+				</aside>
 			</div>
 		</div>
 	);

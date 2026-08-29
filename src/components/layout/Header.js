@@ -1,10 +1,10 @@
 "use client";
 
+import { UilBars, UilTimes } from "@iconscout/react-unicons";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useReducer, useRef } from "react";
-import { UilBars, UilTimes } from "@iconscout/react-unicons";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 import {
 	createInitialHeaderNavState,
@@ -101,7 +101,7 @@ const Header = () => {
 			}`}
 		>
 			<div className="container mx-auto px-4 flex justify-between items-center">
-				<Link href="/" className="flex items-center">
+				<Link href="/" prefetch={true} className="flex items-center">
 					<div className="relative">
 						<Image
 							src="/images/logo.png"

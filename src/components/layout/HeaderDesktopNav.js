@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { UilAngleDown } from "@iconscout/react-unicons";
+import Link from "next/link";
 
 function isActive(pathname, href) {
 	if (href === "/") return pathname === "/";
@@ -36,6 +36,7 @@ export default function HeaderDesktopNav({
 		<nav className="hidden lg:flex items-center gap-x-6">
 			<Link
 				href="/"
+				prefetch={true}
 				className={`${linkClass} hover:text-primary font-medium transition-colors ${
 					isActive(pathname, "/") ? "text-primary" : ""
 				}`}
@@ -74,6 +75,7 @@ export default function HeaderDesktopNav({
 							<Link
 								key={link.href}
 								href={link.href}
+								prefetch={true}
 								className={`block px-4 py-2 transition-colors ${
 									isActive(pathname, link.href)
 										? "bg-secondary-light text-primary font-medium"
@@ -119,6 +121,7 @@ export default function HeaderDesktopNav({
 							<Link
 								key={link.href}
 								href={link.href}
+								prefetch={true}
 								className={`block px-4 py-2 transition-colors ${
 									isActive(pathname, link.href)
 										? "bg-secondary-light text-primary font-medium"
@@ -135,6 +138,7 @@ export default function HeaderDesktopNav({
 
 			<Link
 				href="/services"
+				prefetch={true}
 				className={`${linkClass} hover:text-primary font-medium transition-colors ${
 					isActive(pathname, "/services") ? "text-primary" : ""
 				}`}
@@ -143,6 +147,7 @@ export default function HeaderDesktopNav({
 			</Link>
 			<Link
 				href="/blog"
+				prefetch={true}
 				className={`${linkClass} hover:text-primary font-medium transition-colors ${
 					isActive(pathname, "/blog") ? "text-primary" : ""
 				}`}
@@ -151,6 +156,7 @@ export default function HeaderDesktopNav({
 			</Link>
 			<Link
 				href="/resources"
+				prefetch={true}
 				className={`${linkClass} hover:text-primary font-medium transition-colors ${
 					isActive(pathname, "/resources") ? "text-primary" : ""
 				}`}
@@ -159,6 +165,7 @@ export default function HeaderDesktopNav({
 			</Link>
 			<Link
 				href="/faq"
+				prefetch={true}
 				className={`${linkClass} hover:text-primary font-medium transition-colors ${
 					isActive(pathname, "/faq") ? "text-primary" : ""
 				}`}
@@ -167,6 +174,7 @@ export default function HeaderDesktopNav({
 			</Link>
 			<Link
 				href="/contact"
+				prefetch={true}
 				className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark font-medium transition-colors"
 				onClick={onContactClick}
 			>

@@ -2,10 +2,19 @@
 
 import { useEffect } from "react";
 
-export default function AdminError({ error, reset }) {
+/**
+ * Admin segment error boundary.
+ *
+ * `retry` (Next.js 16.3) re-renders the failed Server Components. `reset` only
+ * clears client state, which is not enough when the failure was in data
+ * fetching. Prefer retry; keep reset as a fallback.
+ */
+export default function AdminError({ error, reset, retry }) {
 	useEffect(() => {
 		console.error("Admin panel error:", error);
 	}, [error]);
+
+	const recover = typeof retry === "function" ? retry : reset;
 
 	return (
 		<div className="flex min-h-[40vh] w-full flex-col items-center justify-center text-center px-4">
@@ -34,7 +43,7 @@ export default function AdminError({ error, reset }) {
 			</p>
 			<button
 				type="button"
-				onClick={reset}
+				onClick={() => recover()}
 				className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-2.5 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 			>
 				Try again

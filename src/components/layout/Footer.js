@@ -1,5 +1,12 @@
-import Link from "next/link";
 import { UilLinkedin } from "@iconscout/react-unicons";
+import Link from "next/link";
+import {
+	EMAIL,
+	LINKEDIN_URL,
+	NAP_LINE,
+	PHONE_DISPLAY,
+	PHONE_TEL,
+} from "@/lib/site";
 
 const Footer = () => {
 	return (
@@ -13,9 +20,26 @@ const Footer = () => {
 							Leading manufacturer and supplier of precision gauges and
 							measuring instruments in India.
 						</p>
+						<p className="mb-1 text-white/90">{NAP_LINE}</p>
+						<p className="mb-1">
+							<a
+								href={`tel:${PHONE_TEL}`}
+								className="hover:text-secondary transition-colors"
+							>
+								{PHONE_DISPLAY}
+							</a>
+						</p>
+						<p className="mb-4">
+							<a
+								href={`mailto:${EMAIL}`}
+								className="hover:text-secondary transition-colors break-all"
+							>
+								{EMAIL}
+							</a>
+						</p>
 						<div className="flex gap-x-4">
 							<a
-								href="https://www.linkedin.com/company/dsn-enterprises/"
+								href={LINKEDIN_URL}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-white hover:text-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"

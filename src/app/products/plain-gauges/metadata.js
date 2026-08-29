@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
 	title: "Plain Gauge Maker – Plug, Ring & Snap",
 	description:
-		"Plain gauge manufacturer in Coimbatore: plug, ring, snap, pins, and setting masters. 1–250 mm, OHNS or carbide, NABL-traceable certificates."
+		"Plain gauge manufacturer in Coimbatore: plug, ring, snap, pins, and setting masters. 1–250 mm, OHNS or carbide, NABL-traceable certificates.",
 	keywords: [
 		"plain gauges",
 		"plain plug gauges",

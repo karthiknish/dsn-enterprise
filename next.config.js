@@ -8,6 +8,9 @@ const alternateHost = preferredHost.startsWith("www.")
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
+	turbopack: {
+		root: __dirname,
+	},
 	images: {
 		remotePatterns: [
 			{
@@ -19,6 +22,19 @@ const nextConfig = {
 				hostname: "images.unsplash.com",
 			},
 		],
+	},
+	async headers() {
+		return [
+			{
+				source: "/:path*",
+				headers: [
+					{
+						key: "Vary",
+						value: "Accept, Accept-Encoding",
+					},
+				],
+			},
+		];
 	},
 	async redirects() {
 		return [

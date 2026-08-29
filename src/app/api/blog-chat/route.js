@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { runAgentStep, startRun } from "@/lib/blog-agent";
+import { ERROR_CODES, jsonError } from "@/lib/http-error";
 
 export const runtime = "nodejs";
 // One request runs a single agent step (one model call plus its tools), which
@@ -10,16 +10,20 @@ export const maxDuration = 60;
 
 export async function POST(request) {
 	if (!process.env.DEEPSEEK_API_KEY) {
-		return NextResponse.json(
-			{ success: false, error: "DeepSeek API key not configured" },
-			{ status: 500 },
-		);
+		return jsonError({
+			code: ERROR_CODES.serviceUnavailable,
+			message: "DeepSeek API key not configured",
+			status: 500,
+			extra: { success: false },
+		});
 	}
 	if (!process.env.EXA_API_KEY) {
-		return NextResponse.json(
-			{ success: false, error: "Exa API key not configured" },
-			{ status: 500 },
-		);
+		return jsonError({
+			code: ERROR_CODES.serviceUnavailable,
+			message: "Exa API key not configured",
+			status: 500,
+			extra: { success: false },
+		});
 	}
 
 	const body = await request.json().catch(() => ({}));
@@ -32,10 +36,12 @@ export async function POST(request) {
 	} else if (Array.isArray(messages) && messages.length > 0) {
 		run = startRun({ messages, postContext });
 	} else {
-		return NextResponse.json(
-			{ success: false, error: "messages or run is required" },
-			{ status: 400 },
-		);
+		return jsonError({
+			code: ERROR_CODES.badRequest,
+			message: "messages or run is required",
+			status: 400,
+			extra: { success: false },
+		});
 	}
 
 	const encoder = new TextEncoder();

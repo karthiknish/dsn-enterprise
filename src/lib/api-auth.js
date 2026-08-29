@@ -14,8 +14,8 @@
  * Server-only.
  */
 
-import { NextResponse } from "next/server";
 import { verifyIdToken } from "@/lib/firebase-admin";
+import { ERROR_CODES, jsonError } from "@/lib/http-error";
 
 function allowlist() {
 	return (process.env.ADMIN_EMAILS || "")
@@ -32,7 +32,7 @@ function bearerToken(request) {
 
 /**
  * Resolve the caller's admin identity.
- * @returns {Promise<{ ok: true, uid: string, email: string|null } | { ok: false, response: NextResponse }>}
+ * @returns {Promise<{ ok: true, uid: string, email: string|null } | { ok: false, response: import("next/server").NextResponse }>}
  */
 export async function requireAdmin(request) {
 	const token = bearerToken(request);
@@ -40,10 +40,12 @@ export async function requireAdmin(request) {
 	if (!token) {
 		return {
 			ok: false,
-			response: NextResponse.json(
-				{ error: "Authentication required" },
-				{ status: 401, headers: { "WWW-Authenticate": "Bearer" } },
-			),
+			response: jsonError({
+				code: ERROR_CODES.unauthorized,
+				message: "Authentication required",
+				status: 401,
+				headers: { "WWW-Authenticate": "Bearer" },
+			}),
 		};
 	}
 
@@ -51,10 +53,12 @@ export async function requireAdmin(request) {
 	if (!decoded) {
 		return {
 			ok: false,
-			response: NextResponse.json(
-				{ error: "Invalid or expired session" },
-				{ status: 401, headers: { "WWW-Authenticate": "Bearer" } },
-			),
+			response: jsonError({
+				code: ERROR_CODES.unauthorized,
+				message: "Invalid or expired session",
+				status: 401,
+				headers: { "WWW-Authenticate": "Bearer" },
+			}),
 		};
 	}
 
@@ -65,10 +69,11 @@ export async function requireAdmin(request) {
 			// 403, not 404: the caller is authenticated but not permitted.
 			return {
 				ok: false,
-				response: NextResponse.json(
-					{ error: "Not authorised" },
-					{ status: 403 },
-				),
+				response: jsonError({
+					code: ERROR_CODES.forbidden,
+					message: "Not authorised",
+					status: 403,
+				}),
 			};
 		}
 	}

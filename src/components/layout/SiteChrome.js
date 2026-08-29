@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import ScrollToTop from "./ScrollToTop";
@@ -11,6 +12,9 @@ import ScrollToTop from "./ScrollToTop";
  * layout (AdminLayout) with a sidebar and header, so the site header/footer
  * must not appear there — otherwise the fixed admin sidebar overlaps the
  * footer and admin pages end up with a double header.
+ *
+ * Page content sits in a Suspense boundary so header and footer stay mounted
+ * as a shell while the next route streams in.
  */
 export default function SiteChrome({ children }) {
 	const pathname = usePathname();
@@ -30,7 +34,13 @@ export default function SiteChrome({ children }) {
 			</a>
 			<Header />
 			<main id="site-main" className="pt-16">
-				{children}
+				<Suspense
+					fallback={
+						<div className="min-h-[50vh] bg-white" aria-hidden="true" />
+					}
+				>
+					{children}
+				</Suspense>
 			</main>
 			<ScrollToTop />
 			<Footer />

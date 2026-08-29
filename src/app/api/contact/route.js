@@ -6,6 +6,7 @@ import {
 	renderContactAutoReplyEmail,
 } from "@/lib/email-templates";
 import { db } from "@/lib/firebase";
+import { ERROR_CODES, jsonError } from "@/lib/http-error";
 import { rateLimit } from "@/lib/rateLimit";
 
 // Force dynamic rendering to prevent build-time execution
@@ -25,16 +26,15 @@ export async function POST(request) {
 		// Apply rate limiting
 		const rateLimitResult = await rateLimit(request);
 		if (!rateLimitResult.success) {
-			return NextResponse.json(
-				{ error: "Too many requests. Please try again later." },
-				{
-					status: 429,
-					headers: {
-						...securityHeaders,
-						"Retry-After": "60",
-					},
+			return jsonError({
+				code: ERROR_CODES.rateLimited,
+				message: "Too many requests. Please try again later.",
+				status: 429,
+				headers: {
+					...securityHeaders,
+					"Retry-After": "60",
 				},
-			);
+			});
 		}
 
 		// Parse and validate request body
@@ -42,10 +42,12 @@ export async function POST(request) {
 		try {
 			body = await request.json();
 		} catch (_parseError) {
-			return NextResponse.json(
-				{ error: "Invalid JSON in request body" },
-				{ status: 400, headers: securityHeaders },
-			);
+			return jsonError({
+				code: ERROR_CODES.badRequest,
+				message: "Invalid JSON in request body",
+				status: 400,
+				headers: securityHeaders,
+			});
 		}
 
 		console.log("Received contact form submission:", {
@@ -127,13 +129,13 @@ export async function POST(request) {
 
 		if (Object.keys(validationErrors).length > 0) {
 			console.log("Validation failed:", validationErrors);
-			return NextResponse.json(
-				{
-					error: "Validation failed",
-					validationErrors,
-				},
-				{ status: 400, headers: securityHeaders },
-			);
+			return jsonError({
+				code: ERROR_CODES.validationError,
+				message: "Validation failed",
+				status: 400,
+				headers: securityHeaders,
+				extra: { validationErrors },
+			});
 		}
 
 		// Sanitize and format the data
@@ -162,10 +164,12 @@ export async function POST(request) {
 
 		if (!docRef || !docRef.id) {
 			console.error("Failed to create Firebase entry - no document returned");
-			return NextResponse.json(
-				{ error: "Failed to save your message. Please try again." },
-				{ status: 500, headers: securityHeaders },
-			);
+			return jsonError({
+				code: ERROR_CODES.internalError,
+				message: "Failed to save your message. Please try again.",
+				status: 500,
+				headers: securityHeaders,
+			});
 		}
 
 		console.log("Successfully saved contact to Firebase with ID:", docRef.id);
@@ -230,45 +234,45 @@ export async function POST(request) {
 
 		// Check for specific Firebase errors
 		if (error.code === "permission-denied") {
-			return NextResponse.json(
-				{ error: "Service temporarily unavailable. Please try again later." },
-				{ status: 503, headers: securityHeaders },
-			);
+			return jsonError({
+				code: ERROR_CODES.serviceUnavailable,
+				message: "Service temporarily unavailable. Please try again later.",
+				status: 503,
+				headers: securityHeaders,
+			});
 		}
 
-		// Generic error response
-		return NextResponse.json(
-			{
-				error: "An unexpected error occurred. Please try again later.",
-				message:
+		return jsonError({
+			code: ERROR_CODES.internalError,
+			message: "An unexpected error occurred. Please try again later.",
+			status: 500,
+			headers: securityHeaders,
+			extra: {
+				detail:
 					process.env.NODE_ENV === "development" ? error.message : undefined,
 			},
-			{
-				status: 500,
-				headers: securityHeaders,
-			},
-		);
+		});
 	}
 }
 
 // Handle unsupported methods
+function methodNotAllowed() {
+	return jsonError({
+		code: ERROR_CODES.methodNotAllowed,
+		message: "Method not allowed",
+		status: 405,
+		headers: { ...securityHeaders, Allow: "POST" },
+	});
+}
+
 export async function GET() {
-	return NextResponse.json(
-		{ error: "Method not allowed" },
-		{ status: 405, headers: securityHeaders },
-	);
+	return methodNotAllowed();
 }
 
 export async function PUT() {
-	return NextResponse.json(
-		{ error: "Method not allowed" },
-		{ status: 405, headers: securityHeaders },
-	);
+	return methodNotAllowed();
 }
 
 export async function DELETE() {
-	return NextResponse.json(
-		{ error: "Method not allowed" },
-		{ status: 405, headers: securityHeaders },
-	);
+	return methodNotAllowed();
 }

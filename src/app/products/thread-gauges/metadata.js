@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
 	title: "NPT, BSP & Metric Thread Gauges",
 	description:
-		"NPT and NPTF pipe thread gauge manufacturer, plus BSP, Metric, Unified, and BSW. Plug, ring, and setting plugs with NABL-traceable certificates."
+		"NPT and NPTF pipe thread gauge manufacturer, plus BSP, Metric, Unified, and BSW. Plug, ring, and setting plugs with NABL-traceable certificates.",
 	keywords: [
 		"thread gauges",
 		"thread plug gauges",

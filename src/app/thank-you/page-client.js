@@ -1,16 +1,15 @@
 "use client";
 
+import { UilArrowLeft, UilCheckCircle } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import Link from "next/link";
 import { useEffect } from "react";
-import { UilArrowLeft, UilCheckCircle } from "@iconscout/react-unicons";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 export default function ThankYouPage() {
-	const { trackThankYouPageView, trackPhoneClick } =
-		useGoogleAdsTracking();
+	const { trackThankYouPageView, trackPhoneClick } = useGoogleAdsTracking();
 
 	// Track conversion on page load
 	useEffect(() => {
@@ -126,7 +125,7 @@ export default function ThankYouPage() {
 										className="underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
 										onClick={() => trackPhoneClick("+919363122005")}
 									>
-										+91 9363122005
+										+91 93631 22005
 									</a>
 								</p>
 							</m.div>

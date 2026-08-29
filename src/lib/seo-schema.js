@@ -1,4 +1,13 @@
-import { getSiteUrl, SITE_URL } from "@/lib/site";
+import {
+	EMAIL,
+	getSiteUrl,
+	LINKEDIN_URL,
+	NAP_COUNTRY,
+	NAP_LOCALITY,
+	NAP_REGION,
+	PHONE_SCHEMA,
+	SITE_URL,
+} from "@/lib/site";
 
 /**
  * Stable @id values so every schema block on the site refers to the SAME
@@ -43,6 +52,7 @@ export function buildOrganizationSchema() {
 		"@type": ["Organization", "LocalBusiness"],
 		"@id": ORG_ID,
 		name: "DSN Enterprises",
+		alternateName: ["DSN Enterprises Coimbatore"],
 		url: SITE_URL,
 		logo: {
 			"@type": "ImageObject",
@@ -53,22 +63,23 @@ export function buildOrganizationSchema() {
 			"Manufacturer of precision plain gauges, thread gauges, API gauges, and custom limit gauges, with NABL-traceable calibration, based in Coimbatore, Tamil Nadu.",
 		address: {
 			"@type": "PostalAddress",
-			addressLocality: "Coimbatore",
-			addressRegion: "Tamil Nadu",
-			addressCountry: "IN",
+			addressLocality: NAP_LOCALITY,
+			addressRegion: NAP_REGION,
+			addressCountry: NAP_COUNTRY,
 		},
 		contactPoint: [
 			{
 				"@type": "ContactPoint",
-				telephone: "+91-93631-22005",
-				email: "info@dsnenterprises.com",
+				telephone: PHONE_SCHEMA,
+				email: EMAIL,
 				contactType: "sales",
 				areaServed: "IN",
 				availableLanguage: ["en", "hi", "ta"],
 			},
 		],
-		telephone: "+91-93631-22005",
-		email: "info@dsnenterprises.com",
+		telephone: PHONE_SCHEMA,
+		email: EMAIL,
+		sameAs: [LINKEDIN_URL],
 		// What this organisation is authoritative about. Helps a retrieval system
 		// decide whether this entity is relevant to a technical question.
 		knowsAbout: [

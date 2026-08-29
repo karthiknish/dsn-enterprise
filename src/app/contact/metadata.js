@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
 	title: "Contact Us – Precision Gauge Makers",
 	description:
-		"Contact DSN Enterprises for precision gauges, calibration, and custom solutions. Call +91 9363122005. Coimbatore, Tamil Nadu, India.",
+		"Contact DSN Enterprises for precision gauges, calibration, and custom solutions. Call +91 93631 22005. Coimbatore, Tamil Nadu, India.",
 	keywords: [
 		"contact DSN Enterprises",
 		"gauge manufacturers contact",
@@ -25,7 +25,7 @@ export const metadata = {
 	openGraph: {
 		title: "Contact Us - DSN Enterprises | Precision Gauge Manufacturers",
 		description:
-			"Get in touch with DSN Enterprises for precision gauges, calibration services, and custom solutions. Call us at +91 9363122005.",
+			"Get in touch with DSN Enterprises for precision gauges, calibration services, and custom solutions. Call us at +91 93631 22005.",
 		url: "/contact",
 		siteName: "DSN Enterprises",
 		type: "website",

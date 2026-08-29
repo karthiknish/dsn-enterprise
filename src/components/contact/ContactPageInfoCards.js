@@ -2,22 +2,23 @@
 
 import { UilClock, UilMapMarker, UilPhone } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
+import { NAP_LINE, PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
 
 const items = [
 	{
 		icon: UilMapMarker,
 		title: "Our Location",
-		content: "Coimbatore, Tamil Nadu, India",
+		content: NAP_LINE,
 	},
 	{
 		icon: UilPhone,
 		title: "Phone",
 		content: (
 			<a
-				href="tel:+919363122005"
+				href={`tel:${PHONE_TEL}`}
 				className="hover:text-primary break-all sm:break-normal"
 			>
-				+91 93631 22005
+				{PHONE_DISPLAY}
 			</a>
 		),
 	},

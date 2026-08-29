@@ -1,4 +1,5 @@
 import { HI_TRANSLATED_PATHS } from "@/content/hi/pages";
+import { NEGOTIATE_VARY, preferredFormat } from "@/lib/accept";
 import { HINDI_ENABLED } from "@/lib/i18n/config";
 import {
 	generateProductCityPages,
@@ -24,14 +25,13 @@ import { SITE_URL } from "@/lib/site";
  * out of sync when the location-page tier limit changes.
  */
 
-export const dynamic = "force-static";
 export const revalidate = 3600;
 
 function abs(path) {
 	return `${SITE_URL}${path}`;
 }
 
-export async function GET() {
+export async function GET(request) {
 	const productCity = generateProductCityPages();
 	const serviceCity = generateServiceCityPages();
 
@@ -165,10 +165,19 @@ export async function GET() {
 	);
 	push();
 
+	const format = preferredFormat(request.headers.get("accept"), {
+		defaultFormat: "markdown",
+	});
+	const contentType =
+		format === "markdown"
+			? "text/markdown; charset=utf-8"
+			: "text/plain; charset=utf-8";
+
 	return new Response(lines.join("\n"), {
 		headers: {
-			"Content-Type": "text/plain; charset=utf-8",
+			"Content-Type": contentType,
 			"Cache-Control": "public, max-age=3600, s-maxage=3600",
+			Vary: NEGOTIATE_VARY,
 		},
 	});
 }

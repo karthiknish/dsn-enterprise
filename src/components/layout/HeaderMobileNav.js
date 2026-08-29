@@ -1,8 +1,8 @@
 "use client";
 
+import { UilAngleDown, UilTimes } from "@iconscout/react-unicons";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { UilAngleDown, UilTimes } from "@iconscout/react-unicons";
 
 function isActive(pathname, href) {
 	if (href === "/") return pathname === "/";
@@ -86,6 +86,7 @@ export default function HeaderMobileNav({
 				</button>
 				<Link
 					href="/"
+					prefetch={true}
 					className={`py-3 text-lg font-medium border-b border-gray-200 active:bg-secondary-light transition-colors ${
 						isActive(pathname, "/") ? "text-primary" : "text-primary"
 					}`}
@@ -114,6 +115,7 @@ export default function HeaderMobileNav({
 								<Link
 									key={link.href}
 									href={link.href}
+									prefetch={true}
 									className={`block py-2 active:bg-secondary-light transition-colors ${
 										isActive(pathname, link.href)
 											? "text-primary font-medium"
@@ -148,6 +150,7 @@ export default function HeaderMobileNav({
 								<Link
 									key={link.href}
 									href={link.href}
+									prefetch={true}
 									className={`block py-2 active:bg-secondary-light transition-colors ${
 										isActive(pathname, link.href)
 											? "text-primary font-medium"
@@ -164,6 +167,7 @@ export default function HeaderMobileNav({
 
 				<Link
 					href="/services"
+					prefetch={true}
 					className={`py-3 text-lg font-medium border-b border-gray-200 active:bg-secondary-light transition-colors ${
 						isActive(pathname, "/services") ? "text-primary" : "text-primary"
 					}`}
@@ -173,6 +177,7 @@ export default function HeaderMobileNav({
 				</Link>
 				<Link
 					href="/blog"
+					prefetch={true}
 					className={`py-3 text-lg font-medium border-b border-gray-200 active:bg-secondary-light transition-colors ${
 						isActive(pathname, "/blog") ? "text-primary" : "text-primary"
 					}`}
@@ -182,6 +187,7 @@ export default function HeaderMobileNav({
 				</Link>
 				<Link
 					href="/resources"
+					prefetch={true}
 					className={`py-3 text-lg font-medium border-b border-gray-200 active:bg-secondary-light transition-colors ${
 						isActive(pathname, "/resources") ? "text-primary" : "text-primary"
 					}`}
@@ -191,6 +197,7 @@ export default function HeaderMobileNav({
 				</Link>
 				<Link
 					href="/faq"
+					prefetch={true}
 					className={`py-3 text-lg font-medium border-b border-gray-200 active:bg-secondary-light transition-colors ${
 						isActive(pathname, "/faq") ? "text-primary" : "text-primary"
 					}`}
@@ -200,6 +207,7 @@ export default function HeaderMobileNav({
 				</Link>
 				<Link
 					href="/contact"
+					prefetch={true}
 					className={`py-3 text-lg font-medium active:bg-secondary-light transition-colors ${
 						isActive(pathname, "/contact") ? "text-primary" : "text-primary"
 					}`}
