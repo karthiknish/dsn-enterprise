@@ -2,9 +2,9 @@ import { alternatesFor } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "Plain Gauge Maker – Plug, Ring & Snap",
+	title: "Plain Gauge Manufacturer – Plug, Ring & Snap Gauges",
 	description:
-		"Plain gauge manufacturer in Coimbatore: plug, ring, snap, pins, and setting masters. 1–250 mm, OHNS or carbide, NABL-traceable certificates.",
+		"Plain gauge and plain snap gauges manufacturer in Coimbatore: plug, ring, pins and setting masters. 1–250 mm, OHNS/carbide, NABL certificates.",
 	keywords: [
 		"plain gauges",
 		"plain plug gauges",
@@ -29,9 +29,9 @@ export const metadata = {
 	alternates: alternatesFor("/products/plain-gauges", { hasHindi: true }),
 	openGraph: {
 		title:
-			"Plain Gauges Manufacturer | Plain Plug & Ring Gauges - DSN Enterprises",
+			"Plain Gauge Manufacturer | Plug, Ring & Snap Gauges - DSN Enterprises",
 		description:
-			"Premium quality plain gauges including plain plug gauges, ring gauges, cylindrical setting masters, measuring pins, and snap gauges. Available in 1mm to 250mm range.",
+			"Plain gauge and plain snap gauges manufacturer in Coimbatore: plug, ring, pins and setting masters. 1–250 mm, OHNS/carbide, NABL certificates.",
 		url: "/products/plain-gauges",
 		siteName: "DSN Enterprises",
 		type: "website",
@@ -47,9 +47,9 @@ export const metadata = {
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Plain Gauges Manufacturer | Plain Plug & Ring Gauges",
+		title: "Plain Gauge Manufacturer | Plug, Ring & Snap Gauges",
 		description:
-			"Premium quality plain gauges including plain plug gauges, ring gauges, cylindrical setting masters, and snap gauges.",
+			"Plain gauge manufacturer in Coimbatore: plain snap gauges, plug, ring, pins and setting masters, NABL certificates.",
 		images: ["/images/plain-plug-gauge.png"],
 	},
 	robots: {

@@ -99,7 +99,7 @@ const products = [
 		name: "Snap Gauges",
 		specs: "Various sizes available",
 		description:
-			"Quick-action gauges for rapid external dimension measurement. Designed for high-volume production inspection with easy pass/fail determination.",
+			"We manufacture plain snap gauges for rapid external-dimension measurement on production lines — fixed and adjustable types with wear-resistant anvils for quick GO/NO-GO decisions at volume.",
 		features: [
 			"Rapid measurement capability",
 			"Adjustable and fixed types",
@@ -162,7 +162,8 @@ export default function PlainGaugesPage() {
 							make plug gauges, ring gauges, snap gauges, measuring pins, and
 							setting masters from 1 mm to 250 mm in OHNS or carbide, with
 							NABL-traceable certificates aligned to the tolerance band on your
-							drawing.
+							drawing. As a plain snap gauges manufacturer, we supply fixed and
+							adjustable snap gauges for high-volume external-diameter checking.
 						</p>
 						<div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
 							<div className="text-center p-5 bg-white rounded-xl border border-gray-200/80 shadow-sm">

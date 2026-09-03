@@ -2,7 +2,7 @@ import { alternatesFor } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
-	title: "NPT, BSP & Metric Thread Gauges",
+	title: "NPT Thread Gauges Manufacturer – BSP, Metric, Pipe",
 	description:
 		"NPT and NPTF pipe thread gauge manufacturer, plus BSP, Metric, Unified, and BSW. Plug, ring, and setting plugs with NABL-traceable certificates.",
 	keywords: [
@@ -31,7 +31,7 @@ export const metadata = {
 	alternates: alternatesFor("/products/thread-gauges", { hasHindi: true }),
 	openGraph: {
 		title:
-			"Thread Gauges Manufacturer | Thread Plug & Ring Gauges - DSN Enterprises",
+			"NPT Thread Gauges Manufacturer | BSP, Metric, Pipe - DSN Enterprises",
 		description:
 			"Precision thread gauges including thread plug gauges, ring gauges, setting plugs, taper gauges, and all standard thread forms.",
 		url: "/products/thread-gauges",
@@ -49,7 +49,7 @@ export const metadata = {
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Thread Gauges Manufacturer | Thread Plug & Ring Gauges",
+		title: "NPT Thread Gauges Manufacturer | BSP, Metric, Pipe",
 		description:
 			"Precision thread gauges including thread plug gauges, ring gauges, setting plugs, and taper gauges.",
 		images: ["/images/thread-plug-gauge.png"],

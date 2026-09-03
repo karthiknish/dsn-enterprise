@@ -189,11 +189,11 @@ export default function ThreadGaugesPage() {
 							threaded holes.
 						</p>
 						<p className="text-lg text-gray-700 mb-6">
-							DSN Enterprises manufactures thread gauges in Coimbatore, including
-							NPT and NPTF pipe thread gauges, BSP/BSPT, Metric, Unified
-							(UNC/UNF), and BSW. Plug gauges inspect internal threads, ring
-							gauges inspect external threads, and setting plugs keep working
-							rings in tolerance.
+							As a manufacturer of NPT thread gauges, DSN Enterprises cuts NPT
+							and NPTF plug gauges, ring gauges, and setting systems in-house,
+							alongside BSP, Metric, Unified, and BSW — so pipe-thread gauge
+							sets and working/reference pairs come from one Coimbatore works
+							with matched calibration.
 						</p>
 
 						{/* Thread Forms Grid */}

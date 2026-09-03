@@ -539,23 +539,98 @@ crawled. **Do not** add API gauge pages for these two cities.
 
 ---
 
+## 2F. Round four — 3 Sep 2026 Search Console pass
+
+Figures are the Search Console API for the 90 days ending 2026-09-03,
+compared with the 21 Aug 2026 pass in section 2D.
+
+### What changed since round three
+
+| Metric | 21 Aug (90d) | 3 Sep (90d) |
+|---|---|---|
+| Clicks | 92 | **111** |
+| Impressions | 4,007 | **5,016** |
+| CTR | 2.30% | 2.21% |
+| Last 28d clicks / impressions | 69 | **80 / 3,239 (+300% / +117% vs prior 28d)** |
+| Non-branded share of impressions | 46% | **56%** |
+
+The IS 3455 post grew again (825 → **1,338 impr, 42 clicks, pos 6.4**).
+City-intent demand is still **0.1%** (3 impr). First trickle on the new
+location URLs: `air-gauges-coimbatore` 21 impr, `thread-plug-coimbatore`
+13 impr. Bangalore/Hyderabad location URLs are in the sitemap and build.
+
+### What this pass changed
+
+Product metadata/body gaps flagged by `npm run seo:keywords`, plus
+over-long Firestore meta descriptions. No new URLs. IS 3455 title left
+alone — only two weeks since the 2D retitle, too soon to re-judge.
+
+| Page | Evidence | Change |
+|---|---|---|
+| `/products/plain-gauges` | "plain snap gauges manufacturer" 10 impr, term in neither body nor desc; "plain gauge" pos 3.4, 0 clicks | Title now **Plain Gauge Manufacturer – Plug, Ring & Snap Gauges** (51 chars, renders without brand suffix — see note). Desc carries both exact phrases (142 chars). Body gains exact-phrase sentence + snap card rewritten around "We manufacture plain snap gauges". |
+| `/products/thread-gauges` | "npt thread gauges manufacturer" absent everywhere; "pipe thread gauge(s)" in body/desc but not title | Title now **NPT Thread Gauges Manufacturer – BSP, Metric, Pipe** (50 chars). Body gains in-house NPT/NPTF manufacturing paragraph. Exporter wording deliberately avoided (unverified claim). |
+| `/products/api-gauges` | Bare "api gauges" in neither desc nor H1; blog outranks product 7.8 vs 23.1 | Desc now leads with exact **API gauges** + keeps the not-pressure-gauges disambiguation (119 chars). Title/H1 keep "Thread" — the blog already owns bare "api gauges" with an exact-anchor link to the product page (verified in Firestore content). |
+| Special-gauges intro | "custom gauge supplier" pos 7.0 | Intro now says "design, make, and supply" — supplier synonym without new claims. Page already states "custom gauges manufacturer". |
+| 4 Firestore posts | metaDesc 170–181 chars, all truncating; parent zero-CTR pages (113/114 impr, 0 clicks) | Rewrites ≤153 chars via `scripts/seo-round4.mjs` (backup in `scripts/.blog-backups/`): gauge-usage mistakes, calibration frequency, precision-measurement QC, aerospace measurement. Guard-banding metaTitle unified with H1. |
+
+### Note: product pages render without the brand suffix
+
+Verified in `.next/server/app/products/plain-gauges.html`: `<title>` has
+no `| DSN Enterprises` — layout and page both export the same metadata
+object, so the root `title.template` does not append. Budget titles
+against 60 chars raw, not 60-minus-brand. `/about` (layout-only metadata)
+does get the suffix. Do not "fix" this by appending the brand manually —
+the current behaviour is what keeps product titles within budget.
+
+### Deliberately not done
+
+**IS 3455/IS 919 title untouched.** "is 919" CTR is still 0.9%
+(116 impr, 1 click @ 7.9) but the 2D retitle is two weeks old; re-judge
+next pass. **Remaining `seo:keywords` title flags** ("plain gauges",
+"pipe thread gauge(s)", "api certified gauges", "api 5b") are strict-
+substring artefacts — a 60-char title cannot hold every permutation, and
+each is covered in body/desc/H1. **Brand cannibalisation** (`/about`
+643 impr @ 0.5%, `dsn` 376 impr 0 clicks) and **host duplication**
+(~142 impr stranded on `http://` + apex) are unchanged; the host fix needs
+the DNS/host layer, not code.
+
+### Re-measure
+
+- "plain snap gauges manufacturer" CTR/position (was 0% @ 18.6)
+- "plain gauge" CTR (was 0% @ pos 3.4)
+- NPT/manufacturer query positions (were 22–35)
+- IS 919 CTR (was 0.9%) — re-judge 2D title then
+- Bangalore/Hyderabad location URL coverage (`seo:coverage` single-URL checks; full sample times out on API quota)
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value.
 
-### 1. Fix the multi-host duplication (infrastructure, not code)
+### 1. Multi-host duplication — redirect verified live, residual GSC rows only
 
-Still live as of 21 Aug 2026:
+Verified 3 Sep 2026 via Vercel CLI (`vercel domains inspect`) plus curl:
 
-```
-https://www.dsnenterprises.in   (canonical)
-http://dsnenterprises.in        74 impr, 0 clicks, pos 5.5
-https://dsnenterprises.in       65 impr, 0 clicks, pos 9.5
-```
+- DNS is on Vercel nameservers (`ns1/ns2.vercel-dns.com` ✔) and both
+  `www.dsnenterprises.in` and `dsnenterprises.in` are assigned to the
+  `dsn-enterprise` project — so this was never a DNS misconfiguration.
+- The apex → www 301 lives in `next.config.js` `redirects()` (host-based,
+  in place since Mar 2026) and is serving correctly:
+  `https://dsnenterprises.in/products/plain-gauges` → 301 → www equivalent,
+  path and query preserved. `http://` → 308 → `https://` is Vercel's
+  automatic edge upgrade.
+- Full chains resolve: `http://apex` → 308 → `https://apex` → 301 →
+  `https://www...` → 200.
 
-~139 impressions and their link equity are stranded on hosts that should
-redirect. Fix at the DNS/hosting layer: `http://` and apex non-www must both
-301 to `https://www.`. This cannot be fixed in Next.js config alone.
+The `http://` and apex rows still appearing in Search Console (142 impr,
+0 clicks) are residual: the 90-day window includes history from before the
+redirects, and Google keeps re-probing previously known URLs. No CLI or DNS
+change can remove them — only time and the permanent redirects, which are
+already in place. Re-check next pass: the rows should decay to ~0 as the
+window rolls past the fix. The two-hop `http apex` chain (308 then 301) is
+unavoidable on Vercel (scheme upgrade precedes app redirects) and within
+Google's 5-hop budget — not worth working around.
 
 ### 2. Convert remaining standards CTR (in progress, see 2D)
 

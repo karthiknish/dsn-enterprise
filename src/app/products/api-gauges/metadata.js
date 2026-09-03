@@ -3,7 +3,7 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
 	title: "API Thread Gauges – 5B & 7-2",
 	description:
-		"API thread gauges for oil and gas, not pressure gauges. Licensed API 5B and 7-2 manufacture for casing, tubing, line pipe, and rotary shouldered connections.",
+		"API gauges (thread gauges, not pressure gauges) manufacturer to API 5B & 7-2 for casing, tubing and rotary connections.",
 	keywords: [
 		"API gauges",
 		"API 5B gauges",
@@ -30,7 +30,7 @@ export const metadata = {
 		title:
 			"API Gauges Manufacturer | API 5B & 7-2 Certified Gauges - DSN Enterprises",
 		description:
-			"API 5B & 7-2 licensed manufacturer of certified thread gauges for oil and gas industry. API casing, tubing, line pipe, and rotary shouldered gauges.",
+			"API gauges (thread gauges, not pressure gauges) manufacturer to API 5B & 7-2 for casing, tubing, line pipe, and rotary shouldered connections.",
 		url: "/products/api-gauges",
 		siteName: "DSN Enterprises",
 		type: "website",
@@ -48,7 +48,7 @@ export const metadata = {
 		card: "summary_large_image",
 		title: "API Gauges Manufacturer | API 5B & 7-2 Certified Gauges",
 		description:
-			"API 5B & 7-2 licensed manufacturer of certified thread gauges for oil and gas industry.",
+			"API gauges manufacturer to API 5B & 7-2: certified thread gauges (not pressure gauges) for the oil and gas industry.",
 		images: ["/images/api-thread-gauge.png"],
 	},
 	robots: {
