@@ -320,6 +320,8 @@ export async function getAnalyticsData(period = "30d") {
 			headers.forEach((name, i) => {
 				out[name] = num(row.metricValues?.[i]?.value);
 			});
+			// The breakdown card reads `users`; GA4's metric is `activeUsers`.
+			out.users = out.activeUsers;
 			return out;
 		}),
 		"users",
