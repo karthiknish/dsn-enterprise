@@ -98,6 +98,10 @@ export default function BlogFeaturedImagePanel({
 	// Track the src that failed rather than a boolean, so a new image (uploaded,
 	// picked or AI-generated) is retried instead of inheriting the old error.
 	const [erroredSrc, setErroredSrc] = useState(null);
+	// Track which src has painted rather than a boolean, so a changed src
+	// automatically returns to the skeleton without an effect.
+	const [loadedSrc, setLoadedSrc] = useState(null);
+	const imageLoaded = loadedSrc === formData.featuredImage;
 	const imageError = Boolean(
 		formData.featuredImage && erroredSrc === formData.featuredImage,
 	);
@@ -185,12 +189,19 @@ export default function BlogFeaturedImagePanel({
 
 			{formData.featuredImage && !imageError ? (
 				<div className="mb-4 relative rounded-lg overflow-hidden border border-gray-200">
+					{!imageLoaded && (
+						<div
+							className="absolute inset-0 animate-pulse bg-gray-100 z-10"
+							aria-hidden="true"
+						/>
+					)}
 					<Image
 						src={formData.featuredImage}
 						alt="Featured preview"
 						width={400}
 						height={225}
 						unoptimized
+						onLoad={() => setLoadedSrc(formData.featuredImage)}
 						onError={() => setErroredSrc(formData.featuredImage)}
 						className="w-full h-48 object-cover"
 					/>

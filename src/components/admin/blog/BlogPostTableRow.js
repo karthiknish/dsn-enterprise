@@ -2,6 +2,39 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+
+/**
+ * Thumbnail with a skeleton state: pulses until the image paints, and resets
+ * whenever the src changes so a re-uploaded image never shows stale content
+ * behind a hidden skeleton.
+ */
+function Thumb({ src }) {
+	// Track which src has painted rather than a boolean, so a changed src
+	// automatically returns to the skeleton without an effect.
+	const [loadedSrc, setLoadedSrc] = useState(null);
+	const loaded = loadedSrc === src;
+
+	return (
+		<div className="relative w-10 h-10 rounded-lg overflow-hidden mr-3 border border-gray-200 shrink-0">
+			{!loaded && (
+				<div
+					className="absolute inset-0 animate-pulse bg-gray-100"
+					aria-hidden="true"
+				/>
+			)}
+			<Image
+				src={src}
+				alt=""
+				width={40}
+				height={40}
+				unoptimized
+				onLoad={() => setLoadedSrc(src)}
+				className="w-10 h-10 object-cover"
+			/>
+		</div>
+	);
+}
 
 export default function BlogPostTableRow({ post, deleting, onDelete }) {
 	const publishedAt =
@@ -19,14 +52,7 @@ export default function BlogPostTableRow({ post, deleting, onDelete }) {
 			<td className="py-3.5 px-4 whitespace-nowrap">
 				<div className="flex items-center">
 					{post.featuredImage ? (
-						<Image
-							src={post.featuredImage}
-							alt=""
-							width={40}
-							height={40}
-							unoptimized
-							className="w-10 h-10 rounded-lg object-cover mr-3 border border-gray-200"
-						/>
+						<Thumb src={post.featuredImage} />
 					) : (
 						<div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center mr-3 border border-gray-200">
 							<svg
@@ -46,7 +72,9 @@ export default function BlogPostTableRow({ post, deleting, onDelete }) {
 						</div>
 					)}
 					<div>
-						<div className="text-sm font-medium text-gray-900">{post.title}</div>
+						<div className="text-sm font-medium text-gray-900">
+							{post.title}
+						</div>
 						<div className="text-xs text-gray-500 font-mono">/{post.slug}</div>
 					</div>
 				</div>
