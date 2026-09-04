@@ -56,13 +56,6 @@ const Hero = () => {
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
 					>
-						<p className="inline-flex items-center gap-2 text-sm font-medium text-secondary-light/90 mb-5 tracking-wide">
-							<span
-								className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse"
-								aria-hidden
-							/>
-							Precision metrology
-						</p>
 						<h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-semibold mb-6 text-white text-balance leading-[1.1] tracking-tight">
 							Precision Gauges & Measuring Instruments
 						</h1>
@@ -100,9 +93,9 @@ const Hero = () => {
 						className="hidden lg:block"
 					>
 						<div className="rounded-2xl border border-white/15 bg-white/5 backdrop-blur-md p-8 shadow-2xl">
-					<h2 className="text-xl font-semibold mb-6 text-white">
-							Industry-Leading Quality
-						</h2>
+							<h2 className="text-xl font-semibold mb-6 text-white">
+								Industry-Leading Quality
+							</h2>
 							<ul className="space-y-3">
 								{trustPoints.map((point, i) => (
 									<m.li
