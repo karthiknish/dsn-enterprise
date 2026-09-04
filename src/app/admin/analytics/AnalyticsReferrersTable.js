@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
 	Table,
 	TableBody,
@@ -7,6 +8,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { formatCount } from "@/lib/analytics-format";
+import { getSourceLogo } from "@/lib/analytics-source-logos";
 
 export default function AnalyticsReferrersTable({ referrers = [] }) {
 	return (
@@ -45,10 +47,31 @@ export default function AnalyticsReferrersTable({ referrers = [] }) {
 									}`}
 								>
 									<TableCell
-										className="max-w-[240px] truncate px-4 py-3 text-sm font-medium text-gray-900"
+										className="max-w-[240px] px-4 py-3 text-sm font-medium text-gray-900"
 										title={row.label}
 									>
-										{row.label}
+										{(() => {
+											const logo = getSourceLogo(row.label);
+											if (!logo) return row.label;
+											const [source, medium] = row.label.split("/");
+											return (
+												<span className="flex items-center gap-2">
+													<Image
+														src={logo}
+														alt=""
+														width={16}
+														height={16}
+														unoptimized
+														loading="lazy"
+														className="h-4 w-4 shrink-0"
+													/>
+													<span className="truncate">
+														{source.trim()}
+														{medium ? ` / ${medium.trim()}` : ""}
+													</span>
+												</span>
+											);
+										})()}
 									</TableCell>
 									<TableCell className="px-4 py-3 text-right text-sm tabular-nums text-gray-600">
 										{formatCount(row.users)}

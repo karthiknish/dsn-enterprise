@@ -104,6 +104,16 @@ function mapDimensionRows(response, labelFn) {
 	});
 }
 
+/**
+ * GA4 `countryId` is normally a 2-letter ISO code, but returns junk like "ZZ"
+ * for unspecified regions. Anything that is not a clean alpha-2 code becomes
+ * empty so the client can skip the flag icon instead of guessing.
+ */
+function normalizeCountryCode(raw) {
+	const value = (raw || "").trim().toUpperCase();
+	return /^[A-Z]{2}$/.test(value) ? value : "";
+}
+
 /** Attach each row's share of the column total, for inline bar rendering. */
 function withShare(rows, metric) {
 	const total = rows.reduce((acc, row) => acc + num(row[metric]), 0);
@@ -209,7 +219,7 @@ export async function getAnalyticsData(period = "30d") {
 				},
 				{
 					dateRanges,
-					dimensions: [{ name: "country" }],
+					dimensions: [{ name: "country" }, { name: "countryId" }],
 					metrics: [{ name: "activeUsers" }, { name: "sessions" }],
 					orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
 					limit: 8,
@@ -297,11 +307,21 @@ export async function getAnalyticsData(period = "30d") {
 	);
 
 	const countries = withShare(
-		mapDimensionRows(countriesRes).map((row) => ({
-			label: row.label,
-			users: row.activeUsers,
-			sessions: row.sessions,
-		})),
+		(countriesRes?.rows || []).map((row) => {
+			const dims = (row.dimensionValues || []).map((d) => d.value ?? "");
+			// Single date range here, so dims are exactly [country, countryId].
+			// countryId is GA4's ISO 3166-1 alpha-2 code, used client-side for
+			// flag icons.
+			const out = {
+				label: dims[0] || "(not set)",
+				code: normalizeCountryCode(dims[1]),
+			};
+			const headers = (countriesRes?.metricHeaders || []).map((h) => h.name);
+			headers.forEach((name, i) => {
+				out[name] = num(row.metricValues?.[i]?.value);
+			});
+			return out;
+		}),
 		"users",
 	);
 

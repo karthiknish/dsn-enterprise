@@ -53,12 +53,15 @@ export default function AnalyticsBreakdownCard({
 					{visible.map((row) => (
 						<li key={row.label} className="px-6 py-3">
 							<div className="flex items-center justify-between gap-4">
-								<span
-									className="truncate text-sm font-medium text-gray-900"
-									title={row.label}
-								>
-									{row.label || "(not set)"}
-								</span>
+								<div className="flex min-w-0 items-center gap-2">
+									{leadingIcon?.(row)}
+									<span
+										className="truncate text-sm font-medium text-gray-900"
+										title={row.label}
+									>
+										{row.label || "(not set)"}
+									</span>
+								</div>
 								<span className="shrink-0 text-sm font-semibold tabular-nums text-gray-900">
 									{formatCount(row[valueKey])}
 								</span>

@@ -11,6 +11,7 @@ import AnalyticsReferrersTable from "./AnalyticsReferrersTable";
 import AnalyticsToolbar from "./AnalyticsToolbar";
 import AnalyticsTopPagesTable from "./AnalyticsTopPagesTable";
 import AnalyticsTrafficTrendSection from "./AnalyticsTrafficTrendSection";
+import CountryFlag from "./CountryFlag";
 
 export default function AnalyticsDashboard({ initialPeriod = "30d" }) {
 	const { user, loading: authLoading } = useAuth();
@@ -75,28 +76,11 @@ export default function AnalyticsDashboard({ initialPeriod = "30d" }) {
 		await load(rangeId);
 	};
 
-	if (loading && !data && !error) {
-		return <AnalyticsSkeleton />;
-	}
-
-	if (error) {
-		return (
-			<div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-800">
-				<h2 className="mb-2 text-lg font-semibold">Analytics Error</h2>
-				<p className="mb-4">{error}</p>
-				<button
-					type="button"
-					onClick={() => load(period)}
-					className="rounded-lg bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
-				>
-					Retry
-				</button>
-			</div>
-		);
-	}
-
 	const noData = data && data.hasData === false;
 
+	// The toolbar is static chrome (heading, period selector, refresh, export).
+	// It renders immediately; only the data sections below swap in a skeleton,
+	// so static content never appears in a loading state.
 	return (
 		<div className="space-y-8">
 			<AnalyticsToolbar
@@ -113,85 +97,107 @@ export default function AnalyticsDashboard({ initialPeriod = "30d" }) {
 				</div>
 			)}
 
-			{/* GA4 returning no rows is not the same as a quiet site. Saying so
-			    prevents a disconnected property from reading as real zeros. */}
-			{noData && (
-				<div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
-					<p className="mb-1 font-semibold">
-						No analytics data for this period
-					</p>
-					<p className="text-sm">
-						Google Analytics returned no rows. If this persists, confirm the
-						site is sending events to the configured GA4 property — the figures
-						below are placeholders, not measured zeros.
-					</p>
+			{error && (
+				<div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-800">
+					<h2 className="mb-2 text-lg font-semibold">Analytics Error</h2>
+					<p className="mb-4">{error}</p>
+					<button
+						type="button"
+						onClick={() => load(period)}
+						className="rounded-lg bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
+					>
+						Retry
+					</button>
 				</div>
 			)}
 
-			{data?.hasComparison === false && (
-				<p className="text-xs text-gray-400">
-					No data in the comparison window, so period-over-period changes are
-					hidden.
-				</p>
-			)}
+			{!error &&
+				(loading && !data ? (
+					<AnalyticsSkeleton />
+				) : (
+					<>
+						{/* GA4 returning no rows is not the same as a quiet site. Saying so
+						    prevents a disconnected property from reading as real zeros. */}
+						{noData && (
+							<div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
+								<p className="mb-1 font-semibold">
+									No analytics data for this period
+								</p>
+								<p className="text-sm">
+									Google Analytics returned no rows. If this persists, confirm
+									the site is sending events to the configured GA4 property —
+									the figures below are placeholders, not measured zeros.
+								</p>
+							</div>
+						)}
 
-			<AnalyticsMetricCards metrics={data?.metrics} days={data?.days} />
+						{data?.hasComparison === false && (
+							<p className="text-xs text-gray-400">
+								No data in the comparison window, so period-over-period changes
+								are hidden.
+							</p>
+						)}
 
-			<AnalyticsTrafficTrendSection trends={data?.trends || []} />
+						<AnalyticsMetricCards metrics={data?.metrics} days={data?.days} />
 
-			<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-				<AnalyticsBreakdownCard
-					title="Acquisition Channels"
-					description="How visitors arrive"
-					icon={Radio}
-					rows={data?.channels || []}
-					valueKey="sessions"
-					valueLabel="Sessions"
-					secondaryKey="engagementRate"
-					secondaryLabel="engaged"
-				/>
-				<AnalyticsBreakdownCard
-					title="Devices"
-					description="Sessions by device category"
-					icon={MonitorSmartphone}
-					rows={data?.devices || []}
-					valueKey="sessions"
-					valueLabel="Sessions"
-					secondaryKey="bounceRate"
-					secondaryLabel="bounce"
-				/>
-			</div>
+						<AnalyticsTrafficTrendSection trends={data?.trends || []} />
 
-			<div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
-				<AnalyticsTopPagesTable topPages={data?.topPages || []} />
-				<AnalyticsReferrersTable referrers={data?.referrers || []} />
-			</div>
+						<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+							<AnalyticsBreakdownCard
+								title="Acquisition Channels"
+								description="How visitors arrive"
+								icon={Radio}
+								rows={data?.channels || []}
+								valueKey="sessions"
+								valueLabel="Sessions"
+								secondaryKey="engagementRate"
+								secondaryLabel="engaged"
+							/>
+							<AnalyticsBreakdownCard
+								title="Devices"
+								description="Sessions by device category"
+								icon={MonitorSmartphone}
+								rows={data?.devices || []}
+								valueKey="sessions"
+								valueLabel="Sessions"
+								secondaryKey="bounceRate"
+								secondaryLabel="bounce"
+							/>
+						</div>
 
-			<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-				<AnalyticsBreakdownCard
-					title="Landing Pages"
-					description="Where sessions start"
-					icon={SignpostBig}
-					rows={data?.landingPages || []}
-					valueKey="sessions"
-					valueLabel="Sessions"
-					secondaryKey="bounceRate"
-					secondaryLabel="bounce"
-				/>
-				<AnalyticsBreakdownCard
-					title="Top Countries"
-					description="Users by location"
-					icon={Globe}
-					rows={data?.countries || []}
-					valueKey="users"
-					valueLabel="Users"
-					secondaryKey="sessions"
-					secondaryLabel="sessions"
-					secondaryFormat="count"
-				/>
-			</div>
+						<div className="grid grid-cols-1 gap-8 xl:grid-cols-2">
+							<AnalyticsTopPagesTable topPages={data?.topPages || []} />
+							<AnalyticsReferrersTable referrers={data?.referrers || []} />
+						</div>
 
-			<AnalyticsInsightsPanel data={data} />
+						<div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+							<AnalyticsBreakdownCard
+								title="Landing Pages"
+								description="Where sessions start"
+								icon={SignpostBig}
+								rows={data?.landingPages || []}
+								valueKey="sessions"
+								valueLabel="Sessions"
+								secondaryKey="bounceRate"
+								secondaryLabel="bounce"
+							/>
+							<AnalyticsBreakdownCard
+								title="Top Countries"
+								description="Users by location"
+								icon={Globe}
+								rows={data?.countries || []}
+								valueKey="users"
+								valueLabel="Users"
+								secondaryKey="sessions"
+								secondaryLabel="sessions"
+								secondaryFormat="count"
+								leadingIcon={(row) => <CountryFlag code={row.code} />}
+							/>
+						</div>
+
+						<AnalyticsInsightsPanel data={data} />
+					</>
+				))}
 		</div>
 	);
 }
@@ -204,7 +210,6 @@ function AnalyticsSkeleton() {
 	return (
 		<output className="block space-y-8" aria-live="polite">
 			<span className="sr-only">Loading analytics</span>
-			<div className="h-10 w-64 animate-pulse rounded-lg bg-gray-100" />
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
 				{[0, 1, 2, 3].map((i) => (
 					<div
