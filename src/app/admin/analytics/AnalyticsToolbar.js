@@ -42,10 +42,7 @@ export default function AnalyticsToolbar({
 					disabled={loading}
 					className="inline-flex items-center gap-2 rounded-lg border border-gray-200/80 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 disabled:opacity-60"
 				>
-					<RefreshCw
-						className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
-						aria-hidden
-					/>
+					<RefreshCw className="h-4 w-4" aria-hidden />
 					Refresh
 				</button>
 				<button
