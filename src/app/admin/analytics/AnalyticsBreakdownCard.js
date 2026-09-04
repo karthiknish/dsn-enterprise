@@ -19,6 +19,7 @@ export default function AnalyticsBreakdownCard({
 	emptyMessage = "No data available",
 	icon: Icon,
 	limit,
+	leadingIcon,
 }) {
 	const visible = limit ? rows.slice(0, limit) : rows;
 	const formatSecondary = secondaryFormat === "rate" ? formatRate : formatCount;
