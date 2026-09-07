@@ -2,9 +2,11 @@ import { alternatesFor } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
+	// 2026-09-07: desc now carries the plural "plain gauges" (7 impr @ 10.3,
+	// term in body+H1 but not desc) while keeping the snap-manufacturer phrase.
 	title: "Plain Gauge Manufacturer – Plug, Ring & Snap Gauges",
 	description:
-		"Plain gauge and plain snap gauges manufacturer in Coimbatore: plug, ring, pins and setting masters. 1–250 mm, OHNS/carbide, NABL certificates.",
+		"Plain gauges manufacturer in Coimbatore — plug, ring, snap gauges, pins and setting masters. 1–250 mm, OHNS/carbide, NABL certificates.",
 	keywords: [
 		"plain gauges",
 		"plain plug gauges",
@@ -31,7 +33,7 @@ export const metadata = {
 		title:
 			"Plain Gauge Manufacturer | Plug, Ring & Snap Gauges - DSN Enterprises",
 		description:
-			"Plain gauge and plain snap gauges manufacturer in Coimbatore: plug, ring, pins and setting masters. 1–250 mm, OHNS/carbide, NABL certificates.",
+			"Plain gauges manufacturer in Coimbatore — plug, ring, snap gauges, pins and setting masters. 1–250 mm, OHNS/carbide, NABL certificates.",
 		url: "/products/plain-gauges",
 		siteName: "DSN Enterprises",
 		type: "website",

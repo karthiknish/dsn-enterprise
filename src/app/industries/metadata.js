@@ -3,9 +3,14 @@ import { SITE_URL } from "@/lib/site";
 export const metadata = {
 	// Brand comes from the root title template; repeating it here produced
 	// "... - DSN Enterprises | DSN Enterprises" at 90 characters.
-	title: "Industries – Auto, Aero, Oil & Gas",
+	// 2026-09-07: abbreviations ("Auto, Aero") answered no ranking query;
+	// /industries had 100 impr @ 7.7 with 0 clicks. Title now uses full
+	// demand terms; desc leads with them instead of city names (0.2% demand).
+	// Raw title is 39 chars: this route gets the root " | DSN Enterprises"
+	// suffix (layout-only metadata), so it must stay under 41 raw.
+	title: "Automotive, Aerospace, Oil & Gas Gauges",
 	description:
-		"Precision gauges for automotive, aerospace, oil and gas, and engineering plants in Tamil Nadu, Bangalore, and Hyderabad.",
+		"Precision gauges for automotive, aerospace, oil & gas, defence and general engineering: plain, thread, API and custom gauges with NABL calibration.",
 	keywords: [
 		"oil and gas gauges",
 		"automotive gauges",
@@ -28,10 +33,9 @@ export const metadata = {
 		canonical: "/industries",
 	},
 	openGraph: {
-		title:
-			"Industries We Serve | Oil & Gas, Automotive, Aerospace - DSN Enterprises",
+		title: "Automotive, Aerospace, Oil & Gas Gauges - DSN Enterprises",
 		description:
-			"DSN Enterprises serves diverse industries including Oil & Gas, Automotive, Aerospace & Defense, General Engineering, and Heavy Machinery with precision gauging solutions.",
+			"Precision gauges for automotive, aerospace, oil & gas, defence and general engineering: plain, thread, API and custom gauges with NABL calibration.",
 		url: "/industries",
 		siteName: "DSN Enterprises",
 		type: "website",
@@ -47,9 +51,9 @@ export const metadata = {
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Industries We Serve | Oil & Gas, Automotive, Aerospace",
+		title: "Automotive, Aerospace, Oil & Gas Gauges",
 		description:
-			"DSN Enterprises serves diverse industries with precision gauging solutions.",
+			"Precision gauges for automotive, aerospace, oil & gas, defence and general engineering, with NABL calibration.",
 		images: ["/images/featured.png"],
 	},
 	robots: {

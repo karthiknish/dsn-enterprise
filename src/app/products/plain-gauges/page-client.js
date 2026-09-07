@@ -139,7 +139,9 @@ export default function PlainGaugesPage() {
 	return (
 		<div>
 			<ProductCategoryHero
-				title="Plain Gauges"
+				// 2026-09-07: H1 carries "manufacturer" — "plain snap gauges
+				// manufacturer" was in body+desc but not H1 (10 impr, 0 clicks).
+				title="Plain Gauge Manufacturer"
 				quoteProduct="Plain Gauges"
 				description={pageHeroes.productCategoryHeroes.plainGauges}
 			/>

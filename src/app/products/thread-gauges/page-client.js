@@ -169,7 +169,9 @@ export default function ThreadGaugesPage() {
 	return (
 		<div>
 			<ProductCategoryHero
-				title="Thread Gauges"
+				// 2026-09-07: H1 carries manufacturer + thread forms — "pipe thread
+				// gauge(s)" was in body+desc but not H1/title (pos 24-29).
+				title="Thread Gauge Manufacturer – NPT, BSP, Metric, Pipe"
 				quoteProduct="Thread Gauges"
 				description={pageHeroes.productCategoryHeroes.threadGauges}
 			/>

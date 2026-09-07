@@ -1,9 +1,13 @@
 import { SITE_URL } from "@/lib/site";
 
 export const metadata = {
+	// 2026-09-07: desc leads with "Certified" — "api certified gauges"
+	// 5 impr @ 6.0, 0 clicks, term in body but not desc/H1. Title/H1 keep
+	// "Thread": the blog owns bare "api gauges" (pos 7.8 vs product 30.1)
+	// and links to this page, so no cannibalisation fight.
 	title: "API Thread Gauges – 5B & 7-2",
 	description:
-		"API gauges (thread gauges, not pressure gauges) manufacturer to API 5B & 7-2 for casing, tubing and rotary connections.",
+		"Certified API gauges (thread gauges, not pressure gauges) to API 5B & 7-2 for casing, tubing and rotary connections.",
 	keywords: [
 		"API gauges",
 		"API 5B gauges",

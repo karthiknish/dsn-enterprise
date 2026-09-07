@@ -604,6 +604,66 @@ the DNS/host layer, not code.
 
 ---
 
+## 2G. Round five — 7 Sep 2026 Search Console pass
+
+Figures are the Search Console API for the 90 days ending 2026-09-07,
+compared with the 3 Sep 2026 pass in section 2F.
+
+### What changed since round four
+
+| Metric | 3 Sep (90d) | 7 Sep (90d) |
+|---|---|---|
+| Clicks | 111 | **125** |
+| Impressions | 5,016 | **5,369** |
+| CTR | 2.21% | **2.33%** |
+| Last 28d clicks / impressions | 80 / 3,239 | **84 / 2,906 (+171% clicks vs prior 28d)** |
+
+City-intent demand still **0.2%** (4 impr). `/industries` newly flagged:
+100 impr @ 7.7, 0 clicks.
+
+### What this pass changed
+
+Firestore (via `scripts/seo-round5.mjs`, backup in `scripts/.blog-backups/`,
+all titles ≤60 / descs ≤158, script asserts budgets before writing):
+
+| Post | Evidence | Change |
+|---|---|---|
+| taper-thread | title 93 / metaTitle 68 / metaDesc 163, all truncating; "tapered thread" 11 impr not in title; "taper thread ring gauge" @ 2.0, 0 clicks | Title/metaTitle now **Tapered Thread Gauges: NPT & BSPT Guide** (39); desc leads with the exact ring-gauge phrase (139) |
+| guard-banding | 117 impr, 0 clicks; desc contained neither "guard banding" nor "guardbanding" (queries split 7/6) | Desc leads with both forms (127); title kept — it already has the two-word form |
+| common-mistakes | 140 impr, 0 clicks; "gauge error" 7 impr @ 8.0, term in neither title nor desc | Desc now leads **Gauge errors…** (145) |
+| precision-QC | 89 impr, 0 clicks; "precision in quality control" 4 impr @ 7.3 | Desc takes the exact query form (137); title keeps "Precision Measurement…" |
+| aerospace | 74 impr, 0 clicks; "aerospace measuring instruments" 7 impr @ 9.7 | Desc front-loads the exact phrase (135) |
+| IS 3455 post | "is 919" 130 impr @ 8.0, **0.8% CTR** — 2D retitle now 3 weeks old, re-judged | Desc flipped to lead **IS 919:2014 = ISO 286** (133); title still leads IS 3455, so each half keeps a lead slot |
+
+Code (verified in `.next/server/app/*.html` after `npm run build`):
+
+| Page | Evidence | Change |
+|---|---|---|
+| `/industries` | 100 impr @ 7.7, 0 clicks; title used "Auto, Aero" abbreviations answering no query; desc led with city names (0.2% demand) | Title **Automotive, Aerospace, Oil & Gas Gauges** (39 raw → 58 rendered with brand suffix — this route gets the suffix, unlike product pages); desc demand-led (150) |
+| `/products/plain-gauges` | "plain gauges" 7 impr @ 10.3 in body+H1 but not desc | Desc now plural-led (138); H1 **Plain Gauge Manufacturer** (was "Plain Gauges") |
+| `/products/thread-gauges` | "pipe thread gauge(s)" in body+desc but not H1/title, pos 24–29 | H1 **Thread Gauge Manufacturer – NPT, BSP, Metric, Pipe** |
+| `/products/api-gauges` | "api certified gauges" 5 impr @ 6.0, 0 clicks, term in body only | Desc leads **Certified…** (118). Title/H1 keep "Thread" — the blog owns bare "api gauges" (7.8 vs 30.1) and links here |
+
+### Deliberately not done
+
+**custom-gauges blog** ("custom gauges manufacturer" pos 4.8, 0 clicks):
+title/meta already exact — this is intent mismatch (blog ranks, buyers want
+the hub), not snippet. Fix is hub relevance + links. **calibration-
+-frequency** (115 impr, 0 clicks @ pos 11–27): snippet already exact;
+positional problem needing depth + internal links. **Brand
+cannibalisation** (`/about` 621 impr @ 0.5%, `dsn` 377 impr 0 clicks):
+branded clicks convert wherever they land — left alone. **City pages,
+second IS URL, BIS tables, host rows**: unchanged per rules 1–6.
+
+### Re-measure
+
+- taper/guard-banding/mistakes/precision-QC/aerospace CTR (all were 0%)
+- "is 919" CTR (was 0.8%) — if still flat, the page may need an IS-919-led H2, not more snippet work
+- `/industries` CTR (was 0% @ 7.7) and plain-gauge CTR (was 0% @ pos 3–13)
+- NPT/pipe positions (were 22–35; H1 alone rarely moves pos 30)
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value.
