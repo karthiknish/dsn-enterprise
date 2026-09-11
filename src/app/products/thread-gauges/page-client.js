@@ -1,9 +1,9 @@
 "use client";
 
+import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
 import CityLinks from "@/components/seo/CityLinks";
@@ -215,6 +215,25 @@ export default function ThreadGaugesPage() {
 								))}
 							</div>
 						</div>
+
+						{/* Link to the thread reference tables */}
+						<div className="mt-10 rounded-xl border border-primary/15 bg-white p-6">
+							<h3 className="text-xl font-semibold mb-2 text-gray-900">
+								Thread dimensions and tolerances
+							</h3>
+							<p className="text-gray-700 mb-0">
+								Pitch diameters, minor diameters and tap drills for every thread
+								form we cut, on the{" "}
+								<Link
+									href="/threads"
+									className="font-semibold text-primary underline decoration-secondary decoration-2 underline-offset-2"
+								>
+									thread reference charts
+								</Link>
+								. Per-size pages for M6 through M20 give the coarse and fine
+								series for that size.
+							</p>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -252,7 +271,7 @@ export default function ThreadGaugesPage() {
 											src={product.image}
 											alt={product.name}
 											fill
-							sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+											sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
 											className="object-contain p-8"
 										/>
 									</div>
@@ -465,7 +484,10 @@ export default function ThreadGaugesPage() {
 				heading="Need Thread Gauges?"
 				description="We manufacture thread gauges for all standard and special thread forms. Contact us for custom specifications, bulk orders, or technical support."
 				buttons={{
-					primary: { text: "Get a Quote", url: "/contact?product=Thread%20Gauges" },
+					primary: {
+						text: "Get a Quote",
+						url: "/contact?product=Thread%20Gauges",
+					},
 					secondary: { text: "View Products", url: "/products/thread-gauges" },
 				}}
 			/>

@@ -12,13 +12,31 @@
 // rather than dumped on Google all at once.
 
 import { getCityProfile } from "@/lib/seo-location-data";
+import { DESC_MAX, fit, TITLE_MAX } from "@/lib/seo-text";
 
 /**
  * Rollout gate. Raise to 2, then 3, only after the current tier is measurably
  * indexed (`node scripts/gsc-index-coverage.mjs`). Overridable for previews.
+ *
+ * LOWERED from 2 to 1 after the external demand check in
+ * docs/SEO-STRATEGY.md (round three). The gate is symmetric: it was put in
+ * place to stop URLs shipping on faith, and the evidence now says the tier-2
+ * cities never should have shipped.
+ *
+ * What the data showed at tier 2 (52 URLs live): 90 days produced 99
+ * impressions and 2 clicks across the whole city segment, with only 4 URLs
+ * ever recording an impression. Google Keyword Planner recorded no volume at
+ * all for 11 of 15 city probes — including "gauge manufacturer in coimbatore",
+ * the company's own city — against 30/month for the best one.
+ *
+ * Tier 1 keeps Coimbatore (the works, local pack and NAP consistency) and
+ * Chennai (the only city term with measured volume, plus the largest
+ * industrial base within reach). Tier 2 no longer emits pages; the existing
+ * 308 in src/app/products/[slug]/page.js sends those URLs to the product hub
+ * so any accumulated signal is preserved rather than dropped.
  */
 export const LOCATION_TIER_LIMIT = Number(
-	process.env.NEXT_PUBLIC_LOCATION_TIER_LIMIT || 2,
+	process.env.NEXT_PUBLIC_LOCATION_TIER_LIMIT || 1,
 );
 
 export const CITIES = [
@@ -173,23 +191,6 @@ export const SERVICE_CITY_RELEVANCE = {
 // mid-sentence in the SERP, which is a direct CTR loss on pages already
 // ranking in positions 8-10.
 // ---------------------------------------------------------------------------
-
-const TITLE_MAX = 60;
-const DESC_MAX = 158;
-
-/** Pick the first candidate that fits the budget; never truncate mid-word. */
-function fit(candidates, max) {
-	for (const c of candidates) {
-		if (c.length <= max) return c;
-	}
-	const last = candidates[candidates.length - 1];
-	if (last.length <= max) return last;
-	const cut = last.slice(0, max);
-	return cut
-		.slice(0, cut.lastIndexOf(" "))
-		.replace(/[,\-|—]$/, "")
-		.trim();
-}
 
 function buildProductTitle(productName, cityName) {
 	return fit(
@@ -436,7 +437,9 @@ export function generateProductCityPages() {
 					`${product.name} supplier ${city.name}`,
 					"DSN Enterprises",
 					city.state,
-					...(city.slug === "bangalore" ? ["Bengaluru", "Bangalore gauges"] : []),
+					...(city.slug === "bangalore"
+						? ["Bengaluru", "Bangalore gauges"]
+						: []),
 					...(city.slug === "hyderabad" ? ["Hyderabad gauges"] : []),
 				],
 			});

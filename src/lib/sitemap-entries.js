@@ -1,12 +1,15 @@
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { HI_TRANSLATED_PATHS } from "@/content/hi/pages";
-import { db } from "@/lib/firebase";
+import { getPublishedPosts } from "@/lib/blog-queries";
 import { HINDI_ENABLED, HREFLANG } from "@/lib/i18n/config";
 import {
 	generateProductCityPages,
 	generateServiceCityPages,
 } from "@/lib/seo-pages.config";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
+import {
+	generateMetricSizePages,
+	generateThreadSystemPages,
+} from "@/lib/thread-pages.config";
 
 /**
  * Shared entry builders for the split sitemap.
@@ -39,29 +42,35 @@ import { getSiteUrl, SITE_URL } from "@/lib/site";
  */
 export const CITY_PAGES_LASTMOD = new Date("2026-08-21T00:00:00.000Z");
 
+/**
+ * Thread reference tables use a pinned lastmod for the same reason cities do.
+ * The dimensions are standards data and only change when the source standard
+ * or the curation does — not on every deploy. Bump by hand when either moves.
+ */
+export const THREAD_PAGES_LASTMOD = new Date("2026-09-12T00:00:00.000Z");
+
 const NOW = () => new Date();
 
+/**
+ * Blog posts for the sitemap. Delegates to the same query the post route uses
+ * to decide which slugs exist, so the sitemap can never list a URL the router
+ * would 404.
+ *
+ * An empty list is tolerable here — the blog simply drops out of this segment.
+ * A *failed* read is not silently tolerated: the post route shares this query
+ * and refuses to build on failure, so a real outage stops the deploy rather
+ * than shipping a sitemap that advertises nothing and a blog that serves
+ * nothing.
+ */
 async function getBlogPosts() {
-	try {
-		const blogRef = collection(db, "blogs");
-		const q = query(
-			blogRef,
-			where("status", "==", "published"),
-			orderBy("createdAt", "desc"),
-		);
-		const snapshot = await getDocs(q);
-		return snapshot.docs.map((doc) => ({
-			slug: doc.data().slug,
-			updatedAt:
-				doc.data().updatedAt?.toDate?.() ||
-				doc.data().createdAt?.toDate?.() ||
-				new Date(),
-		}));
-	} catch (_error) {
-		// Return empty array if Firebase is not accessible
+	const { ok, posts } = await getPublishedPosts();
+
+	if (!ok) {
 		console.log("Sitemap: Unable to fetch blog posts, continuing without them");
 		return [];
 	}
+
+	return posts;
 }
 
 function staticPages() {
@@ -154,6 +163,31 @@ function hindiPages() {
 }
 
 /**
+ * Thread reference pages: the hub, one page per thread system, and a page per
+ * metric size. These go in the main segment, not the generated one — the
+ * variable that changes between them is engineering data rather than a city
+ * name, so each URL states different numbers and earns its own index entry.
+ */
+function threadEntries() {
+	const hub = {
+		path: "/threads",
+		changeFrequency: "monthly",
+		priority: 0.75,
+	};
+
+	return [
+		hub,
+		...generateThreadSystemPages(),
+		...generateMetricSizePages(),
+	].map((page) => ({
+		url: `${SITE_URL}${page.path}`,
+		lastModified: THREAD_PAGES_LASTMOD,
+		changeFrequency: page.changeFrequency ?? "monthly",
+		priority: page.priority ?? 0.6,
+	}));
+}
+
+/**
  * Segment 1: everything with unique content and real internal links.
  * This is the file to submit to Search Console first.
  */
@@ -166,7 +200,12 @@ export async function getMainEntries() {
 		priority: 0.6,
 	}));
 
-	return [...staticPages().map(withAlternates), ...blogPages, ...hindiPages()];
+	return [
+		...staticPages().map(withAlternates),
+		...threadEntries(),
+		...blogPages,
+		...hindiPages(),
+	];
 }
 
 /**

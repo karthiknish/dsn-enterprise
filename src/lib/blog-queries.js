@@ -33,6 +33,61 @@ function mapPostDoc(docSnap) {
 	};
 }
 
+/**
+ * Every published slug, for the build-time route set.
+ *
+ * `/blog/[slug]` builds with `dynamicParams = false`, so this list *is* the set
+ * of blog URLs that exist: anything missing from it is refused by the router
+ * with a real 404 instead of rendering a 200 "Post Not Found" page. That makes
+ * an empty list catastrophic rather than harmless, so this returns `ok` to let
+ * callers tell "the read failed" (network, IAM, quota) apart from "there are no
+ * published posts yet". `getRecentPosts` above can swallow the difference; this
+ * cannot.
+ *
+ * The sitemap reads the same function, so the two cannot advertise different
+ * URL sets.
+ */
+export async function getPublishedPosts() {
+	try {
+		const snapshot = await getDocs(
+			query(
+				collection(db, "blogs"),
+				where("status", "==", "published"),
+				orderBy("createdAt", "desc"),
+			),
+		);
+
+		const posts = snapshot.docs
+			.map((doc) => ({
+				slug: doc.data().slug,
+				updatedAt:
+					doc.data().updatedAt?.toDate?.() ||
+					doc.data().createdAt?.toDate?.() ||
+					new Date(),
+			}))
+			.filter((post) => typeof post.slug === "string" && post.slug.length > 0);
+
+		// A duplicate slug would collapse two routes into one at build time.
+		const seen = new Set();
+		const unique = posts.filter((post) => {
+			if (seen.has(post.slug)) return false;
+			seen.add(post.slug);
+			return true;
+		});
+
+		if (unique.length !== posts.length) {
+			console.warn(
+				`Blog slugs: ${posts.length - unique.length} duplicate slug(s) among published posts; keeping the newest of each.`,
+			);
+		}
+
+		return { ok: true, posts: unique };
+	} catch (error) {
+		console.error("Blog slugs: unable to read published posts", error);
+		return { ok: false, posts: [] };
+	}
+}
+
 /** Newest published posts, newest first. Empty array on failure — never throws. */
 export const getRecentPosts = cache(async (count = 6) => {
 	try {

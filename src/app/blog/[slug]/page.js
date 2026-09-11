@@ -5,6 +5,7 @@ import { cache, Suspense } from "react";
 import BlogPostBody from "@/components/blog/BlogPostBody";
 import BlogPostImage from "@/components/blog/BlogPostImage";
 import RelatedPosts from "@/components/blog/RelatedPosts";
+import { getPublishedPosts } from "@/lib/blog-queries";
 import { db } from "@/lib/firebase";
 import { jsonLdProps } from "@/lib/seo-schema";
 import { getSiteUrl, SITE_URL } from "@/lib/site";
@@ -39,8 +40,50 @@ const getPostBySlug = cache(async (slug) => {
 	}
 });
 
-// Render each post on demand so featured images and edits show up immediately.
+// Known slugs for edits: `revalidate` keeps each post's content fresh, while
+// `dynamicParams = false` fixes the URL set at build time. Together they mean
+// an edit to an existing post lands within the hour, but a *new* post is not
+// reachable until the next build — see docs/SEO-STRATEGY.md §2I.
 export const revalidate = 3600;
+
+export const dynamicParams = false;
+
+/**
+ * The published-slug list *is* the set of blog URLs that exist.
+ *
+ * `notFound()` cannot set a status here: the response is already streaming by
+ * the time the post lookup runs, so a missing slug rendered a 200 page titled
+ * "Post Not Found" — a soft 404, which Search Console reports as a quality
+ * problem and which `notFound()`'s own metadata cannot fix. Next only lets the
+ * router refuse a parameter it never learned about, so the slugs have to be
+ * known before any post renders.
+ *
+ * The sitemap reads the same `getPublishedPosts()`, so the two cannot disagree
+ * about which blog URLs exist.
+ */
+export async function generateStaticParams() {
+	const { ok, posts } = await getPublishedPosts();
+
+	if (!ok || posts.length === 0) {
+		const reason = ok
+			? "Firestore returned no published posts"
+			: "the published-post query failed";
+		const message =
+			`Blog: refusing to build — ${reason}. ` +
+			"dynamicParams = false would 404 every post, so an empty set is a hard " +
+			"failure rather than a fallback. Check NEXT_PUBLIC_FIREBASE_* and network " +
+			"access, then rebuild.";
+
+		if (process.env.NODE_ENV === "production") {
+			throw new Error(message);
+		}
+
+		// Dev stays usable offline: routing is per-request there anyway.
+		console.warn(message);
+	}
+
+	return posts.map((post) => ({ slug: post.slug }));
+}
 
 export async function generateMetadata({ params }) {
 	const { slug } = await params;

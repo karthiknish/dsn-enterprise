@@ -1,12 +1,8 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import ServiceCityLanding from "@/components/seo/ServiceCityLanding";
+import { classifyServiceCitySlug } from "@/lib/dynamic-route-guard";
 import { parseLocationSlug } from "@/lib/parse-location-slug";
-import { SERVICE_PROFILES } from "@/lib/seo-location-data";
-import {
-	generateServiceCityPages,
-	getServiceCityPage,
-	SERVICES,
-} from "@/lib/seo-pages.config";
+import { generateServiceCityPages } from "@/lib/seo-pages.config";
 import { getSiteUrl } from "@/lib/site";
 
 export async function generateStaticParams() {
@@ -16,25 +12,14 @@ export async function generateStaticParams() {
 	}));
 }
 
-/** Retired service x city URLs keep their signal via a 308 to the hub. */
-function redirectTargetFor(serviceSlug) {
-	if (!serviceSlug) return null;
-	if (!SERVICES.some((s) => s.slug === serviceSlug)) return null;
-	return SERVICE_PROFILES[serviceSlug]?.hubPath || "/services";
-}
+// Render, 308, or 404 is decided in `classifyServiceCitySlug` so that
+// `src/proxy.js` can reach the same verdict before this route runs. See that
+// module for why the proxy has to own the 404.
 
 export async function generateMetadata({ params }) {
 	const { slug } = await params;
-	const { citySlug, entitySlug: serviceSlug } = parseLocationSlug(slug);
+	const pageData = classifyServiceCitySlug(slug).page;
 
-	if (!citySlug || !serviceSlug) {
-		return {
-			title: "Page Not Found",
-			robots: { index: false, follow: false },
-		};
-	}
-
-	const pageData = getServiceCityPage(serviceSlug, citySlug);
 	if (!pageData) {
 		return {
 			title: "Page Not Found",
@@ -81,18 +66,17 @@ export async function generateMetadata({ params }) {
 
 export default async function ServiceCityPage({ params }) {
 	const { slug } = await params;
-	const { citySlug, entitySlug: serviceSlug } = parseLocationSlug(slug);
-	const pageData = getServiceCityPage(serviceSlug, citySlug);
+	const verdict = classifyServiceCitySlug(slug);
 
-	if (!pageData) {
-		const target = redirectTargetFor(serviceSlug);
-		if (target) permanentRedirect(target);
-		notFound();
-	}
+	// Retired service x city URLs keep their signal via a 308 to the hub.
+	if (verdict.decision === "redirect") permanentRedirect(verdict.to);
+	if (!verdict.page) notFound();
+
+	const { citySlug, entitySlug: serviceSlug } = parseLocationSlug(slug);
 
 	return (
 		<ServiceCityLanding
-			pageData={pageData}
+			pageData={verdict.page}
 			serviceSlug={serviceSlug}
 			citySlug={citySlug}
 			slug={slug}

@@ -664,6 +664,346 @@ second IS URL, BIS tables, host rows**: unchanged per rules 1–6.
 
 ---
 
+## 2H. Round six — 11 Sep 2026: the programmatic axis changed
+
+Rounds one to five all tuned *content* on a fixed set of URLs. This round
+changed *what the programmatic layer varies*, and is the first round in three
+where the answer to "what is worth generating?" changed rather than the copy
+on what already existed.
+
+### The measurement that forced it
+
+Pulled live from the Search Console API for the 90 days ending 2026-09-11
+(`npm run seo:opportunity` plus ad-hoc scripts, since deleted):
+
+| | 90 days | last 28 days |
+|---|---|---|
+| Location-page impressions | 99 | 57 |
+| Location-page clicks | **2** (1.47% CTR) | **1** |
+| Location URLs that ever earned an impression | 4 of 52 | 4 of 52 |
+
+Fifty-two live URLs, two clicks in a quarter. Section 2F's "0/36" was stale —
+the count had reached 52 when `LOCATION_TIER_LIMIT` was raised to 2 in round
+2E. Independently, Keyword Planner volume for the city axis came back at
+~130/month across 15 probes, with **11 of 15 probes returning zero**.
+
+Against that, the standard-reference cluster — the IS 3455 / IS 919 / ISO 286
+queries the blog post owns — measured 15 queries, 752 impressions, 25 clicks at
+position 7.0. One URL in the whole site (`/blog/using-is-919-and-is-3455…`)
+generates 37 of the last 28 days' 68 clicks.
+
+**Conclusion: the location axis is not commercially relevant demand. It was
+never a content-quality problem that more cities would fix — the queries are
+not being typed.** The machinery built for it (tiering, sitemap segments,
+redirects, uniqueness gating) is sound; only the variable was wrong.
+
+### What was changed
+
+**1. `LOCATION_TIER_LIMIT` 2 → 1.** Live city URLs **52 → 16** (Coimbatore and
+Chennai only). Coimbatore stays for local/NAP relevance and Chennai for the one
+city with measured volume. The 308 machinery in `src/app/products/[slug]/page.js`
+and `src/app/services/[slug]/page.js` already redirects newly out-of-scope
+combinations, so any accumulated signal is preserved rather than 404'd. The
+change is reversible via `NEXT_PUBLIC_LOCATION_TIER_LIMIT`.
+
+**2. A new programmatic axis: specification lookup, not geography.** The
+variable is now a real engineering datum. Tier 1 ships **10 URLs**:
+
+| URL | What it answers |
+|---|---|
+| `/threads` | Hub: the systems, and why they are not interchangeable |
+| `/threads/metric` | Full ISO metric coarse + fine chart |
+| `/threads/npt` | ASME B1.20.1 taper pipe |
+| `/threads/unc` | ASME B1.1 coarse |
+| `/threads/metric/m6…m20` (6) | One size: coarse card, fine pitches, spanner, gauging |
+
+Tier 2 (`THREAD_TIER_LIMIT`) adds `/threads/unf`, `/threads/bsp` and the
+remaining metric sizes. Data lives in `src/lib/thread-specs.js`, URL/tier logic
+in `src/lib/thread-pages.config.js`.
+
+### Why thread dimensions and not tolerance tables
+
+The obvious next axis was fits and tolerances (IS 919 / ISO 286), because that
+is the cluster already producing clicks. It was **not** built, and the reason is
+recorded in `src/lib/thread-specs.js` because it will be asked again:
+
+> Transcribing ISO 286-2's published limits does not reproduce from the IT
+> formula. Measured across 104 cells of ISO 286-1 the formula disagreed with
+> the published table **50 times (48%)** — IT6 for 3–6 mm computes 7 where the
+> table says 8; IT11 for 18–30 mm computes 131 where the table says 130. The
+> published values are a rounded preferred-number series (~10^0.2), not a
+> function of `i`.
+
+So the tolerance layer stays blocked on a decision, not on effort: transcribe
+IS 919/ISO 286 with attribution, publish a calculator instead of tables, or
+skip it. Thread dimensions have no such problem — 60° profile geometry is
+reproducible from the standard's own definition and republished everywhere —
+which is why the thread layer shipped first.
+
+### What the new pages actually contain
+
+The layer avoids the round-one failure mode by construction. Measured on the
+built HTML (5-word shingles, same method as `npm run seo:uniqueness`):
+
+| | exclusive content | worst pairwise similarity |
+|---|---|---|
+| City pages (round one baseline) | ~10% | very high |
+| Thread size pages | **28–31%** | 54% |
+| Thread system pages | **65–86%** | 19% |
+
+The size pages share a gauging section and a CTA, which is where the residual
+54% comes from — but every table cell differs, and the numbers are the page's
+reason to exist. `/threads/metric` is 1,447 words of full chart and shares
+10.7% with `/threads/npt`.
+
+### Two data-integrity bugs caught before shipping
+
+1. **A hardcoded comparison table stated a wrong pitch diameter.** The hub's
+   "three threads that are not interchangeable" table had `11.345` for 1/2-13
+   UNC. The correct basic pitch diameter is `0.4500 in = 11.430 mm` — verified
+   against efunda (3A min PD = 0.4500 = basic; 2A max = 0.4485 = basic minus
+   the 0.0015 allowance) and Machining Doctor. The table is now **derived** from
+   the same helpers that build the size and system tables, so the hub cannot
+   state a figure the reference tables do not. The NPT row likewise moved from
+   a remembered `18.321` to `e1 × 25.4 = 19.772` — the pitch diameter at the
+   hand-tight gauge plane, which is the only plane at which a taper thread has
+   one.
+2. **Minor diameter vs permitted limit.** Fastener catalogues quote ASME B1.1
+   limits; this layer publishes basic-profile values. For 1/2-13 UNC the 3A
+   minor limit (0.4084 in) sits *above* the basic figure (0.4056 in), which
+   reads as an error without a qualifier. Both the UNC and UNF pages now share
+   one `UNIFIED_NOTE` that says so explicitly. Same class of bug as the `/about`
+   "Since 1998" in rule 5.
+
+### Crawl path and tooling
+
+- Sitemap: 10 new URLs in `sitemap-main.xml`, `lastmod` pinned to a constant
+  (`THREAD_PAGES_LASTMOD`) because these are standards data, not per-deploy
+  changes — the same reasoning as `CITY_PAGES_LASTMOD`.
+- Internal links: footer (site-wide), `/products/thread-gauges` (a contextual
+  block after the thread-forms grid), and `/llms.txt`, which now enumerates the
+  size pages with their actual dimensions.
+- `/resources` was considered and **rejected** as a link target — its card grid
+  is file-download oriented (`href="/contact?request=download"`) and forcing an
+  HTML page into it would have meant a misleading "Excel 2.5 MB" badge. The one
+  card that described a thread table now points at the live equivalent.
+- `/threads` added to `EXACT`, `/threads/` to `PREFIXES` in
+  `src/lib/known-paths.js` so the proxy passes the segment through to the page,
+  which is what decides 200 / 308 / 404.
+
+### Verified
+
+- `npm run build`: 10 thread routes prerendered; city sitemap 16 URLs (was 52).
+- Live smoke test against `next start`: all 10 thread URLs 200. That same run
+  showed the retired and unknown slugs were answering with the wrong status
+  codes — see the next section.
+- Every number on the hub cross-checked against `src/lib/thread-specs.js`.
+
+### Two status-code bugs found while smoke-testing, both fixed
+
+Nothing in this round caused either of these, but this round's routes inherited
+both, so they were fixed here rather than left for later.
+
+**1. A missing slug was a soft 404.** Every dynamic route's `notFound()` served
+the not-found page with **HTTP 200** — `/products/<unknown>`, `/services/<unknown>`,
+`/blog/<unknown>` and `/threads/<unknown>`. Confirmed on cache MISS, so not an
+ISR artifact, and reproduced in `next dev` as well.
+
+**2. A retired slug was a soft redirect.** `permanentRedirect()` from a page did
+not produce a 308 either. `/threads/unf` answered **HTTP 200** with the title
+`Page Not Found`, an RSC `NEXT_REDIRECT;replace;/threads;308;` payload and a
+`<meta http-equiv="refresh">` — and because Next prerenders that result on
+demand, it was then cached `s-maxage=31536000`. This is the worse of the two:
+these are exactly the URLs holding accumulated ranking signal, and they were
+being served as a year-long "Page Not Found".
+
+**Why.** By the time a page component calls `notFound()` or
+`permanentRedirect()`, the response has already begun, so the status cannot be
+set. That is documented behaviour, and the documented remedy is the same for
+both — `loading.md` puts it plainly: "You can run this check in `proxy`."
+
+**The fix.** `src/lib/dynamic-route-guard.js` classifies one URL as
+`render` / `redirect` / `missing`, and both `src/proxy.js` and the four page
+components consume it, so the proxy cannot disagree with the pages about which
+slugs exist. The proxy answers `missing` with `negotiatedErrorResponse` (404)
+and `redirect` with a real 308; the pages keep their own calls as a fallback.
+Two details were deliberate:
+
+- The guard returns `null` — "not my family" — for every shape it does not
+  recognise, never `missing`. A false `missing` would take a working page
+offline, so "unrecognised" must never mean "refuse".
+- The 308 carries the query string across. These redirects exist to move signal
+  onto a page that still serves the content, and campaign parameters have to
+  survive that move for the contact-form attribution above to name the channel
+  that earned the enquiry.
+
+**Verified** in a production build, then `next dev`, then a real browser:
+
+| Case | Before | After |
+| --- | --- | --- |
+| `/products/zzz-nope`, `/threads/bogus`, `/threads/metric/m9999` | 200 | 404 |
+| `/threads/unf`, `/threads/bsp` | 200 + meta refresh | 308 → `/threads` |
+| `/threads/metric/m24` | 200 + meta refresh | 308 → `/threads/metric` |
+| `/threads/metric/M12`, `/threads/metric/m6x1` | 200 + meta refresh | 308 → canonical size URL |
+| `/products/plain-plug-gauges-bangalore` (retired combo) | 200 + meta refresh | 308 → `/products/plain-gauges` |
+| All 80 sitemap URLs | 200 | 200 (unchanged) |
+| `/products/plain-gauges`, `/threads`, `/threads/metric/m12` | 200 | 200 (unchanged) |
+
+The 404 now answers `Cache-Control: private, no-store` instead of being cached
+as a 200 for a year, and it still negotiates — `Accept: application/json` gets
+the structured error, a browser gets the HTML page. Client-side navigation was
+checked in a real browser: a `fetch` carrying the router's `RSC: 1` header comes
+back `redirected: true` at `/threads`, so the router follows the 308 natively.
+Every redirect resolves in a single hop — a size under a system that is itself
+only a redirect goes straight to the hub.
+
+**Not fixed in this round — `/blog/<unknown>`.** Blog slugs live in Firestore,
+and reading them in the proxy would put a database query on the path of every
+request, so `/blog` kept its soft 404 and relied on the `noindex` Next injects.
+The right fix is to make the blog's slugs statically known at build time rather
+than to add a proxy read — that is §2I.
+
+### Re-measure
+
+- Are the 10 thread URLs indexed at all? (`npm run seo:coverage`)
+- Do `/threads` and the size pages earn impressions for `m12 thread pitch`,
+  `npt thread dimensions`, `unc thread chart` — the ~2,800/month cluster?
+- Does the city sitemap shrinking 52 → 16 move crawl frequency on the pages
+  that remain?
+- Keyword Planner balance is exhausted (`insufficient_balance`); volume
+  questions need a top-up or a different provider.
+
+---
+
+## 2I. Round six follow-up — `/blog/<unknown>` gets a real 404 (11 Sep 2026)
+
+§2H left the blog as the one route family still answering a soft 404. This round
+closes it with the approach §2H named — a build-time slug list feeding
+`generateStaticParams` — and deliberately does **not** use the proxy.
+
+### Why the proxy is the wrong tool here
+
+`/products`, `/services` and `/threads` are safe to classify in the proxy
+because their slug sets are constants in `src/lib/`. Blog slugs are documents
+in Firestore that appear when somebody publishes. Checking them in the proxy
+puts a database read in front of every request on the site, including static
+assets and unrelated routes — and a read that can fail means the proxy can take
+the whole site down, not just the blog. A cached set only moves the problem: it
+still has to be populated from somewhere, and in a serverless runtime "cached"
+means "per instance, after a cold start".
+
+### What was tried first, and does not work
+
+Before accepting a build-time list I tried to get the status out of the page
+itself. Four shapes, each against a production build and a missing slug:
+
+| Route shape | `/blog/<unknown>` |
+| --- | --- |
+| `notFound()` in the page component (what shipped) | 200 |
+| `notFound()` in `generateMetadata` instead of returning `noindex` metadata | 200 |
+| both, with `src/app/blog/[slug]/loading.js` deleted to stop streaming | 200, still `Transfer-Encoding: chunked` |
+| a throwaway route: no loading boundary, no `Suspense`, no `revalidate`, `notFound()` in both | 200 |
+
+That last row matters, because it means §2H's streaming explanation was
+incomplete: in Next 16.3.3 `notFound()` in a dynamic route **never** sets the
+status, streaming or not. `loading.md` says as much — "If you need a 404 status
+... ensure the resource exists before the response body is streamed" — and the
+only lever is whether the *router* was ever told the parameter exists.
+
+A fifth shape does work:
+
+```js
+export async function generateStaticParams() { return slugs.map((slug) => ({ slug })); }
+export const dynamicParams = false;
+```
+
+A probe route with that shape answered `/probe-e/real` **200** and
+`/probe-e/nope` **404** with `Cache-Control: private, no-cache, no-store` — a
+routing-level 404, decided before the route renders, with no proxy involved.
+
+### What was changed
+
+- **`src/lib/blog-queries.js` gained `getPublishedPosts()`** — the single source
+  of published slugs. It returns `ok` alongside the list so a caller can tell
+  "the read failed" apart from "there are no posts yet"; `getRecentPosts` in the
+  same file can afford to conflate the two, this cannot.
+- **`src/app/blog/[slug]/page.js`** now exports `generateStaticParams()` from
+  that list plus `dynamicParams = false`. `revalidate = 3600` is unchanged, so
+  an edit to an existing post still lands within the hour.
+- **`src/lib/sitemap-entries.js`** reads the same `getPublishedPosts()` instead
+  of running its own near-identical query, so the sitemap and the router cannot
+  hold different opinions about which blog URLs exist.
+- **`src/app/sitemap-main.xml/route.js`** lost `revalidate = 3600`. A sitemap
+  that still revalidated hourly would list a post published after the build and
+  advertise a URL the router now refuses — trading a soft 404 for a "Submitted
+  URL not found (404)" in Search Console, which is worse. Dropping `revalidate`
+  alone was not enough: Route Handlers are uncached by default, so the file went
+  from ISR to `ƒ (Dynamic)`, re-reading Firestore per request and re-creating
+  the drift. `export const dynamic = "force-static"` is the documented opt-in for
+  a cached `GET`, and the build now records it as static with
+  `initialRevalidateSeconds: false` — it is never regenerated at runtime, so the
+  URL set it publishes is the one the build froze.
+
+### What this costs, stated plainly
+
+Publishing a post no longer makes it reachable on its own. `dynamicParams = false`
+freezes the URL set at build time, so a post created in `/admin/blog` goes live
+when the site is next built and deployed — the page and its sitemap entry arrive
+together, which is the point. Before this change a new post was served by the
+runtime Firestore query within the hour with no deploy. Anyone publishing should
+expect to redeploy; if that becomes a nuisance the fix is a publish-time deploy
+hook, not a return to the soft 404.
+
+**Unpublishing is still a soft 404.** `dynamicParams = false` governs slugs the
+router never learned about. A post that existed at build time and was unpublished
+later keeps its route: it serves the ISR cache until `revalidate` passes, then
+`getPostBySlug` returns `null` and `notFound()` renders the 200 page §2H
+describes. That is bounded — one URL, self-inflicted, already carrying
+`noindex` — and the alternative is the proxy read this section argues against.
+Deleting a post and redeploying remains the clean way to retire one.
+
+### The guard, and why an empty list is fatal
+
+The sitemap can shrug off a failed Firestore read — the blog just drops out of
+one file. The route cannot: with `dynamicParams = false` an empty slug list 404s
+**every** post, so the failure modes are "one section of a sitemap is thin" and
+"the entire blog is gone". `generateStaticParams` therefore refuses to build on
+a failed read or an empty list:
+
+- production: `throw`, so the build fails with `Blog: refusing to build — the
+  published-post query failed...` and no blog route is emitted;
+- `next dev`: `console.warn` and carry on, so a laptop with no network access is
+  not bricked by a page it is not working on.
+
+**Verified** by forcing the read to fail and building: exit code `1`, the guard
+message above, and `0` `/blog/` routes prerendered. In dev the same forced
+failure logged the warning once, kept the server up, and a real post still
+rendered — which is the intended asymmetry, not an accident.
+
+### Verified
+
+| Case | Before | After |
+| --- | --- | --- |
+| `/blog/nope-nope`, `/blog/does-not-exist` | 200 + `noindex` | **404**, `Cache-Control: private, no-store` |
+| A published post, `/blog` index | 200 | 200 (unchanged) |
+| All 39 blog URLs in `sitemap-main.xml` | 200 | 200 — sitemap advertises nothing that 404s |
+| All 80 sitemap URLs across the four files | 200 | 200 (unchanged) |
+| `/products`, `/services`, `/threads` matrix (33 cases) | — | unchanged: 200 / 308 / 404 |
+| `npm run build` | — | `● (SSG)` blog routes at `1h`, `○ /sitemap-main.xml` static |
+| `next dev` | 200 | 404 for a missing slug, 200 for a real one |
+
+### Re-measure
+
+- Watch Search Console for "Submitted URL not found (404)" after the next
+  publish. There should be none: a post enters the sitemap and the route set in
+  the same build.
+- If a post is ever published and not deployed, the symptom is a 404 on a URL
+  the admin UI says is live. That is this trade-off, not a bug.
+- Confirm the blog's `● (SSG)` routes still pick up edits within the hour
+  (`revalidate = 3600`).
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value.
@@ -753,9 +1093,13 @@ setting up a new environment needs a copy out of band — it is not in the repo.
 
 ## 5. Rules for whoever works on this next
 
-1. **Do not restore the full product × city matrix.** It was measured, it did not
-   get crawled, and the reason was content quality. Adding cities back without
-   adding genuinely city-specific content will reproduce the same outcome.
+1. **Do not restore the full product × city matrix.** It was measured twice. The
+   second measurement (section 2H, 52 live URLs over 90 days) returned **2
+   clicks** and 99 impressions, with only 4 location URLs ever earning an
+   impression. The reason is that the queries are not being typed — not that the
+   content was thin, which is what round one assumed. `LOCATION_TIER_LIMIT` is
+   now 1. Adding cities back without a measured city query to answer will
+   reproduce the same outcome.
 2. **Raise `LOCATION_TIER_LIMIT` only on evidence.** Run `npm run seo:coverage`
    and confirm the current tier is actually indexed first. Bangalore and
    Hyderabad were added at tier 2 with full profiles (section 2E); that is not
@@ -773,3 +1117,37 @@ setting up a new environment needs a copy out of band — it is not in the repo.
 6. **Do not add a second IS 3455 / IS 919 URL.** The blog post is now the ranking
    page (29 clicks). A `/resources/` duplicate would split that. Point FAQ and
    product pages at the existing slug. Do not host BIS PDFs.
+7. **Derive a number, do not retype it.** Section 2H records a hardcoded 1/2-13
+   UNC pitch diameter that was wrong by 0.085 mm and would have shipped on a
+   page whose entire value is its numbers. If a helper in `src/lib/` already
+   computes a dimension, the component must call it. A literal is only
+   acceptable for data transcribed from a standard, and then the source goes in
+   a comment beside it.
+8. **Tolerance limits are a transcription decision, not a calculation.** IS 919
+   / ISO 286 published values disagree with the IT formula in 48% of measured
+   cells, and ISO 965 / IS 4218 behave the same way. Do not "compute" a 6g or
+   H7 limit, and do not let a page imply a limit figure it did not transcribe
+   from the standard. This is why `/threads` states basic dimensions only and
+   describes GO/NO-GO practice without quoting IS 4218 limits.
+9. **New programmatic axes need a proven query cluster first.** The thread layer
+   exists because the standards cluster measured 752 impressions at position
+   7.0; the location layer was retired because it measured 99 impressions and 2
+   clicks. Run `npm run seo:opportunity` and name the cluster before generating
+   the next family of URLs.
+10. **A status code must be decided before the response begins — in the proxy or
+    by the router, never by the page.** A page component calling `notFound()` or
+    `permanentRedirect()` cannot set the HTTP status: the response has already
+    begun, so it emits a 200 carrying either the not-found UI or a client-side
+    redirect, and Next then caches that 200 for a year. Section 2H records both
+    bugs. Which fix applies depends on where the URL set comes from:
+    - **Known at build time** (the blog): give the route `generateStaticParams`
+      and `dynamicParams = false` and let the router refuse anything else. No
+      proxy, no per-request read. Section 2I.
+    - **Not known at build time** (products, services, threads): add the
+      missing/redirect cases to `src/lib/dynamic-route-guard.js` and let
+      `src/proxy.js` answer them, keeping the page's own call as a fallback.
+    Never put a database read in the proxy, and when you freeze a URL set at
+    build time, make the sitemap read the same list — otherwise the sitemap
+    advertises URLs the router refuses. The guard must return "unrecognised"
+    rather than "missing" for any input it does not fully understand, because a
+    false 404 takes a live page offline.

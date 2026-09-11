@@ -6,6 +6,10 @@ import {
 	generateServiceCityPages,
 } from "@/lib/seo-pages.config";
 import { SITE_URL } from "@/lib/site";
+import {
+	generateMetricSizePages,
+	generateThreadSystemPages,
+} from "@/lib/thread-pages.config";
 
 /**
  * /llms.txt — curated map of the site for AI agents and retrieval systems.
@@ -115,6 +119,19 @@ export async function GET(request) {
 	push(
 		`- [Blog index](${abs("/blog")}): articles on gauge selection, calibration intervals, standards, and shop-floor inspection practice.`,
 	);
+	push(
+		`- [Thread reference](${abs("/threads")}): dimension tables for the thread systems gauged most often in Indian shops — ISO metric, NPT, Unified and BSP. Pitch diameter, minor diameter, tap drill and the gauging practice behind each.`,
+	);
+	for (const s of generateThreadSystemPages()) {
+		push(
+			`- [${s.systemName} thread chart](${abs(s.path)}): full basic dimension table to the relevant standard${s.system === "metric" ? " (ISO 68-1 / ISO 261 / ISO 965, adopted in India as IS 919 / IS 4218)" : ""}.`,
+		);
+	}
+	for (const p of generateMetricSizePages()) {
+		push(
+			`- [M${p.size} thread](${abs(p.path)}): coarse pitch ${p.spec.coarse.pitch} mm, pitch diameter ${p.spec.coarse.pitchDiameter} mm, minor diameter ${p.spec.coarse.externalMinor} mm, tap drill ${p.spec.coarse.tapDrill} mm${p.spec.fine.length ? `, with fine pitches ${p.spec.fine.map((f) => f.pitch).join(" / ")} mm` : ""}.`,
+		);
+	}
 	push();
 
 	// ── Location pages, generated ──

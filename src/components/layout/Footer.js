@@ -151,6 +151,14 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link
+									href="/threads"
+									className="hover:text-secondary transition-colors"
+								>
+									Thread Charts
+								</Link>
+							</li>
+							<li>
+								<Link
 									href="/resources"
 									className="hover:text-secondary transition-colors"
 								>

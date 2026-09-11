@@ -58,10 +58,12 @@ const downloadCategories = [
 				type: "PDF",
 			},
 			{
-				name: "Thread Data Tables",
-				description: "Comprehensive thread dimensions and tolerances",
-				size: "2.5 MB",
-				type: "Excel",
+				name: "Thread Reference Charts",
+				description:
+					"Live metric, NPT, UNC and BSP dimension tables — pitch diameter, minor diameter and tap drill",
+				type: "Online",
+				href: "/threads",
+				meta: "Online reference",
 			},
 			{
 				name: "API Thread Specifications",
@@ -171,6 +173,13 @@ const standardsInfo = [
 ];
 
 function FileIcon({ type }) {
+	if (type === "Online") {
+		return (
+			<div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+				<UilBookAlt className="text-blue-600 text-lg" />
+			</div>
+		);
+	}
 	if (type === "Excel") {
 		return (
 			<div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
@@ -192,6 +201,17 @@ const sectionVariants = {
 		y: 0,
 		transition: { duration: 0.6, delay: i * 0.12, ease: [0.25, 0.1, 0.25, 1] },
 	}),
+};
+
+/**
+ * Badge colours per resource kind. `default` covers the PDF case, so a kind
+ * that is added later without an entry here renders in neutral colours rather
+ * than undefined ones.
+ */
+const BADGE_CLASS = {
+	Excel: "bg-green-50 text-green-700",
+	Online: "bg-blue-50 text-blue-700",
+	default: "bg-red-50 text-red-700",
 };
 
 const cardVariants = {
@@ -304,27 +324,27 @@ export default function ResourcesPage() {
 														<div className="flex items-center gap-2 flex-wrap">
 															<span
 																className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-medium leading-relaxed ${
-																	item.type === "Excel"
-																		? "bg-green-50 text-green-700"
-																		: "bg-red-50 text-red-700"
+																	BADGE_CLASS[item.type] ?? BADGE_CLASS.default
 																}`}
 															>
 																{item.type === "Excel" ? (
 																	<FaFileExcel className="text-[10px]" />
+																) : item.type === "Online" ? (
+																	<UilBookAlt className="text-[10px]" />
 																) : (
 																	<FaFilePdf className="text-[10px]" />
 																)}
 																{item.type}
 															</span>
 															<span className="text-xs text-text-muted">
-																{item.size}
+																{item.meta ?? item.size}
 															</span>
 														</div>
 														<Link
-															href="/contact?request=download"
+															href={item.href ?? "/contact?request=download"}
 															className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors flex-shrink-0 group/link"
 														>
-															<span>Request</span>
+															<span>{item.href ? "Open" : "Request"}</span>
 															<UilArrowRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 													</div>

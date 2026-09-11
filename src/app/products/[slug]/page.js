@@ -1,12 +1,8 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import ProductCityLanding from "@/components/seo/ProductCityLanding";
+import { classifyProductCitySlug } from "@/lib/dynamic-route-guard";
 import { parseLocationSlug } from "@/lib/parse-location-slug";
-import { getProductHub } from "@/lib/seo-location-data";
-import {
-	generateProductCityPages,
-	getProductCityPage,
-	PRODUCTS,
-} from "@/lib/seo-pages.config";
+import { generateProductCityPages } from "@/lib/seo-pages.config";
 import { getSiteUrl } from "@/lib/site";
 
 export async function generateStaticParams() {
@@ -18,30 +14,14 @@ export async function generateStaticParams() {
 	}));
 }
 
-/**
- * Combinations that were previously generated but are now out of scope still
- * exist in Google's index. Send them to the product hub with a 308 instead of
- * returning a 404, so any accumulated signal is preserved rather than dropped.
- */
-function redirectTargetFor(productSlug) {
-	if (!productSlug) return null;
-	const known = PRODUCTS.some((p) => p.slug === productSlug);
-	if (!known) return null;
-	return getProductHub(productSlug).hubPath || "/products";
-}
+// Render, 308, or 404 is decided in `classifyProductCitySlug` rather than here,
+// because `src/proxy.js` has to reach the same verdict before this route runs
+// in order to answer a real 404 for an unknown slug. See that module.
 
 export async function generateMetadata({ params }) {
 	const { slug } = await params;
-	const { citySlug, entitySlug: productSlug } = parseLocationSlug(slug);
+	const pageData = classifyProductCitySlug(slug).page;
 
-	if (!citySlug || !productSlug) {
-		return {
-			title: "Page Not Found",
-			robots: { index: false, follow: false },
-		};
-	}
-
-	const pageData = getProductCityPage(productSlug, citySlug);
 	if (!pageData) {
 		return {
 			title: "Page Not Found",
@@ -88,18 +68,18 @@ export async function generateMetadata({ params }) {
 
 export default async function ProductCityPage({ params }) {
 	const { slug } = await params;
-	const { citySlug, entitySlug: productSlug } = parseLocationSlug(slug);
-	const pageData = getProductCityPage(productSlug, citySlug);
+	const verdict = classifyProductCitySlug(slug);
 
-	if (!pageData) {
-		const target = redirectTargetFor(productSlug);
-		if (target) permanentRedirect(target);
-		notFound();
-	}
+	// A combination that was generated before and is now out of scope still has
+	// URLs in Google's index, so it keeps its signal via a 308 to the hub.
+	if (verdict.decision === "redirect") permanentRedirect(verdict.to);
+	if (!verdict.page) notFound();
+
+	const { citySlug, entitySlug: productSlug } = parseLocationSlug(slug);
 
 	return (
 		<ProductCityLanding
-			pageData={pageData}
+			pageData={verdict.page}
 			productSlug={productSlug}
 			citySlug={citySlug}
 			slug={slug}
