@@ -1,3 +1,4 @@
+import { getLegacyBlogSlug } from "@/lib/blog-legacy-slugs";
 import { parseLocationSlug } from "@/lib/parse-location-slug";
 import { getProductHub, SERVICE_PROFILES } from "@/lib/seo-location-data";
 import {
@@ -39,11 +40,14 @@ import { THREAD_SYSTEMS } from "@/lib/thread-specs";
  * ever disagreed, one side would 404 a page the other serves — so the
  * classifiers are deliberately the only place the question is asked.
  *
- * `/blog/[slug]` is deliberately NOT covered: its slugs live in Firestore, and
- * the proxy is the wrong place for a database read (it runs on every request,
- * and the docs say to keep it to path checks). Those pages keep the soft 404
- * and rely on the `noindex` that Next injects, plus the `robots` their
- * `generateMetadata` returns.
+ * `/blog/[slug]` is covered only for the retired slugs listed in
+ * `blog-legacy-slugs.js`. Its live slugs come from Firestore, and the proxy is
+ * the wrong place for a database read (it runs on every request, and the docs
+ * say to keep it to path checks), so an unrecognised blog slug returns `null`
+ * from here and is refused by the router instead — the `dynamicParams = false`
+ * + `generateStaticParams` pair described in `docs/SEO-STRATEGY.md` §2I. A
+ * legacy slug is a fixed string known at build time, so answering it costs a
+ * path comparison and no I/O.
  */
 
 /** A bare slug here is a prerendered page that Next matches before `[slug]`. */
@@ -159,7 +163,6 @@ export function classifyThreadSize(system, size) {
 }
 
 /**
-/**
  * Proxy-facing entry point: the path-shaped wrapper around the classifiers.
  *
  * Returns `null` when the path is not part of a family this module owns, so the
@@ -194,6 +197,16 @@ export function resolveDynamicPath(pathname) {
 		if (segments.length === 3) {
 			return classifyThreadSize(segments[1], segments[2]);
 		}
+	}
+
+	if (root === "blog" && segments.length === 2) {
+		// Only a retired slug is answered here; everything else falls through to
+		// the router, which refuses unknown blog slugs because the published set
+		// is frozen by `dynamicParams = false`. This branch must therefore never
+		// return `missing` — a `missing` here would 404 the blog's own live posts,
+		// which the proxy cannot distinguish from unknown ones without a read.
+		const currentSlug = getLegacyBlogSlug(segments[1]);
+		return currentSlug ? redirect(`/blog/${currentSlug}`) : null;
 	}
 
 	return null;

@@ -1004,6 +1004,86 @@ rendered — which is the intended asymmetry, not an accident.
 
 ---
 
+## 2J. Round six follow-up — an orphaned blog URL and a future-dated `lastmod` (11 Sep 2026)
+
+Both came out of the indexing audit behind §2I. Neither is a ranking problem in
+itself; both destroy signal silently, which is why they are fixed rather than
+merely noted.
+
+### An edited slug orphans the URL Google already ranked
+
+The audit found `/blog/snap-gauge-vs-ring-gauge-pick-by-the-form-error,-not-the-habit`
+returning a hard 404 — while the post itself is live, at the same slug with the
+comma removed. The rename happened in the admin UI, which writes the slug to
+Firestore, and the public URL is derived from that slug, so the old address
+simply stopped existing. Nothing reported it: no build error, no sitemap entry
+(the retired URL was never in the sitemap), and no 404 anyone was reading. It
+surfaced only because every live URL was being inspected by hand.
+
+That is the whole failure mode, and it is a *class* of bug rather than one
+mistake. A slug edit is free in this stack, and the cost lands on a URL Google
+has already crawled and indexed: whatever signal it earned has no redirect
+to carry it to the new address.
+
+**The fix** is `src/lib/blog-legacy-slugs.js` — a `Map` from retired slug to
+current slug, consulted by `resolveDynamicPath` for two-segment `/blog/` paths.
+It costs a path comparison and no I/O, which is what makes it acceptable in the
+proxy. The proxy still cannot classify a *live* slug, because that needs a
+Firestore read (§2I), so an unrecognised blog slug returns `null` and is refused
+by the router via `dynamicParams = false`.
+
+**The limit, stated plainly:** this map is only correct while it is maintained.
+The next slug edit made without adding an entry here reproduces the original bug
+exactly, with the same silence. It is a convention, not a mechanism — hence
+rule 11.
+
+### A `lastmod` in the future is discarded, not clamped
+
+The audit's `lastmod` pass found the ten `/threads` URLs dated `2026-09-12` —
+*tomorrow* — because `THREAD_PAGES_LASTMOD` had been pinned to the day after the
+layer was written. Google does not error on a `lastmod` it cannot believe; it
+ignores it. So the ten newest pages, the ones whose freshness claim the pin
+existed to make, were advertising a date that bought them nothing.
+
+**The fix** has two parts: the constant is now the real go-live date
+(2026-09-11), and `pinnedLastModified()` clamps any pinned date to the build
+time so the class cannot recur. A clamp rather than a warning comment, because
+the failure is invisible — the sitemap still validates, Search Console still
+reports no error, and the only symptom is a page that keeps the stale crawl the
+pin was added to avoid.
+
+### Verified
+
+| Case | Before | After |
+| --- | --- | --- |
+| `/blog/…error,-not-the-habit` (comma — the form Google has indexed) | 404 | **308** → `/blog/…error-not-the-habit` |
+| The same path with the comma percent-encoded (`%2C`) | 404 | **308**, same target |
+| Query string on either form | — | preserved (`?utm_source=…`) |
+| The current slug, `/blog` index | 200 | 200 |
+| `/blog/<unknown>`, `/blog/__proto__`, `/blog/constructor`, `/blog/toString` | 404 | 404 — a `Map`, not an object literal, so no inherited key can match a slug |
+| `/products`, `/services`, `/threads` matrix (18 cases) | 200 / 308 / 404 | unchanged |
+| Pinned `lastmod`, all four sitemaps (162 entries) | 10 future-dated | **0** future-dated |
+| `npm run build` | — | 107/107 static pages, no errors |
+
+The `%2C` row was initially mis-tested and looked like a failure; the encoded
+test URL was missing the hyphen that follows the comma. Recorded because the
+false alarm cost a round trip and the real conclusion is the useful part:
+`decodeURIComponent` runs over the whole path, so a retired slug containing a
+space or a bracket resolves when encoded too.
+
+### Re-measure
+
+- The comma URL should settle in Search Console as a redirect rather than "Not
+  found (404)". The 404 already recorded stays in the report until a recrawl.
+- `/threads` URLs are still unknown to Google (§2I). A corrected `lastmod` does
+  not create a crawl — it removes an obstacle. Validation still needs Request
+  Indexing or an internal-link nudge.
+- **When a post is renamed, add the entry.** If that is forgotten the symptom is
+  exactly what opened this section, and the way it was found the first time was
+  a manual URL-by-URL sweep.
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value.
@@ -1151,3 +1231,14 @@ setting up a new environment needs a copy out of band — it is not in the repo.
     advertises URLs the router refuses. The guard must return "unrecognised"
     rather than "missing" for any input it does not fully understand, because a
     false 404 takes a live page offline.
+11. **Two ways to quietly lose a page that already ranks: rename its slug, or
+    date its `lastmod` in the future.** Both are silent, neither appears in a
+    log or a Search Console error, and both are repaired by one line. Rename a
+    published slug and you must add the retired slug to
+    `src/lib/blog-legacy-slugs.js` in the same change — the URL is derived from
+    the slug on the Firestore document, so the rename orphans whatever the old
+    address had earned, with no redirect to carry it. Pin a `lastmod` and it
+    must be a date that has already happened; Google discards a future date
+    rather than clamping it, which costs the freshness signal the pin was added
+    to send. `pinnedLastModified()` enforces the second in code; the first is on
+    you. Section 2J.

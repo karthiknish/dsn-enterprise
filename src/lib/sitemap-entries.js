@@ -46,10 +46,35 @@ export const CITY_PAGES_LASTMOD = new Date("2026-08-21T00:00:00.000Z");
  * Thread reference tables use a pinned lastmod for the same reason cities do.
  * The dimensions are standards data and only change when the source standard
  * or the curation does — not on every deploy. Bump by hand when either moves.
+ *
+ * This is the day the layer went live. It must never be dated ahead of the
+ * build: Google ignores a `lastmod` it cannot believe, so a pin set in the
+ * future would cost the ten newest pages exactly the first recrawl the pin
+ * exists to earn. `pinnedLastModified` clamps it, but the value belongs right
+ * on its own.
  */
-export const THREAD_PAGES_LASTMOD = new Date("2026-09-12T00:00:00.000Z");
+export const THREAD_PAGES_LASTMOD = new Date("2026-09-11T00:00:00.000Z");
 
 const NOW = () => new Date();
+
+/**
+ * Clamp a hand-pinned lastmod so it can never be dated in the future.
+ *
+ * A future date is the clearest kind of `lastmod` Google refuses to believe,
+ * and the failure is silent: the sitemap still validates, Search Console still
+ * reports no error, and the only symptom is a page that keeps its stale
+ * crawl — which is precisely what the pin was added to avoid. The first
+ * revision of `THREAD_PAGES_LASTMOD` was set one day ahead and shipped. The
+ * guard therefore lives here rather than in a comment asking the next editor
+ * to be careful.
+ *
+ * @param {Date} date
+ * @returns {Date}
+ */
+function pinnedLastModified(date) {
+	const now = NOW();
+	return date > now ? now : date;
+}
 
 /**
  * Blog posts for the sitemap. Delegates to the same query the post route uses
@@ -181,7 +206,7 @@ function threadEntries() {
 		...generateMetricSizePages(),
 	].map((page) => ({
 		url: `${SITE_URL}${page.path}`,
-		lastModified: THREAD_PAGES_LASTMOD,
+		lastModified: pinnedLastModified(THREAD_PAGES_LASTMOD),
 		changeFrequency: page.changeFrequency ?? "monthly",
 		priority: page.priority ?? 0.6,
 	}));
@@ -219,14 +244,14 @@ export async function getMainEntries() {
 export function getCityEntries() {
 	const productCityPages = generateProductCityPages().map((page) => ({
 		url: `${SITE_URL}/products/${page.product}-${page.city}`,
-		lastModified: CITY_PAGES_LASTMOD,
+		lastModified: pinnedLastModified(CITY_PAGES_LASTMOD),
 		changeFrequency: "monthly",
 		priority: page.priority ?? 0.5,
 	}));
 
 	const serviceCityPages = generateServiceCityPages().map((page) => ({
 		url: `${SITE_URL}/services/${page.service}-${page.city}`,
-		lastModified: CITY_PAGES_LASTMOD,
+		lastModified: pinnedLastModified(CITY_PAGES_LASTMOD),
 		changeFrequency: "monthly",
 		priority: page.priority ?? 0.5,
 	}));
@@ -258,7 +283,7 @@ export const SITEMAP_SEGMENTS = [
 	{
 		name: "cities",
 		url: getSiteUrl("/sitemap-cities.xml"),
-		lastModified: () => CITY_PAGES_LASTMOD,
+		lastModified: () => pinnedLastModified(CITY_PAGES_LASTMOD),
 		// Held back until the city pages have internal links and unique copy.
 		// Flip via SITEMAP_SUBMIT_CITIES=true — no code change, no page deletion,
 		// no noindex needed.
