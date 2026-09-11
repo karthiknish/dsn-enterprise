@@ -1084,6 +1084,155 @@ space or a bracket resolves when encoded too.
 
 ---
 
+## §2K. Round seven — retiring thirteen of sixteen city pages
+
+### The measurement that forced it
+
+§2A–§2C established that the location axis does not bring relevant traffic and
+cut the matrix from 80 URLs to 16. That was not far enough, and the reason is
+crawl budget rather than relevance. A URL Inspection sweep of all 16 pages
+separated them cleanly:
+
+| Page | Last crawl | 90-day impressions | Position |
+|---|---|---|---|
+| `/products/air-gauges-coimbatore` | 2026-07-13 | 31 | 8.5 |
+| `/products/calibration-services-coimbatore` | 2026-07-13 | 18 | 9.9 |
+| `/products/thread-plug-gauges-coimbatore` | 2026-07-13 | 15 | 8.3 |
+| the other 13 | **never** | 0 | — |
+
+"Never crawled" is the operative number. These are not pages Google rejected;
+they are pages Google has not fetched — and they were reachable from the
+strongest internal-link sources the site controls, with `/products/plain-gauges`
+alone pointing at five of them. Thirteen URLs that nothing crawls are pure
+queue, and they sit in front of `/products/special-gauges`, which has never been
+crawled either.
+
+### What was changed
+
+The prune is expressed as a **page-level allowlist**, not a city tier:
+
+```js
+export const LIVE_CITY_PAGES = new Set([
+	"/products/air-gauges-coimbatore",
+	"/products/calibration-services-coimbatore",
+	"/products/thread-plug-gauges-coimbatore",
+]);
+```
+
+A tier could not express this outcome. All three survivors are Coimbatore, and
+every one of Chennai's seven combinations is in the uncrawled group — pruning by
+city would have taken the winners down with the dead weight.
+
+`LOCATION_TIER_LIMIT` is kept rather than deleted, so widening coverage still
+takes two deliberate acts: raise the tier *and* name the page. Rule 9 asks for a
+measured query cluster before a new programmatic axis ships; the two-gate
+arrangement now enforces a version of that in code.
+
+### No new redirect code was needed
+
+`dynamic-route-guard.js` already answers any combination that belongs to a
+product or service family but is not currently generated — and it answers with a
+308 to that family's hub, not a 404. Removing an allowlist entry therefore
+retires the URL in one hop with no further change:
+
+| Retired | 308 target |
+|---|---|
+| `air-gauges-chennai`, `plain-plug-gauges-{chennai,coimbatore}`, `snap-gauges-coimbatore` | `/products/plain-gauges` |
+| `thread-plug-gauges-chennai`, `thread-ring-gauges-{chennai,coimbatore}` | `/products/thread-gauges` |
+| `calibration-services-chennai`, `gauge-calibration-{chennai,coimbatore}` | `/calibration` |
+| `custom-gauge-manufacturing-{chennai,coimbatore}` | `/products/special-gauges` |
+| `gauge-repair-and-reconditioning-coimbatore` | `/services` |
+
+### The link source was derived, not left parallel
+
+`citiesForProduct()` / `citiesForService()` used to re-derive the answer from
+`activeCities()` and the relevance table. Two derivations of one fact drift, and
+the failure mode here is specific: a hub links into a URL that 308s, spending
+crawl budget to arrive at a page the hub already points to. Both now read the
+generator, so links and routes cannot disagree.
+
+The effect on the internal-link graph:
+
+| Page | City links before | after |
+|---|---|---|
+| `/products/plain-gauges` | 5 | 1 |
+| `/products/thread-gauges` | 4 | 1 |
+| `/products/special-gauges` | 2 | 0 |
+| `/services` | 5 | 0 |
+| `/calibration` | 2 | 1 |
+| `/products`, `/` | 0 | 0 |
+
+Five `<CityLinks>` call sites were also deleted rather than left in place —
+three on `/services`, one on `/products/special-gauges`, and one on
+`/products/api-gauges` that had been dead since before this round.
+`citiesForService()` now returns empty for every slug, so a `type="service"`
+block at those sites renders nothing, and a call that can never produce output
+is worse than a missing line: it reads as a feature.
+
+### The prune orphaned one of its own survivors
+
+`/calibration` asked for `type="service" categorySlug="gauge-calibration"`. That
+is the *service* family, and every page in it is retired. The page that survives
+is a *product* — `/products/calibration-services-coimbatore` — so the block
+rendered nothing and the page it was meant to support finished the prune with
+**zero inbound internal links**: a survivor the site had orphaned.
+
+It now reads `type="product" categorySlug="calibration-services"`. Measured
+against the local build, each survivor has exactly one inbound internal link,
+from its own hub:
+
+| Survivor | Inbound from |
+|---|---|
+| `/products/air-gauges-coimbatore` | `/products/plain-gauges` |
+| `/products/calibration-services-coimbatore` | `/calibration` |
+| `/products/thread-plug-gauges-coimbatore` | `/products/thread-gauges` |
+
+The check that caught it is worth keeping: **count inbound internal links for
+every page the site intends to keep**, not only for the pages it intends to
+drop.
+
+### A measurement bug worth recording
+
+The first inbound-link count said the calibration survivor had zero and the other
+two had one — which happened to look like a plausible result, so it survived a
+reading. It was wrong. The script read `<loc>` values out of the sitemap and
+curled them directly, and those are absolute production URLs: the sweep was
+measuring the deployed site, which still had sixteen city pages, while the build
+under test was being verified on `localhost`. The port being wrong is loud and
+the origin being wrong is silent — the same class of error as the `%2C` false
+alarm in §2J.
+
+Anything that starts from a sitemap must rewrite the **origin**, then the path.
+The numbers above are from the corrected run.
+
+### Verified
+
+| Check | Result |
+|---|---|
+| `npm run build` | 94/94 static pages (107 − 13), no errors |
+| 67 sitemap URLs | 67 × 200 |
+| 3 survivors | 200 |
+| 13 retired | 308, single hop, correct hub, query string preserved |
+| never-existed combos (`air-gauges-kochi`, `api-gauges-coimbatore`, …) | 404 |
+| §2H / §2J regression matrix | 18/18 unchanged |
+| legacy blog slug, raw and `%2C`-encoded | 308 → live post |
+| `sitemap-cities.xml` | 3 entries |
+| Lint (`biome check src scripts`) | 16 diagnostics before, 16 after — none new |
+
+### Re-measure
+
+- `/products/special-gauges` is now the page carrying the freed budget and has
+  still never been crawled. Request Indexing, then check whether it moves within
+  a fortnight. If it does not, internal links were not the constraint.
+- The three survivors should keep their impressions. If one decays after the
+  prune, the hub link is the first thing to look at.
+- The 13 retired URLs should settle as redirects over the next recrawl; residual
+  "Not found (404)" rows are historical.
+- If the freed budget produces nothing, the next thing to cut is blog pagination
+  depth (§3). Crawl budget is the hypothesis this round tests.
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value.
@@ -1122,16 +1271,52 @@ create a second standards URL.**
 ### 3. `/products` and `/products/special-gauges` indexing
 
 `/products/special-gauges` still had **zero** Search Console impressions on
-21 Aug. The hub copy and title now match "custom gauges manufacturer", which
-the custom-gauges *blog* already ranks for at position 4.8. Worth a coverage
-check with `npm run seo:coverage` after this deploy; do not add more custom-
-gauge URLs until this one is indexed.
+21 Aug, and the URL Inspection sweep in §2K showed why: its `lastCrawl` is
+`never`. It is not a thin-content problem — it is a queue problem, and it is the
+page §2K freed budget for. The hub copy and title already match "custom gauges
+manufacturer", which the custom-gauges *blog* ranks for at position 4.8. Request
+Indexing now that the thirteen city pages are out of the way, and do not add
+more custom-gauge URLs until this one is indexed.
 
 ### 4. FAQ was thin — addressed in 2D
 
 The Standards category is the content that searchers were already asking the
 IS 3455 post for. `/contact` and `/thank-you` word counts are not a ranking
 problem.
+
+### 5. Fits and tolerance (H7/g6, IT grades) — blocked on a decision, not on effort
+
+This is the largest unclaimed cluster measured so far — roughly 8,000 searches a
+month against essentially no competition, and precisely the question the
+existing traffic already arrives with. It is blocked on rule 8, and the block is
+not technical.
+
+The numbers cannot be computed. Checked against ISO 286-1's published table, the
+IT formula disagrees in **50 of 104 cells (48%)**. A generated table would
+therefore be wrong about half the time on a page whose entire value is its
+numbers — and the cost of a wrong tolerance limit is not a lost ranking, it is
+scrapped parts or a rejected batch at a customer's works.
+
+Three ways forward. Only the first is available without a decision:
+
+1. **Explain the system, publish no limits.** A `/fits` explainer covering what
+   IT grades mean, how to read `H7/g6`, hole-basis versus shaft-basis, and how a
+   fit is chosen — with no numeric limit table anywhere on it. Lawful, useful,
+   and squarely inside rule 8. It reaches the conceptual queries, not the
+   value-seeking ones that make up most of the 8,000.
+2. **Transcribe the tables.** Requires that the client holds, or obtains, the
+   right to reproduce IS 919 / ISO 286 limit tables — and then a second pair of
+   eyes checking every cell against the standard. This is the only route that
+   claims the value-seeking traffic, and it is a legal and editorial commitment
+   rather than a coding task.
+3. **Link out instead of hosting.** Send readers to the standard's own source.
+   Costs the ranking, keeps the page lawful, and is worth doing as a fallback
+   inside option 1 regardless.
+
+Keyword volumes here are Google Ads buckets, so read them as relative rather
+than absolute (§2D). Not started, deliberately: option 1 needs no permission, but
+building it *now* would add URLs to the very queue §2K exists to shorten. Build
+it once the crawl-budget question is answered.
 
 ---
 
@@ -1173,17 +1358,20 @@ setting up a new environment needs a copy out of band — it is not in the repo.
 
 ## 5. Rules for whoever works on this next
 
-1. **Do not restore the full product × city matrix.** It was measured twice. The
-   second measurement (section 2H, 52 live URLs over 90 days) returned **2
-   clicks** and 99 impressions, with only 4 location URLs ever earning an
-   impression. The reason is that the queries are not being typed — not that the
-   content was thin, which is what round one assumed. `LOCATION_TIER_LIMIT` is
-   now 1. Adding cities back without a measured city query to answer will
-   reproduce the same outcome.
-2. **Raise `LOCATION_TIER_LIMIT` only on evidence.** Run `npm run seo:coverage`
-   and confirm the current tier is actually indexed first. Bangalore and
-   Hyderabad were added at tier 2 with full profiles (section 2E); that is not
-   a licence to turn the tier-3 Tamil Nadu cities on, or to add more metros.
+1. **Do not restore the product × city matrix.** It has now been measured three
+   times. The second measurement (section 2H, 52 live URLs over 90 days)
+   returned **2 clicks** and 99 impressions, with only 4 location URLs ever
+   earning an impression. The reason is that the queries are not being typed —
+   not that the content was thin, which is what round one assumed. The third
+   (section 2K) found that of the 16 URLs left after the second cut, 13 had
+   `lastCrawl: never`, and cut the segment to 3. Adding cities back without a
+   measured city query to answer will reproduce the same outcome.
+2. **A city page needs both gates *and* evidence to ship.** Raise
+   `LOCATION_TIER_LIMIT` **and** add the page to `LIVE_CITY_PAGES`; neither
+   alone emits anything, deliberately. Run `npm run seo:coverage` and confirm
+   the pages already live are actually indexed first. Bangalore and Hyderabad
+   were added at tier 2 with full profiles (section 2E); that is not a licence
+   to turn the tier-3 Tamil Nadu cities on, or to add more metros.
 3. **A new city needs a full `CITY_PROFILES` entry** — distance, corridor, nearby
    towns, tolerance focus, local proof, buying pattern — plus at least one
    `CITY_PRODUCT_NOTES` entry. A city added with only a name and a description
@@ -1242,3 +1430,18 @@ setting up a new environment needs a copy out of band — it is not in the repo.
     rather than clamping it, which costs the freshness signal the pin was added
     to send. `pinnedLastModified()` enforces the second in code; the first is on
     you. Section 2J.
+12. **Pruning a family is not finished until every survivor has an inbound
+    internal link.** Section 2K retired thirteen city pages and, in doing so,
+    orphaned one of the three it kept: `/calibration` asked `CityLinks` for the
+    *service* slug while the surviving page is a *product* page, so the block
+    rendered nothing and the page finished the round with zero inbound links —
+    and it was the second-best of the sixteen. Count inbound links for the pages
+    you are keeping, not only for the pages you are dropping, and derive a hub's
+    links from the same generator that produces the routes so the two cannot
+    disagree.
+13. **A sitemap is an output, not an input.** Crawling your own sitemap inside a
+    verification script measures production, because `<loc>` holds absolute URLs
+    and production is what DNS resolves. Section 2K's first inbound-link count
+    was silently wrong for exactly this reason and read as a plausible result,
+    which is the dangerous kind. When verifying a local build, rewrite the
+    origin before the path.

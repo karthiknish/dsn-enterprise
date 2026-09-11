@@ -8,7 +8,6 @@ import ApiGaugesIntroSection from "@/components/products/api-gauges/ApiGaugesInt
 import ApiGaugesProductsGrid from "@/components/products/api-gauges/ApiGaugesProductsGrid";
 import ApiGaugesRelatedCategories from "@/components/products/api-gauges/ApiGaugesRelatedCategories";
 import ApiGaugesStandardsSection from "@/components/products/api-gauges/ApiGaugesStandardsSection";
-import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
 export default function APIGaugesPage() {
@@ -25,7 +24,8 @@ export default function APIGaugesPage() {
 			<ApiGaugesIntroSection />
 			<ApiGaugesProductsGrid />
 			<ApiGaugesStandardsSection />
-			<CityLinks type="product" categorySlug="api-master-gauges" />
+			{/* No <CityLinks> — api-master-gauges has never had a city page in any
+			    tier, so the component would render nothing (SEO-STRATEGY.md §2K). */}
 			<ApiGaugesRelatedCategories />
 
 			<Cta10

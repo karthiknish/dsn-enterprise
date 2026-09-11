@@ -11,7 +11,6 @@ import { m } from "framer-motion";
 import Link from "next/link";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
-import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
 // ─── Motion Variants ───────────────────────────────────────────
@@ -349,13 +348,13 @@ const ServicesPage = () => {
 				</div>
 			</section>
 
-			{/* Service Areas — Internal links to city pages */}
-			<CityLinks type="service" categorySlug="gauge-calibration" />
-			<CityLinks type="service" categorySlug="custom-gauge-manufacturing" />
-			<CityLinks
-				type="service"
-				categorySlug="gauge-repair-and-reconditioning"
-			/>
+			{/*
+			 * No city links here. Every service city page was retired in
+			 * docs/SEO-STRATEGY.md §2K — none had ever been crawled, let alone
+			 * earned an impression — and `citiesForService()` now returns empty for
+			 * every slug, so a <CityLinks> call here would render nothing. The
+			 * surviving city pages are products, and their own hubs link them.
+			 */}
 
 			<Cta10
 				reference="Ref. DSN-SVC-01"

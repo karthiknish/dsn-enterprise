@@ -7,9 +7,16 @@
 // not indexed"). Relevance gating plus tiering keeps the set small enough to
 // earn crawl budget and distinct enough to deserve it.
 //
-// TIERS control rollout. Only cities at or below LOCATION_TIER_LIMIT emit
-// pages, so coverage can be widened deliberately once indexing is proven
-// rather than dumped on Google all at once.
+// TWO GATES, both of which must open before a city page ships:
+//
+//   1. CITY gate — LOCATION_TIER_LIMIT, which cities are in scope at all.
+//   2. PAGE gate — LIVE_CITY_PAGES, which product x city combinations have
+//      proven they deserve a URL. The city-level gate cannot express the
+//      page-level evidence: all three survivors are Coimbatore, while Chennai's
+//      seven combinations sit in the uncrawled group.
+//
+// Deliberately two keys rather than one, so widening coverage costs a
+// measurement and a decision instead of a single env var.
 
 import { getCityProfile } from "@/lib/seo-location-data";
 import { DESC_MAX, fit, TITLE_MAX } from "@/lib/seo-text";
@@ -38,6 +45,43 @@ import { DESC_MAX, fit, TITLE_MAX } from "@/lib/seo-text";
 export const LOCATION_TIER_LIMIT = Number(
 	process.env.NEXT_PUBLIC_LOCATION_TIER_LIMIT || 1,
 );
+
+/**
+ * The product x city combinations that actually ship.
+ *
+ * A page-level gate, because the evidence is page-level. Of the 16 city pages
+ * the city gate produced, Search Console showed exactly three had ever been
+ * crawled — and those three are the only ones that ever earned an impression.
+ * The other thirteen report `lastCrawl: never`: not rejected, simply never
+ * fetched, while the core pages they are linked from wait behind them.
+ *
+ * 90 days, Search Console (docs/SEO-STRATEGY.md §2K):
+ *
+ *   /products/air-gauges-coimbatore           31 impressions  pos 8.5
+ *   /products/calibration-services-coimbatore 18 impressions  pos 9.9
+ *   /products/thread-plug-gauges-coimbatore   15 impressions  pos 8.3
+ *   the other 13 city pages                    0 impressions
+ *
+ * All three survivors are Coimbatore, which is why this cannot be expressed as
+ * a city tier: Chennai's seven combinations are all in the uncrawled group, so
+ * pruning by city would take the winners down with the dead weight.
+ *
+ * ## Retiring a page here costs nothing
+ *
+ * `dynamic-route-guard.js` already answers any combination that belongs to a
+ * product or service family but is not currently generated — and it answers
+ * with a 308 to that family's hub rather than a 404. Removing an entry
+ * therefore retires the URL cleanly, in one hop, carrying its signal to the
+ * hub. Adding one back is a line; adding one for a *new* city also needs the
+ * city gate open and a measured query cluster behind it (§5, rule 9).
+ *
+ * @type {Set<string>}
+ */
+export const LIVE_CITY_PAGES = new Set([
+	"/products/air-gauges-coimbatore",
+	"/products/calibration-services-coimbatore",
+	"/products/thread-plug-gauges-coimbatore",
+]);
 
 export const CITIES = [
 	{
@@ -389,23 +433,25 @@ export const SERVICES = [
 	},
 ];
 
-/** Cities currently in scope for page generation, per the rollout gate. */
+/**
+ * Cities currently in scope at all, per the city gate.
+ *
+ * This is no longer what decides which city pages ship — `LIVE_CITY_PAGES`
+ * does. It answers the narrower question of which cities are worth considering,
+ * and it still gates nothing on its own: a city can pass here and emit zero
+ * pages.
+ */
 export function activeCities() {
 	return CITIES.filter((c) => c.tier <= LOCATION_TIER_LIMIT);
 }
 
-function isProductRelevant(productSlug, citySlug) {
-	return (PRODUCT_CITY_RELEVANCE[citySlug] || []).includes(productSlug);
-}
-
-function isServiceRelevant(serviceSlug, citySlug) {
-	return (SERVICE_CITY_RELEVANCE[citySlug] || []).includes(serviceSlug);
-}
-
 /**
- * Generate product x city pages, gated by both industrial relevance and the
- * tier rollout limit. Priority feeds sitemap weighting: tier-1 cities and
- * their lead products are the pages we most want crawled first.
+ * Generate product x city pages. Three gates, all of which must pass: the city
+ * must be in scope (`activeCities`), the product must be relevant to that
+ * city's industrial base (`PRODUCT_CITY_RELEVANCE`), and the pair must be
+ * proven (`LIVE_CITY_PAGES`). Priority feeds sitemap weighting: a page's rank
+ * within its own city, so the combinations most likely to earn a crawl are
+ * listed first.
  */
 export function generateProductCityPages() {
 	const pages = [];
@@ -414,6 +460,9 @@ export function generateProductCityPages() {
 		for (const productSlug of relevant) {
 			const product = PRODUCTS.find((p) => p.slug === productSlug);
 			if (!product) continue;
+			if (!LIVE_CITY_PAGES.has(`/products/${productSlug}-${city.slug}`)) {
+				continue;
+			}
 
 			// Lead product for the city ranks highest within that city.
 			const rank = relevant.indexOf(productSlug);
@@ -448,6 +497,14 @@ export function generateProductCityPages() {
 	return pages;
 }
 
+/**
+ * Generate service x city pages, under the same three gates as the product
+ * set. Currently returns nothing: the city gate keeps Coimbatore and Chennai,
+ * but no service x city pair ever earned an impression, so `LIVE_CITY_PAGES`
+ * holds no `/services/` entry and every one of them retires to its hub via a
+ * 308. The generator and the gate stay in place so restoring a page is a line
+ * rather than a re-implementation.
+ */
 export function generateServiceCityPages() {
 	const pages = [];
 	for (const city of activeCities()) {
@@ -455,6 +512,9 @@ export function generateServiceCityPages() {
 		for (const serviceSlug of relevant) {
 			const service = SERVICES.find((s) => s.slug === serviceSlug);
 			if (!service) continue;
+			if (!LIVE_CITY_PAGES.has(`/services/${serviceSlug}-${city.slug}`)) {
+				continue;
+			}
 
 			const rank = relevant.indexOf(serviceSlug);
 			const priority =
@@ -484,14 +544,35 @@ export function generateServiceCityPages() {
 	return pages;
 }
 
-/** Cities where a given product has a page — used for cross-linking. */
+/**
+ * Cities where a given product has a *live* page — the hub's cross-link source.
+ *
+ * Derived from the generator rather than from `activeCities()` and the
+ * relevance table, so the links and the generated routes cannot disagree. When
+ * they could, a hub linked into combinations that 308 — spending crawl budget
+ * to arrive at a page the hub already points to.
+ */
 export function citiesForProduct(productSlug) {
-	return activeCities().filter((c) => isProductRelevant(productSlug, c.slug));
+	const live = new Set(
+		generateProductCityPages()
+			.filter((p) => p.product === productSlug)
+			.map((p) => p.city),
+	);
+	return CITIES.filter((c) => live.has(c.slug));
 }
 
-/** Cities where a given service has a page — used for cross-linking. */
+/**
+ * Cities where a given service has a *live* page. Same derivation rule as
+ * `citiesForProduct`. Currently always empty: every service city page was
+ * retired in §2K, so the "other service locations" block renders nowhere.
+ */
 export function citiesForService(serviceSlug) {
-	return activeCities().filter((c) => isServiceRelevant(serviceSlug, c.slug));
+	const live = new Set(
+		generateServiceCityPages()
+			.filter((p) => p.service === serviceSlug)
+			.map((p) => p.city),
+	);
+	return CITIES.filter((c) => live.has(c.slug));
 }
 
 // Get page data by slug combination

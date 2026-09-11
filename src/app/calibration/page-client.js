@@ -540,8 +540,19 @@ export default function CalibrationPage() {
 				</div>
 			</section>
 
-			{/* Service Areas — Internal links to city pages */}
-			<CityLinks type="service" categorySlug="gauge-calibration" />
+			{/*
+			 * Service Areas — internal links to city pages.
+			 *
+			 * This hub parents two families: the service family
+			 * (`/services/gauge-calibration-<city>`, every one of them retired in
+			 * SEO-STRATEGY.md §2K) and the product family
+			 * (`/products/calibration-services-<city>`). Only one page survives the
+			 * prune, and it is a *product* page — so the op reads the product family.
+			 * Asking for `gauge-calibration` here would render nothing and leave
+			 * `/products/calibration-services-coimbatore` with zero inbound links,
+			 * which is how it was orphaned the first time.
+			 */}
+			<CityLinks type="product" categorySlug="calibration-services" />
 
 			<Cta10
 				reference="Ref. DSN-CAL-01"
