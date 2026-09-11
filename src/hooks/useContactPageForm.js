@@ -2,14 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
+import { useMetaTracking } from "@/hooks/useMetaTracking";
+import { getAttribution } from "@/lib/attribution";
 import {
 	EMPTY_CONTACT_FORM,
 	loadContactDraft,
 	validateAllContactFields,
 	validateContactField,
 } from "@/lib/contact-form-state";
-import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
-import { useMetaTracking } from "@/hooks/useMetaTracking";
 
 export function useContactPageForm({ prefillProduct = "" } = {}) {
 	const { push } = useRouter();
@@ -175,7 +176,10 @@ export function useContactPageForm({ prefillProduct = "" } = {}) {
 			const response = await fetch("/api/contact", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(formData),
+				body: JSON.stringify({
+					...formData,
+					attribution: getAttribution(),
+				}),
 			});
 
 			const result = await response.json();

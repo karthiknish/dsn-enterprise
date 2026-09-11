@@ -4,6 +4,7 @@ import { m } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useReducer } from "react";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
+import { getAttribution } from "@/lib/attribution";
 import {
 	validateAllContactFields,
 	validateContactField,
@@ -32,7 +33,11 @@ const ContactSection = () => {
 	const validateHomeContactField = (e) => {
 		const { id, name, value } = e.target;
 		const fieldName = name || id;
-		const fieldErrors = validateContactField(fieldName, value, state.fieldErrors);
+		const fieldErrors = validateContactField(
+			fieldName,
+			value,
+			state.fieldErrors,
+		);
 		dispatch({ type: "SET_FIELD_ERRORS", fieldErrors });
 	};
 
@@ -58,7 +63,10 @@ const ContactSection = () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(state.formData),
+				body: JSON.stringify({
+					...state.formData,
+					attribution: getAttribution(),
+				}),
 			});
 
 			const contentType = response.headers.get("content-type");

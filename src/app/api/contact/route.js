@@ -1,5 +1,6 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { NextResponse } from "next/server";
+import { sanitizeAttribution } from "@/lib/attribution";
 import { sendEmail } from "@/lib/brevo";
 import {
 	renderAdminNotificationEmail,
@@ -155,9 +156,16 @@ export async function POST(request) {
 			email: "[REDACTED]",
 		});
 
+		// Attribution is captured client-side and is therefore untrusted input on a
+		// public endpoint. sanitizeAttribution() bounds and validates every field
+		// and returns null when there is nothing usable, so records written before
+		// this existed stay free of empty attribution objects.
+		const attribution = sanitizeAttribution(body.attribution);
+
 		// Create entry in Firebase Firestore
 		const docRef = await addDoc(collection(db, "contacts"), {
 			...contactData,
+			...(attribution ? { attribution } : {}),
 			createdAt: serverTimestamp(),
 			status: "new",
 		});
@@ -176,7 +184,10 @@ export async function POST(request) {
 
 		// Internal notification + auto-reply to the sender. Neither is allowed to
 		// fail the request: the enquiry is already saved in Firestore.
-		const adminNotification = renderAdminNotificationEmail(contactData);
+		const adminNotification = renderAdminNotificationEmail({
+			...contactData,
+			attribution,
+		});
 		const autoReply = renderContactAutoReplyEmail(contactData);
 
 		const adminEmails = [

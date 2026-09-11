@@ -10,6 +10,7 @@
  *   - preheader text so the inbox preview says something useful
  */
 
+import { describeAttribution } from "@/lib/attribution";
 import { getSiteUrl } from "@/lib/site";
 
 const LOGO_URL = getSiteUrl("/images/logo.png");
@@ -190,6 +191,33 @@ export function renderAdminNotificationEmail(contact) {
 		"Re: your enquiry to DSN Enterprises",
 	)}`;
 
+	// Where the enquiry came from. Absent on records written before attribution
+	// was captured, so every row is conditional.
+	const attributionRows = [];
+	if (contact.attribution?.channel) {
+		attributionRows.push({
+			label: "Channel",
+			value: contact.attribution.channel,
+		});
+	}
+	const landed = contact.attribution?.entryPage;
+	const submittedOn = contact.attribution?.submittedFrom;
+	if (landed) {
+		attributionRows.push({
+			label: "Landed on",
+			value:
+				submittedOn && submittedOn !== landed
+					? `${landed} (form on ${submittedOn})`
+					: landed,
+		});
+	}
+	if (contact.attribution?.utm?.utm_campaign) {
+		attributionRows.push({
+			label: "Campaign",
+			value: contact.attribution.utm.utm_campaign,
+		});
+	}
+
 	const body = [
 		heading(`New enquiry from ${contact.name}`),
 		paragraph(
@@ -206,11 +234,14 @@ export function renderAdminNotificationEmail(contact) {
 			},
 			{ label: "Company", value: contact.company || "" },
 			{ label: "Product interest", value: contact.productInterest || "" },
+			...attributionRows,
 		]),
 		messageBlock("Message", contact.message),
 		button("Reply to this enquiry", replyLink),
 		spacer(24),
 	].join("");
+
+	const attributionSummary = describeAttribution(contact.attribution);
 
 	const text = `New enquiry from ${contact.name}
 Received ${submitted} IST
@@ -220,6 +251,7 @@ Email: ${contact.email}
 Phone: ${contact.phone || "Not provided"}
 Company: ${contact.company || "Not provided"}
 Product interest: ${contact.productInterest || "Not specified"}
+Came from: ${attributionSummary || "Not captured"}
 
 Message:
 ${contact.message}

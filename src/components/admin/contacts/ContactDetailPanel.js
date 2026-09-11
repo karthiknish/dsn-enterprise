@@ -117,6 +117,31 @@ export default function ContactDetailPanel({
 					</div>
 				)}
 
+				{contact.attribution && (
+					<div className="rounded-xl border border-gray-200/80 bg-gray-50/60 p-3">
+						<p className="text-xs uppercase tracking-wide text-gray-500">
+							Source
+						</p>
+						<p className="text-sm text-gray-900 mt-1">
+							{contact.attribution.channel || "Not captured"}
+						</p>
+						{contact.attribution.entryPage && (
+							<p className="text-xs text-gray-600 mt-1 break-all">
+								Landed on {contact.attribution.entryPage}
+								{contact.attribution.submittedFrom &&
+									contact.attribution.submittedFrom !==
+										contact.attribution.entryPage &&
+									` · form on ${contact.attribution.submittedFrom}`}
+							</p>
+						)}
+						{contact.attribution.utm?.utm_campaign && (
+							<p className="text-xs text-gray-600 mt-1 break-all">
+								Campaign {contact.attribution.utm.utm_campaign}
+							</p>
+						)}
+					</div>
+				)}
+
 				<div>
 					<p className="text-xs uppercase tracking-wide text-gray-500">
 						Message

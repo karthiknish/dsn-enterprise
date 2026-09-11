@@ -4,6 +4,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { Suspense, useEffect } from "react";
+import { captureAttribution } from "@/lib/attribution";
 
 /**
  * GA4 measurement ID for property 514574483 ("dsn-enterprises", GA account
@@ -33,6 +34,14 @@ const FB_PIXEL_ID = "1391622058130598";
 
 function AnalyticsContent() {
 	const pathname = usePathname();
+
+	// Record the first page of the browser session. This sits in the root layout
+	// so the entry page is captured even when the visitor arrives on a page with
+	// no form and navigates to the contact form later. captureAttribution() is
+	// idempotent, so repeat mounts and hard navigations do not overwrite it.
+	useEffect(() => {
+		captureAttribution();
+	}, []);
 
 	useEffect(() => {
 		if (pathname && window.gtag) {
