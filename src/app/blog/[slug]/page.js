@@ -4,11 +4,20 @@ import { notFound } from "next/navigation";
 import { cache, Suspense } from "react";
 import BlogPostBody from "@/components/blog/BlogPostBody";
 import BlogPostImage from "@/components/blog/BlogPostImage";
+import PostFaq from "@/components/blog/PostFaq";
+import ReferenceLinks from "@/components/blog/ReferenceLinks";
 import RelatedPosts from "@/components/blog/RelatedPosts";
 import { getPublishedPosts } from "@/lib/blog-queries";
 import { db } from "@/lib/firebase";
-import { jsonLdProps } from "@/lib/seo-schema";
-import { getSiteUrl, SITE_URL } from "@/lib/site";
+import {
+	buildBlogPostingSchema,
+	buildFaqJsonLd,
+	jsonLdProps,
+	ORG_ID,
+	resolvePostFaqs,
+	WEBSITE_ID,
+} from "@/lib/seo-schema";
+import { getSiteUrl } from "@/lib/site";
 
 const getPostBySlug = cache(async (slug) => {
 	try {
@@ -165,37 +174,31 @@ export default async function BlogPostPage({ params }) {
 		notFound();
 	}
 
-	const blogPostSchema = {
-		"@context": "https://schema.org",
-		"@type": "BlogPosting",
-		headline: post.title,
-		image: post.featuredImage
-			? [post.featuredImage]
-			: [getSiteUrl("/images/featured.png")],
-		datePublished: post.publishedDate || post.createdAt,
-		dateModified: post.updatedAt || post.publishedDate || post.createdAt,
-		author: [
-			{
-				"@type": "Organization",
-				name: "DSN Enterprises",
-				url: SITE_URL,
-			},
-		],
-		publisher: {
-			"@type": "Organization",
-			name: "DSN Enterprises",
-			logo: {
-				"@type": "ImageObject",
-				url: getSiteUrl("/images/logo.png"),
-			},
-		},
-		description: post.excerpt || post.title,
-	};
+	const blogPostSchema = buildBlogPostingSchema(
+		post,
+		getSiteUrl(`/blog/${post.slug}`),
+	);
+
+	// FAQ markup, from the hand-written `faq` field when one exists and
+	// otherwise from question headings already visible in the body. A derived
+	// single pair is not enough to emit a FAQPage — one incidental heading is
+	// noise, whereas one authored pair is deliberate. See resolvePostFaqs.
+	const authoredFaqs = Array.isArray(post.faq) && post.faq.length > 0;
+	const faqs = resolvePostFaqs(post);
+	const faqSchema =
+		faqs.length >= (authoredFaqs ? 1 : 2)
+			? buildFaqJsonLd(faqs, {
+					id: `${getSiteUrl(`/blog/${post.slug}`)}#faq`,
+					isPartOfId: WEBSITE_ID,
+					aboutId: ORG_ID,
+				})
+			: null;
 
 	return (
 		<div className="min-h-screen bg-gray-50">
 			{/* JSON-LD Structured Data */}
 			<script {...jsonLdProps(blogPostSchema)} />
+			{faqSchema && <script {...jsonLdProps(faqSchema)} />}
 
 			{/* Hero Section */}
 			<section className="bg-primary text-white py-16">
@@ -265,6 +268,11 @@ export default async function BlogPostPage({ params }) {
 							<BlogPostBody html={post.content} />
 						</article>
 
+						{/* Only a hand-written FAQ renders visibly here. Pairs derived
+						    from question headings are already in the body above, so
+						    rendering them again would duplicate the article. */}
+						{authoredFaqs && <PostFaq faqs={faqs} />}
+
 						{/* Share Section */}
 						<div className="mt-8 bg-white rounded-xl shadow-sm p-6">
 							<h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -321,6 +329,10 @@ export default async function BlogPostPage({ params }) {
 								</a>
 							</div>
 						</div>
+
+						{/* Reference charts: the crawl path into the /threads and /fits
+						    layer from the most frequently recrawled URLs on the site. */}
+						<ReferenceLinks />
 
 						{/*
 						  Related posts: the crawl path from one post to the next.

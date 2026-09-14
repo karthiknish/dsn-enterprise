@@ -159,6 +159,14 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link
+									href="/fits"
+									className="hover:text-secondary transition-colors"
+								>
+									Limits &amp; Fits
+								</Link>
+							</li>
+							<li>
+								<Link
 									href="/resources"
 									className="hover:text-secondary transition-colors"
 								>

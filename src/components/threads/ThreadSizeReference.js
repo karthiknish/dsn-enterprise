@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PageHero from "@/components/layout/PageHero";
+import ThreadSystemLinks from "@/components/threads/ThreadSystemLinks";
 import ThreadTable from "@/components/threads/ThreadTable";
 import {
 	getThreadSystem,
@@ -263,6 +264,8 @@ export default function ThreadSizeReference({ page }) {
 						</p>
 					</section>
 				)}
+
+				<ThreadSystemLinks exclude="metric" />
 			</div>
 		</>
 	);

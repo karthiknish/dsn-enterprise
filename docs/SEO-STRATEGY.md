@@ -1233,6 +1233,287 @@ The numbers above are from the corrected run.
 
 ---
 
+## 2L. Round eight — 14 Sep 2026: the plateau, and the layer that never got crawled
+
+Figures are the Search Console API for the 90 days ending 2026-09-14, compared
+with the 7 Sep pass in §2G. Coverage is the first complete URL Inspection sweep
+since §2K (`node scripts/gsc-index-coverage.mjs --sample 40`).
+
+### What the aggregate hid
+
+| Metric | 7 Sep (90d) | 14 Sep (90d) |
+|---|---|---|
+| Clicks | 125 | **137** |
+| Impressions | 5,369 | **5,824** |
+| CTR | 2.33% | **2.35%** |
+| Average position | — | 10.0 |
+
+The 90-day window still reads as growth. The weekly shape does not:
+
+| Week | Clicks | Impressions |
+|---|---|---|
+| Aug 2–8 | 17 | 1,049 |
+| Aug 9–15 | **36** | **1,069** |
+| Aug 16–22 | 19 | 762 |
+| Aug 23–29 | 14 | 672 |
+| Aug 30–Sep 5 | 18 | 563 |
+| Sep 6–12 | **12** | **547** |
+
+Last 28d vs prior 28d: **62 clicks / 2,483 impressions** against 64 / 2,935
+(−3% / −15%). The February-to-August growth was substantially one spike — the
+§2A IS 3455 rewrite — and that spike is now decaying to its equilibrium.
+
+It is worth being precise about what the 28-day dip is *not*. Decomposed by
+page and by query, most of the impression loss is noise leaving:
+
+| Lost | | Gained | |
+|---|---|---|---|
+| `dsn` 275→21 | bare acronym, **0 clicks in 378 impr/90d** | IS 3455 post +233 impr, +8 clicks | |
+| m20 post 268→20 | 287 impr/90d, so 93% was one window | common-mistakes +157 | |
+| custom-gauges blog 109→2 | | taper-thread +106 | |
+| `/about` 248→97 | the §2D cannibalisation fix working | wringing-blocks +57 | |
+
+**Non-branded demand is flat-to-up; the headline fall is junk impressions
+rolling off.** The real problem is concentration: the IS 3455 post is 55 of 137
+clicks across 90 days (40%) and **33 of 62 in the last 28 (53%)**. There is one
+acquisition channel and it is a single URL.
+
+### Coverage: 80% indexed, and a quarter of URLs have no inbound links
+
+| | |
+|---|---|
+| Indexed | **32/40 (80%)** |
+| Never crawled | 7/40 |
+| Canonical mismatch | 0/40 |
+| **Zero referring URLs** | **10/40** |
+
+The 10/40 is the new number and the useful one: it is a measurement of
+internal-link starvation, not of content quality. Pages Google has no route to
+are pages it will not recrawl.
+
+`/products/special-gauges` is still **"URL is unknown to Google"** with
+`lastCrawl: never` — exactly the open item §2K said to re-measure, unchanged.
+Four blog posts are also unindexed (`thread-plug-vs-ring-gauges`,
+`the-importance-of-thread-gauges`, `when-the-go-gauge-will-not-enter`,
+`what-a-go-no-go-gauge-actually-proves`).
+
+### The thread layer is half-crawled and has earned nothing
+
+Shipped 11 Sep (§2H). Checked by URL Inspection:
+
+| Indexed | Not indexed |
+|---|---|
+| `/threads/metric`, `/threads/metric/m6`–`m12` | `/threads`, `/threads/npt`, `/threads/unc`, `/threads/metric/m16`, `m20` |
+
+Zero impressions for the entire cluster — no `m12 thread pitch`, no
+`npt thread dimensions`, no `unc thread chart`. The whole §2H bet is still
+unmeasured, and the hub, which is the crawl path to the systems, is the page
+Google has not fetched.
+
+### The link profile, measured once
+
+A DataForSEO link-velocity call (14 Sep) returned **14 new referring domains /
+7 new main domains, 0 lost** in the window. Small, but the domain is gaining
+rather than losing links, which is better than the content-only read of the last
+seven rounds would suggest. The endpoint was catalogued as free and was charged
+at **$0.024**; the promotional balance now stands at $0.0146, so volume
+research needs a top-up.
+
+### What this round changed
+
+**1. The blog's structured data now joins the single entity graph.** §2C states
+that Product, Service, FAQPage and ContactPage all reference the canonical
+`#organization` / `#website` nodes. Blog posts never did: each one redeclared an
+anonymous Organization as author and publisher. `buildBlogPostingSchema()` now
+emits `@id` references and adds `mainEntityOfPage`, `inLanguage` and `keywords`.
+
+**2. FAQ markup for the posts that carry search demand, not the posts that
+happen to ask questions.** Across all 39 posts there are **10 question→answer
+pairs, seven of them on a buyer's guide with no measured demand**; the
+highest-traffic article had one, which is below the threshold at which a derived
+FAQPage is worth emitting. So the post route now prefers a hand-written `faq`
+field and falls back to question headings (`extractFaqPairsFromHtml`,
+`resolvePostFaqs`). Three posts got authored Q&A via `scripts/seo-round6.mjs`
+(dry-run, assertion-checked, backup in `scripts/.blog-backups/`):
+
+| Post | Q&A | Source of every answer |
+|---|---|---|
+| IS 3455 / IS 919 | 7 | the article's own body |
+| API 5B / 7-2 oilfield | 5 | the article's own body |
+| M20×1.5-6H thread callout | 4 | the article's own body |
+
+The same array renders a visible `<details>` Q&A section **and** the FAQPage
+JSON-LD, so the markup cannot state a question the page does not show. No new
+figure, date or certification enters the corpus — rule 5.
+
+> A caveat for the next editor: `/admin/blog`'s save path names its fields
+> explicitly, so a normal admin save **preserves** `faq` rather than clearing it.
+> But rewriting a post's body can leave an authored answer stale, and nothing
+> detects that. If the body changes, re-read the `faq` entries against it.
+
+**3. Internal links aimed at the uncrawled thread pages.** Two new blocks, both
+fed by the generator the routes and sitemap read, so neither can point at a page
+that does not exist:
+
+- `ReferenceLinks` at the foot of **every blog post** — the most frequently
+  recrawled URLs on the site — linking `/threads`, each active system page,
+  `/fits` and `/faq`.
+- `ThreadSystemLinks` on **every metric size page** (`m6`–`m12`, the indexed
+  ones) linking the hub and the other systems.
+
+Before this, a size page linked only to sibling sizes and back to
+`/threads/metric`; nothing indexed pointed at `/threads/npt` or `/threads/unc`.
+
+**4. `/fits` — the §3.5 option-1 explainer, shipped.** One page covering what IT
+grades are, how the deviation letter positions a zone, hole-basis versus
+shaft-basis, and the clearance / transition / interference families, with a
+visible Q&A and FAQPage markup. It prints **no limit values and no formula
+coefficients**, which is the point: §3.5's option 1 is the only route that needs
+no transcription decision, and the page says so in its own section rather than
+quietly omitting the numbers.
+
+Registered in `known-paths.js`, both sitemaps (`/sitemap-main.xml` and the
+legacy `/sitemap.xml`), the footer, and `/llms.txt`. It adds **one** URL, not a
+programmatic axis — rule 9 is not engaged.
+
+### Deliberately not done
+
+**`THREAD_TIER_LIMIT` stays at 1.** Tier 2 is BSP, UNF and the remaining metric
+sizes. Adding them before tier 1 is measurably indexed is the city matrix again
+with different nouns.
+
+**No second IS 3455 / IS 919 URL** (§2D), **no BIS tables** (§2D, rule 8), **no
+computed tolerance values** (rule 8), **no location pages** (§2K).
+
+**No artificial freshness.** Roughly half the blog was last edited 12 or 29 Jul,
+and AI-citation research favours content updated within 30 days. Bumping
+`updatedAt` without changing anything would corrupt the one signal that is
+supposed to mean "this was revisited"; real edits are an editorial task, not a
+script.
+
+**No `seo:keywords` follow-up.** The remaining title-substring flags were
+identified in §2F as artefacts and remain so.
+
+### Verified (production build, then `next start`)
+
+| Check | Result |
+|---|---|
+| `npm run build` | ✓ compiled; `/fits` `○ (Static)`; 40 blog routes; thread routes unchanged |
+| `/fits`, `/threads`, `/threads/npt`, `/threads/unc`, `/threads/metric/m12` | all **200** |
+| `/blog/<unknown>`, `/products/<unknown>` | still **404** (proxy regression guard) |
+| `/fits` `<title>` | `Limits and Fits: IT Grades & H7/g6 \| DSN Enterprises` (58) |
+| JSON-LD `@type` on `/fits` | `FAQPage` (6 × Question), `BreadcrumbList` |
+| FAQPage on IS 3455 / API post / buyer's guide | 7 / 5 / 7 questions |
+| BlogPosting author + publisher | `{"@id": ".../#organization"}`, not inline |
+| HTML entities inside JSON-LD | **0** across the sampled posts |
+| `/fits` in `sitemap-main.xml` and `sitemap.xml` | 1 each |
+| `m12` outbound links | `/threads`, `/threads/npt`, `/threads/unc`, `/fits` present |
+| `biome check` on every changed file | clean |
+
+### Re-measure
+
+- **Request Indexing** by hand in Search Console for `/threads`,
+  `/threads/npt`, `/threads/unc`, `/threads/metric/m16`, `/threads/metric/m20`
+  and `/products/special-gauges`. The API cannot do this and the links are only
+  a nudge; the pages have sat in "discovered" since 11 Sep.
+- Does the **zero-referring-URL count** fall from 10/40? If it does not, the
+  blog footer block is not being read and the problem is elsewhere.
+- Does the **thread cluster earn its first impressions**? §2H measured ~2,800/mo
+  of demand for it. A month with zero is a layer problem, not a ranking problem.
+- **IS 919 CTR** (0.7% on 136 impr @ 7.9) after the §2G description flip. If it
+  is still flat, the answer is an IS-919-led section, not more snippet work.
+- **Mobile CTR** (1.82% at position 7.6 versus desktop 2.75% at 11.9). Better
+  position, two-thirds the CTR, is anomalous and unexamined.
+- **`leakgall`** — 224 impressions at 8.8 with zero clicks, growing, on the API
+  post. Adult-category noise that inflates impressions and drags CTR; decide
+  whether to keep absorbing it.
+
+---
+
+## 2M. Round eight follow-up — the sitemap cron gets a memory (14 Sep 2026)
+
+Not a content round. This closes an observability gap found while checking
+whether the daily Search Console cron was actually running.
+
+### The gap
+
+`/api/cron/sitemap` (`0 4 * * *`, added 29 Jul) submits the sitemaps and reads
+them back, and does both correctly. What it never did was **keep a record of
+having run**. Everything it knew came from Google's own `lastSubmitted` /
+`lastDownloaded`, and `lastSubmitted` is *overwritten* on every submit. So the
+system could answer "did it run recently?" but never "has it been running?" —
+a cron that failed Mon–Wed and succeeded Thu left exactly the same trace as one
+that ran every day. Vercel cannot close that either: `vercel logs` streams the
+last five minutes only, and past executions are not retrievable.
+
+The `/api/health` sitemap check made it worse by looking healthy in exactly the
+case that mattered: with a 14-day `lastDownloaded` staleness threshold, a cron
+that had stopped firing would read "Operational" for a fortnight.
+
+### What changed
+
+**1. A run log.** `src/lib/sitemap-run-log.js` writes one Firestore document per
+**UTC day** to `ops_sitemap_runs`, so a re-run updates that day's row instead of
+appending a duplicate and a gap becomes readable. Reached through the Admin SDK
+(`getAdminDb`), which bypasses security rules — correct for a server-only
+operational log. The collection has no `allow` clause in `firestore.rules`, so
+client access is denied by default and only the Admin SDK can touch it. Rows
+older than 90 days are pruned on each write.
+
+**2. The cron records every run.** `recordRun` flattens the result into a row,
+and a **thrown run is recorded too** — otherwise a day the cron ran and failed
+would show as a clean gap. The write is wrapped so a Firestore outage logs an
+error and still returns the cron's own result: a logging failure must not be
+reported as a Search Console failure. The Vercel scheduler's user agent
+(`vercel-cron/1.0`) is recorded as the trigger, so a hand-triggered run cannot
+be misread as evidence the schedule fired.
+
+**3. `/api/health` asks both questions.** `assessSitemapRunHistory` adds two
+problems the Google-side check could not see: **no run for 50h** (the schedule
+is daily with up to an hour of jitter, so a healthy gap is ≤ ~25h) and
+**two or more consecutive unhealthy runs**. An empty history is deliberately
+`known: false` and therefore healthy — before the first run after this shipped
+there is nothing to judge, and flipping the site red on deploy would be wrong.
+
+**4. `/admin/status` shows it.** The sitemap row now carries the last-run age,
+the trigger, and how many runs are on record.
+
+### What this does not change
+
+The cron still does not make Google index anything faster, and nothing here
+pretends otherwise. A submit prompts Google to re-read the **sitemap file**
+almost immediately — measured again on 14 Sep: `lastSubmitted 05:14:33.335Z` →
+`lastDownloaded 05:14:33.915Z`, 0.6s. Indexing the URLs inside it is governed by
+`lastmod`, internal links and Google's scheduling, which is why §2L spent its
+effort on internal links and Request Indexing rather than on submitting more
+often.
+
+### Verified
+
+| Check | Result |
+|---|---|
+| Cron run (authorised, local production server) | 200, `healthy: true`, `logged.recorded: true`, `trigger: "manual"` (curl UA, correctly not `cron`) |
+| Cron run, unauthorised | 401 |
+| Health, after one run | `runsOnRecord: 1`, `lastRunAgeHours: 0`, `consecutiveUnhealthy: 0`, overall `healthy` |
+| Health, with the only run 60h old | `unhealthy`: "the sitemap check has not run for 60h; it is scheduled daily" |
+| Health, with 2 consecutive unhealthy runs | `unhealthy`: "2 consecutive sitemap check(s) reported problems" |
+| Health, with 0 runs recorded (the post-deploy state) | `healthy`, `runsOnRecord: 0` — no false alarm on deploy |
+| `npm run build` | ✓ compiled |
+| `biome check` on every changed file | clean |
+
+All seeded test rows were deleted after verification; the collection is empty so
+the history begins with the first real cron run.
+
+### Re-measure
+
+- `/api/health` should report `runsOnRecord` climbing by one per day with
+  `consecutiveUnhealthy: 0`. **Any day missing from the sequence is now a
+  visible fact** rather than an inference from a single overwritten timestamp.
+- If a gap appears, the cause is Vercel-side (cron skipped or the invocation
+  401'd), not Google-side — the two are now distinguishable, which they were not.
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value.
@@ -1314,9 +1595,12 @@ Three ways forward. Only the first is available without a decision:
    inside option 1 regardless.
 
 Keyword volumes here are Google Ads buckets, so read them as relative rather
-than absolute (§2D). Not started, deliberately: option 1 needs no permission, but
-building it *now* would add URLs to the very queue §2K exists to shorten. Build
-it once the crawl-budget question is answered.
+than absolute (§2D). **Option 1 shipped on 14 Sep 2026 as `/fits`** — see §2L.
+It prints no limit values and no formula coefficients. The crawl-budget
+question §2K raised has not been answered (the thread layer is still half
+crawled), so only one URL was added, and `/fits` was linked from the footer,
+every blog post and every metric size page rather than left to the sitemap
+alone. Options 2 and 3 remain open.
 
 ---
 

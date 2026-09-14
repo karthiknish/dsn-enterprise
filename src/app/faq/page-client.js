@@ -7,7 +7,12 @@ import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { faqCategories } from "@/content/faq";
 import { pageHeroes } from "@/content/page-heroes";
-import { jsonLdProps, ORG_ID, WEBSITE_ID } from "@/lib/seo-schema";
+import {
+	buildFaqJsonLd,
+	jsonLdProps,
+	ORG_ID,
+	WEBSITE_ID,
+} from "@/lib/seo-schema";
 import { SITE_URL } from "@/lib/site";
 
 function faqTabSlug(name) {
@@ -182,23 +187,16 @@ export default function FAQPage() {
 			    text child — text children get HTML-escaped, which would push
 			    entities into the JSON payload as the answers grow. */}
 			<script
-				{...jsonLdProps({
-					"@context": "https://schema.org",
-					"@type": "FAQPage",
-					"@id": `${SITE_URL}/faq#faq`,
-					isPartOf: { "@id": WEBSITE_ID },
-					about: { "@id": ORG_ID },
-					mainEntity: faqCategories.flatMap((category) =>
-						category.faqs.map((faq) => ({
-							"@type": "Question",
-							name: faq.question,
-							acceptedAnswer: {
-								"@type": "Answer",
-								text: faq.answer,
-							},
-						})),
+				{...jsonLdProps(
+					buildFaqJsonLd(
+						faqCategories.flatMap((category) => category.faqs),
+						{
+							id: `${SITE_URL}/faq#faq`,
+							isPartOfId: WEBSITE_ID,
+							aboutId: ORG_ID,
+						},
 					),
-				})}
+				)}
 			/>
 
 			<Cta10

@@ -8,6 +8,10 @@ import {
 	SEARCH_CONSOLE_SITE,
 } from "@/lib/search-console";
 import { getSubmittedSitemapUrls } from "@/lib/sitemap-entries";
+import {
+	assessSitemapRunHistory,
+	readSitemapRunHistory,
+} from "@/lib/sitemap-run-log";
 import { getPhotos } from "@/lib/unsplash-server";
 
 export const dynamic = "force-dynamic";
@@ -99,9 +103,29 @@ async function checkSitemapAutomation() {
 		}),
 	);
 
-	const problems = results.flatMap((result) =>
-		result.health.problems.map((problem) => `${result.sitemapUrl}: ${problem}`),
-	);
+	// The cron's own run history. Best-effort on purpose: a Firestore blip must
+	// not be reported as a Search Console outage, and the Google-side checks
+	// below already stand on their own.
+	const history = await readSitemapRunHistory(40).catch((error) => {
+		console.error("Sitemap run history read failed:", error?.message);
+		return [];
+	});
+	const runHistory = assessSitemapRunHistory(history);
+
+	// Two independent questions, and both matter: is Google still reading the
+	// sitemap (assessSitemap), and is the thing that submits it still running
+	// (assessSitemapRunHistory). Before the history existed only the first was
+	// answerable, so a cron that had quietly stopped looked identical to one
+	// that was working — Google's lastDownloaded would lag but stay inside the
+	// 14-day window for a fortnight.
+	const problems = [
+		...results.flatMap((result) =>
+			result.health.problems.map(
+				(problem) => `${result.sitemapUrl}: ${problem}`,
+			),
+		),
+		...runHistory.problems,
+	];
 	if (problems.length > 0) {
 		throw new Error(problems.join("; "));
 	}
@@ -118,6 +142,11 @@ async function checkSitemapAutomation() {
 		sitemaps: sitemapUrls,
 		urls: results.reduce((sum, result) => sum + result.status.urlCount, 0),
 		lastDownloaded,
+		lastRunAt: runHistory.lastRunAt,
+		lastRunAgeHours: runHistory.ageHours,
+		runsOnRecord: runHistory.runsOnRecord,
+		consecutiveUnhealthy: runHistory.consecutiveUnhealthy,
+		lastRun: runHistory.lastRun,
 	};
 }
 

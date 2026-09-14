@@ -29,6 +29,7 @@ const EXACT = new Set([
 	"/calibration",
 	"/resources",
 	"/threads",
+	"/fits",
 	"/faq",
 	"/contact",
 	"/blog",

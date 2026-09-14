@@ -155,10 +155,13 @@ export function buildBreadcrumbJsonLd(items) {
 	};
 }
 
-export function buildFaqJsonLd(faqs) {
+export function buildFaqJsonLd(faqs, { id, aboutId, isPartOfId } = {}) {
 	return {
 		"@context": "https://schema.org",
 		"@type": "FAQPage",
+		...(id ? { "@id": id } : {}),
+		...(isPartOfId ? { isPartOf: { "@id": isPartOfId } } : {}),
+		...(aboutId ? { about: { "@id": aboutId } } : {}),
 		mainEntity: faqs.map((faq) => ({
 			"@type": "Question",
 			name: faq.question,
@@ -167,6 +170,102 @@ export function buildFaqJsonLd(faqs) {
 				text: faq.answer,
 			},
 		})),
+	};
+}
+
+/**
+ * Extract question→answer pairs that already exist in a post's HTML.
+ *
+ * This is deliberately an extractor, not a generator: it returns only a
+ * heading that ends in "?" followed by a paragraph. The rule matters because
+ * the only way FAQ markup becomes a liability is by stating a question or
+ * answer the page itself never shows. A post with no question headings gets an
+ * empty list and therefore no FAQ block — which is the correct outcome, not a
+ * gap to fill with invented questions.
+ */
+export function extractFaqPairsFromHtml(html, limit = 8) {
+	if (typeof html !== "string" || !html) return [];
+	const strip = (s) =>
+		s
+			.replace(/<[^>]+>/g, " ")
+			.replace(/&[a-z#0-9]+;/gi, " ")
+			.replace(/\s+/g, " ")
+			.trim();
+
+	const pairs = [];
+	const re = /<h[23][^>]*>([\s\S]*?)<\/h[23]>\s*<p[^>]*>([\s\S]*?)<\/p>/gi;
+	for (const match of html.matchAll(re)) {
+		if (pairs.length >= limit) break;
+		const question = strip(match[1]);
+		const answer = strip(match[2]);
+		if (
+			question.endsWith("?") &&
+			question.length <= 160 &&
+			answer.length >= 40
+		) {
+			pairs.push({ question, answer });
+		}
+	}
+	return pairs;
+}
+
+/**
+ * A post's FAQ list, preferring the hand-written `faq` field on the Firestore
+ * document and falling back to questions already visible in the body.
+ *
+ * The field exists because the posts worth marking up are not the posts that
+ * happen to phrase their headings as questions: the highest-traffic article on
+ * the site had exactly one, while a buyer's guide with no search demand had
+ * seven. Editorial Q&A can be added without rewriting the article.
+ */
+export function resolvePostFaqs(post, limit = 8) {
+	const authored = Array.isArray(post?.faq)
+		? post.faq
+				.filter(
+					(entry) =>
+						entry &&
+						typeof entry.question === "string" &&
+						typeof entry.answer === "string",
+				)
+				.map((entry) => ({
+					question: entry.question.trim(),
+					answer: entry.answer.trim(),
+				}))
+		: [];
+	if (authored.length > 0) return authored.slice(0, limit);
+	return extractFaqPairsFromHtml(post?.content, limit);
+}
+
+/**
+ * The BlogPosting node for a single article.
+ *
+ * Every entity reference here is an `@id` pointer into the one graph defined at
+ * the top of this module rather than an inline re-declaration — the same fix
+ * §2C applied to Product, Service and FAQPage. Before this, a post's author and
+ * publisher were two more anonymous Organizations that a machine consumer had
+ * to guess were the company.
+ */
+export function buildBlogPostingSchema(post, postUrl) {
+	return {
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		"@id": `${postUrl}#article`,
+		mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+		headline: post.title,
+		image: post.featuredImage
+			? [post.featuredImage]
+			: [getSiteUrl("/images/featured.png")],
+		datePublished: post.publishedDate || post.createdAt,
+		dateModified: post.updatedAt || post.publishedDate || post.createdAt,
+		author: { "@id": ORG_ID },
+		publisher: { "@id": ORG_ID },
+		isPartOf: { "@id": WEBSITE_ID },
+		about: { "@id": ORG_ID },
+		inLanguage: "en-IN",
+		description: post.excerpt || post.title,
+		...(Array.isArray(post.keywords) && post.keywords.length > 0
+			? { keywords: post.keywords.join(", ") }
+			: {}),
 	};
 }
 

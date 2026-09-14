@@ -2,6 +2,17 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+/**
+ * Compact age for the cron's last run, so a stalled schedule is visible on this
+ * page rather than only in the JSON. Only the sitemap check reports these
+ * fields today.
+ */
+function formatAgeHours(hours) {
+	if (hours < 1) return `${Math.round(hours * 60)}m`;
+	if (hours < 48) return `${hours.toFixed(1)}h`;
+	return `${Math.floor(hours / 24)}d`;
+}
+
 export default function StatusPage() {
 	const [result, setResult] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -130,6 +141,18 @@ export default function StatusPage() {
 										</td>
 										<td className="py-4 px-4 text-sm text-gray-600">
 											{check.message}
+											{check.lastRunAgeHours != null && (
+												<span className="block text-xs text-gray-400 mt-0.5">
+													Cron last ran {formatAgeHours(check.lastRunAgeHours)}{" "}
+													ago
+													{check.lastRun?.trigger
+														? ` · ${check.lastRun.trigger}`
+														: ""}
+													{typeof check.runsOnRecord === "number"
+														? ` · ${check.runsOnRecord} runs on record`
+														: ""}
+												</span>
+											)}
 										</td>
 									</tr>
 								))}

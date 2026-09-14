@@ -122,6 +122,9 @@ export async function GET(request) {
 	push(
 		`- [Thread reference](${abs("/threads")}): dimension tables for the thread systems gauged most often in Indian shops — ISO metric, NPT, Unified and BSP. Pitch diameter, minor diameter, tap drill and the gauging practice behind each.`,
 	);
+	push(
+		`- [Limits and fits](${abs("/fits")}): what IT grades mean, how to read H7/g6 and H7/h6, hole-basis versus shaft-basis, and the clearance / transition / interference families. Explains the system; deliberately prints no tolerance limits, because the published values are a rounded preferred-number series rather than a formula output.`,
+	);
 	for (const s of generateThreadSystemPages()) {
 		push(
 			`- [${s.systemName} thread chart](${abs(s.path)}): full basic dimension table to the relevant standard${s.system === "metric" ? " (ISO 68-1 / ISO 261 / ISO 965, adopted in India as IS 919 / IS 4218)" : ""}.`,
