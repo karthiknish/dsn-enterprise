@@ -1,8 +1,20 @@
 "use client";
 
-import { UilClock, UilMapMarker, UilPhone } from "@iconscout/react-unicons";
+import {
+	UilClock,
+	UilMapMarker,
+	UilPhone,
+	UilWhatsapp,
+} from "@iconscout/react-unicons";
 import { m } from "framer-motion";
-import { NAP_LINE, PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
+import TrackedLink from "@/components/analytics/TrackedLink";
+import {
+	EMAIL,
+	NAP_LINE,
+	PHONE_DISPLAY,
+	PHONE_TEL,
+	whatsappUrl,
+} from "@/lib/site";
 
 const items = [
 	{
@@ -14,12 +26,30 @@ const items = [
 		icon: UilPhone,
 		title: "Phone",
 		content: (
-			<a
+			<TrackedLink
 				href={`tel:${PHONE_TEL}`}
+				kind="phone"
+				location="Contact Page"
 				className="hover:text-primary break-all sm:break-normal"
 			>
 				{PHONE_DISPLAY}
-			</a>
+			</TrackedLink>
+		),
+	},
+	{
+		icon: UilWhatsapp,
+		title: "WhatsApp",
+		content: (
+			<TrackedLink
+				href={whatsappUrl()}
+				kind="whatsapp"
+				location="Contact Page"
+				target="_blank"
+				rel="noopener noreferrer"
+				className="hover:text-primary"
+			>
+				{PHONE_DISPLAY}
+			</TrackedLink>
 		),
 	},
 	{
@@ -63,6 +93,21 @@ export default function ContactPageInfoCards() {
 						</div>
 					</m.div>
 				))}
+			</div>
+			<div className="border-t border-gray-200/80 p-6">
+				<h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+					Email
+				</h3>
+				<p className="text-[15px] leading-relaxed text-gray-900">
+					<TrackedLink
+						href={`mailto:${EMAIL}`}
+						kind="email"
+						location="Contact Page"
+						className="hover:text-primary break-all"
+					>
+						{EMAIL}
+					</TrackedLink>
+				</p>
 			</div>
 		</div>
 	);

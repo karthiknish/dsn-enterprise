@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { auth } from "@/lib/firebase";
 import AnalyticsBreakdownCard from "./AnalyticsBreakdownCard";
 import AnalyticsInsightsPanel from "./AnalyticsInsightsPanel";
+import AnalyticsLeadsPanel from "./AnalyticsLeadsPanel";
 import AnalyticsMetricCards from "./AnalyticsMetricCards";
 import AnalyticsReferrersTable from "./AnalyticsReferrersTable";
 import AnalyticsToolbar from "./AnalyticsToolbar";
@@ -139,6 +140,11 @@ export default function AnalyticsDashboard({ initialPeriod = "30d" }) {
 						)}
 
 						<AnalyticsMetricCards metrics={data?.metrics} days={data?.days} />
+
+						{/* Leads sit directly under traffic: an enquiry count is the
+						    number the business acts on, and hiding it below charts was
+						    why lead tracking went unnoticed. */}
+						<AnalyticsLeadsPanel leads={data?.leads} days={data?.days} />
 
 						<AnalyticsTrafficTrendSection trends={data?.trends || []} />
 

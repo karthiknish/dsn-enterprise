@@ -11,6 +11,7 @@ import {
 	validateAllContactFields,
 	validateContactField,
 } from "@/lib/contact-form-state";
+import { recordLeadId } from "@/lib/lead-tracking";
 
 export function useContactPageForm({ prefillProduct = "" } = {}) {
 	const { push } = useRouter();
@@ -201,8 +202,16 @@ export function useContactPageForm({ prefillProduct = "" } = {}) {
 
 			setIsSubmitting(false);
 			setSubmitSuccess(true);
+
+			// The Firestore id is what makes the GA4 event, the Ads conversion
+			// and the stored enquiry the same lead. It is recorded before the
+			// events fire so the /thank-you page can consume it, and passed to
+			// both trackers as a transaction id for de-duplication.
+			const leadId = result.entryId || "";
+			recordLeadId(leadId);
 			trackContactSubmission(formData);
-			trackGoogleAdsSubmission(formData);
+			await trackGoogleAdsSubmission(formData, { leadId });
+
 			clearForm();
 			push("/thank-you");
 		} catch (error) {

@@ -3,15 +3,16 @@
  * Optimized for conversion tracking and remarketing
  */
 
-// Google Tag IDs
+import { hashUserData } from "@/lib/lead-tracking";
+
+// Google Tag IDs — a note, not configuration.
 //
-// GA4_MEASUREMENT_ID is the property the admin dashboard reads
-// (GA_PROPERTY_ID=514574483, stream 13066196898). GOOGLE_TAG_ID resolves to
-// Google Ads only and carries no GA4 destination, which is why GA4 has to be
-// configured explicitly rather than relying on the container.
-const GA4_MEASUREMENT_ID =
-	process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-GR3VEG2ZX0";
-const GOOGLE_TAG_ID = "GT-TQKJ52Q3";
+// The site loads GA4 (property 514574483, stream 13066196898) and the
+// GT-TQKJ52Q3 container from src/components/Analytics.js. The container
+// resolves to Google Ads only and carries no GA4 destination, so GA4 has to be
+// configured explicitly rather than relying on it. Nothing in this module
+// addresses GA4 directly: every helper here sends to whichever destinations
+// gtag() already has configured, which is kept in one place on purpose.
 
 // Google Ads conversion tracking.
 //
@@ -36,22 +37,25 @@ export const ADS_CONVERSION_LABELS = {
 };
 
 /**
- * Track page views
- * @param {string} url - The URL of the page
+ * Which Ads action counts a contact-form lead.
+ *
+ * Both the form submit and the /thank-you page view used to fire an Ads
+ * conversion, so one enquiry could count as two. Exactly one action is now
+ * fired, and which one is a configuration choice rather than a code change:
+ *
+ *   contact_form (default) — fires on the verified 201 response, carries the
+ *     lead id, and cannot be triggered by visiting a URL.
+ *   thank_you — fires on /thank-you, but only when a fresh lead id is present.
+ *
+ * The default is `contact_form` because it is the strictly better signal. Set
+ * NEXT_PUBLIC_ADS_PRIMARY_LEAD_ACTION=thank_you to switch; whichever action is
+ * not primary should be marked secondary (not "conversions") in Google Ads so
+ * the account does not double-count the history either.
  */
-const pageview = (url) => {
-	if (typeof window !== "undefined" && window.gtag) {
-		window.gtag("config", GA4_MEASUREMENT_ID, {
-			page_path: url,
-		});
-		window.gtag("config", GOOGLE_TAG_ID, {
-			page_path: url,
-		});
-		window.gtag("config", GOOGLE_ADS_ID, {
-			page_path: url,
-		});
-	}
-};
+export const PRIMARY_LEAD_ACTION =
+	process.env.NEXT_PUBLIC_ADS_PRIMARY_LEAD_ACTION === "thank_you"
+		? "thank_you"
+		: "contact_form";
 
 /**
  * Track custom events
@@ -91,42 +95,66 @@ export const trackConversion = (conversionLabel, params = {}) => {
 };
 
 /**
- * Track contact form submission as conversion
- * @param {object} formData - The form data
+ * Track contact form submission as conversion.
+ *
+ * Async because enhanced conversions need the email/phone hashed before the
+ * conversion fires — `gtag('set','user_data', …)` only applies to events sent
+ * after it. Callers should await this before navigating away; it never throws
+ * and degrades to a plain conversion if hashing is unavailable.
+ *
+ * @param {object} formData - The form data (used for email/phone matching)
+ * @param {{ leadId?: string }} [options] - Firestore id of the created lead
  */
-export const trackContactFormSubmission = (formData = {}) => {
-	if (typeof window !== "undefined" && window.gtag) {
-		// Track as Google Ads conversion
+export const trackContactFormSubmission = async (
+	formData = {},
+	options = {},
+) => {
+	if (typeof window === "undefined" || !window.gtag) return;
+
+	const leadId = typeof options.leadId === "string" ? options.leadId : "";
+
+	// Enhanced conversions: hashed identity makes the Ads match rate much
+	// higher on a form lead. Best-effort — a null result just skips it.
+	const userData = await hashUserData({
+		email: formData.email,
+		phone: formData.phone,
+	});
+	if (userData) {
+		window.gtag("set", "user_data", userData);
+	}
+
+	// Exactly one Ads conversion per lead. `transaction_id` is Ads' native
+	// de-duplication key, so a replayed submit cannot count twice.
+	if (PRIMARY_LEAD_ACTION === "contact_form") {
 		trackConversion(ADS_CONVERSION_LABELS.contactForm, {
 			value: 100, // Assign a value to leads
 			currency: "INR",
-		});
-
-		// Track as custom event for analytics
-		window.gtag("event", "generate_lead", {
-			event_category: "Contact",
-			event_label: "Contact Form Submission",
-			value: 100,
-			currency: "INR",
-			form_type: "contact",
-			has_company: !!formData.company,
-			has_phone: !!formData.phone,
-			product_interest: formData.productInterest || "general",
-		});
-
-		// Track lead event
-		window.gtag("event", "Lead", {
-			event_category: "Conversion",
-			event_label: "Contact Form",
+			...(leadId ? { transaction_id: leadId } : {}),
 		});
 	}
+
+	// GA4's lead event. `lead_id` is carried so a GA4 lead can be matched to the
+	// Firestore record; there is deliberately no second `Lead` event here —
+	// that was a Meta event name leaking into GA4 and doubling the count.
+	window.gtag("event", "generate_lead", {
+		event_category: "Contact",
+		event_label: "Contact Form Submission",
+		value: 100,
+		currency: "INR",
+		form_type: "contact",
+		has_company: !!formData.company,
+		has_phone: !!formData.phone,
+		product_interest: formData.productInterest || "general",
+		...(leadId ? { lead_id: leadId, transaction_id: leadId } : {}),
+	});
 };
 
 /**
  * Track phone number clicks
  * @param {string} phoneNumber - The phone number clicked
+ * @param {string} source - Where the click originated
  */
-export const trackPhoneClick = (phoneNumber) => {
+export const trackPhoneClick = (phoneNumber, source = "unknown") => {
 	if (typeof window !== "undefined" && window.gtag) {
 		// Track as conversion
 		trackConversion(ADS_CONVERSION_LABELS.phoneCall, {
@@ -139,6 +167,7 @@ export const trackPhoneClick = (phoneNumber) => {
 			event_category: "Contact",
 			event_label: phoneNumber,
 			phone_number: phoneNumber,
+			link_location: source,
 		});
 	}
 };
@@ -146,13 +175,15 @@ export const trackPhoneClick = (phoneNumber) => {
 /**
  * Track email link clicks
  * @param {string} email - The email address clicked
+ * @param {string} source - Where the click originated
  */
-export const trackEmailClick = (email) => {
+export const trackEmailClick = (email, source = "unknown") => {
 	if (typeof window !== "undefined" && window.gtag) {
 		window.gtag("event", "click_to_email", {
 			event_category: "Contact",
 			event_label: email,
 			email_address: email,
+			link_location: source,
 		});
 	}
 };
@@ -264,21 +295,36 @@ export const trackTimeOnPage = (seconds, page) => {
 };
 
 /**
- * Track thank you page view (conversion confirmation)
+ * Track thank you page view.
+ *
+ * This used to fire the Ads `thankYou` conversion unconditionally, which meant
+ * a reload or a direct visit to /thank-you counted as a lead. It now fires the
+ * Ads conversion only when it is the configured primary action *and* a fresh
+ * lead id is present (i.e. the visitor actually submitted the form), and the id
+ * is passed as `transaction_id` so Ads de-duplicates a replayed submit.
+ *
+ * @param {{ leadId?: string }} [options] - id consumed from lead-tracking
  */
-export const trackThankYouPageView = () => {
-	if (typeof window !== "undefined" && window.gtag) {
-		// This confirms the conversion
+export const trackThankYouPageView = (options = {}) => {
+	if (typeof window === "undefined" || !window.gtag) return;
+
+	const leadId = typeof options.leadId === "string" ? options.leadId : "";
+
+	if (PRIMARY_LEAD_ACTION === "thank_you" && leadId) {
 		trackConversion(ADS_CONVERSION_LABELS.thankYou, {
 			value: 100,
 			currency: "INR",
-		});
-
-		window.gtag("event", "thank_you_page_view", {
-			event_category: "Conversion",
-			event_label: "Form Submission Complete",
+			transaction_id: leadId,
 		});
 	}
+
+	// The GA4 event fires either way — it is a page-view fact, not a
+	// conversion claim, and it is useful when someone opens /thank-you directly.
+	window.gtag("event", "thank_you_page_view", {
+		event_category: "Conversion",
+		event_label: "Form Submission Complete",
+		...(leadId ? { lead_id: leadId } : {}),
+	});
 };
 
 /**

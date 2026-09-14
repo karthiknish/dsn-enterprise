@@ -1,5 +1,6 @@
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
 import { getServiceAccountCredentials } from "@/lib/google-credentials";
+import { getLeadStats } from "@/lib/lead-stats";
 
 /**
  * Number of days each selectable period covers. The day count is also used to
@@ -102,6 +103,26 @@ function mapDimensionRows(response, labelFn) {
 		});
 		return out;
 	});
+}
+
+/**
+ * Sum one metric across the two date ranges of a report.
+ *
+ * `rowsByDateRange` above keys off dimensionValues[0], which is only correct
+ * for the totals report (no real dimensions). A filtered report — eventName
+ * plus the synthetic dateRange — puts the range tag last, so it is found rather
+ * than assumed.
+ */
+function splitByDateRange(response) {
+	const out = { current: 0, previous: 0 };
+	for (const row of response?.rows || []) {
+		const dims = (row.dimensionValues || []).map((d) => d.value || "");
+		const tag = dims.find((value) => /^date_range_\d$/.test(value));
+		const value = num(row.metricValues?.[0]?.value);
+		if (tag === "date_range_1") out.previous += value;
+		else out.current += value;
+	}
+	return out;
 }
 
 /**
@@ -231,13 +252,40 @@ export async function getAnalyticsData(period = "30d") {
 					orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
 					limit: 8,
 				},
+				{
+					// The GA4 side of the lead count. Filtered to generate_lead so
+					// the event volume is comparable to a lead count rather than to
+					// all traffic.
+					dateRanges,
+					dimensions: [{ name: "eventName" }],
+					metrics: [{ name: "eventCount" }],
+					dimensionFilter: {
+						filter: {
+							fieldName: "eventName",
+							stringFilter: { value: "generate_lead" },
+						},
+					},
+				},
 			],
 		}),
 	]);
 
 	const [totalsRes, trendRes, topPagesRes, referrersRes, channelsRes] =
 		firstBatch.reports || [];
-	const [devicesRes, countriesRes, landingRes] = secondBatch.reports || [];
+	const [devicesRes, countriesRes, landingRes, leadEventsRes] =
+		secondBatch.reports || [];
+
+	const leadEvents = splitByDateRange(leadEventsRes);
+
+	// Firestore is the record of enquiries that actually arrived; GA4 only sees
+	// the ones whose browser ran the tracking. Best-effort so a Firestore blip
+	// cannot blank the whole dashboard.
+	let firestoreLeads = null;
+	try {
+		firestoreLeads = await getLeadStats(days);
+	} catch (error) {
+		console.error("Lead stats unavailable:", error?.message);
+	}
 
 	const { buckets } = rowsByDateRange(totalsRes);
 
@@ -357,6 +405,25 @@ export async function getAnalyticsData(period = "30d") {
 		devices,
 		countries,
 		landingPages,
+		// Leads, from both sides. They will not match, and that is the point:
+		// GA4 counts events, Firestore counts enquiries. Showing one alone hid
+		// the gap for months.
+		leads: {
+			ga4: {
+				current: leadEvents.current,
+				previous: leadEvents.previous,
+				change: changePct(leadEvents.current, leadEvents.previous),
+			},
+			firestore: firestoreLeads
+				? {
+						...firestoreLeads,
+						change: changePct(
+							firestoreLeads.current.total,
+							firestoreLeads.previous.total,
+						),
+					}
+				: null,
+		},
 	};
 
 	writeCache(period, payload);

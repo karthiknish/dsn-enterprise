@@ -7,13 +7,16 @@ import { useEffect } from "react";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
+import { consumeLeadId } from "@/lib/lead-tracking";
 
 export default function ThankYouPage() {
 	const { trackThankYouPageView, trackPhoneClick } = useGoogleAdsTracking();
 
-	// Track conversion on page load
+	// Track conversion on page load. The lead id is consumed (read once, then
+	// cleared) so a reload or a direct visit cannot re-fire the Ads conversion,
+	// and the id travels with the event when it is a real submission.
 	useEffect(() => {
-		trackThankYouPageView();
+		trackThankYouPageView({ leadId: consumeLeadId() });
 	}, [trackThankYouPageView]);
 
 	return (
@@ -123,7 +126,9 @@ export default function ThankYouPage() {
 									<a
 										href="tel:+919363122005"
 										className="underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm"
-										onClick={() => trackPhoneClick("+919363122005")}
+										onClick={() =>
+											trackPhoneClick("+919363122005", "Thank You")
+										}
 									>
 										+91 93631 22005
 									</a>

@@ -15,22 +15,25 @@ export const useGoogleAdsTracking = () => {
 	/**
 	 * Track contact form submission
 	 */
-	const trackContactSubmission = useCallback((formData = {}) => {
-		gtag.trackContactFormSubmission(formData);
+	const trackContactSubmission = useCallback((formData = {}, options = {}) => {
+		// Async: enhanced conversions hash the email/phone before the
+		// conversion is sent. Await it if you need the event to land before a
+		// navigation; it never rejects.
+		return gtag.trackContactFormSubmission(formData, options);
 	}, []);
 
 	/**
 	 * Track phone number click
 	 */
-	const trackPhoneClick = useCallback((phoneNumber) => {
-		gtag.trackPhoneClick(phoneNumber);
+	const trackPhoneClick = useCallback((phoneNumber, source = "unknown") => {
+		gtag.trackPhoneClick(phoneNumber, source);
 	}, []);
 
 	/**
 	 * Track email click
 	 */
-	const trackEmailClick = useCallback((email) => {
-		gtag.trackEmailClick(email);
+	const trackEmailClick = useCallback((email, source = "unknown") => {
+		gtag.trackEmailClick(email, source);
 	}, []);
 
 	/**
@@ -76,8 +79,8 @@ export const useGoogleAdsTracking = () => {
 	/**
 	 * Track thank you page view
 	 */
-	const trackThankYouPageView = useCallback(() => {
-		gtag.trackThankYouPageView();
+	const trackThankYouPageView = useCallback((options = {}) => {
+		gtag.trackThankYouPageView(options);
 	}, []);
 
 	/**

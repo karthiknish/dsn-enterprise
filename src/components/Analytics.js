@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { captureAttribution } from "@/lib/attribution";
 
 /**
@@ -32,8 +32,23 @@ const GOOGLE_TAG_ID = "GT-TQKJ52Q3";
 const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || "AW-17769294111";
 const FB_PIXEL_ID = "1391622058130598";
 
+/**
+ * Consent Mode default.
+ *
+ * This has always emitted `granted` for ad and analytics storage with no
+ * banner. That is a legal/business decision, not a technical one, so it is left
+ * as the default — but it is now changeable without a code edit:
+ * NEXT_PUBLIC_GA_CONSENT_DEFAULT=denied emits the denied default instead, which
+ * is the prerequisite for a consent banner to be able to grant it later.
+ */
+const CONSENT_DEFAULT =
+	process.env.NEXT_PUBLIC_GA_CONSENT_DEFAULT === "denied"
+		? "denied"
+		: "granted";
+
 function AnalyticsContent() {
 	const pathname = usePathname();
+	const lastTrackedPath = useRef(null);
 
 	// Record the first page of the browser session. This sits in the root layout
 	// so the entry page is captured even when the visitor arrives on a page with
@@ -43,8 +58,24 @@ function AnalyticsContent() {
 		captureAttribution();
 	}, []);
 
+	/**
+	 * Client-side navigations only.
+	 *
+	 * The inline gtag bootstrap below already sends the page view for the entry
+	 * URL, and the Meta pixel snippet already sends its entry PageView. This
+	 * effect therefore remembers the first pathname it sees and stays silent for
+	 * it, then reports each subsequent change once — so a landing page is counted
+	 * exactly once rather than twice, and navigations are still tracked.
+	 */
 	useEffect(() => {
-		if (pathname && window.gtag) {
+		if (!pathname) return;
+
+		const isFirst = lastTrackedPath.current === null;
+		const changed = lastTrackedPath.current !== pathname;
+		lastTrackedPath.current = pathname;
+		if (isFirst || !changed) return;
+
+		if (window.gtag) {
 			// GA4 first — this is the one that populates the admin dashboard.
 			window.gtag("config", GA4_MEASUREMENT_ID, {
 				page_path: pathname,
@@ -53,10 +84,8 @@ function AnalyticsContent() {
 				page_path: pathname,
 			});
 		}
-	}, [pathname]);
 
-	useEffect(() => {
-		if (pathname && window.fbq) {
+		if (window.fbq) {
 			window.fbq("track", "PageView");
 		}
 	}, [pathname]);
@@ -94,10 +123,10 @@ export default function GoogleAnalytics() {
           });
           
           gtag('consent', 'default', {
-            'ad_storage': 'granted',
-            'analytics_storage': 'granted',
-            'ad_user_data': 'granted',
-            'ad_personalization': 'granted'
+            'ad_storage': '${CONSENT_DEFAULT}',
+            'analytics_storage': '${CONSENT_DEFAULT}',
+            'ad_user_data': '${CONSENT_DEFAULT}',
+            'ad_personalization': '${CONSENT_DEFAULT}'
           });
         `}
 			</Script>

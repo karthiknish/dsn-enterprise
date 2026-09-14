@@ -18,3 +18,16 @@ export const LINKEDIN_URL = "https://www.linkedin.com/company/dsn-enterprises/";
 export function getSiteUrl(path = "/") {
 	return new URL(path, `${SITE_URL}/`).toString();
 }
+
+/**
+ * WhatsApp deep link to the same number the phone links use.
+ *
+ * The business already answers WhatsApp — it is the channel the admin
+ * notification email points customers at — but the site had no such link, so
+ * the Google Ads "WhatsApp" conversion action could never fire. Kept next to
+ * the phone constants so the two cannot drift.
+ */
+export function whatsappUrl(text = "") {
+	const base = `https://wa.me/${PHONE_TEL.replace(/\D/g, "")}`;
+	return text ? `${base}?text=${encodeURIComponent(text)}` : base;
+}

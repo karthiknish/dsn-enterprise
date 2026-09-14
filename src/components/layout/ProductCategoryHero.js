@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { FaArrowRight, FaPhone } from "react-icons/fa";
 import PageHero from "@/components/layout/PageHero";
+import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
 
 export default function ProductCategoryHero({
 	title,
@@ -11,6 +13,16 @@ export default function ProductCategoryHero({
 	badgeSlot: BadgeSlot,
 	image,
 }) {
+	const { trackProductView } = useGoogleAdsTracking();
+	const productName = quoteProduct || title;
+
+	// Every product hub page renders this hero, so the view_item fires here
+	// rather than being repeated in four page components. `trackProductView` was
+	// defined but never called, so product pages had no view events at all.
+	useEffect(() => {
+		if (productName) trackProductView(productName, "gauge");
+	}, [productName, trackProductView]);
+
 	return (
 		<PageHero
 			title={title}

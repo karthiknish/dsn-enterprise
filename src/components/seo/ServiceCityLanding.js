@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import TrackedLink from "@/components/analytics/TrackedLink";
 import JsonLdScripts from "@/components/seo/JsonLdScripts";
 import { getServiceLandingImage } from "@/lib/seo-landing-images";
 import {
@@ -99,12 +100,14 @@ export default function ServiceCityLanding({
 								>
 									Get a Quote
 								</Link>
-								<a
+								<TrackedLink
 									href="tel:+919363122005"
+									kind="phone"
+									location="Service City Page"
 									className="inline-flex items-center bg-white/10 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/20 border border-white/30"
 								>
 									+91 93631 22005
-								</a>
+								</TrackedLink>
 							</div>
 						</div>
 

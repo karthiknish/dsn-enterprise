@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import TrackedLink from "@/components/analytics/TrackedLink";
 import { getProductLandingImage } from "@/lib/seo-landing-images";
 
 export default function ProductCityHero({
@@ -48,12 +49,14 @@ export default function ProductCityHero({
 							>
 								Request a Quote
 							</Link>
-							<a
+							<TrackedLink
 								href="tel:+919363122005"
+								kind="phone"
+								location="Product City Page"
 								className="inline-flex items-center bg-white/10 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/20 transition-colors border border-white/30"
 							>
 								+91 93631 22005
-							</a>
+							</TrackedLink>
 							<Link
 								href={hub.hubPath}
 								className="inline-flex items-center text-accent-100 hover:text-white underline-offset-4 hover:underline px-2 py-3"

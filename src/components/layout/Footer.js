@@ -1,11 +1,13 @@
-import { UilLinkedin } from "@iconscout/react-unicons";
+import { UilLinkedin, UilWhatsapp } from "@iconscout/react-unicons";
 import Link from "next/link";
+import TrackedLink from "@/components/analytics/TrackedLink";
 import {
 	EMAIL,
 	LINKEDIN_URL,
 	NAP_LINE,
 	PHONE_DISPLAY,
 	PHONE_TEL,
+	whatsappUrl,
 } from "@/lib/site";
 
 const Footer = () => {
@@ -22,20 +24,24 @@ const Footer = () => {
 						</p>
 						<p className="mb-1 text-white/90">{NAP_LINE}</p>
 						<p className="mb-1">
-							<a
+							<TrackedLink
 								href={`tel:${PHONE_TEL}`}
+								kind="phone"
+								location="Footer"
 								className="hover:text-secondary transition-colors"
 							>
 								{PHONE_DISPLAY}
-							</a>
+							</TrackedLink>
 						</p>
 						<p className="mb-4">
-							<a
+							<TrackedLink
 								href={`mailto:${EMAIL}`}
+								kind="email"
+								location="Footer"
 								className="hover:text-secondary transition-colors break-all"
 							>
 								{EMAIL}
-							</a>
+							</TrackedLink>
 						</p>
 						<div className="flex gap-x-4">
 							<a
@@ -47,6 +53,17 @@ const Footer = () => {
 							>
 								<UilLinkedin size={20} aria-hidden />
 							</a>
+							<TrackedLink
+								href={whatsappUrl()}
+								kind="whatsapp"
+								location="Footer"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-white hover:text-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
+								aria-label="DSN Enterprises on WhatsApp"
+							>
+								<UilWhatsapp size={20} aria-hidden />
+							</TrackedLink>
 						</div>
 					</div>
 

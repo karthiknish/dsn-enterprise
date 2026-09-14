@@ -4,6 +4,7 @@ import { m } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useReducer } from "react";
 import { useGoogleAdsTracking } from "@/hooks/useGoogleAdsTracking";
+import { useMetaTracking } from "@/hooks/useMetaTracking";
 import { getAttribution } from "@/lib/attribution";
 import {
 	validateAllContactFields,
@@ -13,12 +14,17 @@ import {
 	homeContactReducer,
 	initialHomeContactState,
 } from "@/lib/home-contact-reducer";
+import { recordLeadId } from "@/lib/lead-tracking";
 import HomeContactForm from "./HomeContactForm";
 import SectionHeader from "./SectionHeader";
 
 const ContactSection = () => {
 	const { push } = useRouter();
-	const { trackContactSubmission } = useGoogleAdsTracking();
+	// Named for what it sends: the hook's "contact submission" fires a Google
+	// Ads conversion, and this form previously skipped Meta entirely.
+	const { trackContactSubmission: trackGoogleAdsSubmission } =
+		useGoogleAdsTracking();
+	const { trackContactSubmission: trackMetaSubmission } = useMetaTracking();
 	const [state, dispatch] = useReducer(
 		homeContactReducer,
 		initialHomeContactState,
@@ -96,7 +102,10 @@ const ContactSection = () => {
 				);
 			}
 
-			trackContactSubmission(state.formData);
+			trackMetaSubmission(state.formData);
+			const leadId = result.entryId || "";
+			recordLeadId(leadId);
+			await trackGoogleAdsSubmission(state.formData, { leadId });
 			dispatch({ type: "SUBMIT_SUCCESS" });
 			push("/thank-you");
 		} catch (error) {
