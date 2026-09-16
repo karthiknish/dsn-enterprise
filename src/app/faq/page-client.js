@@ -46,7 +46,7 @@ function FAQItem({ faq, isOpen, onClick, itemId }) {
 				</span>
 				<span
 					aria-hidden
-					className="flex-shrink-0 w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center transition-all duration-300 bg-white group-hover:border-primary/30"
+					className="shrink-0 w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center transition-all duration-300 bg-white group-hover:border-primary/30"
 				>
 					{isOpen ? (
 						<UilMinus className="text-primary w-3.5 h-3.5" />

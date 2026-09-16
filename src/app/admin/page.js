@@ -17,8 +17,6 @@ export default function AdminDashboardPage() {
 
 	useEffect(() => {
 		let cancelled = false;
-		setLoading(true);
-		setFetchError(null);
 
 		fetchAdminDashboardStats()
 			.then((data) => {

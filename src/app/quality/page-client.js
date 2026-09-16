@@ -1,8 +1,5 @@
 "use client";
 
-import { m } from "framer-motion";
-import Image from "next/image";
-import { FaCertificate } from "react-icons/fa";
 import {
 	UilAward,
 	UilCheck,
@@ -12,6 +9,9 @@ import {
 	UilMicroscope,
 	UilThermometer,
 } from "@iconscout/react-unicons";
+import { m } from "framer-motion";
+import Image from "next/image";
+import { FaCertificate } from "react-icons/fa";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import {
@@ -144,7 +144,8 @@ const commitmentStats = [
 		value: "100",
 		suffix: "%",
 		label: "Inspection on Every Gauge",
-		description: "Every dimension, every feature, 100% verified before shipment.",
+		description:
+			"Every dimension, every feature, 100% verified before shipment.",
 	},
 	{
 		value: "0",
@@ -169,10 +170,10 @@ export default function QualityPage() {
 				eyebrow="Quality"
 				title="Quality Assurance"
 				description={pageHeroes.quality}
-			breadcrumbs={[
-				{ href: "/", label: "Home" },
-				{ href: "/quality", label: "Quality" },
-			]}
+				breadcrumbs={[
+					{ href: "/", label: "Home" },
+					{ href: "/quality", label: "Quality" },
+				]}
 			>
 				<UilAward className="w-8 h-8 opacity-90" aria-hidden />
 			</PageHero>
@@ -180,7 +181,7 @@ export default function QualityPage() {
 			{/* ====== Quality Process, Numbered Timeline ====== */}
 			<section className="py-20 md:py-28 bg-surface-subtle relative">
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">
@@ -190,8 +191,8 @@ export default function QualityPage() {
 							Six-Step Quality Assurance
 						</h2>
 						<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-							Every gauge moves through a systematic, documented process, from material
-							certification through to final functional acceptance.
+							Every gauge moves through a systematic, documented process, from
+							material certification through to final functional acceptance.
 						</p>
 					</div>
 
@@ -199,7 +200,7 @@ export default function QualityPage() {
 					<div className="max-w-4xl mx-auto relative">
 						{/* Connecting rail */}
 						<div
-							className="absolute left-[27px] md:left-8 top-2 bottom-2 w-px bg-gradient-to-b from-primary via-accent/40 to-primary/10"
+							className="absolute left-6.75 md:left-8 top-2 bottom-2 w-px bg-linear-to-b from-primary via-accent/40 to-primary/10"
 							aria-hidden
 						/>
 
@@ -277,7 +278,7 @@ export default function QualityPage() {
 			{/* ====== Certifications ====== */}
 			<section className="py-20 md:py-28 bg-secondary-light relative">
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/10 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/10 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">
@@ -287,9 +288,9 @@ export default function QualityPage() {
 							Industry-Recognized Credentials
 						</h2>
 						<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-							Our quality systems are certified, licensed, and accredited by the bodies that
-							define the standards we manufacture to, verified through regular independent
-							audits.
+							Our quality systems are certified, licensed, and accredited by the
+							bodies that define the standards we manufacture to, verified
+							through regular independent audits.
 						</p>
 					</div>
 
@@ -311,7 +312,7 @@ export default function QualityPage() {
 									className="object-cover transition-transform duration-500 group-hover:scale-105"
 								/>
 								{/* Hover overlay */}
-								<div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+								<div className="absolute inset-0 bg-linear-to-t from-primary/80 via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
 									<span className="text-white text-sm font-medium tracking-wide border border-white/30 px-4 py-2 rounded-full backdrop-blur-sm">
 										View Certificate
 									</span>
@@ -319,7 +320,10 @@ export default function QualityPage() {
 							</div>
 							<div className="p-6 md:p-8">
 								<div className="flex items-start gap-3 mb-2">
-									<FaCertificate className="text-accent mt-0.5 shrink-0" aria-hidden />
+									<FaCertificate
+										className="text-accent mt-0.5 shrink-0"
+										aria-hidden
+									/>
 									<h3 className="text-xl font-semibold text-gray-900 leading-snug">
 										{certFeatured.name}
 									</h3>
@@ -372,7 +376,7 @@ export default function QualityPage() {
 			{/* ====== Standards ====== */}
 			<section className="py-20 md:py-28 bg-white relative">
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">
@@ -435,14 +439,14 @@ export default function QualityPage() {
 											</svg>
 										</CollapsibleTrigger>
 										<CollapsibleContent className="overflow-hidden">
-											<ul className="px-6 md:px-7 pb-6 md:pb-7 pl-[4.75rem] space-y-2.5">
+											<ul className="px-6 md:px-7 pb-6 md:pb-7 pl-19 space-y-2.5">
 												{group.standards.map((standard) => (
 													<li
 														key={standard}
 														className="flex items-start gap-2.5"
 													>
 														<UilCheck
-															className="text-accent mt-0.5 flex-shrink-0 w-3.5 h-3.5"
+															className="text-accent mt-0.5 shrink-0 w-3.5 h-3.5"
 															aria-hidden
 														/>
 														<span className="text-sm text-gray-700 leading-relaxed">
@@ -463,7 +467,7 @@ export default function QualityPage() {
 			{/* ====== Technical Specifications ====== */}
 			<section className="py-20 md:py-28 bg-white relative">
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/10 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-accent/10 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">
@@ -474,8 +478,8 @@ export default function QualityPage() {
 								Technical Specifications
 							</h2>
 							<p className="text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
-								Our standard manufacturing parameters, contact our engineering team for
-								custom requirements beyond these ranges.
+								Our standard manufacturing parameters, contact our engineering
+								team for custom requirements beyond these ranges.
 							</p>
 						</div>
 
@@ -508,11 +512,11 @@ export default function QualityPage() {
 				{/* Decorative background blur */}
 
 				<div
-					className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-primary/[0.03] to-accent/[0.03] blur-3xl pointer-events-none"
+					className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full bg-linear-to-br from-primary/[0.03] to-accent/[0.03] blur-3xl pointer-events-none"
 					aria-hidden
 				/>
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4 relative">
@@ -523,8 +527,8 @@ export default function QualityPage() {
 								The Quality Commitment
 							</h2>
 							<p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-								Three principles that define how we manufacture, inspect, and deliver every
-								gauge that leaves our facility.
+								Three principles that define how we manufacture, inspect, and
+								deliver every gauge that leaves our facility.
 							</p>
 						</div>
 
@@ -548,7 +552,7 @@ export default function QualityPage() {
 												</span>
 											)}
 										</div>
-										<div className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
+										<div className="w-12 h-0.5 bg-linear-to-r from-primary to-accent mx-auto mb-4 rounded-full" />
 										<p className="font-semibold text-gray-900 mb-1">
 											{stat.label}
 										</p>

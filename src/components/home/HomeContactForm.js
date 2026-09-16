@@ -67,9 +67,13 @@ export default function HomeContactForm({
 					{fieldErrors.name && (
 						<p
 							id="name-error"
-							className="mt-1 text-sm text-red-600 flex items-center field-error"
+							data-field-error
+							className="mt-1 text-sm text-red-600 flex items-center"
 						>
-							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" aria-hidden />
+							<UilExclamationTriangle
+								className="mr-1 w-3.5 h-3.5"
+								aria-hidden
+							/>
 							{fieldErrors.name}
 						</p>
 					)}
@@ -100,9 +104,13 @@ export default function HomeContactForm({
 					{fieldErrors.email && (
 						<p
 							id="email-error"
-							className="mt-1 text-sm text-red-600 flex items-center field-error"
+							data-field-error
+							className="mt-1 text-sm text-red-600 flex items-center"
 						>
-							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" aria-hidden />
+							<UilExclamationTriangle
+								className="mr-1 w-3.5 h-3.5"
+								aria-hidden
+							/>
 							{fieldErrors.email}
 						</p>
 					)}
@@ -132,9 +140,13 @@ export default function HomeContactForm({
 					{fieldErrors.phone && (
 						<p
 							id="phone-error"
-							className="mt-1 text-sm text-red-600 flex items-center field-error"
+							data-field-error
+							className="mt-1 text-sm text-red-600 flex items-center"
 						>
-							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" aria-hidden />
+							<UilExclamationTriangle
+								className="mr-1 w-3.5 h-3.5"
+								aria-hidden
+							/>
 							{fieldErrors.phone}
 						</p>
 					)}
@@ -227,9 +239,13 @@ export default function HomeContactForm({
 					{fieldErrors.message && (
 						<p
 							id="message-error"
-							className="mt-1 text-sm text-red-600 flex items-center field-error"
+							data-field-error
+							className="mt-1 text-sm text-red-600 flex items-center"
 						>
-							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" aria-hidden />
+							<UilExclamationTriangle
+								className="mr-1 w-3.5 h-3.5"
+								aria-hidden
+							/>
 							{fieldErrors.message}
 						</p>
 					)}
@@ -237,7 +253,7 @@ export default function HomeContactForm({
 				<button
 					type="submit"
 					aria-busy={isSubmitting}
-					className={`w-full bg-primary hover:bg-primary-dark text-white font-medium py-3.5 px-6 rounded-lg transition-all duration-200 hover:shadow-md active:scale-[0.99] ${
+					className={`w-full bg-primary hover:bg-primary-dark text-white font-medium py-3.5 px-6 rounded-lg transition-all duration-200 hover:shadow-md active:scale-99 ${
 						isSubmitting ? "opacity-70 cursor-not-allowed" : ""
 					}`}
 					disabled={isSubmitting}

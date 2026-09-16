@@ -21,7 +21,7 @@ export default function ProductCityBottomSections({
 
 	return (
 		<>
-			<div className="bg-gradient-to-br from-primary to-primary-dark rounded-xl p-8 text-white">
+			<div className="bg-linear-to-br from-primary to-primary-dark rounded-xl p-8 text-white">
 				<h2 className="text-xl font-semibold mb-6">How we build your gauges</h2>
 				<div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
 					{processSteps.map(([title, desc], i) => (

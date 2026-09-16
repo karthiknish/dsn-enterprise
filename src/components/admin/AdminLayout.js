@@ -35,6 +35,9 @@ export default function AdminLayout({ children }) {
 	useEffect(() => {
 		try {
 			const storedState = localStorage.getItem("adminSidebarCollapsed:v1");
+			// Deliberately read after mount: reading during render would make the
+			// client's first pass disagree with the server's and desync hydration.
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			if (storedState) setIsCollapsed(JSON.parse(storedState));
 		} catch {
 			// ignore malformed/inaccessible storage
@@ -96,7 +99,7 @@ export default function AdminLayout({ children }) {
 			{sidebarOpen && (
 				<button
 					type="button"
-					className="fixed inset-0 z-40 bg-gray-950 bg-opacity-50 lg:hidden"
+					className="fixed inset-0 z-40 bg-gray-950/50 lg:hidden"
 					aria-label="Close sidebar"
 					onClick={() => setSidebarOpen(false)}
 				/>

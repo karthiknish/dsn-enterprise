@@ -24,7 +24,7 @@ export default function AnalyticsTopPagesTable({ topPages = [] }) {
 			<div className="overflow-x-auto">
 				<Table>
 					<TableHeader>
-						<TableRow className="border-b border-gray-200 hover:bg-transparent">
+						<TableRow className="border-gray-200 hover:bg-transparent">
 							<TableHead className="text-xs uppercase tracking-wide text-gray-500">
 								Page Path
 							</TableHead>
@@ -48,7 +48,7 @@ export default function AnalyticsTopPagesTable({ topPages = [] }) {
 										index % 2 === 1 ? "bg-gray-50/40" : ""
 									}`}
 								>
-									<TableCell className="max-w-[220px] px-4 py-3">
+									<TableCell className="max-w-55 px-4 py-3">
 										{/* Linking out saves the round trip of copying a path
 										    into the address bar to inspect a page. */}
 										<a
@@ -79,13 +79,13 @@ export default function AnalyticsTopPagesTable({ topPages = [] }) {
 											<div className="mt-1 flex items-center gap-2">
 												<div className="h-1 w-16 rounded-full bg-gray-100">
 													<div
-														className="h-1 rounded-full bg-accent"
+														className="h-1 rounded-full bg-accent bar-fill"
 														style={{
-															width: `${Math.min(100, row.share || 0)}%`,
+															"--bar-width": `${Math.min(100, row.share || 0)}%`,
 														}}
 													/>
 												</div>
-												<span className="text-[10px] tabular-nums text-gray-400">
+												<span className="text-2xs tabular-nums text-gray-400">
 													{(row.share || 0).toFixed(1)}%
 												</span>
 											</div>

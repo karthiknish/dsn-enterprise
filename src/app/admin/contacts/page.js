@@ -18,8 +18,6 @@ export default function ContactsPage() {
 
 	useEffect(() => {
 		let cancelled = false;
-		setLoading(true);
-		setFetchError(null);
 
 		fetchContacts()
 			.then((data) => {

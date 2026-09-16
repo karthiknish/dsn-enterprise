@@ -351,7 +351,7 @@ export default function FitsPage() {
 					</ol>
 					<p className="text-gray-700 leading-relaxed mt-4">
 						Only after those are answered does the call-out get read out of the
-						standard's table for the size and grade range in question.
+						standard&apos;s table for the size and grade range in question.
 					</p>
 				</section>
 
@@ -363,8 +363,9 @@ export default function FitsPage() {
 						Why the numbers are not on this page
 					</h2>
 					<p className="text-gray-700 leading-relaxed mb-4">
-						The limit values live in the standard's Part 2 tables, and this page
-						deliberately does not reproduce them. Two reasons, and both matter.
+						The limit values live in the standard&apos;s Part 2 tables, and this
+						page deliberately does not reproduce them. Two reasons, and both
+						matter.
 					</p>
 					<p className="text-gray-700 leading-relaxed mb-4">
 						The first is ownership. The IS tables are BIS copyright and the ISO
@@ -380,7 +381,7 @@ export default function FitsPage() {
 						the formula has not. A page that computed its own values would
 						therefore be wrong about half the time on the only numbers that give
 						it value. For a tolerance, that is not a lost ranking — it is a
-						scrapped batch or a rejected assembly at a customer's works.
+						scrapped batch or a rejected assembly at a customer&apos;s works.
 					</p>
 					<p className="text-gray-700 leading-relaxed mb-4">
 						So: get <strong>IS 919 (Part 2) : 2014</strong> (or ISO 286-2:2010)
@@ -452,7 +453,7 @@ export default function FitsPage() {
 									<span>{faq.question}</span>
 									<span
 										aria-hidden
-										className="mt-1 flex-shrink-0 text-gray-400 transition-transform group-open:rotate-45"
+										className="mt-1 shrink-0 text-gray-400 transition-transform group-open:rotate-45"
 									>
 										+
 									</span>

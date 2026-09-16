@@ -88,7 +88,7 @@ const ProductCard = ({ product, index, className = "" }) => (
 				height={160}
 				className="object-contain max-h-full w-auto transition-transform duration-500 group-hover:scale-105"
 			/>
-			<span className="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-wider text-primary/70 bg-white/90 px-2 py-1 rounded-md">
+			<span className="absolute top-3 right-3 text-2xs font-semibold uppercase tracking-wider text-primary/70 bg-white/90 px-2 py-1 rounded-md">
 				{product.specs}
 			</span>
 		</div>
@@ -122,7 +122,7 @@ const FeaturedProducts = () => {
 			className="scroll-mt-24 py-20 md:py-24 bg-surface-muted relative"
 		>
 			<div
-				className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+				className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"
 				aria-hidden
 			/>
 			<div className="container mx-auto px-4">
@@ -148,7 +148,7 @@ const FeaturedProducts = () => {
 								height={220}
 								className="object-contain max-h-full w-auto transition-transform duration-500 group-hover:scale-105"
 							/>
-							<span className="absolute top-4 right-4 text-[10px] font-semibold uppercase tracking-wider text-primary/70 bg-white/90 px-2 py-1 rounded-md">
+							<span className="absolute top-4 right-4 text-2xs font-semibold uppercase tracking-wider text-primary/70 bg-white/90 px-2 py-1 rounded-md">
 								{spotlight.specs}
 							</span>
 						</div>
@@ -197,7 +197,7 @@ const FeaturedProducts = () => {
 				<div className="text-center mt-14">
 					<Link
 						href="#contact"
-						className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-[0.98]"
+						className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-98"
 					>
 						Contact Now
 					</Link>

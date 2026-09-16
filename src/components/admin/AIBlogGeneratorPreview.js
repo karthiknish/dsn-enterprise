@@ -1,12 +1,6 @@
 "use client";
 
-import {
-	FaCheck,
-	FaCopy,
-	FaMagic,
-	FaRedo,
-	FaSpinner,
-} from "react-icons/fa";
+import { FaCheck, FaCopy, FaMagic, FaRedo, FaSpinner } from "react-icons/fa";
 import { markdownToHtml } from "@/lib/markdown-to-html";
 
 export default function AIBlogGeneratorPreview({
@@ -28,7 +22,9 @@ export default function AIBlogGeneratorPreview({
 	return (
 		<div className="mt-6">
 			<div className="flex items-center justify-between mb-2">
-				<h4 className="font-medium text-gray-900">Generated Content Preview:</h4>
+				<h4 className="font-medium text-gray-900">
+					Generated Content Preview:
+				</h4>
 				<div className="flex gap-2">
 					<button
 						type="button"
@@ -70,7 +66,7 @@ export default function AIBlogGeneratorPreview({
 				</div>
 			</div>
 			<div className="bg-white border border-gray-200 rounded-lg p-4 max-h-96 overflow-y-auto">
-				<div className="prose prose-sm max-w-none">
+				<div className="prose max-w-none">
 					<pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans">
 						{content}
 					</pre>

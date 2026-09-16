@@ -87,9 +87,7 @@ export default function ContactPageInfoCards() {
 							<h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
 								{title}
 							</h3>
-							<p className="text-[15px] leading-relaxed text-gray-900">
-								{content}
-							</p>
+							<p className="text-md leading-relaxed text-gray-900">{content}</p>
 						</div>
 					</m.div>
 				))}
@@ -98,7 +96,7 @@ export default function ContactPageInfoCards() {
 				<h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
 					Email
 				</h3>
-				<p className="text-[15px] leading-relaxed text-gray-900">
+				<p className="text-md leading-relaxed text-gray-900">
 					<TrackedLink
 						href={`mailto:${EMAIL}`}
 						kind="email"

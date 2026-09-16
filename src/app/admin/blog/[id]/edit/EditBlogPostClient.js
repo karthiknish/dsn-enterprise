@@ -50,7 +50,6 @@ export default function EditBlogPostClient({ postId }) {
 	// route), even with a memoized promise. This pattern is immune to it.
 	useEffect(() => {
 		let cancelled = false;
-		setState({ status: "loading" });
 
 		withTimeout(
 			fetchBlogPostById(postId),
@@ -90,7 +89,12 @@ export default function EditBlogPostClient({ postId }) {
 		return (
 			<EditBlogError
 				message={state.message}
-				onRetry={() => setAttempt((a) => a + 1)}
+				onRetry={() => {
+					// Reset to loading here rather than inside the effect: a
+					// synchronous setState in an effect triggers a cascading render.
+					setState({ status: "loading" });
+					setAttempt((a) => a + 1);
+				}}
 			/>
 		);
 	}

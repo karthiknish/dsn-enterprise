@@ -6,7 +6,6 @@ import {
 	initialTiptapEditorUiState,
 	tiptapEditorUiReducer,
 } from "@/lib/tiptap-editor-ui-reducer";
-import { EditorStyles } from "./tiptap/EditorStyles";
 import ImageDialog from "./tiptap/ImageDialog";
 import LinkDialog from "./tiptap/LinkDialog";
 import MenuBar from "./tiptap/MenuBar";
@@ -38,9 +37,11 @@ export default function TiptapEditor({
 			},
 			editorProps: {
 				attributes: {
-					class: "prose prose-lg max-w-none focus:outline-none min-h-[300px] p-4",
+					class: "prose max-w-none focus:outline-none min-h-75 p-4",
 				},
-				...createEditorProps(isExternalUpdate, onChange),
+				// No arguments: this factory ignores them, and passing the ref
+				// object here counted as reading a ref during render.
+				...createEditorProps(),
 			},
 		},
 		[editorKey],
@@ -86,7 +87,6 @@ export default function TiptapEditor({
 
 	return (
 		<div>
-			<EditorStyles />
 			<section
 				key={editorKey}
 				aria-label="Rich text editor"

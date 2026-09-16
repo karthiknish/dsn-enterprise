@@ -76,7 +76,7 @@ export default function BlogPostDetailsSection({
 										key={title}
 										type="button"
 										onClick={() => onSelectTitle(title)}
-										className="w-full text-left px-4 py-2 text-sm text-purple-900 hover:bg-purple-50 hover:text-purple-800 transition-colors"
+										className="w-full text-left px-4 py-2 text-sm text-purple-800 hover:bg-purple-50 hover:text-purple-800 transition-colors"
 									>
 										{title}
 									</button>

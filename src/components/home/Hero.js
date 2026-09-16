@@ -39,13 +39,13 @@ const Hero = () => {
 				<source src="/hero-video.mp4" type="video/mp4" />
 			</video>
 			<div
-				className={`absolute inset-0 z-[1] bg-gradient-to-br from-primary-dark/90 via-primary/75 to-black/50 pointer-events-none transition-opacity duration-700 ${
+				className={`absolute inset-0 z-1 bg-linear-to-br from-primary-dark/90 via-primary/75 to-black/50 pointer-events-none transition-opacity duration-700 ${
 					videoLoaded ? "opacity-100" : "opacity-0"
 				}`}
 				aria-hidden
 			/>
 			<div
-				className="absolute inset-0 z-[2] opacity-[0.07] pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:48px_48px]"
+				className="absolute inset-0 z-2 opacity-7 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:48px_48px]"
 				aria-hidden
 			/>
 
@@ -67,14 +67,14 @@ const Hero = () => {
 						<div className="flex flex-wrap gap-3">
 							<Link
 								href="#products"
-								className="bg-white text-primary font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:bg-secondary-light hover:shadow-lg active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary/80"
+								className="bg-white text-primary font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:bg-secondary-light hover:shadow-lg active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary/80"
 								onClick={() => trackCTAClick("Explore Products", "Hero")}
 							>
 								Explore Products
 							</Link>
 							<Link
 								href="/contact"
-								className="bg-transparent border border-white/40 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:bg-white/10 hover:border-white/60 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary/80"
+								className="bg-transparent border border-white/40 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:bg-white/10 hover:border-white/60 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary/80"
 								onClick={() => trackCTAClick("Contact Us", "Hero")}
 							>
 								Contact Us

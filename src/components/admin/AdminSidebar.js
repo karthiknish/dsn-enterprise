@@ -36,7 +36,7 @@ export default function AdminSidebar({
 							alt="DSN Enterprises"
 							width={48}
 							height={48}
-							className="w-12 h-12 object-contain flex-shrink-0"
+							className="w-12 h-12 object-contain shrink-0"
 						/>
 					</Link>
 				) : (
@@ -132,7 +132,7 @@ export default function AdminSidebar({
 							{isCollapsed ? (
 								<AdminSidebarTooltip content={item.name}>
 									<item.icon
-										className={`w-5 h-5 transition-colors flex-shrink-0 ${
+										className={`w-5 h-5 transition-colors shrink-0 ${
 											isActive
 												? "text-accent"
 												: "text-gray-400 group-hover:text-accent"
@@ -142,7 +142,7 @@ export default function AdminSidebar({
 							) : (
 								<>
 									<item.icon
-										className={`w-5 h-5 transition-colors flex-shrink-0 mr-3 ${
+										className={`w-5 h-5 transition-colors shrink-0 mr-3 ${
 											isActive
 												? "text-accent"
 												: "text-gray-400 group-hover:text-accent"
@@ -162,7 +162,7 @@ export default function AdminSidebar({
 				{!isCollapsed ? (
 					<div className="rounded-xl border border-gray-200/80 bg-gray-50/60 p-3">
 						<div className="flex items-center gap-3 mb-3 px-0.5">
-							<div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center text-sm font-medium text-accent-700 flex-shrink-0">
+							<div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center text-sm font-medium text-accent-700 shrink-0">
 								{user?.email?.[0].toUpperCase()}
 							</div>
 							<div className="flex-1 min-w-0">

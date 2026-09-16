@@ -1,6 +1,12 @@
 "use client";
 
-import { UilArrowRight, UilCheck, UilRuler, UilShieldCheck, UilWrench } from "@iconscout/react-unicons";
+import {
+	UilArrowRight,
+	UilCheck,
+	UilRuler,
+	UilShieldCheck,
+	UilWrench,
+} from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import Link from "next/link";
 
@@ -53,7 +59,7 @@ const ServicesSection = () => {
 	return (
 		<section className="py-20 md:py-24 bg-secondary-light/80 relative">
 			<div
-				className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+				className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent"
 				aria-hidden
 			/>
 			<div className="container mx-auto px-4">
@@ -77,7 +83,7 @@ const ServicesSection = () => {
 						</p>
 						<Link
 							href="#contact"
-							className="mt-8 inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-[0.98]"
+							className="mt-8 inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-98"
 						>
 							Contact Now
 						</Link>
@@ -112,12 +118,9 @@ const ServicesSection = () => {
 											</p>
 											<ul className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-600">
 												{service.details.slice(0, 2).map((detail) => (
-													<li
-														key={detail}
-														className="flex items-start gap-2"
-													>
+													<li key={detail} className="flex items-start gap-2">
 														<UilCheck
-															className="text-accent mt-0.5 flex-shrink-0 w-3.5 h-3.5"
+															className="text-accent mt-0.5 shrink-0 w-3.5 h-3.5"
 															aria-hidden
 														/>
 														<span>{detail}</span>

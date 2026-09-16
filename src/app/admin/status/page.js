@@ -70,16 +70,16 @@ export default function StatusPage() {
 					<div
 						className={`rounded-xl border p-4 flex items-center justify-between ${
 							result?.overall === "healthy"
-								? "bg-green-50 border-green-200 text-green-800"
-								: "bg-yellow-50 border-yellow-200 text-yellow-800"
+								? "bg-success-50 border-success-200 text-success-800"
+								: "bg-yellow-50 border-yellow-100 text-yellow-800"
 						}`}
 					>
 						<div className="flex items-center gap-3">
 							<span
 								className={`w-3 h-3 rounded-full ${
 									result?.overall === "healthy"
-										? "bg-green-500"
-										: "bg-yellow-500"
+										? "bg-success-500"
+										: "bg-yellow-400"
 								}`}
 							/>
 							<span className="font-semibold">
@@ -129,7 +129,7 @@ export default function StatusPage() {
 											<span
 												className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
 													check.status === "healthy"
-														? "bg-green-100 text-green-800"
+														? "bg-success-100 text-success-800"
 														: "bg-red-100 text-red-800"
 												}`}
 											>

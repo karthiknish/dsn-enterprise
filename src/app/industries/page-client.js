@@ -1,9 +1,5 @@
 "use client";
 
-import { m } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { FaOilCan } from "react-icons/fa";
 import {
 	UilArrowRight,
 	UilAward,
@@ -18,6 +14,10 @@ import {
 	UilSubway,
 	UilUsersAlt,
 } from "@iconscout/react-unicons";
+import { m } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { FaOilCan } from "react-icons/fa";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
@@ -274,8 +274,8 @@ export default function IndustriesPage() {
 						</h2>
 						<p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
 							From deep-sea rigs to microelectronics, our precision gauges meet
-							the exacting standards of the world&apos;s most demanding industrial
-							sectors.
+							the exacting standards of the world&apos;s most demanding
+							industrial sectors.
 						</p>
 					</m.div>
 
@@ -291,7 +291,7 @@ export default function IndustriesPage() {
 							>
 								{/* Top accent bar */}
 								<div
-									className="h-1.5 bg-gradient-to-r from-primary to-accent"
+									className="h-1.5 bg-linear-to-r from-primary to-accent"
 									aria-hidden
 								/>
 
@@ -302,7 +302,7 @@ export default function IndustriesPage() {
 									>
 										{/* Industry icon + name */}
 										<div className="flex items-center gap-4 mb-6">
-											<div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+											<div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
 												<industry.icon className="w-5 h-5 text-primary" />
 											</div>
 											<h2 className="text-2xl lg:text-3xl font-semibold text-gray-900">
@@ -323,7 +323,7 @@ export default function IndustriesPage() {
 											<ul className="space-y-2">
 												{industry.applications.map((app) => (
 													<li key={app} className="flex items-start gap-3">
-														<UilCheck className="mt-0.5 text-accent flex-shrink-0 w-3.5 h-3.5" />
+														<UilCheck className="mt-0.5 text-accent shrink-0 w-3.5 h-3.5" />
 														<span className="text-gray-700">{app}</span>
 													</li>
 												))}
@@ -350,11 +350,11 @@ export default function IndustriesPage() {
 
 									{/* Image Panel */}
 									<div
-										className={`bg-gray-50 p-8 lg:p-12 flex flex-col items-center justify-center relative min-h-[320px] lg:min-h-full ${index % 2 === 1 ? "lg:order-1" : ""}`}
+										className={`bg-gray-50 p-8 lg:p-12 flex flex-col items-center justify-center relative min-h-80 lg:min-h-full ${index % 2 === 1 ? "lg:order-1" : ""}`}
 									>
 										{/* Subtle pattern overlay */}
 										<div
-											className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#374941_1px,transparent_1px)] bg-[size:20px_20px]"
+											className="absolute inset-0 opacity-3 bg-[radial-gradient(#374941_1px,transparent_1px)] bg-[size:20px_20px]"
 											aria-hidden
 										/>
 
@@ -371,7 +371,7 @@ export default function IndustriesPage() {
 										/>
 
 										{/* Product image */}
-										<div className="relative w-full max-w-[220px] aspect-square mb-8 z-10">
+										<div className="relative w-full max-w-55 aspect-square mb-8 z-10">
 											<Image
 												src={industry.image}
 												alt={`${industry.name} precision gauge`}
@@ -402,7 +402,7 @@ export default function IndustriesPage() {
 			<section className="py-16 md:py-20 bg-white relative overflow-hidden">
 				{/* Subtle background pattern */}
 				<div
-					className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#374941_1px,transparent_1px)] bg-[size:24px_24px]"
+					className="absolute inset-0 opacity-3 bg-[radial-gradient(#374941_1px,transparent_1px)] bg-[size:24px_24px]"
 					aria-hidden
 				/>
 
@@ -470,7 +470,9 @@ export default function IndustriesPage() {
 								<div className="mt-3 text-gray-700 font-medium">
 									Industrial Clients
 								</div>
-								<p className="text-sm text-gray-400 mt-1">Across 15+ countries</p>
+								<p className="text-sm text-gray-400 mt-1">
+									Across 15+ countries
+								</p>
 							</m.div>
 
 							{/* Divider */}
@@ -492,7 +494,9 @@ export default function IndustriesPage() {
 								<div className="mt-3 text-gray-700 font-medium">
 									Certified Manufacturer
 								</div>
-								<p className="text-sm text-gray-400 mt-1">API 5B & 7-2 Licensed</p>
+								<p className="text-sm text-gray-400 mt-1">
+									API 5B & 7-2 Licensed
+								</p>
 							</m.div>
 						</div>
 					</m.div>

@@ -283,7 +283,7 @@ export default async function BlogPostPage({ params }) {
 									href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}`}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="inline-flex items-center px-4 py-2 bg-[color:var(--color-twitter)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
+									className="inline-flex items-center px-4 py-2 bg-(color:--color-twitter) text-white rounded-lg hover:bg-(color:--color-twitter)/90 transition-colors"
 								>
 									<svg
 										aria-hidden="true"
@@ -299,7 +299,7 @@ export default async function BlogPostPage({ params }) {
 									href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}&title=${encodeURIComponent(post.title)}`}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="inline-flex items-center px-4 py-2 bg-[color:var(--color-linkedin)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
+									className="inline-flex items-center px-4 py-2 bg-(color:--color-linkedin) text-white rounded-lg hover:bg-(color:--color-linkedin)/90 transition-colors"
 								>
 									<svg
 										aria-hidden="true"
@@ -315,7 +315,7 @@ export default async function BlogPostPage({ params }) {
 									href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getSiteUrl(`/blog/${post.slug}`))}`}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="inline-flex items-center px-4 py-2 bg-[color:var(--color-facebook)] text-white rounded-lg hover:bg-opacity-90 transition-colors"
+									className="inline-flex items-center px-4 py-2 bg-(color:--color-facebook) text-white rounded-lg hover:bg-(color:--color-facebook)/90 transition-colors"
 								>
 									<svg
 										aria-hidden="true"

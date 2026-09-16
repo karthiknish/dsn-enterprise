@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as gtag from "@/lib/gtag";
 
 /**
@@ -10,7 +10,14 @@ import * as gtag from "@/lib/gtag";
 export const useGoogleAdsTracking = () => {
 	const formStartTracked = useRef(false);
 	const scrollMilestones = useRef(new Set());
-	const startTime = useRef(Date.now());
+	const startTime = useRef(null);
+
+	// Date.now() during render is impure, and React 19's lint rejects it. Start
+	// the clock on mount instead; trackTimeOnPage falls back if it is ever
+	// called before the effect has run.
+	useEffect(() => {
+		startTime.current = Date.now();
+	}, []);
 
 	/**
 	 * Track contact form submission
@@ -113,7 +120,8 @@ export const useGoogleAdsTracking = () => {
 	 * Track time on page (call on unmount)
 	 */
 	const trackTimeOnPage = useCallback((pageName) => {
-		const timeSpent = Math.round((Date.now() - startTime.current) / 1000);
+		const from = startTime.current ?? Date.now();
+		const timeSpent = Math.round((Date.now() - from) / 1000);
 		gtag.trackTimeOnPage(timeSpent, pageName);
 	}, []);
 

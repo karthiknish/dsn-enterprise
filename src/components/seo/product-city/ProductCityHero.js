@@ -67,7 +67,7 @@ export default function ProductCityHero({
 					</div>
 
 					<div className="lg:col-span-5">
-						<div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-white/10 border border-white/15 backdrop-blur-sm">
+						<div className="relative aspect-4/3 rounded-2xl overflow-hidden bg-white/10 border border-white/15 backdrop-blur-sm">
 							<Image
 								src={image.src}
 								alt={`${image.alt} – supplied to ${pageData.cityName}`}

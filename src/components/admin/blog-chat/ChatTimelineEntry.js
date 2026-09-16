@@ -30,11 +30,11 @@ function ToolEntry({ entry }) {
 				className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-700 text-left"
 			>
 				{entry.status === "running" ? (
-					<span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+					<span className="h-2 w-2 rounded-full bg-yellow-400 animate-pulse shrink-0" />
 				) : entry.status === "error" ? (
 					<span className="h-2 w-2 rounded-full bg-red-400 shrink-0" />
 				) : (
-					<span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0" />
+					<span className="h-2 w-2 rounded-full bg-success-400 shrink-0" />
 				)}
 				<span className="font-medium">{label}</span>
 				{query && <span className="truncate max-w-xs">“{query}”</span>}
@@ -101,7 +101,7 @@ export default function ChatTimelineEntry({ entry }) {
 
 	if (entry.kind === "revision") {
 		return (
-			<div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+			<div className="text-xs text-yellow-700 bg-yellow-50 border border-yellow-100 rounded-lg px-3 py-2">
 				Slop check failed — revision pass {entry.attempt}
 				{entry.issues?.length ? `: ${entry.issues.join(", ")}` : ""}
 			</div>
@@ -110,7 +110,7 @@ export default function ChatTimelineEntry({ entry }) {
 
 	if (entry.kind === "draft") {
 		return (
-			<div className="text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2">
+			<div className="text-xs text-success-800 bg-success-50 border border-success-200 rounded-lg px-3 py-2">
 				Draft saved · {entry.wordCount} words · quality {entry.score}/100
 			</div>
 		);

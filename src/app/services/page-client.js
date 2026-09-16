@@ -90,7 +90,7 @@ const standards = [
 
 const GradientDivider = () => (
 	<div
-		className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+		className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"
 		aria-hidden
 	/>
 );
@@ -255,7 +255,7 @@ const ServicesPage = () => {
 											key={`${service.id}-${detail}`}
 											className="flex items-start gap-3"
 										>
-											<UilCheck className="w-3.5 h-3.5 text-accent mt-1 flex-shrink-0" />
+											<UilCheck className="w-3.5 h-3.5 text-accent mt-1 shrink-0" />
 											<span className="text-gray-700 leading-relaxed">
 												{detail}
 											</span>
@@ -336,7 +336,7 @@ const ServicesPage = () => {
 							<ul className="space-y-3">
 								{standards.map((standard) => (
 									<li key={standard} className="flex items-start gap-3">
-										<UilCheck className="w-3.5 h-3.5 text-accent mt-1 flex-shrink-0" />
+										<UilCheck className="w-3.5 h-3.5 text-accent mt-1 shrink-0" />
 										<span className="text-gray-700 leading-relaxed">
 											{standard}
 										</span>

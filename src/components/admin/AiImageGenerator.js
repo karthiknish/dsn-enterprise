@@ -174,7 +174,7 @@ export default function AiImageGenerator({
 			</p>
 
 			{disabled && (
-				<p className="text-xs text-amber-600">
+				<p className="text-xs text-yellow-600">
 					Add a title (and ideally some content) first — the image is generated
 					from the article itself.
 				</p>

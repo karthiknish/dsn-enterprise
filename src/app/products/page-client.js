@@ -1,11 +1,15 @@
 "use client";
 
+import {
+	UilAngleRight,
+	UilArrowRight,
+	UilSearch,
+} from "@iconscout/react-unicons";
 import { m } from "framer-motion";
+import { BadgeCheck, BookOpen, CheckCircle2, Ruler } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { UilArrowRight, UilAngleRight, UilSearch } from "@iconscout/react-unicons";
-import { CheckCircle2, Ruler, BadgeCheck, BookOpen } from "lucide-react";
 import { Cta10 } from "@/components/cta10";
 import PageHero from "@/components/layout/PageHero";
 import { pageHeroes } from "@/content/page-heroes";
@@ -270,7 +274,7 @@ const ProductsPage = () => {
 			{/* Product Category Cards */}
 			<section className="py-16 md:py-20 bg-secondary-light relative overflow-hidden">
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">
@@ -305,13 +309,13 @@ const ProductsPage = () => {
 								className="group flex flex-col md:flex-row h-full bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
 							>
 								<div className="relative h-64 md:h-auto md:w-1/2 bg-[linear-gradient(135deg,#f6f8f4_0%,#e8ede3_100%)] overflow-hidden shrink-0">
-									<div className="absolute inset-0 bg-gradient-to-t from-white/60 via-transparent to-transparent z-10 pointer-events-none md:hidden" />
+									<div className="absolute inset-0 bg-linear-to-t from-white/60 via-transparent to-transparent z-10 pointer-events-none md:hidden" />
 									<Image
 										src={categories[0].image}
 										alt={categories[0].name}
 										fill
 										sizes="(min-width: 1024px) 40vw, 100vw"
-										className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+										className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-snappy"
 									/>
 								</div>
 								<div className="p-6 md:p-8 flex flex-col justify-center flex-1">
@@ -366,7 +370,7 @@ const ProductsPage = () => {
 											alt={category.name}
 											fill
 											sizes="80px"
-											className="object-contain p-2.5 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+											className="object-contain p-2.5 group-hover:scale-105 transition-transform duration-500 ease-snappy"
 										/>
 									</div>
 									<div className="min-w-0 flex-1">
@@ -480,9 +484,9 @@ const ProductsPage = () => {
 											transition={{ duration: 0.45 }}
 										>
 											<div className="relative h-56 md:h-auto md:w-1/2 bg-secondary-light overflow-hidden shrink-0">
-												<div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/30 z-10 pointer-events-none md:hidden" />
+												<div className="absolute inset-0 bg-linear-to-b from-transparent to-white/30 z-10 pointer-events-none md:hidden" />
 												<Image
-													className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+													className="object-contain p-8 group-hover:scale-105 transition-transform duration-500 ease-snappy"
 													src={category.items[0].image}
 													alt={category.items[0].name}
 													fill
@@ -490,7 +494,7 @@ const ProductsPage = () => {
 												/>
 											</div>
 											<div className="p-6 md:p-8 flex flex-col justify-center flex-1">
-												<span className="inline-block text-[11px] font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2.5 py-1 rounded-full mb-3 w-fit">
+												<span className="inline-block text-3xs font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2.5 py-1 rounded-full mb-3 w-fit">
 													{category.items[0].specs}
 												</span>
 												<h3 className="text-xl font-semibold mb-2 text-gray-900">
@@ -535,7 +539,7 @@ const ProductsPage = () => {
 											>
 												<div className="relative w-32 shrink-0 bg-secondary-light overflow-hidden">
 													<Image
-														className="object-contain p-4 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+														className="object-contain p-4 group-hover:scale-105 transition-transform duration-500 ease-snappy"
 														src={item.image}
 														alt={item.name}
 														fill
@@ -543,7 +547,7 @@ const ProductsPage = () => {
 													/>
 												</div>
 												<div className="p-4 flex-1 min-w-0">
-													<span className="inline-block text-[10px] font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2 py-0.5 rounded-full mb-2">
+													<span className="inline-block text-2xs font-semibold uppercase tracking-wider text-accent bg-accent/10 px-2 py-0.5 rounded-full mb-2">
 														{item.specs}
 													</span>
 													<h3 className="text-base font-semibold mb-1.5 text-gray-900">
@@ -584,11 +588,11 @@ const ProductsPage = () => {
 			{/* Specifications */}
 			<section className="py-16 md:py-20 bg-primary relative overflow-hidden">
 				<div
-					className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] bg-[size:40px_40px]"
+					className="absolute inset-0 opacity-4 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] bg-[size:40px_40px]"
 					aria-hidden
 				/>
 				<div
-					className="absolute inset-0 bg-gradient-to-br from-primary-dark/40 via-transparent to-black/10 pointer-events-none"
+					className="absolute inset-0 bg-linear-to-br from-primary-dark/40 via-transparent to-black/10 pointer-events-none"
 					aria-hidden
 				/>
 				<div className="relative z-10">
@@ -618,7 +622,10 @@ const ProductsPage = () => {
 						>
 							<div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
 								<div className="flex items-center justify-center w-9 h-9 rounded-lg bg-accent/10">
-									<Ruler className="w-4.5 h-4.5 text-accent" strokeWidth={1.5} />
+									<Ruler
+										className="w-4.5 h-4.5 text-accent"
+										strokeWidth={1.5}
+									/>
 								</div>
 								<div>
 									<h3 className="text-base font-semibold text-gray-900">
@@ -633,13 +640,23 @@ const ProductsPage = () => {
 								{specifications.map((spec) => {
 									const parts = spec.split(" - ");
 									return (
-										<div key={spec} className="flex items-center gap-3 px-6 py-3.5">
-											<CheckCircle2 className="w-4 h-4 text-accent shrink-0" strokeWidth={1.5} />
+										<div
+											key={spec}
+											className="flex items-center gap-3 px-6 py-3.5"
+										>
+											<CheckCircle2
+												className="w-4 h-4 text-accent shrink-0"
+												strokeWidth={1.5}
+											/>
 											<div>
 												{parts.length > 1 ? (
 													<>
-														<span className="text-xs font-medium text-gray-500 uppercase tracking-wider">{parts[0]}</span>
-														<p className="text-sm text-gray-700">{parts.slice(1).join(" - ")}</p>
+														<span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+															{parts[0]}
+														</span>
+														<p className="text-sm text-gray-700">
+															{parts.slice(1).join(" - ")}
+														</p>
 													</>
 												) : (
 													<span className="text-sm text-gray-700">{spec}</span>
@@ -660,7 +677,10 @@ const ProductsPage = () => {
 						>
 							<div className="flex items-center gap-3 px-6 py-5 border-b border-gray-100">
 								<div className="flex items-center justify-center w-9 h-9 rounded-lg bg-accent/10">
-									<BookOpen className="w-4.5 h-4.5 text-accent" strokeWidth={1.5} />
+									<BookOpen
+										className="w-4.5 h-4.5 text-accent"
+										strokeWidth={1.5}
+									/>
 								</div>
 								<div>
 									<h3 className="text-base font-semibold text-gray-900">
@@ -673,9 +693,17 @@ const ProductsPage = () => {
 							</div>
 							<div className="divide-y divide-gray-50">
 								{standards.map((standard) => (
-									<div key={standard} className="flex items-start gap-3 px-6 py-3.5">
-										<BadgeCheck className="w-4 h-4 text-accent shrink-0 mt-0.5" strokeWidth={1.5} />
-										<span className="text-sm text-gray-700 leading-relaxed">{standard}</span>
+									<div
+										key={standard}
+										className="flex items-start gap-3 px-6 py-3.5"
+									>
+										<BadgeCheck
+											className="w-4 h-4 text-accent shrink-0 mt-0.5"
+											strokeWidth={1.5}
+										/>
+										<span className="text-sm text-gray-700 leading-relaxed">
+											{standard}
+										</span>
 									</div>
 								))}
 							</div>
@@ -703,7 +731,10 @@ const ProductsPage = () => {
 				description="We specialize in manufacturing custom gauges according to your specific requirements. Contact us today to discuss your needs."
 				buttons={{
 					primary: { text: "Contact Us", url: "/contact" },
-					secondary: { text: "Request Quote", url: "/contact?subject=custom-gauge" },
+					secondary: {
+						text: "Request Quote",
+						url: "/contact?subject=custom-gauge",
+					},
 				}}
 			/>
 		</div>

@@ -55,9 +55,12 @@ export default function HeaderMobileNav({
 			}
 		};
 
-		navRef.current.addEventListener("keydown", handleKeyDown);
+		const node = navRef.current;
+		if (!node) return;
+
+		node.addEventListener("keydown", handleKeyDown);
 		return () => {
-			navRef.current?.removeEventListener("keydown", handleKeyDown);
+			node.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [isOpen]);
 

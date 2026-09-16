@@ -23,11 +23,11 @@ export default function EditBlogPostView({ postId, initialPostData }) {
 			/>
 
 			{hook.postMissing && (
-				<div className="mb-6 rounded-xl border border-amber-300 bg-amber-50 p-4">
-					<h2 className="text-sm font-semibold text-amber-900">
+				<div className="mb-6 rounded-xl border border-yellow-400 bg-yellow-50 p-4">
+					<h2 className="text-sm font-semibold text-yellow-800">
 						This post no longer exists
 					</h2>
-					<p className="mt-1 text-sm text-amber-800">
+					<p className="mt-1 text-sm text-yellow-800">
 						It was deleted while you had it open, so it cannot be updated.
 						Nothing you have typed has been lost — save it as a new post, or
 						copy what you need before leaving this page.
@@ -44,7 +44,7 @@ export default function EditBlogPostView({ postId, initialPostData }) {
 						<button
 							type="button"
 							onClick={hook.back}
-							className="px-3 py-1.5 text-xs font-medium rounded-lg border border-amber-300 text-amber-900 hover:bg-amber-100"
+							className="px-3 py-1.5 text-xs font-medium rounded-lg border border-yellow-400 text-yellow-800 hover:bg-yellow-100"
 						>
 							Back to posts
 						</button>

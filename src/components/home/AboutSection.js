@@ -14,7 +14,7 @@ const AboutSection = () => {
 	return (
 		<section className="py-20 md:py-24 bg-white relative overflow-hidden">
 			<div
-				className="absolute inset-0 opacity-[0.4] pointer-events-none bg-[radial-gradient(circle_at_80%_20%,var(--color-secondary-light)_0%,transparent_50%)]"
+				className="absolute inset-0 opacity-40 pointer-events-none bg-[radial-gradient(circle_at_80%_20%,var(--color-secondary-light)_0%,transparent_50%)]"
 				aria-hidden
 			/>
 			<div className="container mx-auto px-4 relative">
@@ -59,7 +59,7 @@ const AboutSection = () => {
 						</div>
 						<Link
 							href="#contact"
-							className="inline-flex items-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-md active:scale-[0.98]"
+							className="inline-flex items-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-md active:scale-98"
 						>
 							Contact Now
 						</Link>
@@ -73,7 +73,7 @@ const AboutSection = () => {
 						className="order-1 lg:order-2"
 					>
 						<div className="relative max-w-lg mx-auto lg:max-w-none">
-							<div className="rounded-2xl overflow-hidden bg-secondary-light/60 border border-gray-100 aspect-[4/3] relative">
+							<div className="rounded-2xl overflow-hidden bg-secondary-light/60 border border-gray-100 aspect-4/3 relative">
 								<Image
 									src="/images/bnr1.png"
 									alt="Cylinder Masters"
@@ -82,7 +82,7 @@ const AboutSection = () => {
 									sizes="(max-width: 1024px) 100vw, 50vw"
 								/>
 							</div>
-							<div className="absolute -bottom-4 -right-2 md:-bottom-6 md:-right-6 bg-primary rounded-xl p-6 shadow-xl max-w-[280px] border border-primary-dark/20">
+							<div className="absolute -bottom-4 -right-2 md:-bottom-6 md:-right-6 bg-primary rounded-xl p-6 shadow-xl max-w-70 border border-primary-dark/20">
 								<h3 className="text-lg font-semibold text-white mb-2">
 									ISO Certified
 								</h3>

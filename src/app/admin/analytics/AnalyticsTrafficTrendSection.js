@@ -60,9 +60,9 @@ export default function AnalyticsTrafficTrendSection({ trends }) {
 								}`}
 							>
 								<span
-									className="h-2.5 w-2.5 rounded-full"
+									className="h-2.5 w-2.5 rounded-full chart-dot"
 									style={{
-										backgroundColor: on
+										"--dot-color": on
 											? SERIES[key].color
 											: "var(--color-gray-300)",
 									}}

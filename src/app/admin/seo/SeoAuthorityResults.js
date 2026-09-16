@@ -27,7 +27,7 @@ export default function SeoAuthorityResults({ data }) {
 							<span
 								className={`shrink-0 px-2 py-0.5 rounded-full text-xs font-medium ${
 									row.spamScore <= 5
-										? "bg-green-100 text-green-800"
+										? "bg-success-100 text-success-800"
 										: row.spamScore <= 30
 											? "bg-yellow-100 text-yellow-800"
 											: "bg-red-100 text-red-800"
@@ -84,8 +84,8 @@ function ScoreBar({ label, value }) {
 			<p className="text-2xl font-bold text-gray-900">{value ?? "—"}</p>
 			<div className="mt-1.5 h-1.5 rounded-full bg-gray-100 overflow-hidden">
 				<div
-					className="h-full rounded-full bg-accent"
-					style={{ width: `${Math.min(score, 100)}%` }}
+					className="h-full rounded-full bg-accent bar-fill"
+					style={{ "--bar-width": `${Math.min(score, 100)}%` }}
 				/>
 			</div>
 		</div>

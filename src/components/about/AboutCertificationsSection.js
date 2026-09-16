@@ -1,9 +1,9 @@
 "use client";
 
+import { UilAward, UilSearchPlus } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import Image from "next/image";
 import { FaCertificate } from "react-icons/fa";
-import { UilAward, UilSearchPlus } from "@iconscout/react-unicons";
 import PageSection from "@/components/layout/PageSection";
 import SectionHeader from "@/components/ui/SectionHeader";
 
@@ -74,7 +74,7 @@ export default function AboutCertificationsSection() {
 							className="object-cover transition-transform duration-500 group-hover:scale-105"
 						/>
 						<div
-							className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+							className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
 							aria-hidden
 						/>
 						<div
@@ -112,7 +112,7 @@ export default function AboutCertificationsSection() {
 							viewport={{ once: true, margin: "-30px" }}
 							transition={{ duration: 0.45, delay: (index + 1) * 0.06 }}
 						>
-							<div className="relative w-28 sm:w-32 flex-shrink-0 overflow-hidden">
+							<div className="relative w-28 sm:w-32 shrink-0 overflow-hidden">
 								<Image
 									src={cert.image}
 									alt={cert.alt}
@@ -123,7 +123,7 @@ export default function AboutCertificationsSection() {
 							</div>
 							<div className="p-5 flex-1 min-w-0">
 								<div className="flex items-center gap-3 mb-2">
-									<div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+									<div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
 										<cert.icon className="w-3.5 h-3.5" />
 									</div>
 									<h3 className="text-base font-semibold text-gray-900 leading-tight">

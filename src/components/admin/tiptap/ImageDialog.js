@@ -8,7 +8,10 @@ import {
 } from "@/lib/image-dialog-reducer";
 
 export default function ImageDialog({ isOpen, onClose, onConfirm }) {
-	const [state, dispatch] = useReducer(imageDialogReducer, initialImageDialogState);
+	const [state, dispatch] = useReducer(
+		imageDialogReducer,
+		initialImageDialogState,
+	);
 	const dragCounter = useRef(0);
 	const fileInputRef = useRef(null);
 
@@ -86,7 +89,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 	if (!isOpen) return null;
 
 	return (
-		<div className="fixed inset-0 z-[99999] flex items-center justify-center bg-gray-950 bg-opacity-50">
+		<div className="fixed inset-0 z-99999 flex items-center justify-center bg-gray-950/50">
 			<div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4 animate-fadeIn">
 				<div className="flex items-center justify-between mb-4">
 					<h3 className="text-lg font-semibold text-gray-900">Insert Image</h3>
@@ -197,9 +200,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 						aria-labelledby="image-url-label"
 						type="url"
 						value={state.url}
-						onChange={(e) =>
-							dispatch({ type: "SET_URL", url: e.target.value })
-						}
+						onChange={(e) => dispatch({ type: "SET_URL", url: e.target.value })}
 						placeholder="https://example.com/image.jpg"
 						className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
 					/>
@@ -218,9 +219,7 @@ export default function ImageDialog({ isOpen, onClose, onConfirm }) {
 						aria-labelledby="image-alt-label"
 						type="text"
 						value={state.alt}
-						onChange={(e) =>
-							dispatch({ type: "SET_ALT", alt: e.target.value })
-						}
+						onChange={(e) => dispatch({ type: "SET_ALT", alt: e.target.value })}
 						placeholder="Image description"
 						className="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
 					/>

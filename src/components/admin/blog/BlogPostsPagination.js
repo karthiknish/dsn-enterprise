@@ -60,10 +60,8 @@ export default function BlogPostsPagination({
 									type="button"
 									key={pageNum}
 									onClick={() => onPageChange(pageNum)}
-									aria-current={
-										currentPage === pageNum ? "page" : undefined
-									}
-									className={`relative inline-flex items-center justify-center min-w-[2.25rem] h-9 rounded-md px-3 text-sm font-medium focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors ${
+									aria-current={currentPage === pageNum ? "page" : undefined}
+									className={`relative inline-flex items-center justify-center min-w-9 h-9 rounded-md px-3 text-sm font-medium focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors ${
 										currentPage === pageNum
 											? "bg-primary text-white"
 											: "text-gray-600 hover:bg-gray-100"

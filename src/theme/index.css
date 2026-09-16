@@ -1,12 +1,25 @@
 /**
- * DSN Enterprises - Centralized Theme
- * All colors are defined here as CSS variables
- * No gradients - solid colors only
+ * DSN Enterprises — Centralized Theme (Tailwind v4)
+ *
+ * Two blocks, and the split is deliberate:
+ *
+ *   @theme  — the colours that should produce utilities. `--color-primary`
+ *             generates bg-/text-/border-primary, `--color-gray-700` generates
+ *             gray-700, and so on. Every one of these is emitted into :root as
+ *             a CSS variable as well, so the existing `var(--color-…)` uses in
+ *             arbitrary values keep resolving.
+ *
+ *   :root   — values that are read with `var()` but are not colour utilities:
+ *             the raw semantic scales that the palette aliases point at, the
+ *             border/twitter/chart colours, and the spacing reference values.
+ *
+ * `static` on @theme keeps every variable in the output even when no utility
+ * happens to use it, which is what makes the var() references safe.
+ *
+ * No gradients - solid colors only.
  */
 
-:root {
-	color-scheme: light;
-
+@theme static {
 	/* Primary Colors */
 	--color-primary: #374941;
 	--color-primary-light: #4a6257;
@@ -39,6 +52,44 @@
 		--color-primary-dark
 	); /* was #1f2937 slate, brand neutral */
 	--color-gray-900: #111827;
+	/* Only used for modal/overlay scrims, where the extra darkness is the point
+	   and gray-900 is visibly lighter. */
+	--color-gray-950: #030712;
+
+	/* Border (a utility name here, and var(--color-border) elsewhere) */
+	--color-border: #e5e7eb;
+
+	/* shadcn/ui component tokens.
+	   The components under src/components/ui were written against shadcn's
+	   naming (muted, ring, destructive, popover, card) and reference those
+	   tokens. They are declared here so the components work against this
+	   project's palette instead of silently generating no CSS. */
+	--color-muted: var(--color-gray-100);
+	--color-muted-foreground: var(--color-text-muted);
+	--color-ring: var(--color-accent);
+	--color-destructive: var(--color-error-600);
+	--color-destructive-foreground: #ffffff;
+	--color-popover: #ffffff;
+	--color-popover-foreground: var(--color-text-main);
+	--color-card: #ffffff;
+	--color-card-foreground: var(--color-text-main);
+	--color-primary-foreground: #ffffff;
+	--color-secondary-foreground: var(--color-primary-dark);
+	--color-accent-foreground: #ffffff;
+
+	/* Off-scale type sizes that are deliberate in dense admin tables. Declared
+	   as tokens rather than rounded up to text-xs, which would change the look. */
+	--text-2xs: 0.625rem; /* 10px */
+	--text-3xs: 0.6875rem; /* 11px */
+	--text-md: 0.9375rem; /* 15px */
+
+	/* Press feedback scales, used as `active:scale-98` / `group-hover:scale-102`. */
+	--scale-98: 98%;
+	--scale-99: 99%;
+	--scale-102: 102%;
+
+	/* Shared easing for entrance animations. */
+	--ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
 
 	/* Accent Colors — brand green (brand highlight, CTAs, links) */
 	--color-accent-50: #f0fdf4;
@@ -51,10 +102,9 @@
 	--color-accent-700: #15803d;
 	--color-accent-800: #166534;
 
-	/* Success Colors — genuine positive/confirmation states only
-	   (published badges, success banners, saved indicators). Kept
-	   separate from --color-accent so the brand highlight can be
-	   orange without success states losing their green convention. */
+	/* Success Colors — genuine positive/confirmation states only. Kept
+	   separate from --color-accent so the brand highlight can change without
+	   success states losing their green convention. */
 	--color-success-50: #f0fdf4;
 	--color-success-100: #dcfce7;
 	--color-success-200: #bbf7d0;
@@ -69,54 +119,83 @@
 	--color-background: #ffffff;
 	--color-foreground: #171717;
 
-	/* Border Colors */
-	--color-border: #e5e7eb;
-	--color-border-dark: var(--color-primary-dark);
-
-	/* Social Media Colors */
-	--color-twitter: #1da1f2;
-	--color-linkedin: #0a66c2;
-	--color-facebook: #1877f2;
-
 	/* Blog Accent */
 	--color-blog-accent: #16a34a;
 	--color-blog-accent-dark: #15803d;
 
 	/* Semantic Text Colors - Centralized for consistent usage */
-	/* Use these for all text styling across the application */
-
-	/* Main text colors - for headings, primary content */
-	--color-text-main: #111827; /* text-gray-900 equivalent - main headings */
+	--color-text-main: #111827; /* main headings */
 	--color-text-heading: var(--color-primary-dark); /* secondary headings */
-
-	/* Body text colors - for paragraphs, descriptions */
-	--color-text-body: #374151; /* text-gray-700 - primary body text */
-	--color-text-secondary: #4b5563; /* text-gray-600 - secondary body text */
-
-	/* Muted text colors - for meta info, placeholders */
-	--color-text-muted: #6b7280; /* text-gray-500 - muted text */
-	--color-text-placeholder: #9ca3af; /* text-gray-400 - placeholders */
-
-	/* Light text colors - for subtle elements */
-	--color-text-light: #d1d5db; /* text-gray-300 - light text on dark */
-	--color-text-lighter: #e5e7eb; /* text-gray-200 - very light text on dark */
-
-	/* Special purpose text colors */
+	--color-text-body: #374151; /* primary body text */
+	--color-text-secondary: #4b5563; /* secondary body text */
+	--color-text-muted: #6b7280; /* muted text */
+	--color-text-placeholder: #9ca3af; /* placeholders */
+	--color-text-light: #d1d5db; /* light text on dark */
+	--color-text-lighter: #e5e7eb; /* very light text on dark */
 	--color-text-on-primary: #ffffff; /* white text on primary/dark backgrounds */
 	--color-text-on-light: #111827; /* dark text on light/white backgrounds */
 	--color-text-link: var(--color-accent);
 	--color-text-link-hover: var(--color-accent-dark);
+	--color-text-success: #16a34a;
+	--color-text-error: #dc2626;
+	--color-text-warning: #f59e0b;
 
-	/* Semantic state text colors */
-	--color-text-success: #16a34a; /* green for success messages */
-	--color-text-error: #dc2626; /* red for error messages */
-	--color-text-warning: #f59e0b; /* amber for warnings */
+	/* Teal slot, same tokens as success green */
+	--color-teal-50: var(--color-success-50);
+	--color-teal-100: var(--color-success-100);
+	--color-teal-300: var(--color-success-200);
+	--color-teal-400: var(--color-success-400);
+	--color-teal-600: var(--color-success);
+	--color-teal-800: var(--color-success-800);
 
-	/* Admin */
-	--color-admin-bg: #fafaf9;
-	--color-admin-border: #e5e7eb;
+	/* Green / Orange accents */
+	--color-success-50: #f0fdf4;
+	--color-success: #16a34a;
+	--color-orange-50: #fff7ed;
+	--color-orange-600: #ea580c;
 
-	/* Destructive, maps Tailwind `red-*` utilities to tokens */
+	/* Palette aliases.
+	   In v3 these were remapped in tailwind.config.js, so `red-500` meant the
+	   project's error red rather than Tailwind's. v4 has no config to remap, so
+	   the alias is expressed here instead: the utility name stays `red-*` and
+	   the value stays the project token. The raw scales live in :root below. */
+	--color-red-50: var(--color-error-50);
+	--color-red-100: var(--color-error-100);
+	--color-red-200: var(--color-error-200);
+	--color-red-300: var(--color-error-300);
+	--color-red-400: var(--color-error-400);
+	--color-red-500: var(--color-error-500);
+	--color-red-600: var(--color-error-600);
+	--color-red-700: var(--color-error-700);
+	--color-red-800: var(--color-error-800);
+
+	--color-yellow-50: var(--color-warning-50);
+	--color-yellow-100: var(--color-warning-100);
+	--color-yellow-400: var(--color-warning-400);
+	--color-yellow-600: var(--color-warning-600);
+	--color-yellow-700: var(--color-warning-700);
+	--color-yellow-800: var(--color-warning-800);
+
+	--color-blue-50: var(--color-info-50);
+	--color-blue-400: var(--color-info-400);
+	--color-blue-500: var(--color-info-500);
+	--color-blue-600: var(--color-info-600);
+	--color-blue-700: var(--color-info-700);
+
+	--color-purple-50: var(--color-ai-50);
+	--color-purple-100: var(--color-ai-100);
+	--color-purple-200: var(--color-ai-200);
+	--color-purple-300: var(--color-ai-300);
+	--color-purple-500: var(--color-ai-500);
+	--color-purple-600: var(--color-ai-600);
+	--color-purple-700: var(--color-ai-700);
+	--color-purple-800: var(--color-ai-800);
+}
+
+:root {
+	color-scheme: light;
+
+	/* Destructive scale, aliased to `red-*` above */
 	--color-error-50: #fef2f2;
 	--color-error-100: #fee2e2;
 	--color-error-200: #fecaca;
@@ -127,7 +206,7 @@
 	--color-error-700: #b91c1c;
 	--color-error-800: #991b1b;
 
-	/* Warning, maps `yellow-*` */
+	/* Warning scale, aliased to `yellow-*` above */
 	--color-warning-50: #fefce8;
 	--color-warning-100: #fef9c3;
 	--color-warning-400: #facc15;
@@ -135,14 +214,14 @@
 	--color-warning-700: #a16207;
 	--color-warning-800: #854d0e;
 
-	/* Info, maps `blue-*`; aligned with the success green (not the brand accent) */
+	/* Info scale, aliased to `blue-*` above */
 	--color-info-50: var(--color-success-50);
 	--color-info-400: var(--color-success-400);
 	--color-info-500: var(--color-success-500);
 	--color-info-600: var(--color-success);
 	--color-info-700: var(--color-success-dark);
 
-	/* AI / feature purple, maps `purple-*` */
+	/* AI / feature scale, aliased to `purple-*` above */
 	--color-ai-50: #faf5ff;
 	--color-ai-100: #f3e8ff;
 	--color-ai-200: #e9d5ff;
@@ -152,34 +231,32 @@
 	--color-ai-700: #7e22ce;
 	--color-ai-800: #6b21a8;
 
-	/* Teal slot, maps `teal-*`; same tokens as success green */
-	--color-teal-50: var(--color-success-50);
-	--color-teal-100: var(--color-success-100);
-	--color-teal-300: var(--color-success-200);
-	--color-teal-400: var(--color-success-400);
-	--color-teal-600: var(--color-success);
-	--color-teal-800: var(--color-success-800);
+	/* Border Colors — --color-border itself is a @theme token above; only the
+	   dark variant is var()-only. */
+	--color-border-dark: var(--color-primary-dark);
 
-	/* Green, maps `green-*` (aligned with accent for UI consistency) */
-	--color-green-50: #f0fdf4;
-	--color-green-600: #16a34a;
+	/* Social Media Colors (referenced with var() in share links) */
+	--color-twitter: #1da1f2;
+	--color-linkedin: #0a66c2;
+	--color-facebook: #1877f2;
 
-	/* Orange, maps `orange-*` (e.g. metric accents) */
-	--color-orange-50: #fff7ed;
-	--color-orange-600: #ea580c;
+	/* Admin */
+	--color-admin-bg: #fafaf9;
+	--color-admin-border: #e5e7eb;
 
 	/* Rich text editor, table cell selection highlight (TipTap) */
 	--color-editor-selected-cell: var(--color-accent-200);
 
-	/* Emerald slot, keep Tailwind token; success green */
-	--color-emerald-500: var(--color-success-500);
+	/* Emerald slot. Deliberately NOT a @theme colour: v3 did not expose it, so
+	   `emerald-*` utilities resolve to Tailwind's own scale. */
+	--color-success-500: var(--color-success-500);
 
 	/* Charts (SVG attributes; not all have Tailwind classes) */
 	--color-chart-line-users: var(--color-accent-500);
 	--color-chart-line-sessions: var(--color-accent-800);
 	--color-chart-grid: var(--color-gray-100);
 
-	/* Spacing Scale (for reference) */
+	/* Spacing Scale (for reference; not utility-generating in v3 either) */
 	--spacing-xs: 0.25rem;
 	--spacing-sm: 0.5rem;
 	--spacing-md: 1rem;
@@ -187,4 +264,3 @@
 	--spacing-xl: 2rem;
 	--spacing-2xl: 3rem;
 }
-

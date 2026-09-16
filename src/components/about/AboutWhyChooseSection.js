@@ -1,8 +1,8 @@
 "use client";
 
+import { UilAward, UilGlobe, UilUsersAlt } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import { FaIndustry } from "react-icons/fa";
-import { UilUsersAlt, UilGlobe, UilAward } from "@iconscout/react-unicons";
 import PageSection from "@/components/layout/PageSection";
 import SectionHeader from "@/components/ui/SectionHeader";
 
@@ -86,7 +86,7 @@ export default function AboutWhyChooseSection() {
 							viewport={{ once: true, margin: "-30px" }}
 							transition={{ duration: 0.45, delay: (index + 1) * 0.06 }}
 						>
-							<div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+							<div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
 								<reason.icon className="w-5 h-5" />
 							</div>
 							<div>

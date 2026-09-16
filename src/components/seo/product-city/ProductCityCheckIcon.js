@@ -2,7 +2,7 @@ export default function ProductCityCheckIcon() {
 	return (
 		<svg
 			aria-hidden="true"
-			className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0"
+			className="w-5 h-5 text-accent mr-2 mt-0.5 shrink-0"
 			fill="currentColor"
 			viewBox="0 0 20 20"
 		>

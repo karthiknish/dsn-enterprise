@@ -160,7 +160,7 @@ export function useContactPageForm({ prefillProduct = "" } = {}) {
 			trackValidationErrors(allErrors);
 			setSubmitError(true);
 			setErrorMessage("Please fix the errors in the form before submitting.");
-			const firstErrorField = document.querySelector(".field-error");
+			const firstErrorField = document.querySelector("[data-field-error]");
 			if (firstErrorField) {
 				firstErrorField.scrollIntoView({ behavior: "smooth", block: "center" });
 			}

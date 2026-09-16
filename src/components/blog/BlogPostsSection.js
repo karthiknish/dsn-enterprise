@@ -206,12 +206,12 @@ export default async function BlogPostsSection({
 							We&apos;re having trouble connecting to our blog. Please try again
 							in a moment.
 						</p>
-						<a
+						<Link
 							href="/blog"
 							className="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-2.5 px-6 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
 						>
 							Try again
-						</a>
+						</Link>
 					</EmptyState>
 				</div>
 			) : posts.length === 0 && !searchQuery ? (

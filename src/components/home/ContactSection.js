@@ -128,7 +128,7 @@ const ContactSection = () => {
 			className="scroll-mt-24 py-20 md:py-24 bg-secondary-light relative"
 		>
 			<div
-				className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+				className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"
 				aria-hidden
 			/>
 			<div className="container mx-auto px-4 max-w-5xl">

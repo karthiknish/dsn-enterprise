@@ -20,7 +20,7 @@ function CheckIcon() {
 	return (
 		<svg
 			aria-hidden="true"
-			className="w-5 h-5 text-accent mr-2 mt-0.5 flex-shrink-0"
+			className="w-5 h-5 text-accent mr-2 mt-0.5 shrink-0"
 			fill="currentColor"
 			viewBox="0 0 20 20"
 		>
@@ -112,7 +112,7 @@ export default function ServiceCityLanding({
 						</div>
 
 						<div className="lg:col-span-5">
-							<div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-white/10 border border-white/15 backdrop-blur-sm">
+							<div className="relative aspect-4/3 rounded-2xl overflow-hidden bg-white/10 border border-white/15 backdrop-blur-sm">
 								<Image
 									src={heroImage.src}
 									alt={`${heroImage.alt} – ${pageData.serviceName} for ${pageData.cityName}`}
@@ -242,7 +242,7 @@ export default function ServiceCityLanding({
 							</div>
 						</div>
 
-						<div className="bg-gradient-to-br from-primary to-primary-dark rounded-xl p-8 text-white">
+						<div className="bg-linear-to-br from-primary to-primary-dark rounded-xl p-8 text-white">
 							<h2 className="text-xl font-semibold mb-6">
 								Why DSN Enterprises
 							</h2>

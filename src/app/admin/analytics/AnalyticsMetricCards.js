@@ -108,7 +108,7 @@ function DeltaBadge({ change, goodWhenUp, comparisonLabel }) {
 	const classes = flat
 		? "bg-gray-100 text-gray-600"
 		: positive
-			? "bg-green-50 text-green-600"
+			? "bg-success-50 text-success"
 			: "bg-red-50 text-red-600";
 
 	return (
@@ -177,7 +177,7 @@ export default function AnalyticsMetricCards({ metrics, days }) {
 						>
 							<div className="flex items-center gap-2 text-gray-500">
 								<Icon className="h-3.5 w-3.5" aria-hidden />
-								<span className="text-[11px] font-semibold uppercase tracking-wide">
+								<span className="text-3xs font-semibold uppercase tracking-wide">
 									{card.name}
 								</span>
 							</div>

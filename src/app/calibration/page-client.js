@@ -231,7 +231,7 @@ export default function CalibrationPage() {
 							</p>
 							<Link
 								href="/contact?service=Calibration"
-								className="mt-8 inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-[0.98]"
+								className="mt-8 inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 hover:shadow-md active:scale-98"
 							>
 								Request Calibration
 							</Link>
@@ -267,7 +267,7 @@ export default function CalibrationPage() {
 									<ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
 										{service.features.map((feature) => (
 											<li key={feature} className="flex items-start text-sm">
-												<span className="flex-shrink-0 w-5 h-5 rounded-full bg-accent-50 flex items-center justify-center mr-3 mt-0.5">
+												<span className="shrink-0 w-5 h-5 rounded-full bg-accent-50 flex items-center justify-center mr-3 mt-0.5">
 													<UilCheck
 														className="text-accent w-3 h-3"
 														aria-hidden
@@ -285,7 +285,7 @@ export default function CalibrationPage() {
 			</section>
 
 			{/* Gradient accent divider */}
-			<div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+			<div className="h-px bg-linear-to-r from-transparent via-primary/20 to-transparent" />
 
 			{/* Calibration Capabilities */}
 			<section className="py-20 md:py-28 bg-surface-subtle">
@@ -379,7 +379,7 @@ export default function CalibrationPage() {
 			</section>
 
 			{/* Gradient accent divider */}
-			<div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+			<div className="h-px bg-linear-to-r from-transparent via-primary/20 to-transparent" />
 
 			{/* Process */}
 			<section className="py-20 md:py-28 bg-white">
@@ -422,7 +422,7 @@ export default function CalibrationPage() {
 										className="flex items-start gap-6 group"
 									>
 										{/* Numbered step circle */}
-										<div className="relative flex-shrink-0 z-10">
+										<div className="relative shrink-0 z-10">
 											<div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
 												{step.step}
 											</div>
@@ -446,7 +446,7 @@ export default function CalibrationPage() {
 			</section>
 
 			{/* Gradient accent divider */}
-			<div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+			<div className="h-px bg-linear-to-r from-transparent via-primary/20 to-transparent" />
 
 			{/* Benefits, asymmetric bento layout */}
 			<section className="py-20 md:py-28 bg-surface-subtle">

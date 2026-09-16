@@ -25,11 +25,10 @@ export default function Tooltip({ children, content }) {
 		>
 			{children}
 			<div
-				className="fixed px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity duration-200 z-[99999] shadow-lg"
+				className="fixed floating-panel px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity duration-200 z-99999 shadow-lg -translate-x-1/2 -translate-y-full"
 				style={{
-					top: `${position.top}px`,
-					left: `${position.left}px`,
-					transform: "translate(-50%, -100%)",
+					"--float-y": `${position.top}px`,
+					"--float-x": `${position.left}px`,
 				}}
 			>
 				{content}

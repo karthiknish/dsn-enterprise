@@ -25,7 +25,7 @@ export default function AnalyticsReferrersTable({ referrers = [] }) {
 			<div className="overflow-x-auto">
 				<Table>
 					<TableHeader>
-						<TableRow className="border-b border-gray-200 hover:bg-transparent">
+						<TableRow className="border-gray-200 hover:bg-transparent">
 							<TableHead className="text-xs uppercase tracking-wide text-gray-500">
 								Source / Medium
 							</TableHead>
@@ -47,7 +47,7 @@ export default function AnalyticsReferrersTable({ referrers = [] }) {
 									}`}
 								>
 									<TableCell
-										className="max-w-[240px] px-4 py-3 text-sm font-medium text-gray-900"
+										className="max-w-60 px-4 py-3 text-sm font-medium text-gray-900"
 										title={row.label}
 									>
 										{(() => {
@@ -84,13 +84,13 @@ export default function AnalyticsReferrersTable({ referrers = [] }) {
 											<div className="mt-1 flex items-center gap-2">
 												<div className="h-1 w-16 rounded-full bg-gray-100">
 													<div
-														className="h-1 rounded-full bg-accent"
+														className="h-1 rounded-full bg-accent bar-fill"
 														style={{
-															width: `${Math.min(100, row.share || 0)}%`,
+															"--bar-width": `${Math.min(100, row.share || 0)}%`,
 														}}
 													/>
 												</div>
-												<span className="text-[10px] tabular-nums text-gray-400">
+												<span className="text-2xs tabular-nums text-gray-400">
 													{(row.share || 0).toFixed(1)}%
 												</span>
 											</div>

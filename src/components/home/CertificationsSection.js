@@ -58,7 +58,7 @@ const CertificationsSection = () => {
 								src={featured.image}
 								alt={featured.name}
 								fill
-								className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+								className="object-cover transition-transform duration-500 group-hover:scale-102"
 								sizes="(max-width: 768px) 100vw, 50vw"
 							/>
 						</div>
@@ -96,7 +96,7 @@ const CertificationsSection = () => {
 										className="relative shrink-0 h-24 w-20 rounded-lg bg-secondary-light/40 flex flex-col items-center justify-center gap-1.5 text-primary hover:text-accent transition-colors"
 									>
 										<UilDownloadAlt className="w-5 h-5" aria-hidden />
-										<span className="text-[10px] font-semibold uppercase tracking-wide">
+										<span className="text-2xs font-semibold uppercase tracking-wide">
 											PDF
 										</span>
 									</a>

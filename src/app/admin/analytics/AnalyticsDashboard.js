@@ -120,7 +120,7 @@ export default function AnalyticsDashboard({ initialPeriod = "30d" }) {
 						{/* GA4 returning no rows is not the same as a quiet site. Saying so
 						    prevents a disconnected property from reading as real zeros. */}
 						{noData && (
-							<div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
+							<div className="rounded-2xl border border-yellow-100 bg-yellow-50 p-4 text-yellow-800">
 								<p className="mb-1 font-semibold">
 									No analytics data for this period
 								</p>

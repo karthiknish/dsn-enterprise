@@ -29,7 +29,7 @@ export default function PostFaq({ faqs }) {
 							<span>{faq.question}</span>
 							<span
 								aria-hidden
-								className="mt-1 flex-shrink-0 text-gray-400 transition-transform group-open:rotate-45"
+								className="mt-1 shrink-0 text-gray-400 transition-transform group-open:rotate-45"
 							>
 								+
 							</span>

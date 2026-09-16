@@ -6,28 +6,6 @@ import { cn } from "@/lib/utils.js";
 function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
 	return (
 		<div>
-			<style>{`
-        .rdp-weekday { color: var(--color-gray-700) !important; font-weight: 600 !important; font-size: 0.875rem !important; }
-        .rdp-day { color: var(--color-gray-900) !important; border-radius: 50% !important; }
-        .rdp-day:hover { background-color: var(--color-accent-50) !important; }
-        .rdp-day[data-selected] { background-color: var(--color-accent) !important; color: var(--color-white) !important; font-weight: 600 !important; }
-        .rdp-day.rdp-selected { background-color: var(--color-accent) !important; color: var(--color-white) !important; font-weight: 600 !important; }
-        .rdp-day.rdp-today { color: var(--color-accent-dark) !important; font-weight: 600 !important; }
-        .rdp-day.rdp-today[data-selected] { background-color: var(--color-accent) !important; color: var(--color-white) !important; }
-        .rdp-day.rdp-outside { color: var(--color-text-light) !important; }
-        .rdp-day.rdp-disabled { color: var(--color-border) !important; }
-        .rdp-nav_button { color: var(--color-gray-700) !important; background-color: var(--color-white) !important; }
-        .rdp-nav_button:hover { color: var(--color-gray-900) !important; background-color: var(--color-gray-100) !important; }
-        .rdp-caption_label { color: var(--color-gray-900) !important; font-weight: 600 !important; }
-        .rdp-dropdown { color: var(--color-gray-700) !important; background-color: var(--color-white) !important; border: 1px solid var(--color-border) !important; border-radius: 0.375rem !important; padding: 0.25rem 0.5rem !important; font-size: 0.875rem !important; }
-        .rdp-dropdown:hover { background-color: var(--color-gray-50) !important; }
-        .rdp-dropdowns { display: flex !important; gap: 0.5rem !important; }
-        .rdp-dropdown_year { width: 5rem !important; }
-        .rdp-dropdown_month { width: 7rem !important; }
-        .rdp-dropdown_icon { display: none !important; }
-        .rdp-cell { outline: 1px solid var(--color-border) !important; }
-        .rdp-table { outline: 1px solid var(--color-border) !important; }
-      `}</style>
 			<DayPicker
 				showOutsideDays={showOutsideDays}
 				className={cn("text-sm", className)}
@@ -52,10 +30,13 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
 					day: cn(
 						"h-10 w-10 p-0 font-normal text-gray-900 hover:bg-accent-50 rounded-full transition-colors cursor-pointer flex items-center justify-center",
 					),
-					range_end: "range-end",
 					selected: "bg-accent text-white hover:bg-accent-700",
 					today: "bg-accent-50 text-accent-700 font-medium",
 					outside: "text-gray-300 opacity-50",
+					// Passed straight to react-day-picker as its classNames hook,
+					// not a Tailwind class.
+					// eslint-disable-next-line shadcn/no-unknown-classes
+					range_end: "range-end",
 					disabled: "text-gray-300 opacity-50 cursor-not-allowed",
 					range_middle: "bg-gray-100",
 					hidden: "invisible",

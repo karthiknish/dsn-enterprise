@@ -86,7 +86,7 @@ export default function AboutManufacturingSection() {
 							{step.bullets.map((bullet) => (
 								<li key={bullet} className="flex items-start gap-3">
 									<span
-										className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent/50 flex-shrink-0"
+										className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent/50 shrink-0"
 										aria-hidden
 									/>
 									<span className="text-sm text-gray-700">{bullet}</span>

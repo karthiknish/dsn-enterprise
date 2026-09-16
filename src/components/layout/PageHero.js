@@ -23,11 +23,11 @@ export default function PageHero({
 	return (
 		<section className="relative bg-primary text-white py-16 md:py-20 overflow-hidden">
 			<div
-				className="absolute inset-0 opacity-[0.06] pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] bg-[size:40px_40px]"
+				className="absolute inset-0 opacity-6 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] bg-[size:40px_40px]"
 				aria-hidden
 			/>
 			<div
-				className="absolute inset-0 bg-gradient-to-br from-primary-dark/50 via-transparent to-black/20 pointer-events-none"
+				className="absolute inset-0 bg-linear-to-br from-primary-dark/50 via-transparent to-black/20 pointer-events-none"
 				aria-hidden
 			/>
 			<div
@@ -96,7 +96,7 @@ export default function PageHero({
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, delay: 0.15 }}
 					>
-						<div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-white/10 border border-white/15 backdrop-blur-sm">
+						<div className="relative aspect-4/3 rounded-2xl overflow-hidden bg-white/10 border border-white/15 backdrop-blur-sm">
 							<Image
 								src={image.src}
 								alt={image.alt}

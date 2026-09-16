@@ -12,8 +12,8 @@ export default function SeoRankResults({ data }) {
 			<div
 				className={`rounded-xl border p-5 ${
 					found
-						? "bg-green-50 border-green-200"
-						: "bg-yellow-50 border-yellow-200"
+						? "bg-success-50 border-success-200"
+						: "bg-yellow-50 border-yellow-100"
 				}`}
 			>
 				<div className="flex flex-wrap items-center justify-between gap-4">
@@ -22,7 +22,7 @@ export default function SeoRankResults({ data }) {
 							“{data.keyword}” · {data.domain}
 						</p>
 						<p
-							className={`mt-1 text-2xl font-bold ${found ? "text-green-800" : "text-yellow-800"}`}
+							className={`mt-1 text-2xl font-bold ${found ? "text-success-800" : "text-yellow-800"}`}
 						>
 							{found
 								? `Position #${data.position}`
@@ -33,7 +33,7 @@ export default function SeoRankResults({ data }) {
 								href={data.rankingUrl}
 								target="_blank"
 								rel="noreferrer"
-								className="mt-1 inline-flex items-center gap-1 text-sm text-green-800 underline underline-offset-2 break-all"
+								className="mt-1 inline-flex items-center gap-1 text-sm text-success-800 underline underline-offset-2 break-all"
 							>
 								{data.rankingUrl}
 								<ExternalLink className="w-3.5 h-3.5 shrink-0" aria-hidden />
@@ -64,7 +64,7 @@ export default function SeoRankResults({ data }) {
 						{data.serpFeatures.map((feature) => (
 							<span
 								key={feature}
-								className="px-2 py-0.5 text-[11px] rounded-full bg-white/70 border border-gray-200 text-gray-600"
+								className="px-2 py-0.5 text-3xs rounded-full bg-white/70 border border-gray-200 text-gray-600"
 							>
 								{feature.replace(/_/g, " ")}
 							</span>
@@ -81,12 +81,12 @@ export default function SeoRankResults({ data }) {
 					{data.results.map((item) => (
 						<li
 							key={`${item.position}-${item.url}`}
-							className={`px-5 py-3.5 flex gap-4 ${item.isTarget ? "bg-green-50/60" : ""}`}
+							className={`px-5 py-3.5 flex gap-4 ${item.isTarget ? "bg-success-50/60" : ""}`}
 						>
 							<span
 								className={`shrink-0 w-8 h-8 rounded-lg grid place-items-center text-sm font-semibold ${
 									item.isTarget
-										? "bg-green-600 text-white"
+										? "bg-success text-white"
 										: "bg-gray-100 text-gray-600"
 								}`}
 							>

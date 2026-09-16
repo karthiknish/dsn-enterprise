@@ -130,7 +130,7 @@ export default function SeoDashboard() {
 			</div>
 
 			{notConfigured && (
-				<div className="rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-yellow-900">
+				<div className="rounded-xl border border-yellow-100 bg-yellow-50 p-4 text-yellow-800">
 					<p className="font-medium flex items-center gap-2">
 						<AlertTriangle className="w-4 h-4" aria-hidden />
 						treg is not configured

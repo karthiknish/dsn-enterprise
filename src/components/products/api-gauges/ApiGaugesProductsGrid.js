@@ -1,9 +1,9 @@
 "use client";
 
+import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { UilArrowRight, UilCheck } from "@iconscout/react-unicons";
 import { products } from "@/content/api-gauges-data";
 
 export default function ApiGaugesProductsGrid() {
@@ -46,7 +46,9 @@ export default function ApiGaugesProductsGrid() {
 								<p className="text-primary font-medium mb-3 text-sm">
 									{product.specs}
 								</p>
-								<p className="text-gray-700 text-sm mb-4">{product.description}</p>
+								<p className="text-gray-700 text-sm mb-4">
+									{product.description}
+								</p>
 
 								<div className="mb-4">
 									<h4 className="font-semibold text-gray-900 mb-2 text-sm">
@@ -55,7 +57,7 @@ export default function ApiGaugesProductsGrid() {
 									<ul className="space-y-1">
 										{product.features.slice(0, 3).map((feature) => (
 											<li key={feature} className="flex items-start text-sm">
-												<UilCheck className="w-3.5 h-3.5 text-primary mt-1 mr-2 flex-shrink-0" />
+												<UilCheck className="w-3.5 h-3.5 text-primary mt-1 mr-2 shrink-0" />
 												<span className="text-gray-600">{feature}</span>
 											</li>
 										))}

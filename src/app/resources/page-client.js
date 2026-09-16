@@ -175,20 +175,20 @@ const standardsInfo = [
 function FileIcon({ type }) {
 	if (type === "Online") {
 		return (
-			<div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+			<div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
 				<UilBookAlt className="text-blue-600 text-lg" />
 			</div>
 		);
 	}
 	if (type === "Excel") {
 		return (
-			<div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
-				<FaFileExcel className="text-green-600 text-lg" />
+			<div className="w-10 h-10 rounded-xl bg-success-50 flex items-center justify-center shrink-0">
+				<FaFileExcel className="text-success text-lg" />
 			</div>
 		);
 	}
 	return (
-		<div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
+		<div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center shrink-0">
 			<FaFilePdf className="text-red-600 text-lg" />
 		</div>
 	);
@@ -209,7 +209,7 @@ const sectionVariants = {
  * than undefined ones.
  */
 const BADGE_CLASS = {
-	Excel: "bg-green-50 text-green-700",
+	Excel: "bg-success-50 text-success-700",
 	Online: "bg-blue-50 text-blue-700",
 	default: "bg-red-50 text-red-700",
 };
@@ -245,7 +245,7 @@ export default function ResourcesPage() {
 			{/* Download Catalogues & Technical Resources */}
 			<section className="py-20 md:py-28 bg-white relative">
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">
@@ -269,7 +269,7 @@ export default function ResourcesPage() {
 								gauges with confidence.
 							</p>
 							<div
-								className="mt-6 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent max-w-xs mx-auto"
+								className="mt-6 h-px bg-linear-to-r from-transparent via-accent/20 to-transparent max-w-xs mx-auto"
 								aria-hidden
 							/>
 						</m.div>
@@ -286,7 +286,7 @@ export default function ResourcesPage() {
 							>
 								{/* Category Header */}
 								<div className="flex items-center gap-4 mb-6">
-									<div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+									<div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
 										<category.icon className="w-6 h-6 text-primary" />
 									</div>
 									<div>
@@ -323,16 +323,16 @@ export default function ResourcesPage() {
 													<div className="flex items-center justify-between gap-2">
 														<div className="flex items-center gap-2 flex-wrap">
 															<span
-																className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-medium leading-relaxed ${
+																className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-3xs font-medium leading-relaxed ${
 																	BADGE_CLASS[item.type] ?? BADGE_CLASS.default
 																}`}
 															>
 																{item.type === "Excel" ? (
-																	<FaFileExcel className="text-[10px]" />
+																	<FaFileExcel className="text-2xs" />
 																) : item.type === "Online" ? (
-																	<UilBookAlt className="text-[10px]" />
+																	<UilBookAlt className="text-2xs" />
 																) : (
-																	<FaFilePdf className="text-[10px]" />
+																	<FaFilePdf className="text-2xs" />
 																)}
 																{item.type}
 															</span>
@@ -342,7 +342,7 @@ export default function ResourcesPage() {
 														</div>
 														<Link
 															href={item.href ?? "/contact?request=download"}
-															className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors flex-shrink-0 group/link"
+															className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-dark transition-colors shrink-0 group/link"
 														>
 															<span>{item.href ? "Open" : "Request"}</span>
 															<UilArrowRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform" />
@@ -362,7 +362,7 @@ export default function ResourcesPage() {
 			{/* Standards Reference */}
 			<section className="py-20 md:py-28 bg-secondary-light relative">
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/10 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">
@@ -414,7 +414,7 @@ export default function ResourcesPage() {
 											<ul className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-text-body">
 												{standard.items.map((item) => (
 													<li key={item} className="flex items-start gap-2.5">
-														<span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+														<span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
 														<span className="leading-relaxed">{item}</span>
 													</li>
 												))}
@@ -431,7 +431,7 @@ export default function ResourcesPage() {
 			{/* Industry Resources */}
 			<section className="py-20 md:py-28 bg-white relative">
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"
 					aria-hidden
 				/>
 				<div className="container mx-auto px-4">

@@ -4,7 +4,7 @@ import BlogAiActionButton from "./BlogAiActionButton";
 const TiptapEditor = dynamic(() => import("@/components/admin/TiptapEditor"), {
 	ssr: false,
 	loading: () => (
-		<div className="border border-gray-300 rounded-lg p-4 bg-gray-50 min-h-[300px] flex items-center justify-center">
+		<div className="border border-gray-300 rounded-lg p-4 bg-gray-50 min-h-75 flex items-center justify-center">
 			<div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 border-t-accent" />
 		</div>
 	),
@@ -34,7 +34,7 @@ export default function BlogPostContentSection({
 			</div>
 			<fieldset className="border-0 p-0 m-0 min-w-0">
 				<legend className="sr-only">Post content</legend>
-				<div className="prose-editor font-normal">
+				<div className="prose font-normal">
 					<TiptapEditor
 						key={editorKey}
 						content={content}

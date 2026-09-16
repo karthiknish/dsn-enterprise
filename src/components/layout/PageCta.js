@@ -19,7 +19,7 @@ export default function PageCta({
 			aria-labelledby="page-cta-heading"
 		>
 			<div
-				className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/15 to-transparent"
+				className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/15 to-transparent"
 				aria-hidden
 			/>
 			<div className="container mx-auto px-4 text-center">

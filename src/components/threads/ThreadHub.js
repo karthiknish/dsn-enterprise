@@ -241,7 +241,7 @@ export default function ThreadHub() {
 					</section>
 				)}
 
-				<section className="rounded-xl bg-gradient-to-br from-primary to-primary-dark p-8 text-white">
+				<section className="rounded-xl bg-linear-to-br from-primary to-primary-dark p-8 text-white">
 					<h2 className="text-xl font-semibold mb-3">
 						Need these threads gauged instead?
 					</h2>

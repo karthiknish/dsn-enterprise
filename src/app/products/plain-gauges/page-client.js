@@ -154,10 +154,10 @@ export default function PlainGaugesPage() {
 						</h2>
 						<p className="text-lg text-gray-700 mb-6">
 							A plain gauge is a GO/NO-GO limit gauge for a cylindrical hole or
-							shaft — plug, ring, or snap — that gives a pass/fail result without
-							a measured reading. Shops use them for production acceptance and
-							incoming inspection when a comparator would be slower than the
-							line.
+							shaft — plug, ring, or snap — that gives a pass/fail result
+							without a measured reading. Shops use them for production
+							acceptance and incoming inspection when a comparator would be
+							slower than the line.
 						</p>
 						<p className="text-lg text-gray-700 mb-6">
 							DSN Enterprises is a plain gauge manufacturer in Coimbatore. We
@@ -219,7 +219,7 @@ export default function PlainGaugesPage() {
 								transition={{ duration: 0.5, delay: index * 0.1 }}
 							>
 								<div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-									<div className="relative h-64 lg:h-auto min-h-[16rem] bg-gray-100 flex items-center justify-center p-8">
+									<div className="relative h-64 lg:h-auto min-h-64 bg-gray-100 flex items-center justify-center p-8">
 										<Image
 											src={product.image}
 											alt={product.name}
@@ -247,7 +247,7 @@ export default function PlainGaugesPage() {
 														key={feature}
 														className="flex items-start text-sm"
 													>
-														<UilCheck className="w-4 h-4 text-primary mt-1 mr-2 flex-shrink-0" />
+														<UilCheck className="w-4 h-4 text-primary mt-1 mr-2 shrink-0" />
 														<span className="text-gray-600">{feature}</span>
 													</li>
 												))}

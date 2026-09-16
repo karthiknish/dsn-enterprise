@@ -21,7 +21,7 @@ export default function PageSection({
 		>
 			{bordered && (
 				<div
-					className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+					className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-gray-200 to-transparent"
 					aria-hidden
 				/>
 			)}

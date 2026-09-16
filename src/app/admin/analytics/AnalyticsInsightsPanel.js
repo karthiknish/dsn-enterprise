@@ -116,7 +116,7 @@ function buildInsights(data) {
 }
 
 const TONES = {
-	good: "bg-green-50 text-green-600 border-green-100",
+	good: "bg-success-50 text-success border-success-100",
 	bad: "bg-red-50 text-red-600 border-red-100",
 	neutral: "bg-accent-50 text-accent-700 border-accent-100",
 };
@@ -133,7 +133,7 @@ export default function AnalyticsInsightsPanel({ data }) {
 				<div>
 					<h2 className="text-base font-semibold text-gray-900">Insights</h2>
 					<p className="text-sm text-gray-500">
-						Derived from this period's figures
+						Derived from this period&apos;s figures
 					</p>
 				</div>
 			</div>
@@ -147,7 +147,7 @@ export default function AnalyticsInsightsPanel({ data }) {
 					{insights.map((insight, index) => (
 						<li key={insight.title} className="flex gap-3 px-6 py-4">
 							<span
-								className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold ${TONES[insight.tone]}`}
+								className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-3xs font-bold ${TONES[insight.tone]}`}
 							>
 								{index + 1}
 							</span>

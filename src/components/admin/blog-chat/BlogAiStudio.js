@@ -68,7 +68,7 @@ export default function BlogAiStudio({ postContext, onApplyDraft }) {
 
 			<div
 				ref={scrollRef}
-				className="px-5 py-4 space-y-3 max-h-[28rem] overflow-y-auto"
+				className="px-5 py-4 space-y-3 max-h-112 overflow-y-auto"
 			>
 				{empty && (
 					<div className="py-2">

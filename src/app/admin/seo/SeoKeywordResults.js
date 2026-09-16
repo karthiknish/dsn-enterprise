@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { formatNumber } from "./seo-constants";
 
 const COMPETITION_STYLES = {
-	LOW: "bg-green-100 text-green-800",
+	LOW: "bg-success-100 text-success-800",
 	MEDIUM: "bg-yellow-100 text-yellow-800",
 	HIGH: "bg-red-100 text-red-800",
 };

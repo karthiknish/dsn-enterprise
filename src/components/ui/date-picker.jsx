@@ -90,10 +90,10 @@ export function DatePicker({
 
 			{open && (
 				<div
-					className="fixed z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-2"
+					className="fixed floating-panel z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-2"
 					style={{
-						top: `${position.top}px`,
-						left: `${position.left}px`,
+						"--float-y": `${position.top}px`,
+						"--float-x": `${position.left}px`,
 					}}
 				>
 					<Calendar

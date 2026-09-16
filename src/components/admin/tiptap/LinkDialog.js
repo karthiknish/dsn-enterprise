@@ -12,7 +12,7 @@ function LinkDialogForm({ initialUrl, onClose, onConfirm }) {
 	};
 
 	return (
-		<div className="fixed inset-0 z-[99999] flex items-center justify-center bg-gray-950 bg-opacity-50">
+		<div className="fixed inset-0 z-99999 flex items-center justify-center bg-gray-950/50">
 			<div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4 animate-fadeIn">
 				<div className="flex items-center justify-between mb-4">
 					<h3 className="text-lg font-semibold text-gray-900">Add Link</h3>

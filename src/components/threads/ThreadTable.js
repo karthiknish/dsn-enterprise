@@ -40,7 +40,7 @@ export default function ThreadTable({
 								>
 									{col.label}
 									{col.sub && (
-										<span className="block text-[11px] font-normal text-white/70">
+										<span className="block text-3xs font-normal text-white/70">
 											{col.sub}
 										</span>
 									)}

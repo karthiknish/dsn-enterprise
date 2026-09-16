@@ -46,7 +46,7 @@ export default function AnalyticsLeadsPanel({ leads, days }) {
 			</div>
 
 			{!firestore && (
-				<p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+				<p className="rounded-xl border border-yellow-100 bg-yellow-50 p-3 text-sm text-yellow-800">
 					Firestore lead counts are unavailable, so only the GA4 figure is
 					shown. The enquiry total is the one to trust when they disagree.
 				</p>
@@ -104,8 +104,8 @@ export default function AnalyticsLeadsPanel({ leads, days }) {
 									</div>
 									<div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
 										<div
-											className="h-full rounded-full bg-accent"
-											style={{ width: `${Math.max(share, 2)}%` }}
+											className="h-full rounded-full bg-accent bar-fill"
+											style={{ "--bar-width": `${Math.max(share, 2)}%` }}
 										/>
 									</div>
 								</li>
@@ -145,7 +145,7 @@ function LeadStat({
 		<div className="rounded-xl border border-gray-200/80 bg-gray-50/50 px-4 py-3">
 			<div className="flex items-center gap-2 text-gray-500">
 				<Icon className="h-3.5 w-3.5" aria-hidden />
-				<span className="text-[11px] font-semibold uppercase tracking-wide">
+				<span className="text-3xs font-semibold uppercase tracking-wide">
 					{name}
 				</span>
 			</div>
@@ -161,7 +161,7 @@ function LeadStat({
 					<span
 						className={
 							change > 0
-								? "text-green-600"
+								? "text-success"
 								: change < 0
 									? "text-red-600"
 									: "text-gray-500"

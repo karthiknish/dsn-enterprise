@@ -9,7 +9,7 @@ import { TableRow } from "@tiptap/extension-table-row";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 
-export function createEditorProps(_isExternalUpdate, _onChange) {
+export function createEditorProps() {
 	return {
 		handleDrop: (event, view, moved) => {
 			if (!view || moved) return false;

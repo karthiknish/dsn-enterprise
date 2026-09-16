@@ -118,7 +118,7 @@ export default function UnsplashImagePicker({ onSelect, onClose }) {
 			<div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
 				<button
 					type="button"
-					className="fixed inset-0 bg-gray-950 bg-opacity-50 transition-opacity cursor-default"
+					className="fixed inset-0 bg-gray-950/50 transition-opacity cursor-default"
 					onClick={onClose}
 					aria-label="Close image picker"
 				/>
@@ -206,7 +206,7 @@ export default function UnsplashImagePicker({ onSelect, onClose }) {
 										sizes="(min-width: 768px) 33vw, 50vw"
 										className="object-cover transition-transform group-hover:scale-105"
 									/>
-									<div className="absolute inset-0 bg-gray-950 bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center">
+									<div className="absolute inset-0 bg-gray-950/0 group-hover:bg-gray-950/30 transition-all flex items-center justify-center">
 										<span className="text-white opacity-0 group-hover:opacity-100 transition-opacity font-medium">
 											Select
 										</span>

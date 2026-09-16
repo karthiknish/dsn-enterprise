@@ -13,7 +13,7 @@ export default function CountryFlag({ code }) {
 	if (!Flag) return null;
 	return (
 		<Flag
-			className="h-3 w-[18px] shrink-0 rounded-[2px] ring-1 ring-black/10"
+			className="h-3 w-4.5 shrink-0 rounded-xs ring-1 ring-black/10"
 			aria-hidden
 		/>
 	);

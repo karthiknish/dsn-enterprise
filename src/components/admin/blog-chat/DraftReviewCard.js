@@ -4,13 +4,13 @@ import { useState } from "react";
 
 const SEVERITY_STYLES = {
 	high: "text-red-700 bg-red-50 border-red-200",
-	medium: "text-amber-700 bg-amber-50 border-amber-200",
+	medium: "text-yellow-700 bg-yellow-50 border-yellow-100",
 	low: "text-gray-600 bg-gray-50 border-gray-200",
 };
 
 function scoreTone(score) {
-	if (score >= 85) return "text-emerald-700 bg-emerald-50 border-emerald-200";
-	if (score >= 65) return "text-amber-700 bg-amber-50 border-amber-200";
+	if (score >= 85) return "text-success-700 bg-success-50 border-success-200";
+	if (score >= 65) return "text-yellow-700 bg-yellow-50 border-yellow-100";
 	return "text-red-700 bg-red-50 border-red-200";
 }
 

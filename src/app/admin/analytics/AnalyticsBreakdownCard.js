@@ -70,15 +70,17 @@ export default function AnalyticsBreakdownCard({
 							<div className="mt-2 flex items-center gap-3">
 								<div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
 									<div
-										className="h-full rounded-full bg-accent"
-										style={{ width: `${Math.min(100, row.share || 0)}%` }}
+										className="h-full rounded-full bg-accent bar-fill"
+										style={{
+											"--bar-width": `${Math.min(100, row.share || 0)}%`,
+										}}
 									/>
 								</div>
-								<span className="w-10 shrink-0 text-right text-[10px] tabular-nums text-gray-400">
+								<span className="w-10 shrink-0 text-right text-2xs tabular-nums text-gray-400">
 									{(row.share || 0).toFixed(1)}%
 								</span>
 								{secondaryKey && (
-									<span className="w-24 shrink-0 text-right text-[10px] tabular-nums text-gray-500">
+									<span className="w-24 shrink-0 text-right text-2xs tabular-nums text-gray-500">
 										{secondaryLabel} {formatSecondary(row[secondaryKey])}
 									</span>
 								)}

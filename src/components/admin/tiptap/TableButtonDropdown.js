@@ -48,10 +48,10 @@ export default function TableButtonDropdown({
 	return (
 		<div
 			ref={dropdownRef}
-			className="fixed bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-[99999] min-w-[180px]"
+			className="fixed floating-panel bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-99999 min-w-45"
 			style={{
-				top: `${position.top}px`,
-				left: `${position.left}px`,
+				"--float-y": `${position.top}px`,
+				"--float-x": `${position.left}px`,
 			}}
 		>
 			<div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase border-b border-gray-100">

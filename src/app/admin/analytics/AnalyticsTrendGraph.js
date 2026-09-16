@@ -99,7 +99,7 @@ export default function AnalyticsTrendGraph({ trends, activeSeries }) {
 	return (
 		<div className="relative">
 			<div className="w-full overflow-x-auto scrollbar-hide">
-				<div className="min-w-[600px]">
+				<div className="min-w-150">
 					<svg
 						aria-hidden="true"
 						viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
@@ -146,7 +146,7 @@ export default function AnalyticsTrendGraph({ trends, activeSeries }) {
 										x={PADDING.left - 10}
 										y={y + 3}
 										textAnchor="end"
-										className="fill-gray-400 text-[10px] font-medium"
+										className="fill-gray-400 text-2xs font-medium"
 									>
 										{formatCount(tick)}
 									</text>
@@ -178,7 +178,7 @@ export default function AnalyticsTrendGraph({ trends, activeSeries }) {
 									x={getX(i)}
 									y={HEIGHT - 12}
 									textAnchor="middle"
-									className="fill-gray-400 text-[10px] font-medium"
+									className="fill-gray-400 text-2xs font-medium"
 								>
 									{formatGaDate(d.date)}
 								</text>
@@ -262,18 +262,18 @@ export default function AnalyticsTrendGraph({ trends, activeSeries }) {
 					className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-lg"
 					aria-live="polite"
 				>
-					<p className="text-[11px] font-semibold text-gray-900">
+					<p className="text-3xs font-semibold text-gray-900">
 						{formatGaDate(hovered.date, { withYear: true })}
 					</p>
 					<div className="mt-1 space-y-0.5">
 						{keys.map((key) => (
 							<p
 								key={key}
-								className="flex items-center gap-2 text-[11px] text-gray-600"
+								className="flex items-center gap-2 text-3xs text-gray-600"
 							>
 								<span
-									className="h-2 w-2 rounded-full"
-									style={{ backgroundColor: SERIES[key].color }}
+									className="h-2 w-2 rounded-full chart-dot"
+									style={{ "--dot-color": SERIES[key].color }}
 								/>
 								{SERIES[key].label}
 								<span className="font-semibold tabular-nums text-gray-900">

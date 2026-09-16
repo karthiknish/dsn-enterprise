@@ -37,7 +37,8 @@ export default function ContactFormFields({
 				{fieldErrors.name && (
 					<p
 						id="name-error"
-						className="mt-1 text-sm text-red-600 flex items-center field-error"
+						data-field-error
+						className="mt-1 text-sm text-red-600 flex items-center"
 					>
 						<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 						{fieldErrors.name}
@@ -74,7 +75,8 @@ export default function ContactFormFields({
 					{fieldErrors.email && (
 						<p
 							id="email-error"
-							className="mt-1 text-sm text-red-600 flex items-center field-error"
+							data-field-error
+							className="mt-1 text-sm text-red-600 flex items-center"
 						>
 							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 							{fieldErrors.email}
@@ -104,7 +106,8 @@ export default function ContactFormFields({
 					{fieldErrors.phone && (
 						<p
 							id="phone-error"
-							className="mt-1 text-sm text-red-600 flex items-center field-error"
+							data-field-error
+							className="mt-1 text-sm text-red-600 flex items-center"
 						>
 							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 							{fieldErrors.phone}
@@ -136,7 +139,8 @@ export default function ContactFormFields({
 				{fieldErrors.company && (
 					<p
 						id="company-error"
-						className="mt-1 text-sm text-red-600 flex items-center field-error"
+						data-field-error
+						className="mt-1 text-sm text-red-600 flex items-center"
 					>
 						<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 						{fieldErrors.company}
@@ -217,7 +221,8 @@ export default function ContactFormFields({
 					{fieldErrors.message && (
 						<p
 							id="message-error"
-							className="text-sm text-red-600 flex items-center field-error"
+							data-field-error
+							className="text-sm text-red-600 flex items-center"
 						>
 							<UilExclamationTriangle className="mr-1 w-3.5 h-3.5" />
 							{fieldErrors.message}
