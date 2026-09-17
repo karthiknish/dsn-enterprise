@@ -28,7 +28,7 @@ TableBody.displayName = "TableBody"
 const TableFooter = React.forwardRef(({ className, ...props }, ref) => (
   <tfoot
     ref={ref}
-    className={cn("border-t bg-gray-50 font-medium [&>tr]:last:border-b-0", className)}
+    className={cn("border-t border-gray-200 bg-gray-50 font-medium [&>tr]:last:border-b-0", className)}
     {...props} />
 ))
 TableFooter.displayName = "TableFooter"
@@ -37,7 +37,11 @@ const TableRow = React.forwardRef(({ className, ...props }, ref) => (
   <tr
     ref={ref}
     className={cn(
-      "border-b transition-colors hover:bg-gray-50 data-[state=selected]:bg-gray-100",
+      // `border-b` with no colour resolves to `currentColor` in Tailwind v4
+      // (its default changed from gray-200), which drew near-black row
+      // dividers. The colour is stated here so every table inherits it,
+      // rather than each call site having to restate it.
+      "border-b border-gray-200 transition-colors hover:bg-gray-50 data-[state=selected]:bg-gray-100",
       className
     )}
     {...props} />
