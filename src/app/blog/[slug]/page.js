@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { cache, Suspense } from "react";
 import BlogPostBody from "@/components/blog/BlogPostBody";
 import BlogPostImage from "@/components/blog/BlogPostImage";
+import PostCta from "@/components/blog/PostCta";
 import PostFaq from "@/components/blog/PostFaq";
 import ReferenceLinks from "@/components/blog/ReferenceLinks";
 import RelatedPosts from "@/components/blog/RelatedPosts";
@@ -267,6 +268,12 @@ export default async function BlogPostPage({ params }) {
 						<article className="bg-white rounded-xl shadow-sm p-8 md:p-12">
 							<BlogPostBody html={post.content} />
 						</article>
+
+						{/* The conversion path from the one page type with real traffic.
+						    Placed between the body and the Q&A appendix, because a reader
+						    who has just finished the article is the only reader this can
+						    convert. See the component for the evidence. */}
+						<PostCta post={post} />
 
 						{/* Only a hand-written FAQ renders visibly here. Pairs derived
 						    from question headings are already in the body above, so

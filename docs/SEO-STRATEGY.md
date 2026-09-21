@@ -1514,6 +1514,154 @@ the history begins with the first real cron run.
 
 ---
 
+## 2N. Round nine — 21 Sep 2026: the thread layer earns its impressions, and the one page with traffic could not convert
+
+Figures are the Search Console API for the windows ending 2026-09-21, compared
+with the 14 Sep pass in §2L, plus a Firestore read of `contacts`.
+
+### The thread layer answered its own §2L question
+
+§2L's re-measure asked whether the thread cluster would earn its first
+impressions — "a month with zero is a layer problem, not a ranking problem". It
+did, and the whole cluster's impressions are new:
+
+| Page | Impressions 28d | Clicks | Avg position |
+|---|---|---|---|
+| `/threads/metric/m10` | 641 | 0 | 7.4 |
+| `/threads/metric/m12` | 468 | 1 | 8.3 |
+| `/threads/metric/m8` | 459 | 0 | 6.9 |
+| `/threads/metric/m6` | 309 | 0 | 8.1 |
+
+Both the `m16` and `m20` pages remain at zero, consistent with their
+`lastCrawl: never` status in §2L.
+
+**The impressions are real and the clicks are not.** 1,877 impressions across
+the six sizes returned one click in 28 days. Reading the queries explains it:
+`m10 standard pitch` (113 impr), `m12 standard pitch` (143), `m10 pitch` (46),
+`m12 pitch` (37) — all answered in the SERP above a position-7 result. This is
+the zero-click pattern §2L predicted for the standards cluster, at a larger
+scale. The layer is doing what it was built to do and cannot be judged on
+clicks; it is a crawl and citation surface, not an acquisition one.
+
+### The lead drought has a measurable cause, and it is concentration
+
+Last real enquiry: **31 Aug**. Five real leads all-time (`contacts` also holds
+two `test` rows from Nov 2025).
+
+`/blog/using-is-919-and-is-3455-…` is the site's only acquisition channel, and
+it is decaying:
+
+| Window | Clicks | Impressions | CTR |
+|---|---|---|---|
+| 90d to 21 Sep | 56 | 1,808 | 3.1% |
+| 28d to 21 Sep | **21** | 782 | 2.7% |
+| prior 28d | **35** | 1,076 | 3.3% |
+
+−40% clicks on the URL that supplies 40% of the 90-day total and 39% of the last
+28. Position is stable (6.3 vs 6.5), so this is not a ranking loss — the
+impression pool behind it shrank. Leads stopped when this page's clicks halved.
+
+The rest of the decline is intended roll-off and was checked, not assumed: the
+homepage's −332 impressions are `dsn` 218→8 and `dsn company` 38→9 (bare-acronym
+noise, §2L already identified it), and the homepage lost only 2 clicks. The
+`/about` and M20-post drops are the §2D cannibalisation fix working.
+
+### The defect: the only page with traffic had no way to convert it
+
+Rendered HTML of the IS 3455 post showed the article body's links were the share
+buttons and `ReferenceLinks` — nothing to `/products/*`, nothing to `/contact`.
+The `/products/plain-gauges` and `/contact` hrefs in the page come from the site
+chrome. So the article closes with "send us the drawing. We manufacture plain
+plug, ring, and snap gauges" and then offers no way to do either, while
+`/products/plain-gauges` sat on **26 impressions and 0 clicks** over the same 28
+days. Every post had the same hole.
+
+This is not a snippet problem and was not treated as one. §2L already concluded
+that IS 919 CTR (still 0.7% on 140 impr at position 8.0 — **flat, third pass**)
+would not move with more snippet work and that the answer, if anything, is an
+IS-919-led section. Nothing here contradicts that; no title or description was
+touched this round.
+
+### What this round changed
+
+**1. `src/components/blog/PostCta.js` — the missing hop, on every post.** A
+product-line call to action rendered directly under the article body, above the
+Q&A appendix, because a reader who has just finished the article is the only
+reader it can convert. It carries the product link, the contact link, and the
+phone number.
+
+Which product line a post is about is **derived from the post's own fields**
+(slug, title, metaTitle, keywords), not a slug→product table, so a new post gets
+a sensible target without anyone remembering to add one. Precedence is API →
+ACME/buttress/spline → thread → custom/special → plain, because an API
+thread-gauge post matches both `api` and `thread` and the narrower line is the
+more useful one. `drawing` is deliberately **not** a match term: most thread
+posts mention one and it mis-routed them.
+
+No new Firestore field. §2L's caveat stands — `/admin/blog`'s save path names its
+fields explicitly, so a new field is a field a normal admin save can drop.
+
+**2. A conversion strip at the top of every metric size page.** The size pages
+had a call to action inside the gauging section, ~250 lines down, which only a
+visitor already on the page could find. The strip moves the same offer above the
+reference table. It is a strip and not a card on purpose: the page's job is the
+table, and the numbers must stay the reason it ranks.
+
+### Deliberately not done
+
+- **No more IS 3455 / IS 919 snippet work.** See above; §2L's conclusion holds and
+  this pass did not change it.
+- **No `THREAD_TIER_LIMIT` raise.** Tier 2 is still BSP, UNF and the remaining
+  metric sizes. The cluster is now measurably *indexed* but returns ~0 clicks, so
+  the evidence for widening it argues the other way.
+- **No new products, no new programmatic axis.** Rule 9.
+- **No artificial `updatedAt` bump** on the IS 3455 post (rule: §2L).
+- **No change to `classifyChannel`'s label format.** See the open item below.
+
+### Verified
+
+| Check | Result |
+|---|---|
+| `npm run build` | ✓ compiled; 95/95 static pages; 39 blog routes |
+| `biome check` / `eslint` on changed files | clean |
+| `PostCta` on all 39 posts | 39/39, none missing |
+| Product-line mapping | API posts → `/products/api-gauges`; ACME/buttress → special; thread → thread; IS 3455 → plain; custom → special |
+| Thread strip on `/threads/metric/m12` | present, **above** the first spec heading (index 19193 vs 20250) |
+| Attribution, live against production | `POST /api/contact` → 201, `entryId` returned, `attribution.channel: "google.com / organic"`, `entryPage: "/threads/metric/m12"` preserved |
+| Test record removed | deleted; `contacts` count back to 7 |
+| `sanitizeAttribution` on hostile input | `{}`/`[]`/`javascript:` path → `null`; 500-char path → clipped to 200 |
+
+The attribution test was posted to the API rather than driven through a browser
+on purpose: the browser path also fires a real GA4 `generate_lead` and a Google
+Ads conversion, and polluting live conversion data to check a stored field is not
+a trade worth making. The client wiring was confirmed by reading it instead —
+`captureAttribution()` on pageview (`Analytics.js:58`) and `attribution:
+getAttribution()` in both submit paths (`useContactPageForm.js:182`,
+`ContactSection.js:74`).
+
+### Re-measure
+
+- **Do leads arrive with a channel now?** Every contact predates §2L's
+  attribution work, so the field is unproven in production. The next enquiry is
+  the first real test, and it is the number the SEO work should be judged on.
+- **Does the IS 3455 post's click decay continue?** 35 → 21 across the two
+  28-day windows. If it keeps falling the concentration problem is the whole
+  problem, and the fix is a second acquisition channel, not more work on this URL.
+- **Does `/products/plain-gauges` move off 26 impressions / 0 clicks?** It now
+  has an inbound link from every blog post. If it does not move, the constraint
+  is the product page's own targeting, not its link profile.
+- **Is a per-post CTA better than a derived one?** The derivation is a
+  heuristic. If a post routes somewhere obviously wrong, that is the signal to
+  add an explicit override — not to guess a table now.
+- **`classifyChannel` labels Google organic as `google.com / organic`, not
+  `google / organic`** as its own doc comment says and as GA4 labels it. Nothing
+  breaks — `getSourceLogo()` resolves both — but `AnalyticsLeadsPanel` shows GA4
+  and Firestore channels side by side, so the same channel reads under two names.
+  Left as-is this round: changing stored label semantics is the client's call,
+  not a side effect of a diagnostic pass.
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value.

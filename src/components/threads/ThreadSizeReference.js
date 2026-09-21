@@ -77,6 +77,44 @@ export default function ThreadSizeReference({ page }) {
 			/>
 
 			<div className="container mx-auto px-4 py-12 md:py-16 max-w-5xl">
+				{/*
+				  Conversion path, at the point a reader actually lands.
+
+				  These pages now rank for the lookup queries they were built for —
+				  "m10 standard pitch" 113 impressions, "m12 standard pitch" 143 in
+				  the 28 days to 2026-09-21 — but the SERP answers them above the
+				  fold, so almost nobody arrives: 1,877 impressions across the six
+				  sizes and one click. The offer that existed sat inside the gauging
+				  section far below, which only a visitor already on the page could
+				  find. This is the same offer where the visitor is.
+
+				  It is deliberately a strip, not a card: the page's job is the
+				  reference table, and the numbers must stay the reason it ranks.
+				*/}
+				<div className="mb-10 rounded-xl border border-secondary bg-secondary/20 p-5 md:flex md:items-center md:justify-between md:gap-6">
+					<p className="mb-4 text-gray-700 leading-relaxed md:mb-0">
+						<span className="font-semibold text-gray-900">
+							Checking M{size} threads on the shop floor?
+						</span>{" "}
+						We manufacture M{size} thread plug and ring gauges to order at our
+						Coimbatore works.
+					</p>
+					<div className="flex shrink-0 flex-wrap gap-3">
+						<Link
+							href="/products/thread-gauges"
+							className="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+						>
+							Thread gauges we make
+						</Link>
+						<Link
+							href="/contact"
+							className="inline-flex items-center rounded-lg border border-primary px-5 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/5"
+						>
+							Enquire about M{size}
+						</Link>
+					</div>
+				</div>
+
 				<div className="prose max-w-none mb-10">
 					<p className="text-lg text-gray-700 leading-relaxed">
 						M{size} is an ISO metric thread on the 60° basic profile, so every
