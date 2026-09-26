@@ -2,6 +2,7 @@
 
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
+import ProductQuoteChecklist from "@/components/products/ProductQuoteChecklist";
 import ApiGaugeHeroBadges from "@/components/products/ApiGaugeHeroBadges";
 import ApiGaugesCertificationsSection from "@/components/products/api-gauges/ApiGaugesCertificationsSection";
 import ApiGaugesIntroSection from "@/components/products/api-gauges/ApiGaugesIntroSection";
@@ -27,6 +28,15 @@ export default function APIGaugesPage() {
 			{/* No <CityLinks> — api-master-gauges has never had a city page in any
 			    tier, so the component would render nothing (SEO-STRATEGY.md §2K). */}
 			<ApiGaugesRelatedCategories />
+
+			<ProductQuoteChecklist
+				product="API Gauges"
+				productLabel="API gauge"
+				items={[
+					"The API connection, size and specification (API 5B or API 7-2)",
+					"Whether you need working gauges, master gauges, or both",
+				]}
+			/>
 
 			<Cta10
 				reference="Ref. DSN-API-01"

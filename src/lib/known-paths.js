@@ -23,6 +23,7 @@ const EXACT = new Set([
 	"/products/thread-gauges",
 	"/products/api-gauges",
 	"/products/special-gauges",
+	"/products/snap-gauges",
 	"/services",
 	"/industries",
 	"/quality",

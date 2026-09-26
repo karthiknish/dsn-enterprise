@@ -422,8 +422,8 @@ export const PRODUCT_PROFILES = {
 		],
 	},
 	"snap-gauges": {
-		hubPath: "/products/plain-gauges",
-		hubLabel: "Plain Gauges",
+		hubPath: "/products/snap-gauges",
+		hubLabel: "Snap Gauges",
 		shortName: "snap gauges",
 		applications: [
 			"Rapid OD checks on shafts and pins",

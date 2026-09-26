@@ -2,6 +2,7 @@
 
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
+import ProductQuoteChecklist from "@/components/products/ProductQuoteChecklist";
 import SpecialGaugesCapabilitiesSection from "@/components/products/special-gauges/SpecialGaugesCapabilitiesSection";
 import SpecialGaugesIntroSection from "@/components/products/special-gauges/SpecialGaugesIntroSection";
 import SpecialGaugesProductsGrid from "@/components/products/special-gauges/SpecialGaugesProductsGrid";
@@ -29,6 +30,15 @@ export default function SpecialGaugesPage() {
 			{/* No <CityLinks> — custom-gauge-manufacturing has no live city page
 			    (docs/SEO-STRATEGY.md §2K), so the component would render nothing. */}
 			<SpecialGaugesRelatedCategories />
+
+			<ProductQuoteChecklist
+				product="Custom Gauge"
+				productLabel="custom gauge"
+				items={[
+					"The feature to be checked, and how it is inspected today",
+					"The tolerance on that feature, and how many parts a shift you check",
+				]}
+			/>
 
 			<Cta10
 				reference="Ref. DSN-SPG-01"

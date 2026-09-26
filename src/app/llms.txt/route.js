@@ -100,6 +100,9 @@ export async function GET(request) {
 		`- [Plain gauges](${abs("/products/plain-gauges")}): plug, ring, snap gauges, setting masters, measuring pins. 1 mm to 250 mm, OHNS tool steel or carbide, 58-65 HRC.`,
 	);
 	push(
+		`- [Snap gauges](${abs("/products/snap-gauges")}): fixed progressive (IS 8023, single-ended up to 160 mm) and adjustable snap gauges for GO/NO-GO shaft OD checks, set to the drawing's limits.`,
+	);
+	push(
 		`- [Thread gauges](${abs("/products/thread-gauges")}): thread plug and ring gauges, setting plugs, taper gauges. Metric, UN, BSP, NPT and specials.`,
 	);
 	push(

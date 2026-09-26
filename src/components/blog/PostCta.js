@@ -1,4 +1,6 @@
 import Link from "next/link";
+import TrackedLink from "@/components/analytics/TrackedLink";
+import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/site";
 
 /**
  * The conversion path from an article to the product line it is about.
@@ -23,9 +25,13 @@ import Link from "next/link";
  * thread-gauge post matches both "api" and "thread", and the API line is the
  * narrower and more useful of the two.
  *
- * The four product paths are the ones the nav, the footer and
- * `known-paths.js` already use, so this cannot point at a page that does not
- * exist.
+ * The product paths are the ones the nav, the footer and `known-paths.js`
+ * already use, so this cannot point at a page that does not exist.
+ *
+ * Snap gauges got their own line on 26 Sep 2026 (§2O): two of the four real
+ * enquiries on record asked for snap gauges, and a snap-vs-ring article sent
+ * those readers to the plain-gauge page, where snap gauges were one card of
+ * five.
  */
 
 const PRODUCT_LINES = {
@@ -40,6 +46,12 @@ const PRODUCT_LINES = {
 		linkLabel: "Thread plug & ring gauges",
 		heading: "Need thread gauges for these threads?",
 		body: "DSN Enterprises manufactures thread plug, ring and setting gauges to order in Coimbatore — metric, NPT, BSP, UNC and UNF — with NABL-traceable certificates.",
+	},
+	snap: {
+		path: "/products/snap-gauges",
+		linkLabel: "Snap gauges",
+		heading: "Need snap gauges for your shafts?",
+		body: "DSN Enterprises manufactures fixed and adjustable snap gauges to order at our Coimbatore works, set to the GO and NO-GO limits on your drawing.",
 	},
 	api: {
 		path: "/products/api-gauges",
@@ -77,6 +89,7 @@ export function productLineForPost(post = {}) {
 		return PRODUCT_LINES.special;
 	}
 	if (/thread/.test(haystack)) return PRODUCT_LINES.thread;
+	if (/snap/.test(haystack)) return PRODUCT_LINES.snap;
 	if (/custom|special|form gauge/.test(haystack)) {
 		return PRODUCT_LINES.special;
 	}
@@ -114,12 +127,14 @@ export default function PostCta({ post }) {
 			</div>
 			<p className="mt-4 text-sm text-gray-600">
 				Or call{" "}
-				<a
-					href="tel:+919363122005"
+				<TrackedLink
+					href={`tel:${PHONE_TEL}`}
+					kind="phone"
+					location="Blog Post CTA"
 					className="font-semibold text-primary underline decoration-secondary decoration-2 underline-offset-2"
 				>
-					+91 93631 22005
-				</a>
+					{PHONE_DISPLAY}
+				</TrackedLink>
 				.
 			</p>
 		</section>

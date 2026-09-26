@@ -104,7 +104,7 @@ export default function ThreadSizeReference({ page }) {
 							href="/products/thread-gauges"
 							className="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
 						>
-							Thread gauges we make
+							M{size} thread plug &amp; ring gauges
 						</Link>
 						<Link
 							href="/contact"
@@ -256,7 +256,7 @@ export default function ThreadSizeReference({ page }) {
 								href="/products/thread-gauges"
 								className="inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
 							>
-								Thread gauges we manufacture
+								M{size} thread gauges we manufacture
 							</Link>
 							<Link
 								href="/contact"

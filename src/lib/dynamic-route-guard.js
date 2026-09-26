@@ -54,6 +54,7 @@ import { THREAD_SYSTEMS } from "@/lib/thread-specs";
 const STATIC_PRODUCT_SLUGS = new Set([
 	"api-gauges",
 	"plain-gauges",
+	"snap-gauges",
 	"special-gauges",
 	"thread-gauges",
 ]);

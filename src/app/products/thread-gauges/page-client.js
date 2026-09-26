@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
+import ProductQuoteChecklist from "@/components/products/ProductQuoteChecklist";
 import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -478,6 +479,15 @@ export default function ThreadGaugesPage() {
 					</div>
 				</div>
 			</section>
+
+			<ProductQuoteChecklist
+				product="Thread Gauges"
+				productLabel="thread gauge"
+				items={[
+					"The thread designation and class, e.g. M12×1.75-6H or 1/2-14 NPT",
+					"Internal or external thread: plug gauges check tapped holes, ring gauges check studs and bolts",
+				]}
+			/>
 
 			<Cta10
 				reference="Ref. DSN-THG-01"

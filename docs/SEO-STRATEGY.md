@@ -1662,6 +1662,148 @@ getAttribution()` in both submit paths (`useContactPageForm.js:182`,
 
 ---
 
+## 2O. Round ten — 26 Sep 2026: the site ranks for lookups, not for buyers
+
+Figures are the Search Console API for the windows ending 2026-09-26, plus a
+Firestore read of `contacts` and URL Inspection on the pages §2L asked to be
+submitted by hand.
+
+### Clicks are falling while impressions rise
+
+| Week starting | Clicks | Impressions |
+|---|---|---|
+| Aug 9 | **36** | 1,069 |
+| Aug 16 | 19 | 762 |
+| Aug 23 | 14 | 672 |
+| Aug 30 | 18 | 563 |
+| Sep 6 | 15 | 689 |
+| Sep 13 | 11 | **2,621** |
+| Sep 20 (partial) | **4** | 1,869 |
+
+The impression jump is the thread layer (§2N): 3,700 impressions across
+`m6`–`m12` in 90 days, 3 clicks. The click fall is the IS 3455 post: 17 clicks
+a week in mid-August, 1 last week, **at an unchanged position (6.5 → 6.8)**.
+When position holds and clicks go, the search results page changed — most likely
+an AI Overview answering the query — and no title or snippet change recovers
+that. §2L reached the same conclusion for IS 919.
+
+**No enquiry since 31 Aug.** Four real leads on record (Medha, SNSKAR, RKS
+Forgings, SprayWerx); **two asked for snap gauges**. All four arrived while the
+IS 3455 post was at its peak.
+
+### The measurement that matters: buying intent is almost invisible
+
+Non-branded queries containing manufacturer / supplier / price / buy / quote /
+exporter / near me / in india / custom, 90 days: **24 queries, 70 impressions,
+0 clicks.**
+
+| Query | Page | Position |
+|---|---|---|
+| plain snap gauges manufacturer | `/products/plain-gauges` | 18.6 |
+| npt thread gauges manufacturer | `/products/thread-gauges` | 26.8 |
+| thread gauges manufacturer | `/products/thread-gauges` | 30.0 |
+| thread gauge manufacturers in india | `/products/thread-gauges` | 48.0 |
+| custom gauges manufacturer | custom-gauges **blog post** | **4.8** |
+| calibration company near me (+4 variants) | `/calibration` | 8–12 |
+
+The product pages already carry these words in their titles and H1s
+(`Thread Gauge Manufacturer – NPT, BSP, Metric, Pipe`). They rank 20–50 because
+they have little authority, not because of the copy. Every inbound link they had
+came from the site chrome or a CTA box.
+
+### §2L's Request Indexing was not done, or did not take
+
+| URL | State | lastCrawl |
+|---|---|---|
+| `/products/special-gauges` | Discovered – not indexed | **never** |
+| `/threads`, `/threads/npt`, `/threads/unc` | Discovered – not indexed | never |
+| `/threads/metric/m16`, `/threads/metric/m20` | Discovered – not indexed | never |
+| `/fits` | Discovered – not indexed | never |
+
+`/products/special-gauges` is the right page for "custom gauges manufacturer",
+where the blog already ranks 4.8. It has been un-crawled since at least §2K.
+
+### What this round changed
+
+**1. Product links in article text** — `src/lib/product-mention-links.js`,
+applied in `BlogPostBody`. The first mention of a product line in a post's body
+becomes a link to that line's page: at most three per post, one per target,
+never inside a heading, an existing link, code or a caption, and skipped when
+the editor already linked that page. It wraps existing words and adds none, so
+rule 5 is not engaged. It runs at render, not in Firestore, so an admin save
+cannot drop it and a new post gets it automatically. A bare "plug gauge" in an
+article that mentions threads is not linked to plain gauges — in that context it
+means a thread plug gauge.
+
+**2. `/products/snap-gauges`** — one page, not an axis (rule 9). Evidence: two
+of four real leads, and "plain snap gauges manufacturer" at 18.6 on a page where
+snap gauges were one card of five. Every claim on it already exists on the site
+(IS 8023 progressive type and the 160 mm range on `/products`, the snap product
+profile in `seo-location-data.js`, the snap-vs-ring article). Registered in
+`STATIC_PRODUCT_SLUGS`, `known-paths.js`, `sitemap-entries.js` (both sitemaps),
+`/llms.txt`, header, footer and the `/products` hub tile. `getProductHub` now
+sends retired `snap-gauges-<city>` URLs to it rather than to plain gauges
+(`/products/snap-gauges-erode` → 308 → `/products/snap-gauges`). `PostCta` has a
+snap line, so the snap-vs-ring article now routes there. The plain-gauge page
+links to it from its intro and its snap card.
+
+**3. "What to send us for a quote" on every product page** —
+`ProductQuoteChecklist`: the product-specific inputs (size and tolerance,
+thread designation, API connection), quantity, certificate, drawing, then quote
+/ WhatsApp / phone. The WhatsApp and phone links use `TrackedLink`, so they fire
+the Ads conversions. No lead times, prices or MOQs — none are on record (rule
+5). Add them once the client confirms figures.
+
+**4. Smaller:** the thread size-page anchors now say "M12 thread plug & ring
+gauges" rather than "Thread gauges we make"; `PostCta`'s phone link was plain
+markup and is now tracked.
+
+### Deliberately not done
+
+- **No snippet work on the IS 3455 post** (§2L, §2N, and now the position data).
+- **No more thread sizes** — 3,700 impressions, 3 clicks.
+- **No city pages** — 6 city-intent impressions in 90 days.
+- **No title change on `/products/plain-gauges`** even though it still names
+  snap gauges. If the new page does not take over the snap queries within a
+  month, drop "Snap" from that title then.
+
+### Not code — for the client
+
+1. **Request Indexing by hand**, `/products/special-gauges` first, then the six
+   URLs above. The API cannot do it.
+2. **Google Business Profile** for the Coimbatore works. The "near me"
+   calibration queries are local-pack queries. `buildOrganizationSchema` has only
+   LinkedIn in `sameAs` and no `hasMap`; add the profile URL when it exists.
+3. **IndiaMART / TradeIndia / ExportersIndia listings** — where Indian
+   industrial buyers search, and referring domains for the product pages.
+4. **Google Ads on the exact buying-intent terms.** Conversion tracking is
+   already wired (§2N). Organic search will not reach page one for these soon.
+
+### Verified (production build, then `next start`)
+
+| Check | Result |
+|---|---|
+| `npm run build` | ✓; `/products/snap-gauges` `○ (Static)` |
+| `/products/snap-gauges` | 200; title 56 chars, description 148; canonical correct; BreadcrumbList |
+| `/products/snap-gauges-erode` | 308 → `/products/snap-gauges` |
+| `/products/snap-gauges-bogus`, `/blog/nope` | 404 |
+| `sitemap-main.xml`, `sitemap.xml`, `llms.txt` | 1 entry each |
+| Product links across 39 posts | 0 inside headings; IS 3455 post → plain + snap; thread posts' bare "plug gauge" no longer routed to plain |
+| `biome check` on new files | clean (existing format errors in untouched files are pre-existing) |
+
+### Re-measure
+
+- **Leads.** The number this work is judged on. Attribution is still unproven
+  in production.
+- Does `/products/snap-gauges` get crawled, and does it take over "snap gauge"
+  queries from `/products/plain-gauges`?
+- Do the product pages move off positions 20–50 for the manufacturer queries
+  now that every post links them with descriptive anchors?
+- `/products/special-gauges`: crawled yet? If it is still `never` after a hand
+  Request Indexing, the problem is not the queue.
+
+---
+
 ## 3. Open items — not yet done
 
 These are ranked by expected value.

@@ -16,6 +16,7 @@ import HeaderMobileNav from "./HeaderMobileNav";
 const productLinks = [
 	{ href: "/products", label: "All Products" },
 	{ href: "/products/plain-gauges", label: "Plain Gauges" },
+	{ href: "/products/snap-gauges", label: "Snap Gauges" },
 	{ href: "/products/thread-gauges", label: "Thread Gauges" },
 	{ href: "/products/api-gauges", label: "API Gauges" },
 	{ href: "/products/special-gauges", label: "Special Gauges" },

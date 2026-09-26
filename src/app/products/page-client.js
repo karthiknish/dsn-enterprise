@@ -118,6 +118,8 @@ const products = [
 				description:
 					"Progressive snap gauges for high-speed OD sorting, single-ended design up to 160 mm.",
 				image: "/images/snap-gauge.png",
+				// Own page since 26 Sep 2026 (docs/SEO-STRATEGY.md §2O).
+				href: "/products/snap-gauges",
 			},
 		],
 	},
@@ -567,10 +569,10 @@ const ProductsPage = () => {
 															<UilArrowRight className="w-2.5 h-2.5 group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 														<Link
-															href={`/products/${category.id}`}
+															href={item.href ?? `/products/${category.id}`}
 															className="text-text-muted hover:text-primary font-medium text-xs inline-flex items-center gap-1 group/link"
 														>
-															View All
+															{item.href ? "Details" : "View All"}
 															<UilAngleRight className="w-2.5 h-2.5 group-hover/link:translate-x-0.5 transition-transform" />
 														</Link>
 													</div>

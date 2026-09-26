@@ -152,6 +152,14 @@ const Footer = () => {
 							</li>
 							<li>
 								<Link
+									href="/products/snap-gauges"
+									className="hover:text-secondary transition-colors"
+								>
+									Snap Gauges
+								</Link>
+							</li>
+							<li>
+								<Link
 									href="/products/api-gauges"
 									className="hover:text-secondary transition-colors"
 								>

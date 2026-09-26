@@ -124,6 +124,11 @@ function staticPages() {
 			changeFrequency: "weekly",
 			priority: 0.85,
 		},
+		{
+			path: "/products/snap-gauges",
+			changeFrequency: "weekly",
+			priority: 0.85,
+		},
 		{ path: "/services", changeFrequency: "monthly", priority: 0.8 },
 		{ path: "/industries", changeFrequency: "monthly", priority: 0.8 },
 		{ path: "/quality", changeFrequency: "monthly", priority: 0.8 },

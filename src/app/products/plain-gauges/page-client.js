@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Cta10 } from "@/components/cta10";
 import ProductCategoryHero from "@/components/layout/ProductCategoryHero";
+import ProductQuoteChecklist from "@/components/products/ProductQuoteChecklist";
 import CityLinks from "@/components/seo/CityLinks";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -114,6 +115,9 @@ const products = [
 			"Shaft measurement",
 		],
 		image: "/images/snap-gauge.png",
+		// Snap gauges have their own page since 26 Sep 2026 (§2O); this card
+		// stays so the plain-gauge range reads complete, and points there.
+		detailHref: "/products/snap-gauges",
 	},
 ];
 
@@ -164,8 +168,14 @@ export default function PlainGaugesPage() {
 							make plug gauges, ring gauges, snap gauges, measuring pins, and
 							setting masters from 1 mm to 250 mm in OHNS or carbide, with
 							NABL-traceable certificates aligned to the tolerance band on your
-							drawing. As a plain snap gauges manufacturer, we supply fixed and
-							adjustable snap gauges for high-volume external-diameter checking.
+							drawing. We also make fixed and adjustable{" "}
+							<Link
+								href="/products/snap-gauges"
+								className="text-primary underline decoration-secondary decoration-2 underline-offset-2"
+							>
+								snap gauges
+							</Link>{" "}
+							for high-volume external-diameter checking.
 						</p>
 						<div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
 							<div className="text-center p-5 bg-white rounded-xl border border-gray-200/80 shadow-sm">
@@ -270,13 +280,24 @@ export default function PlainGaugesPage() {
 											</div>
 										</div>
 
-										<Link
-											href={`/contact?product=${encodeURIComponent(product.name)}`}
-											className="inline-flex items-center text-primary hover:text-primary-dark font-medium"
-										>
-											Request Quote
-											<UilArrowRight className="ml-2 w-4 h-4" />
-										</Link>
+										<div className="flex flex-wrap gap-x-6 gap-y-2">
+											<Link
+												href={`/contact?product=${encodeURIComponent(product.name)}`}
+												className="inline-flex items-center text-primary hover:text-primary-dark font-medium"
+											>
+												Request Quote
+												<UilArrowRight className="ml-2 w-4 h-4" />
+											</Link>
+											{product.detailHref ? (
+												<Link
+													href={product.detailHref}
+													className="inline-flex items-center text-primary hover:text-primary-dark font-medium"
+												>
+													{product.name}: sizes and types
+													<UilArrowRight className="ml-2 w-4 h-4" />
+												</Link>
+											) : null}
+										</div>
 									</div>
 								</div>
 							</m.div>
@@ -335,7 +356,6 @@ export default function PlainGaugesPage() {
 
 			{/* Service Areas — Internal links to city pages */}
 			<CityLinks type="product" categorySlug="plain-plug-gauges" />
-			<CityLinks type="product" categorySlug="snap-gauges" />
 			<CityLinks type="product" categorySlug="air-gauges" />
 
 			{/* Related Categories */}
@@ -382,6 +402,15 @@ export default function PlainGaugesPage() {
 					</div>
 				</div>
 			</section>
+
+			<ProductQuoteChecklist
+				product="Plain Gauges"
+				productLabel="plain gauge"
+				items={[
+					"The bore or shaft size and its tolerance, e.g. Ø25 H7 or Ø25 h6",
+					"Which gauge: plug gauges for holes, ring gauges for shafts, or setting masters",
+				]}
+			/>
 
 			<Cta10
 				reference="Ref. DSN-PLG-01"
