@@ -16,7 +16,7 @@ import { getSiteUrl } from "@/lib/site";
 const LOGO_URL = getSiteUrl("/images/logo.png");
 const WHATSAPP_NUMBER = "919363122005";
 const WHATSAPP_DISPLAY = "+91 93631 22005";
-const SUPPORT_EMAIL = "info@dsnenterprises.com";
+const SUPPORT_EMAIL = "info@dsnenterprises.in";
 
 const COLORS = {
 	text: "#1f2937",

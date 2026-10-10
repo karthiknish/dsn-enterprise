@@ -12,7 +12,7 @@ export const faqCategories = [
 			{
 				question: "Where is DSN Enterprises located?",
 				answer:
-					"Our manufacturing and calibration facility is in Coimbatore, Tamil Nadu. From here we supply plants across Tamil Nadu (Chennai, Madurai, Salem, Trichy, Erode, Tiruppur, Thoothukudi), Bangalore (Peenya, Bidadi, Jigani, Hosur corridor), Hyderabad (Jeedimetla, Adibatla, Medchal), pan-India, and export markets. Technical support is available by phone at +91 93631 22005, email at info@dsnenterprises.com, and scheduled plant visits for drawing reviews and first-article discussions.",
+					"Our manufacturing and calibration facility is in Coimbatore, Tamil Nadu. From here we supply plants across Tamil Nadu (Chennai, Madurai, Salem, Trichy, Erode, Tiruppur, Thoothukudi), Bangalore (Peenya, Bidadi, Jigani, Hosur corridor), Hyderabad (Jeedimetla, Adibatla, Medchal), pan-India, and export markets. Technical support is available by phone at +91 93631 22005, email at info@dsnenterprises.in, and scheduled plant visits for drawing reviews and first-article discussions.",
 			},
 			{
 				question: "Do you supply gauges to Bangalore and Hyderabad?",
@@ -186,7 +186,7 @@ export const faqCategories = [
 			{
 				question: "How can I request a quotation?",
 				answer:
-					"Use the contact form on this site, email info@dsnenterprises.com, or call +91 93631 22005. Include drawing or size, tolerance, thread specification, quantity, and certificate requirements. We usually respond within one business day with scope, lead time, and pricing.",
+					"Use the contact form on this site, email info@dsnenterprises.in, or call +91 93631 22005. Include drawing or size, tolerance, thread specification, quantity, and certificate requirements. We usually respond within one business day with scope, lead time, and pricing.",
 			},
 			{
 				question: "What payment terms do you offer?",

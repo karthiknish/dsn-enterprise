@@ -54,7 +54,7 @@ export async function GET(request) {
 
 	// Free-form context. No headings here, per the spec.
 	push(
-		"Contact: +91 93631 22005, info@dsnenterprises.com. Manufacturing and calibration facility in Coimbatore; supplies Tamil Nadu, Bangalore, Hyderabad, pan-India, and export markets.",
+		"Contact: +91 93631 22005, info@dsnenterprises.in. Manufacturing and calibration facility in Coimbatore; supplies Tamil Nadu, Bangalore, Hyderabad, pan-India, and export markets.",
 	);
 	push();
 	push(
