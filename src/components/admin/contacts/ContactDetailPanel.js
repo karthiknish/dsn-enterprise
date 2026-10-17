@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CONTACT_STATUSES, getContactStatusColor } from "@/lib/contact-status";
 
 export default function ContactDetailPanel({
@@ -7,7 +8,19 @@ export default function ContactDetailPanel({
 	onClose,
 	onStatusChange,
 	onDelete,
+	onResendAdminEmail,
 }) {
+	const [resending, setResending] = useState(false);
+
+	const handleResend = async () => {
+		setResending(true);
+		try {
+			await onResendAdminEmail(contact.id);
+		} finally {
+			setResending(false);
+		}
+	};
+
 	if (!contact) {
 		return (
 			<div className="bg-white rounded-2xl border border-gray-200/80 p-6 text-center text-gray-500">
@@ -200,6 +213,15 @@ export default function ContactDetailPanel({
 							))}
 						</select>
 					</div>
+
+					<button
+						type="button"
+						onClick={handleResend}
+						disabled={resending}
+						className="w-full px-4 py-2 text-sm font-medium border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+					>
+						{resending ? "Sending…" : "Resend admin email"}
+					</button>
 
 					<div className="flex gap-2">
 						<a

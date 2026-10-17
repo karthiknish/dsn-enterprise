@@ -6,7 +6,7 @@ import BlogNotificationToast from "@/components/admin/blog/BlogNotificationToast
 import ContactDetailPanel from "@/components/admin/contacts/ContactDetailPanel";
 import ContactsList from "@/components/admin/contacts/ContactsList";
 import { fetchContacts } from "@/lib/admin-firestore";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { describeFirestoreError } from "@/lib/firebase-errors";
 
 export default function ContactsPage() {
@@ -74,6 +74,30 @@ export default function ContactsPage() {
 		}
 	};
 
+	const handleResendAdminEmail = async (contactId) => {
+		try {
+			const current = auth.currentUser;
+			if (!current) throw new Error("Your session has expired. Sign in again.");
+			const token = await current.getIdToken();
+			const response = await fetch("/api/admin/contacts/resend", {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ contactId }),
+			});
+			if (!response.ok) {
+				const payload = await response.json().catch(() => ({}));
+				throw new Error(payload?.message || "Failed to resend email.");
+			}
+			showNotification("Admin email resent.", "success");
+		} catch (error) {
+			console.error("Error resending admin email:", error);
+			showNotification(error.message || "Failed to resend email.");
+		}
+	};
+
 	const handleDelete = async (contactId) => {
 		if (!confirm("Are you sure you want to delete this contact?")) return;
 
@@ -138,6 +162,7 @@ export default function ContactsPage() {
 					onClose={() => setSelectedContact(null)}
 					onStatusChange={handleStatusChange}
 					onDelete={handleDelete}
+					onResendAdminEmail={handleResendAdminEmail}
 				/>
 			</div>
 		</div>
