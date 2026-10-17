@@ -9,6 +9,7 @@ import {
 import { db } from "@/lib/firebase";
 import { ERROR_CODES, jsonError } from "@/lib/http-error";
 import { rateLimit } from "@/lib/rateLimit";
+import { screenContact } from "@/lib/spam-filter";
 
 // Force dynamic rendering to prevent build-time execution
 export const dynamic = "force-dynamic";
@@ -150,6 +151,24 @@ export async function POST(request) {
 				? body.productInterest.trim().replace(/[<>]/g, "")
 				: "",
 		};
+
+		// Cold solicitations get a normal-looking success so senders (often
+		// automated) have no signal to adapt to, but nothing is saved or emailed.
+		const spamCheck = screenContact(contactData);
+		if (spamCheck.spam) {
+			console.warn("Contact submission blocked as spam:", {
+				domain: contactData.email.split("@")[1],
+				score: spamCheck.score,
+				reasons: spamCheck.reasons,
+			});
+			return NextResponse.json(
+				{
+					success: true,
+					message: "Thank you for your message! We'll get back to you soon.",
+				},
+				{ status: 201, headers: securityHeaders },
+			);
+		}
 
 		console.log("Attempting to save contact to Firebase:", {
 			name: contactData.name,

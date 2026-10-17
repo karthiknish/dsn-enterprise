@@ -7,6 +7,7 @@ import SpecialGaugesCapabilitiesSection from "@/components/products/special-gaug
 import SpecialGaugesIntroSection from "@/components/products/special-gauges/SpecialGaugesIntroSection";
 import SpecialGaugesProductsGrid from "@/components/products/special-gauges/SpecialGaugesProductsGrid";
 import SpecialGaugesRelatedCategories from "@/components/products/special-gauges/SpecialGaugesRelatedCategories";
+import SpecialGaugesRequestsSection from "@/components/products/special-gauges/SpecialGaugesRequestsSection";
 import SpecialGaugesSpecsSection from "@/components/products/special-gauges/SpecialGaugesSpecsSection";
 import { pageHeroes } from "@/content/page-heroes";
 
@@ -25,6 +26,7 @@ export default function SpecialGaugesPage() {
 
 			<SpecialGaugesCapabilitiesSection />
 			<SpecialGaugesIntroSection />
+			<SpecialGaugesRequestsSection />
 			<SpecialGaugesProductsGrid />
 			<SpecialGaugesSpecsSection />
 			{/* No <CityLinks> — custom-gauge-manufacturing has no live city page
