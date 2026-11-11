@@ -1,4 +1,6 @@
+import RelatedReading from "@/components/blog/RelatedReading";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
+import { RELATED_READING } from "@/content/related-reading";
 import { metadata as routeMetadata } from './metadata';
 
 export const metadata = routeMetadata;
@@ -15,6 +17,7 @@ export default function ThreadGaugesPage() {
 				]}
 			/>
 			<PageClient />
+			<RelatedReading items={RELATED_READING["thread-gauges"]} />
 		</>
 	);
 }

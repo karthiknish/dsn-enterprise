@@ -222,6 +222,40 @@ function threadEntries() {
  * Segment 1: everything with unique content and real internal links.
  * This is the file to submit to Search Console first.
  */
+/**
+ * Blog listing page size, kept in step with `postsPerPage` in
+ * BlogPostsSection. If the two drift, the sitemap advertises page numbers that
+ * render nothing.
+ */
+const BLOG_PAGE_SIZE = 9;
+
+/**
+ * Paginated blog listings, pages 2 onward.
+ *
+ * The 11 Nov 2026 coverage audit found five URLs that Google had never
+ * fetched, and four of them had the sitemap as their *only* referring URL.
+ * Those posts are reachable — /blog paginates 9 at a time and every page
+ * links all six — but the crawl path ran entirely through one listing page
+ * that Google has to choose to recrawl before it can see forty-five links it
+ * has not seen before.
+ *
+ * Submitting the listing pages directly means Google fetches six URLs and gets
+ * the whole post graph in one pass, instead of waiting for a recrawl of /blog
+ * to cascade. The pages are already self-canonical and indexable (see the
+ * note in app/blog/page.js about why pages 2+ must not canonicalise to page 1),
+ * so listing them here is an honest description of what exists.
+ */
+function blogListingEntries(postCount) {
+	const pageCount = Math.ceil(postCount / BLOG_PAGE_SIZE);
+	if (pageCount <= 1) return [];
+
+	return Array.from({ length: pageCount - 1 }, (_, index) => ({
+		url: `${SITE_URL}/blog?page=${index + 2}`,
+		changeFrequency: "weekly",
+		priority: 0.5,
+	}));
+}
+
 export async function getMainEntries() {
 	const blogPosts = await getBlogPosts();
 	const blogPages = blogPosts.map((post) => ({
@@ -234,6 +268,7 @@ export async function getMainEntries() {
 	return [
 		...staticPages().map(withAlternates),
 		...threadEntries(),
+		...blogListingEntries(blogPosts.length),
 		...blogPages,
 		...hindiPages(),
 	];
