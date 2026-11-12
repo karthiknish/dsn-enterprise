@@ -15,6 +15,11 @@ export default function AdminSidebar({
 	onLogout,
 }) {
 	const pathname = usePathname();
+	// Collapsing is a desktop-rail affordance. The mobile drawer is a fixed
+	// 256px panel, so honouring the desktop collapse state inside it produced a
+	// wide icon-only drawer with the labels replaced by tooltips hovering a
+	// full rail-width away from their icons.
+	const collapsed = isCollapsed && !sidebarOpen;
 
 	return (
 		<aside
@@ -22,14 +27,14 @@ export default function AdminSidebar({
 			aria-label="Admin navigation"
 			className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200/80 transform transition-all duration-300 ease-in-out flex flex-col
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-          ${isCollapsed ? "lg:w-20" : "lg:w-64"}
+          ${collapsed ? "lg:w-20" : "lg:w-64"}
           w-64
         `}
 		>
 			<div
-				className={`flex items-center h-16 bg-white border-b border-gray-200/80 transition-all duration-300 ${isCollapsed ? "justify-center px-0" : "justify-between px-6"}`}
+				className={`flex items-center h-16 bg-white border-b border-gray-200/80 transition-all duration-300 ${collapsed ? "justify-center px-0" : "justify-between px-6"}`}
 			>
-				{!isCollapsed ? (
+				{!collapsed ? (
 					<Link href="/admin" className="flex items-center gap-3">
 						<Image
 							src="/images/logo.png"
@@ -76,7 +81,7 @@ export default function AdminSidebar({
 					</svg>
 				</button>
 
-				{!isCollapsed && (
+				{!collapsed && (
 					<button
 						type="button"
 						onClick={onToggleCollapse}
@@ -116,20 +121,26 @@ export default function AdminSidebar({
 						<Link
 							key={item.name}
 							href={item.href}
+							// Collapsed, the link's only child is an aria-hidden icon,
+							// so without this the rail is a column of unlabelled links
+							// for anyone not using a mouse. The visible label carries it
+							// when expanded, so the override is scoped to the rail.
+							aria-label={collapsed ? item.name : undefined}
+							aria-current={isActive ? "page" : undefined}
 							className={`relative flex items-center p-3 rounded-lg transition-all duration-200 group whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
 								isActive
 									? "bg-accent-50 text-accent-700"
 									: "text-gray-600 hover:bg-gray-50 hover:text-accent-700"
-							} ${isCollapsed ? "justify-center" : ""}`}
+							} ${collapsed ? "justify-center" : ""}`}
 							onClick={onCloseMobile}
 						>
 							{isActive && (
 								<span
 									aria-hidden="true"
-									className={`absolute rounded-full bg-accent ${isCollapsed ? "left-0.5 top-1/2 -translate-y-1/2 h-5 w-1" : "left-0 top-1/2 -translate-y-1/2 h-5 w-1"}`}
+									className={`absolute rounded-full bg-accent ${collapsed ? "left-0.5 top-1/2 -translate-y-1/2 h-5 w-1" : "left-0 top-1/2 -translate-y-1/2 h-5 w-1"}`}
 								/>
 							)}
-							{isCollapsed ? (
+							{collapsed ? (
 								<AdminSidebarTooltip content={item.name}>
 									<item.icon
 										className={`w-5 h-5 transition-colors shrink-0 ${
@@ -157,9 +168,9 @@ export default function AdminSidebar({
 			</nav>
 
 			<div
-				className={`p-3 border-t border-gray-200/80 bg-white transition-all duration-300 ${isCollapsed ? "items-center" : ""}`}
+				className={`p-3 border-t border-gray-200/80 bg-white transition-all duration-300 ${collapsed ? "items-center" : ""}`}
 			>
-				{!isCollapsed ? (
+				{!collapsed ? (
 					<div className="rounded-xl border border-gray-200/80 bg-gray-50/60 p-3">
 						<div className="flex items-center gap-3 mb-3 px-0.5">
 							<div className="w-8 h-8 rounded-full bg-accent-100 flex items-center justify-center text-sm font-medium text-accent-700 shrink-0">
