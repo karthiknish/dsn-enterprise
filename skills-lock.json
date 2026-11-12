@@ -1,81 +1,87 @@
 {
-  "version": 1,
+  "version": 2,
   "skills": {
     "caveman": {
       "source": "JuliusBrussee/caveman",
       "sourceType": "github",
-      "computedHash": "a818cdc41dcfaa50dd891c5cb5e5705968338de02e7e37949ca56e8c30ad4176"
+      "computedHash": "f3fa1416fca89f20c93d31b7a728ff752465a939ab9cb0a97d7ef7ca564b7f7b"
     },
     "caveman-commit": {
       "source": "JuliusBrussee/caveman",
       "sourceType": "github",
-      "computedHash": "76994afc39b68f4dbe098df76262b68d9928a23ee0f6aaebb11ba0e0f55bfa13"
+      "computedHash": "2b2b719870115d9800b38e8d83a5eab2412d1748a94fb594634afbf233842c63"
     },
     "caveman-compress": {
       "source": "JuliusBrussee/caveman",
       "sourceType": "github",
-      "computedHash": "300fb8578258161e1752a2a4142a7e9ff178c960bcb83b84422e2987421f33bf"
+      "computedHash": "1c1256d60b34a35ba1aeff3451ba7168a248bafd22cc239ca28408bd627738c7"
     },
     "caveman-help": {
       "source": "JuliusBrussee/caveman",
       "sourceType": "github",
-      "computedHash": "3cd5f7d3f88c8ef7b16a6555dc61f5a11b14151386697609ab6887ab8b5f059d"
+      "computedHash": "f14c2c2896590e97da2c4080c5288edb1aec32b2e64885091cca55da3669b27b"
     },
     "caveman-review": {
       "source": "JuliusBrussee/caveman",
       "sourceType": "github",
-      "computedHash": "1dc59e7e896bc9dd449e43116c4c8b2e656b88c3370df91848330c17347af3d0"
+      "computedHash": "b396954c67890dfca2d9a05e97a74bb8605b86c841a495f75cbbf95b38522e7c"
     },
     "design-taste-frontend": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "9d1e82c5c409d2b0247245a005bc0f7e4447c0999b78dcea60f568c1ba4a6694"
+      "computedHash": "21ae6b307fccfa6b84354704716e6a207a7aef82e334b6a07873a4ccd4c6d72c"
     },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
       "skillPath": "skills/frontend-design/SKILL.md",
-      "computedHash": "4eabc66183767153e404b39d1b839b1c37f2d82d86f0a0d7e880a579d8d62336"
+      "computedHash": "e1481fcd7484d1bc55f2ca7170b788d7357821f5595d27e7132ec7df6841b0cf"
     },
     "full-output-enforcement": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "26bd29ce4c5e02c7666b2d503609bf466bd32290822e91f0e984147048dbb924"
+      "computedHash": "9f39bf2e92322e91e2446f709b44537aaee222949dd5860c56eccb50d66331b3"
     },
     "gpt-taste": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "cc8f0c601d8240a124e1d11634351a2be7b8a72fd807c75e5b6bf7afcd5ddee0"
+      "computedHash": "f0eefce6ce80f76a3645e0ad4cecfd45ef185fed1311e45b1b467d3fedc7bf52"
     },
     "high-end-visual-design": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "7db385e4c5370e5a7fca9704a1361b056e4504ea6a03924bb86f33a4f00b5c73"
+      "computedHash": "d5f1d07d14b1e72454e49c4de69adc65022f4eda0126e1902b84a2e0c3fec47b"
     },
     "image-taste-frontend": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "0c3bcf794d785fdf8aab31bc3ecc6e12d8a6a9f021346ae2e41b6f953c13c6be"
+      "computedHash": "947fca960bf7e018e99bbcc0fc3225343dad5ddc718d00bea9fbdd30182b4c3d"
+    },
+    "impeccable": {
+      "source": "pbakaus/impeccable",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "86e265bf3df79c65215f7244d71892ca278370d56dec47a8cc15e8373db3f714"
     },
     "industrial-brutalist-ui": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "8fc355c4aadb7d29c53ca28bc41be3cd6eea765d121e3737c4dc2d0f90a8effa"
+      "computedHash": "5a181aaf5fcacff516dbc4773eca28d8cca472733b2b22687c9bf8d10ea73365"
     },
     "minimalist-ui": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "08873a3131d3be27bef9bf3304b310b16b44ca6e3561aebe532797be3443f6bd"
+      "computedHash": "6fe7616c22141da6f52a9d7d55521d08c519d7de595f154d1d6358ecb988c9be"
     },
     "redesign-existing-projects": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "b405eee0e0e80fc243f731d9aa368bca307e356db7e6157d27101d369dac6726"
+      "computedHash": "a462c359ad5d5d2d96d18f9c1d2abefdf08318a1ec78f7852660d51ae098be4f"
     },
     "stitch-design-taste": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "computedHash": "3aa58992f0fd9673b975cd48cd4f8ae4b4976fd5cdd9f20e26d3d447aee317fb"
+      "computedHash": "d9ebb0280ac68e756cd307a20be26312cb2c747a8a73b79d9ef0a50c8fe01f1c"
     }
   }
 }
